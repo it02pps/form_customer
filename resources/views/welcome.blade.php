@@ -23,6 +23,12 @@
         {{-- Sweetalert2 --}}
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+        {{-- Signature --}}
+        <!-- jSignature -->
+        <script src="{{ asset('js/jSignature.min.js') }}"></script>
+        <script src="{{ asset('js/modernizr.js') }}"></script>
+        {{-- <script src="{{ asset('js/jq-signature.min.js') }}"></script> --}}
+
         <style>
             body {
                 padding: 30px 0;
@@ -47,7 +53,7 @@
                 margin-right: 302px;
             }
 
-            .section1 h4, .section2 h4, .section3 h4, .section4 h4 {
+            .section1 h4, .section2 h4, .section3 h4 {
                 text-align: center;
             }
 
@@ -71,7 +77,18 @@
                 color: #fff;
             }
 
-            @media only screen and (max-width: 384px) {
+            #signature {
+                width: 100%;
+                height: auto;
+                border: 1px solid #1C4A9C;
+                border-radius: 7px;
+            }
+
+            #signature canvas {
+                border-radius: 7px;
+            }
+
+            @media only screen and (max-width: 500px) {
                 .content-header h2 {
                     font-size: 22px;
                 }
@@ -103,8 +120,20 @@
                     margin-bottom: 12px;
                 }
 
-                .section4-body .row .col-xl-6:nth-of-type(1) {
+                .section3-body .row .col-xl-6:nth-of-type(1) {
                     margin-bottom: 12px;
+                }
+
+                #signature {
+                    width: 100%;
+                    height: 200px;
+                    border: 1px solid #1C4A9C;
+                    border-radius: 7px;
+                }
+
+                #signature canvas {
+                    border-radius: 7px;
+                    height: 185px !important;
                 }
             }
         </style>
@@ -205,51 +234,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <hr>
-                <div class="section2 mt-4 mb-4">
-                    <h4>DATA IDENTITAS</h4>
-                    <div class="section2-body">
-                        <div class="row mb-3">
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Nama Penanggung Jawab <span class="text-danger">*</span></label>
-                                    <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" class="form-control" autocomplete="off" required placeholder="Masukkan nama penanggung jawab">
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Jabatan <span class="text-danger">*</span></label>
-                                    <input type="text" name="jabatan" id="jabatan" class="form-control" required autocomplete="off" placeholder="Masukkan jabatan">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Identitas Penanggung Jawab <span class="text-danger">*</span></label>
-                                    <select name="identitas_penanggung_jawab" id="identitas_penanggung_jawab" class="form-control" accept=".jpg, .png, .pdf, .jpeg" required>
-                                        {{-- <option value="">-- Pilih identitas penanggung jawab --</option> --}}
-                                        <option value="ktp">KTP</option>
-                                        <option value="npwp">NPWP</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group" id="penanggung_ktp">
-                                    <label for="">Foto KTP <span class="text-danger">*</span></label>
-                                    <input type="file" name="foto_ktp_penanggung" id="foto_ktp_penanggung" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
-                                </div>
-                                <div class="form-group d-none" id="penanggung_npwp">
-                                    <label for="">Foto NPWP <span class="text-danger">*</span></label>
-                                    <input type="file" name="foto_npwp_penanggung" id="foto_npwp_penanggung" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                <div class="section3 mt-4 mb-4">
                     <div class="row">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group mb-2">
@@ -345,9 +329,9 @@
                     </div>
                 </div>
                 <hr>
-                <div class="section4 mt-4">
+                <div class="section2 mt-4 mb-4">
                     <h4>INFORMASI BANK</h4>
-                    <div class="section4-body">
+                    <div class="section2-body">
                         <div class="row mb-3">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
@@ -386,6 +370,57 @@
                         </div>
                     </div>
                 </div>
+                <hr>
+                <div class="section3 mt-4">
+                    <h4>DATA IDENTITAS</h4>
+                    <div class="section3-body">
+                        <div class="row mb-3">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Nama Penanggung Jawab <span class="text-danger">*</span></label>
+                                    <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" class="form-control" autocomplete="off" required placeholder="Masukkan nama penanggung jawab">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Jabatan <span class="text-danger">*</span></label>
+                                    <input type="text" name="jabatan" id="jabatan" class="form-control" required autocomplete="off" placeholder="Masukkan jabatan">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Identitas Penanggung Jawab <span class="text-danger">*</span></label>
+                                    <select name="identitas_penanggung_jawab" id="identitas_penanggung_jawab" class="form-control" accept=".jpg, .png, .pdf, .jpeg" required>
+                                        {{-- <option value="">-- Pilih identitas penanggung jawab --</option> --}}
+                                        <option value="ktp">KTP</option>
+                                        <option value="npwp">NPWP</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group" id="penanggung_ktp">
+                                    <label for="">Foto KTP <span class="text-danger">*</span></label>
+                                    <input type="file" name="foto_ktp_penanggung" id="foto_ktp_penanggung" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
+                                </div>
+                                <div class="form-group d-none" id="penanggung_npwp">
+                                    <label for="">Foto NPWP <span class="text-danger">*</span></label>
+                                    <input type="file" name="foto_npwp_penanggung" id="foto_npwp_penanggung" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Signature --}}
+                        <label for="">Tanda Tangan <span class="text-danger">*</span></label>
+                        <div id="signature"></div>
+                        <input type="button" id="preview" class="btn btn-primary mt-2" value="Konfirmasi">
+                        <input type="hidden" name="hasil_ttd" id="hasil_ttd">
+                        {{-- <textarea name="hasil_ttd" id="hasil_ttd"></textarea> --}}
+
+                        {{-- <img src="" id="sign_prev" style="display: none;"> --}}
+                    </div>
+                </div>
             </div>
             <div class="content-footer mt-4">
                 <button type="button" class="btn waves-effect waves-light rounded btn-md rounded cancel">Cancel</button>
@@ -407,13 +442,11 @@
                 });
 
                 $('#identitas_penanggung_jawab').select2({
-                    placeholder: 'Pilih identitas penanggung jawab',
-                    allowClear: true
+                    placeholder: 'Pilih identitas penanggung jawab'
                 });
 
                 $('#identitas_perusahaan').select2({
-                    placeholder: 'Pilih identitas',
-                    allowClear: true
+                    placeholder: 'Pilih identitas'
                 });
 
                 $('#status_rekening').select2({
@@ -510,7 +543,21 @@
                         }
                     });
                 });
-            })
+
+                // Signature
+                var $sigDiv = $('#signature').jSignature({'undoButton': true});
+                var data = $sigDiv.jSignature('getData', 'image');
+
+                $('#preview').on('click', function() {
+                    var data = $sigDiv.jSignature('getData', 'image');
+
+                    // Masukkan ke textarea
+                    $('#hasil_ttd').val(data);
+
+                    // $('#sign_prev').attr('src', "data:" + data);
+                    // $('#sign_prev').show();
+                });
+            });
         </script>
     </body>
 </html>

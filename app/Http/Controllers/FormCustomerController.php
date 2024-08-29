@@ -23,7 +23,7 @@ class FormCustomerController extends Controller
             'nama_group_perusahaan' => 'required',
             'alamat_lengkap' => 'required',
             'kota_kabupaten' => 'required',
-            'no_hp' => 'required|numeric|digits_between:1,13',
+            'no_hp' => 'required|numeric|digits_between:10,13',
             'kecamatan' => 'required',
             'bidang_usaha' => 'required',
             'tahun_berdiri' => 'required|date',
@@ -41,9 +41,9 @@ class FormCustomerController extends Controller
             'status_rekening' => 'required',
             'nama_bank' => 'required',
             'nama_lengkap' => ($data['identitas_perusahaan'] == 'ktp' ? 'required' : ''),
-            'nomor_ktp' => ($data['identitas_perusahaan'] == 'ktp' ? 'required|numeric|digits_between:1,16' : ''),
+            'nomor_ktp' => ($data['identitas_perusahaan'] == 'ktp' ? 'required|numeric|min:16|max:16' : ''),
             'foto_ktp' => ($data['identitas_perusahaan'] == 'ktp' ? 'required|mimes:jpg,png,jpeg,pdf' : ''),
-            'nomor_npwp' => ($data['identitas_perusahaan'] == 'npwp' ? 'required|numeric|digits_between:1,15' : ''),
+            'nomor_npwp' => ($data['identitas_perusahaan'] == 'npwp' ? 'required|digits_between:15,16' : ''),
             'nama_npwp' => ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
             'badan_usaha' => ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
             'email_faktur' => ($data['identitas_perusahaan'] == 'npwp' ? 'required|email' : ''),
@@ -58,7 +58,7 @@ class FormCustomerController extends Controller
             'kota_kabupaten.required' => 'Kota/Kabupaten harus diisi',
             'no_hp.required' => 'Nomor handphone harus diisi',
             'no_hp.numeric' => 'Nomor handphone harus berupa angka',
-            'no_hp.digits_between' => 'Nomor Handphone maksimal 13 digit',
+            'no_hp.digits_between' => 'Nomor Handphone harus diantara 10 - 13 digit',
             'kecamatan.required' => 'Kecamatan harus diisi',
             'bidang_usaha.required' => 'Bidang usaha harus diisi',
             'tahun_berdiri.required' => 'Tahun berdiri harus diisi',
@@ -82,12 +82,11 @@ class FormCustomerController extends Controller
             'nama_lengkap.required' => 'Nama lengkap harus diisi',
             'nomor_ktp.required' => 'Nomor KTP harus diisi',
             'nomor_ktp.numeric' => 'Nomor KTP harus berupa angka',
-            'nomor_ktp.digits_between' => 'Nomor KTP maksimal 16 digit',
+            'nomor_ktp.digits_between' => 'Nomor KTP harus 16 digit',
             'foto_ktp.required' => 'Foto KTP harus diisi',
             'foto_ktp.mimes' => 'Format file harus berupa JPG, PNG, JPEG, atau PDF',
             'nomor_npwp.required' => 'Nomor NPWP harus diisi',
-            'nomor_npwp.numeric' => 'Nomor NPWP harus berupa angka',
-            'nomor_npwp.digits_between' => 'Nomor NPWP maksimal 15 digit',
+            'nomor_npwp.digits_between' => 'Nomor NPWP harus diantar 15 - 16 digit',
             'nama_npwp.required' => 'Nama NPWP harus diisi',
             'badan_usaha.required' => 'Badan usaha harus diisi',
             'email_faktur.required' => 'Email faktur harus diisi',
@@ -102,7 +101,7 @@ class FormCustomerController extends Controller
     }
 
     public function store(Request $request) {
-        // dd($request->all());
+        dd($request->all());
         try {
             $validator = $this->validator($request->all());
             if($validator->fails()) {
