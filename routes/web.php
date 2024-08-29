@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FormCustomerController as FormCustomer;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [FormCustomer::class, 'index'])->name('form_customer.index');
+Route::post('/store', [FormCustomer::class, 'store'])->name('form_customer.store');
+Route::get('/detail', [FormCustomer::class, 'detail'])->name('form_customer.detail');
