@@ -51,6 +51,10 @@
                 margin-right: auto;
             }
 
+            .content-footer {
+                
+            }
+
             hr {
                 border-top: 2px solid #1C4A9C;
                 opacity: 1;
@@ -284,6 +288,10 @@
                     </table>
                 </div>
             </div>
+        </div>
+
+        <div class="content-footer mt-2">
+            <button type="button" class="btn btn-primary waves-effect waves-light rounded btn-md" id="update_customer" title="Edit Data Customer">Edit Data Customer</button>
         </div>
 
         <script>

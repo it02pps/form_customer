@@ -27,7 +27,10 @@
         <!-- jSignature -->
         <script src="{{ asset('js/jSignature.min.js') }}"></script>
         <script src="{{ asset('js/modernizr.js') }}"></script>
-        {{-- <script src="{{ asset('js/jq-signature.min.js') }}"></script> --}}
+
+        {{-- Zoom --}}
+        <link rel="stylesheet" href="{{ asset('css/zoom.css') }}">
+        <script src="{{ asset('js/zoom.js') }}"></script>
 
         <style>
             body {
@@ -79,12 +82,27 @@
 
             #signature {
                 width: 100%;
-                height: auto;
+                height: 200px;
                 border: 1px solid #1C4A9C;
                 border-radius: 7px;
             }
 
             #signature canvas {
+                height: 198px !important;
+                border-radius: 7px;
+            }
+
+            #preview_ktp, #preview_npwp, #preview_sppkp, #preview_ktp_penanggung,  #preview_npwp_penanggung {
+                border: 1px solid #1C4A9C;
+                border-radius: 7px;
+                margin-top: 2px;
+                height: 180px;
+            }
+
+            #preview_ktp img, #preview_npwp img, #preview_sppkp img, #preview_ktp_penanggung img,  #preview_npwp_penanggung img {
+                width: 100%;
+                height: 180px;
+                object-fit: fill;
                 border-radius: 7px;
             }
 
@@ -133,7 +151,7 @@
 
                 #signature canvas {
                     border-radius: 7px;
-                    height: 185px !important;
+                    height: 198px !important;
                 }
             }
         </style>
@@ -260,7 +278,11 @@
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <label for="">Foto KTP <span class="text-danger">*</span></label>
-                                    <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" accept=".jpg, .png, .pdf, .jpeg" autocomplete="off">
+                                    <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg" autocomplete="off">
+
+                                    <div id="preview_ktp" class="d-none">
+                                        <img id="preview_foto_ktp" src="" alt="Preview" data-action="zoom">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -299,32 +321,43 @@
                                         <label for="">Email Khusus Untuk Faktur Pajak <span class="text-danger">*</span></label>
                                         <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Masukkan email faktur">
                                     </div>
+
+                                    <div class="form-group mb-2">
+                                        <label for="">Status Pengusaha Kena Pajak (PKP) <span class="text-danger">*</span></label>
+                                        <select name="status_pkp" id="status_pkp" class="form-control">
+                                            <option value="non_pkp">Non PKP</option>
+                                            <option value="pkp">PKP</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group mb-2 d-none" id="sppkp-section">
+                                        <label for="">Foto SPPKP <span class="text-danger">*</span></label>
+                                        <input type="file" name="foto_sppkp" id="foto_sppkp" onchange="previewFileSppkp(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
+
+                                        <div id="preview_sppkp">
+                                            <img id="preview_foto_sppkp" src="" alt="Preview" data-action="zoom">
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group mb-2">
                                         <label for="">Foto NPWP <span class="text-danger">*</span></label>
-                                        <input type="file" name="foto_npwp" id="foto_npwp" class="form-control" accept=".jpg, .png, .pdf, .jpeg" autocomplete="off">
+                                        <input type="file" name="foto_npwp" id="foto_npwp" class="form-control" onchange="previewFileNpwp(this);" accept=".jpg, .png, .pdf, .jpeg" autocomplete="off">
+                                    </div>
+
+                                    <div id="preview_npwp" class="d-none">
+                                        <img id="preview_foto_npwp" src="" alt="Preview" data-action="zoom">
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            {{-- <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group mb-2">
-                                        <label for="">Status Pengusaha Kena Pajak (PKP) <span class="text-danger">*</span></label>
-                                        <select name="status_pkp" id="status_pkp" class="form-control">
-                                            <option value="">-- Pilih status PKP --</option>
-                                            <option value="pkp">PKP</option>
-                                            <option value="non_pkp">Non PKP</option>
-                                        </select>
-                                    </div>
+                                    
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12" id="sppkp-section">
-                                    <div class="form-group mb-2">
-                                        <label for="">Foto SPPKP <span class="text-danger">*</span></label>
-                                        <input type="file" name="foto_sppkp" id="foto_sppkp" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
-                                    </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 d-none" id="sppkp-section">
+                                    
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -390,7 +423,7 @@
                         </div>
                         <div class="row mb-3">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group">
+                                <div class="form-group mb-2">
                                     <label for="">Identitas Penanggung Jawab <span class="text-danger">*</span></label>
                                     <select name="identitas_penanggung_jawab" id="identitas_penanggung_jawab" class="form-control" accept=".jpg, .png, .pdf, .jpeg" required>
                                         {{-- <option value="">-- Pilih identitas penanggung jawab --</option> --}}
@@ -398,27 +431,40 @@
                                         <option value="npwp">NPWP</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group" id="penanggung_ktp">
+
+                                <div class="form-group mb-2" id="penanggung_ktp">
                                     <label for="">Foto KTP <span class="text-danger">*</span></label>
-                                    <input type="file" name="foto_ktp_penanggung" id="foto_ktp_penanggung" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
+                                    <input type="file" name="foto_ktp_penanggung" id="foto_ktp_penanggung" onchange="previewFileKtpPenanggung(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
+
+                                    <div id="preview_ktp_penanggung" class="d-none">
+                                        <img id="preview_foto_ktp_penanggung" src="" alt="Preview" data-action="zoom">
+                                    </div>
                                 </div>
+
                                 <div class="form-group d-none" id="penanggung_npwp">
                                     <label for="">Foto NPWP <span class="text-danger">*</span></label>
-                                    <input type="file" name="foto_npwp_penanggung" id="foto_npwp_penanggung" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
+                                    <input type="file" name="foto_npwp_penanggung" id="foto_npwp_penanggung" onchange="previewFileNpwpPenanggung(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
+
+                                    <div id="preview_npwp_penanggung" class="d-none">
+                                        <img id="preview_foto_npwp_penanggung" src="" alt="Preview" data-action="zoom">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                {{-- Signature --}}
+                                <div class="mt-2">
+                                    <label for="">Tanda Tangan <span class="text-danger">*</span></label>
+                                    <div id="signature"></div>
+                                    <input type="button" id="clear_signature" class="btn btn-outline-primary mt-2" value="Bersihkan">
+                                    <input type="button" id="preview" class="btn btn-primary mt-2" value="Konfirmasi">
+                                    <input type="hidden" name="hasil_ttd" id="hasil_ttd">
+                                    
+                                    {{-- <textarea name="hasil_ttd" id="hasil_ttd"></textarea> --}}
+
+                                    {{-- <img src="" id="sign_prev" style="display: none;"> --}}
                                 </div>
                             </div>
                         </div>
-
-                        {{-- Signature --}}
-                        <label for="">Tanda Tangan <span class="text-danger">*</span></label>
-                        <div id="signature"></div>
-                        <input type="button" id="preview" class="btn btn-primary mt-2" value="Konfirmasi">
-                        <input type="hidden" name="hasil_ttd" id="hasil_ttd">
-                        {{-- <textarea name="hasil_ttd" id="hasil_ttd"></textarea> --}}
-
-                        {{-- <img src="" id="sign_prev" style="display: none;"> --}}
                     </div>
                 </div>
             </div>
@@ -430,6 +476,66 @@
         </form>
 
         <script>
+            function previewFileKtp(input) {
+                var file = $('#foto_ktp').prop('files');
+                if(file){
+                    var reader = new FileReader();
+                    $("#preview_ktp").removeClass('d-none');
+                    reader.onload = function() {
+                        $("#preview_foto_ktp").attr("src", reader.result);
+                    }
+                    reader.readAsDataURL(file[0]);
+                }
+            }
+
+            function previewFileNpwp(input) {
+                var file = $("#foto_npwp").prop('files');
+                if(file){
+                    var reader = new FileReader();
+                    $("#preview_npwp").removeClass('d-none');
+                    reader.onload = function() {
+                        $("#preview_foto_npwp").attr("src", reader.result);
+                    }
+                    reader.readAsDataURL(file[0]);
+                }
+            }
+
+            function previewFileSppkp(input) {
+                var file = $("#foto_sppkp").prop('files');
+                if(file){
+                    var reader = new FileReader();
+                    $("#preview_sppkp").removeClass('d-none');
+                    reader.onload = function() {
+                        $("#preview_foto_sppkp").attr("src", reader.result);
+                    }
+                    reader.readAsDataURL(file[0]);
+                }
+            }
+
+            function previewFileKtpPenanggung(input) {
+                var file = $("#foto_ktp_penanggung").prop('files');
+                if(file){
+                    var reader = new FileReader();
+                    $("#preview_ktp_penanggung").removeClass('d-none');
+                    reader.onload = function() {
+                        $("#preview_foto_ktp_penanggung").attr("src", reader.result);
+                    }
+                    reader.readAsDataURL(file[0]);
+                }
+            }
+
+            function previewFileNpwpPenanggung(input) {
+                var file = $("#foto_npwp_penanggung").prop('files');
+                if(file){
+                    var reader = new FileReader();
+                    $("#preview_npwp_penanggung").removeClass('d-none');
+                    reader.onload = function() {
+                        $("#foto_npwp_penanggung").attr("src", reader.result);
+                    }
+                    reader.readAsDataURL(file[0]);
+                }
+            }
+            
             $(document).ready(function() {
                 $('#bidang_usaha').select2({
                     placeholder: 'Pilih bidang usaha',
@@ -454,16 +560,6 @@
                     allowClear: true
                 });
 
-                $('#status_pkp').select2({
-                    placeholder: 'Pilih status PKP',
-                    allowClear: true
-                });
-
-                $('#badan_usaha').select2({
-                    placeholder: 'Pilih badan usaha',
-                    allowClear: true
-                });
-
                 $(document).on('change', '#identitas_penanggung_jawab', function() {
                     let identitas = $(this).val();
                     if(identitas == 'ktp') {
@@ -480,9 +576,24 @@
                     if(identitas == 'ktp') {
                         $('.ktp-section').removeClass('d-none');
                         $('.npwp-section').addClass('d-none');
+                        $("#preview_ktp").removeClass('d-none');
+                        $("#preview_npwp").addClass('d-none');
+                        $("#preview_sppkp").addClass('d-none');
                     } else {
                         $('.ktp-section').addClass('d-none');
                         $('.npwp-section').removeClass('d-none');
+                        $("#preview_ktp").addClass('d-none');
+                        $("#preview_npwp").removeClass('d-none');
+                        $("#preview_sppkp").removeClass('d-none');
+                        $('#badan_usaha').select2({
+                            placeholder: 'Pilih badan usaha',
+                            allowClear: true
+                        });
+
+                        $('#status_pkp').select2({
+                            placeholder: 'Pilih status PKP',
+                            allowClear: true
+                        });
                     }
                 });
 
@@ -490,8 +601,10 @@
                     let status = $(this).val();
                     if(status == 'pkp') {
                         $('#sppkp-section').removeClass('d-none');
+                        $('#preview_sppkp').removeClass('d-none');
                     } else {
                         $('#sppkp-section').addClass('d-none');
+                        $('#preview_sppkp').addClass('d-none');
                     }
                 });
 
@@ -556,6 +669,10 @@
 
                     // $('#sign_prev').attr('src', "data:" + data);
                     // $('#sign_prev').show();
+                });
+
+                $('#clear_signature').on('click', function() {
+                    $sigDiv.jSignature('reset');
                 });
             });
         </script>
