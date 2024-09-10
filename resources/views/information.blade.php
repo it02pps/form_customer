@@ -23,6 +23,10 @@
         {{-- Sweetalert2 --}}
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+        {{-- Zoom --}}
+        <link rel="stylesheet" href="{{ asset('css/zoom.css') }}">
+        <script src="{{ asset('js/zoom.js') }}"></script>
+
         <style>
             body {
                 padding: 30px 0;
@@ -52,7 +56,12 @@
             }
 
             .content-footer {
-                
+                border-radius: 8px;
+                width: 35%;
+                display: flex;
+                justify-content: center;
+                margin-left: auto;
+                margin-right: 140px;
             }
 
             hr {
@@ -79,224 +88,271 @@
         </div>
 
         <div class="content-body">
+            <h3>Informasi Perusahaan</h3>
             <table>
                 <tr>
                     <th width="20%">Nama</th>
                     <td width="5%">:</td>
                     <td width="75%">
-                        <input type="text" value="{{ $perusahaan['nama_perusahaan'] }}" readonly>
+                        <input type="text" class="form-control" value="{{ $perusahaan['nama_perusahaan'] }}" readonly>
                     </td>
                 </tr>
                 <tr>
                     <th>Nama Group Perusahaan</th>
                     <td>:</td>
                     <td>
-                        <input type="text" value="{{ $perusahaan['nama_group_perusahaan'] }}" readonly>
+                        <input type="text" class="form-control" value="{{ $perusahaan['nama_group_perusahaan'] }}" readonly>
                     </td>
                 </tr>
                 <tr>
                     <th valign="top">Alamat Lengkap</th>
                     <td valign="top">:</td>
                     <td>
-                        <textarea cols="30" rows="3" readonly>{{ $perusahaan['alamat_lengkap'] }}</textarea>
+                        <textarea cols="30" rows="3" class="form-control" readonly>{{ $perusahaan['alamat_lengkap'] }}</textarea>
                     </td>
                 </tr>
                 <tr>
                     <th>Bidang Usaha</th>
                     <td>:</td>
                     <td>
-                        <input type="text" value="{{ $perusahaan['bidang_usaha'] }}" readonly>
+                        <input type="text" class="form-control" value="{{ $perusahaan['bidang_usaha'] }}" readonly>
                     </td>
                 </tr>
                 <tr>
                     <th>Tahun Berdiri</th>
                     <td>:</td>
                     <td>
-                        <input type="text" value="{{ \Carbon\Carbon::parse($perusahaan['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') }}" readonly>
+                        <input type="text" class="form-control" value="{{ \Carbon\Carbon::parse($perusahaan['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') }}" readonly>
                     </td>
                 </tr>
                 <tr>
                     <th>Lama Usaha (Tahun)</th>
                     <td>:</td>
                     <td>
-                        <input type="text" value="{{ $perusahaan['lama_usaha'] }} tahun" readonly>
+                        <input type="text" class="form-control" value="{{ $perusahaan['lama_usaha'] }} tahun" readonly>
                     </td>
                 </tr>
                 <tr>
                     <th>Nomor Handphone</th>
                     <td>:</td>
                     <td>
-                        <input type="text" value="{{ $perusahaan['nomor_handphone'] }}" readonly>
+                        <input type="text" class="form-control" value="{{ $perusahaan['nomor_handphone'] }}" readonly>
                     </td>
                 </tr>
                 <tr>
                     <th>Email</th>
                     <td>:</td>
                     <td>
-                        <input type="text" value="{{ $perusahaan['alamat_email'] }}" readonly>
+                        <input type="text" class="form-control" value="{{ $perusahaan['alamat_email'] }}" readonly>
                     </td>
                 </tr>
                 <tr>
                     <th>Status Kepemilikan</th>
                     <td>:</td>
                     <td>
-                        <input type="text" value="{{ \Str::replace('_', ' ', ucwords($perusahaan['status_kepemilikan'])) }}" readonly>
+                        <input type="text" class="form-control" value="{{ \Str::replace('_', ' ', ucwords($perusahaan['status_kepemilikan'])) }}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Identitas</th>
+                    <td>:</td>
+                    <td>
+                        <input type="text" class="form-control" value="{{ strtoupper($perusahaan['identitas']) }}" readonly>
+                    </td>
+                </tr>
+                @if($perusahaan['identitas'] == 'ktp')
+                    <tr>
+                        <th>Nama KTP</th>
+                        <td>:</td>
+                        <td>
+                            <input type="text" class="form-control" value="{{ $perusahaan['nama_lengkap'] }}" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Nomor KTP</th>
+                        <td>:</td>
+                        <td>
+                            <input type="text" class="form-control" value="{{ $perusahaan['nomor_ktp'] }}" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th valign="top">Foto KTP</th>
+                        <td valign="top">:</td>
+                        <td>
+                            <div style="width: 20%; height: auto; aspect-ratio: 16 / 9; overflow: hidden;">
+                                <img style="width: 100%; height: 100%; object-fit: cover;" src="/uploads/identitas_perusahaan/{{ $perusahaan['foto_ktp'] }}" alt="Foto KTP" class="rounded" data-action="zoom">
+                            </div>
+                        </td>
+                    </tr>
+                @else
+                    <tr>
+                        <th>Nomor NPWP</th>
+                        <td>:</td>
+                        <td>
+                            <input type="text" class="form-control" value="{{ $perusahaan['nomor_npwp'] }}" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Nama NPWP</th>
+                        <td>:</td>
+                        <td>
+                            <input type="text" class="form-control" value="{{ $perusahaan['nama_npwp'] }}" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Badan Usaha</th>
+                        <td>:</td>
+                        <td>
+                            <input type="text" class="form-control" value="{{ strtoupper($perusahaan['badan_usaha']) }}" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th valign="top">Foto NPWP</th>
+                        <td valign="top">:</td>
+                        <td>
+                            <div style="width: 15%; height: auto; aspect-ratio: 16 / 9; overflow: hidden;">
+                                <img style="width: 100%; height: 100%; object-fit: cover;" src="/uploads/identitas_perusahaan/{{ $perusahaan['foto_npwp'] }}" alt="Foto NPWP" class="rounded" data-action="zoom">
+                            </div>
+                        </td>
+                    </tr>
+                    @if($perusahaan['status_pkp'] == 'pkp')
+                        <tr>
+                            <th>Foto SPPKP</th>
+                            <td>:</td>
+                            <td>
+                                <div style="width: 20%; height: auto; aspect-ratio: 16 / 9; overflow: hidden;">
+                                    <img style="width: 100%; height: 100%; object-fit: cover;" src="/uploads/identitas_perusahaan/{{ $perusahaan['sppkp'] }}" alt="Foto SPPKP" class="rounded" data-action="zoom">
+                                </div>
+                            </td>
+                        </tr>
+                    @endif
+                @endif
+                <tr>
+                    <th>Nomor Rekening</th>
+                    <td>:</td>
+                    <td>
+                        <input type="text" class="form-control" value="{{ $bank['nomor_rekening'] }}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Nama Rekening</th>
+                    <td>:</td>
+                    <td>
+                        <input type="text" class="form-control" value="{{ $bank['nama_rekening'] }}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Status Rekening</th>
+                    <td>:</td>
+                    <td>
+                        <input type="text" class="form-control" value="{{ \Str::replace('_', ' ', ucwords($bank['status'])) }}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Nama Bank</th>
+                    <td>:</td>
+                    <td>
+                        <input type="text" class="form-control" value="{{ $bank['nama_bank'] }}" readonly>
                     </td>
                 </tr>
             </table>
             <hr>
-            <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                    <table>
-                        <tr>
-                            <th width="20%">Nama Penanggung Jawab</th>
-                            <td width="5%">:</td>
-                            <td width="75%">
-                                <input type="text" value="{{ $penanggung_jawab['nama'] }}" readonly>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Jabatan</th>
-                            <td>:</td>
-                            <td>
-                                <input type="text" value="{{ $penanggung_jawab['jabatan'] }}" readonly>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Identitas</th>
-                            <td>:</td>
-                            <td>
-                                <input type="text" value="{{ strtoupper($perusahaan['identitas']) }}" readonly>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th valign="top">Foto Identitas</th>
-                            <td valign="top">:</td>
-                            <td>
-                                <img src="/uploads/penanggung_jawab/{{ $penanggung_jawab['foto'] }}" alt="Foto KTP" width="30%" class="rounded">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Nomor Rekening</th>
-                            <td>:</td>
-                            <td>
-                                <input type="text" value="{{ $bank['nomor_rekening'] }}" readonly>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Nama Rekening</th>
-                            <td>:</td>
-                            <td>
-                                <input type="text" value="{{ $bank['nama_rekening'] }}" readonly>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Status Rekening</th>
-                            <td>:</td>
-                            <td>
-                                <input type="text" value="{{ \Str::replace('_', ' ', ucwords($bank['status'])) }}" readonly>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Nama Bank</th>
-                            <td>:</td>
-                            <td>
-                                <input type="text" value="{{ $bank['nama_bank'] }}" readonly>
-                            </td>
-                        </tr>
-                        @if($perusahaan['identitas'] == 'npwp')
-                            <tr>
-                                <th>Tanda Tangan</th>
-                                <td>:</td>
-                                <td>
-                                    <input type="text" value="foto">
-                                </td>
-                            </tr>
-                        @endif
-                    </table>
-                </div>
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                    <table>
-                        @if($perusahaan['identitas'] == 'ktp')
-                            <tr>
-                                <th width="20%">Nama KTP</th>
-                                <td width="5%">:</td>
-                                <td width="75%">
-                                    <input type="text" value="{{ $perusahaan['nama_lengkap'] }}" readonly>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Nomor KTP</th>
-                                <td>:</td>
-                                <td>
-                                    <input type="text" value="{{ $perusahaan['nomor_ktp'] }}" readonly>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th valign="top">Foto KTP</th>
-                                <td valign="top">:</td>
-                                <td>
-                                    <img src="/uploads/identitas_perusahaan/{{ $perusahaan['foto_ktp'] }}" alt="Foto KTP" width="30%" class="rounded">
-                                </td>
-                            </tr>
-                            <tr>
-                                <th valign="top">Tanda Tangan</th>
-                                <td valign="top">:</td>
-                                <td>
-                                    <textarea name="" id="" cols="30" rows="4"></textarea>
-                                </td>
-                            </tr>
-                        @else
-                            <tr>
-                                <th>Nomor NPWP</th>
-                                <td>:</td>
-                                <td>
-                                    <input type="text" value="{{ $perusahaan['nomor_npwp'] }}" readonly>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Nama NPWP</th>
-                                <td>:</td>
-                                <td>
-                                    <input type="text" value="{{ $perusahaan['nama_npwp'] }}" readonly>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Badan Usaha</th>
-                                <td>:</td>
-                                <td>
-                                    <input type="text" value="{{ $perusahaan['badan_usaha'] }}" readonly>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Foto NPWP</th>
-                                <td>:</td>
-                                <td>
-                                    <input type="text" value="foto" readonly>
-                                </td>
-                            </tr>
-                            @if($perusahaan['status_pkp'] == 'pkp')
-                                <tr>
-                                    <th>Foto SPPKP</th>
-                                    <td>:</td>
-                                    <td>
-                                        <img src="/uploads/identitas_perusahaan/{{ $perusahaan['sppkp'] }}" alt="Foto KTP" width="30%" class="rounded">
-                                    </td>
-                                </tr>
-                            @endif
-                        @endif
-                    </table>
-                </div>
-            </div>
+            <h3>Data Identitas</h3>
+            <table>
+                <tr>
+                    <th width="20%">Nama Penanggung Jawab</th>
+                    <td width="5%">:</td>
+                    <td width="75%">
+                        <input type="text" class="form-control" value="{{ $penanggung_jawab['nama'] }}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Jabatan</th>
+                    <td>:</td>
+                    <td>
+                        <input type="text" class="form-control" value="{{ $penanggung_jawab['jabatan'] }}" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Identitas</th>
+                    <td>:</td>
+                    <td>
+                        <input type="text" class="form-control" value="{{ strtoupper($penanggung_jawab['identitas']) }}" readonly>
+                    </td>
+                </tr>
+                @if($penanggung_jawab['identitas'] == 'ktp')
+                    <tr>
+                        <th valign="top">Foto KTP</th>
+                        <td valign="top">:</td>
+                        <td>
+                            <div style="width: 20%; height: auto; aspect-ratio: 16 / 9; overflow: hidden;">
+                                <img style="width: 100%; height: 100%; object-fit: cover;" src="/uploads/penanggung_jawab/{{ $penanggung_jawab['foto'] }}" alt="Foto KTP" class="rounded" data-action="zoom">
+                            </div>
+                        </td>
+                    </tr>
+                @else
+                    <tr>
+                        <th valign="top">Foto NPWP</th>
+                        <td valign="top">:</td>
+                        <td>
+                            <div style="width: 20%; height: auto; aspect-ratio: 16 / 9; overflow: hidden;">
+                                <img style="width: 100%; height: 100%; object-fit: cover;" src="/uploads/penanggung_jawab/{{ $penanggung_jawab['foto'] }}" alt="Foto NPWP" class="rounded" data-action="zoom">
+                            </div>
+                        </td>
+                    </tr>
+                @endif
+                <tr>
+                    <th valign="top">Tanda Tangan</th>
+                    <td valign="top">:</td>
+                    <td>
+                        <img src="data:{{ $penanggung_jawab['ttd'] }}" alt="" style="width: 30%;" data-action="zoom">
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <div class="content-footer mt-2">
-            <button type="button" class="btn btn-primary waves-effect waves-light rounded btn-md" id="update_customer" title="Edit Data Customer">Edit Data Customer</button>
+            <button type="button" class="btn btn-outline-primary waves-effect waves-light rounded btn-md" id="update_customer" data-url="{{ $url }}" title="Edit Data Customer">Edit Data Customer</button>
+            &nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-outline-primary waves-effect waves-light rounded btn-md" id="pdf" title="Download PDF">Download PDF</button>
+            &nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-primary waves-effect waves-light rounded btn-md" id="konfirmasi" data-id="{{ $enkripsi }}" title="Upload Data Customer">Upload Data Customer</button>
         </div>
 
         <script>
             $(document).ready(function() {
+                $(document).on('click', '#update_customer', function() {
+                    let url = $(this).data('url');
+                    window.location.href = url;
+                });
 
+                $(document).on('click', '#konfirmasi', function() {
+                    let id = $(this).data('id');
+                    $.ajax({
+                        url: '{{ route('form_customer.confirmation') }}',
+                        type: 'POST',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            "id": id
+                        },
+                        success: res => {
+                            if(res.status == true) {
+                                Swal.fire({
+                                    title: 'Berhasil!',
+                                    text: 'Data Customer Berhasil Diupload!',
+                                    icon: 'success',
+                                });
+                                // window.location.href = 'https://papasari.com';
+                            } else {
+                                Swal.fire({
+                                    title: 'Gagal!',
+                                    text: 'Terjadi Kesalahan!',
+                                    icon: 'error'
+                                });
+                            }
+                        }
+                    })
+                });
             });
         </script>
     </body>

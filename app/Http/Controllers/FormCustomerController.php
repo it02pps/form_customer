@@ -8,13 +8,52 @@ use App\Models\IdentitasPerusahaan;
 use App\Models\InformasiBank;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class FormCustomerController extends Controller
 {
-    public function index() {
-        return view('welcome');
+    public function index(Request $request) {
+        if($request->enkripsi) {
+            $data = Crypt::decryptString($request->enkripsi);
+            $data_perusahaan = IdentitasPerusahaan::find($data);
+            $informasi_bank = InformasiBank::where('identitas_perusahaan_id', $data)->first();
+            $penanggung_jawab = DataIdentitas::where('identitas_perusahaan_id', $data)->first();
+            $url = route('form_customer.detail', ['id' => $request->enkripsi]);
+            $enkripsi = $request->enkripsi;
+
+            $data_perusahaan->makeHidden([
+                'id',
+                'created_at',
+                'updated_at',
+            ]);
+            $informasi_bank->makeHidden([
+                'created_at',
+                'updated_at',
+                'id',
+                'identitas_perusahaan_id',
+            ]);
+            $penanggung_jawab->makeHidden([
+                'created_at',
+                'updated_at',
+                'id',
+                'identitas_perusahaan_id',
+            ]);
+
+            $response = [
+                $data_perusahaan->toArray(),
+                $informasi_bank->toArray(),
+                $penanggung_jawab->toArray(),
+            ];
+        } else {
+            $response = null;
+            $url = null;
+            $enkripsi = null;
+        }
+
+        // dd($response);
+        return view('welcome', compact('response', 'url', 'enkripsi'));
     }
 
     protected function validator($data) {
@@ -29,26 +68,26 @@ class FormCustomerController extends Controller
             'tahun_berdiri' => 'required|date',
             'lama_usaha' => 'required',
             'email_perusahaan' => 'required|email',
-            'foto_ktp_penanggung' => ($data['identitas_penanggung_jawab'] == 'ktp' ? 'required|mimes:jpg,png,jpeg,pdf' : ''),
-            'foto_npwp_penanggung' => ($data['identitas_penanggung_jawab'] == 'npwp' ? 'required|mimes:jpg,png,jpeg,pdf' : ''),
+            'foto_ktp_penanggung' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['identitas_penanggung_jawab'] == 'ktp' ? 'required|mimes:jpg,png,jpeg,pdf' : ''),
+            'foto_npwp_penanggung' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['identitas_penanggung_jawab'] == 'npwp' ? 'required|mimes:jpg,png,jpeg,pdf' : ''),
             'status_kepemilikan' => 'required',
             'nama_penanggung_jawab' => 'required',
             'jabatan' => 'required',
             'identitas_penanggung_jawab' => 'required',
             'identitas_perusahaan' => 'required',
-            'nomor_rekening' => 'required|numeric',
+            'nomor_rekening' => 'required|numeric|between:10,16',
             'nama_rekening' => 'required',
             'status_rekening' => 'required',
             'nama_bank' => 'required',
             'nama_lengkap' => ($data['identitas_perusahaan'] == 'ktp' ? 'required' : ''),
             'nomor_ktp' => ($data['identitas_perusahaan'] == 'ktp' ? 'required|numeric|digits:16' : ''),
-            'foto_ktp' => ($data['identitas_perusahaan'] == 'ktp' ? 'required|mimes:jpg,png,jpeg,pdf' : ''),
+            'foto_ktp' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['identitas_perusahaan'] == 'ktp' ? 'required|mimes:jpg,png,jpeg,pdf' : ''),
             'nomor_npwp' => ($data['identitas_perusahaan'] == 'npwp' ? 'required|digits_between:15,16' : ''),
             'nama_npwp' => ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
             'badan_usaha' => ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
             'email_faktur' => ($data['identitas_perusahaan'] == 'npwp' ? 'required|email' : ''),
-            'foto_npwp' => ($data['identitas_perusahaan'] == 'npwp' ? 'required|mimes:jpg,png,jpeg,pdf' : ''),
-            'foto_sppkp' => ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,png,jpeg,pdf' : '')
+            'foto_npwp' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['identitas_perusahaan'] == 'npwp' ? 'required|mimes:jpg,png,jpeg,pdf' : ''),
+            // 'foto_sppkp' => ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,png,jpeg,pdf' : '')
         ];
 
         $message = [
@@ -72,12 +111,13 @@ class FormCustomerController extends Controller
             'identitas_perusahaan.required' => 'Identitas perusahaan harus diisi',
             'nomor_rekening.required' => 'Nomor rekening harus diisi',
             'nomor_rekening.numeric' => 'Nomor rekening harus berupa angka',
+            'nomor_rekening.between' => 'Nomor rekening harus diantara 10 - 16 digit',
             'nama_rekening.required' => 'Nama rekening harus diisi',
             'status_rekening' => 'Status rekening harus diisi',
             'nama_bank.required' => 'Nama bank harus diisi',
-            'foto_ktp_penanggung.required' => 'Foto KTP harus diisi',
+            'foto_ktp_penanggung.required' => 'Foto KTP penanggung jawab harus diisi',
             'foto_ktp_penanggung.mimes' => 'Format file harus berupa JPG, PNG, JPEG, atau PDF',
-            'foto_npwp_penanggung.required' => 'Foto NPWP harus diisi',
+            'foto_npwp_penanggung.required' => 'Foto NPWP penanggung jawab harus diisi',
             'foto_npwp_penanggung.mimes' => 'Format file harus berupa JPG, PNG, JPEG, atau PDF',
             'nama_lengkap.required' => 'Nama lengkap harus diisi',
             'nomor_ktp.required' => 'Nomor KTP harus diisi',
@@ -108,8 +148,11 @@ class FormCustomerController extends Controller
                 return ['status' => false, 'error' => $validator->errors()->all()];
             }
 
+            // Cek id
+            $dekripsi = $request->update_id ? Crypt::decryptString($request->update_id) : '';
+
             // Identitas perusahaan
-            $identitas_perusahaan = new IdentitasPerusahaan();
+            $identitas_perusahaan = IdentitasPerusahaan::findOrNew($dekripsi);
             $identitas_perusahaan->nama_perusahaan = $request->nama_perusahaan;
             $identitas_perusahaan->nama_group_perusahaan = $request->nama_group_perusahaan;
             $identitas_perusahaan->alamat_lengkap = $request->alamat_lengkap;
@@ -122,7 +165,7 @@ class FormCustomerController extends Controller
             // $tahun_berdiri = Carbon::parse($request->tahun_berdiri)->format('Y');
             // $hasil = $sekarang - $tahun_berdiri;
 
-            $identitas_perusahaan->lama_usaha = $request->lama_usaha_hide;
+            $identitas_perusahaan->lama_usaha = Str::replace('tahun ', '', $request->lama_usaha);
             $identitas_perusahaan->tahun_berdiri = $request->tahun_berdiri;
             $identitas_perusahaan->alamat_email = $request->email_perusahaan;
             $identitas_perusahaan->nomor_handphone = $request->no_hp;
@@ -134,6 +177,9 @@ class FormCustomerController extends Controller
                 $identitas_perusahaan->nama_lengkap = $request->nama_lengkap;
                 $identitas_perusahaan->nomor_ktp = $request->nomor_ktp;
                 if($request->hasFile('foto_ktp')) {
+                    if(File::exists('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_ktp)) {
+                        File::delete('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_ktp);
+                    }
                     $foto = $request->file('foto_ktp');
                     $ext = $foto->getClientOriginalExtension();
                     $filename = uniqid() . '-' . 'KTP-' . Str::slug($request->nama_lengkap, '-') . '.' . $ext;
@@ -141,16 +187,38 @@ class FormCustomerController extends Controller
                     $foto->move('uploads/identitas_perusahaan/', $filename);
                     $identitas_perusahaan->foto_ktp = $filename;
                 }
+
+                // Clear NPWP column
+                $identitas_perusahaan->badan_usaha = null;
+                $identitas_perusahaan->nama_npwp = null;
+                $identitas_perusahaan->nomor_npwp = null;
+                $identitas_perusahaan->foto_npwp = null;
+                $identitas_perusahaan->email_khusus_faktur_pajak = null;
+                $identitas_perusahaan->status_pkp = 'non_pkp';
+                $identitas_perusahaan->sppkp = null;
             } else {
                 $identitas_perusahaan->badan_usaha = $request->badan_usaha;
                 $identitas_perusahaan->nama_npwp = $request->nama_npwp;
                 $identitas_perusahaan->nomor_npwp = $request->nomor_npwp;
-                $identitas_perusahaan->foto_npwp = $request->foto_npwp;
+                if($request->hasFile('foto_npwp')) {
+                    if(File::exists('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_npwp)) {
+                        File::delete('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_npwp);
+                    }
+                    $foto = $request->file('foto_npwp');
+                    $ext = $foto->getClientOriginalExtension();
+                    $filename = uniqid() . '-' . 'NPWP-' . Str::slug($request->nama_lengkap, '-') . '.' . $ext;
+
+                    $foto->move('uploads/identitas_perusahaan/', $filename);
+                    $identitas_perusahaan->foto_npwp = $filename;
+                }
                 $identitas_perusahaan->email_khusus_faktur_pajak = $request->email_faktur;
                 $identitas_perusahaan->status_pkp = $request->status_pkp;
 
                 if($request->status_pkp == 'pkp') {
                     if($request->hasFile('foto_sppkp')) {
+                        if(File::exists('uploads/identitas_perusahaan/' . $identitas_perusahaan->sppkp)) {
+                            File::delete('uploads/identitas_perusahaan/' . $identitas_perusahaan->sppkp);
+                        }
                         $foto = $request->file('foto_sppkp');
                         $ext = $foto->getClientOriginalExtension();
                         $filename = uniqid() . '-SPPKP' . '.' . $ext;
@@ -159,12 +227,19 @@ class FormCustomerController extends Controller
                         $identitas_perusahaan->sppkp = $filename;
                     }
                 }
-            }
 
+                // Clear KTP column
+                $identitas_perusahaan->nama_lengkap = null;
+                $identitas_perusahaan->nomor_ktp = null;
+                $identitas_perusahaan->foto_ktp = null;
+            }
+            $identitas_perusahaan->status_konfirmasi = '0';
             $identitas_perusahaan->save();
 
             // Identitas penanggung jawab
-            $identitas_penanggung_jawab = new DataIdentitas();
+            $identitas_penanggung_jawab = DataIdentitas::firstOrNew([
+                'identitas_perusahaan_id' => $dekripsi
+            ]);
             $identitas_penanggung_jawab->identitas_perusahaan_id = $identitas_perusahaan->id;
             $identitas_penanggung_jawab->nama = $request->nama_penanggung_jawab;
             $identitas_penanggung_jawab->jabatan = $request->jabatan;
@@ -172,6 +247,9 @@ class FormCustomerController extends Controller
             $identitas_penanggung_jawab->ttd = $request->hasil_ttd;
             if($request->identitas_penanggung_jawab == 'ktp') {
                 if($request->hasFile('foto_ktp_penanggung')) {
+                    if(File::exists('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto)) {
+                        File::delete('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto);
+                    }
                     $foto = $request->file('foto_ktp_penanggung');
                     $ext = $foto->getClientOriginalExtension();
                     $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $ext;
@@ -181,6 +259,9 @@ class FormCustomerController extends Controller
                 }
             } else {
                 if($request->hasFile('foto_npwp_penanggung')) {
+                    if(File::exists('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto)) {
+                        File::delete('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto);
+                    }
                     $foto = $request->file('foto_npwp_penanggung');
                     $ext = $foto->getClientOriginalExtension();
                     $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $ext;
@@ -192,7 +273,9 @@ class FormCustomerController extends Controller
             $identitas_penanggung_jawab->save();
 
             // Informasi Bank
-            $bank = new InformasiBank();
+            $bank = InformasiBank::firstOrNew([
+                'identitas_perusahaan_id' => $dekripsi
+            ]);
             $bank->identitas_perusahaan_id = $identitas_perusahaan->id;
             $bank->nomor_rekening = $request->nomor_rekening;
             $bank->nama_rekening = $request->nama_rekening;
@@ -238,9 +321,40 @@ class FormCustomerController extends Controller
         ]);
 
         return view('information', [
+            'enkripsi' => $request->id,
             'perusahaan' => $data_perusahaan->toArray(),
             'bank' => $informasi_bank->toArray(),
-            'penanggung_jawab' => $penanggung_jawab->toArray()
+            'penanggung_jawab' => $penanggung_jawab->toArray(),
+            'url' => route('form_customer.index', ['enkripsi' => $request->id])
         ]);
+    }
+
+    public function select(Request $request) {
+        $dekripsi = Crypt::decryptString($request->id);
+        $data = IdentitasPerusahaan::where('id', $dekripsi)->get([
+            'status_kepemilikan',
+            'bidang_usaha',
+            'identitas',
+            'badan_usaha',
+            'status_pkp'
+        ]);
+
+        $informasi_bank = InformasiBank::where('identitas_perusahaan_id', $dekripsi)->pluck('status');
+
+        return ['status' => true, 'data' => $data, 'bank' => $informasi_bank];
+    }
+
+    public function confirmation(Request $request) {
+        try {
+            $dekripsi = Crypt::decryptString($request->id);
+
+            $confirmation = IdentitasPerusahaan::find($dekripsi);
+            $confirmation->status_konfirmasi = '1';
+            $confirmation->save();
+
+            return ['status' => true];
+        } catch(\Exception $e) {
+            return ['status' => false];
+        }
     }
 }
