@@ -10,4 +10,8 @@ class InformasiBank extends Model
     use HasFactory;
     protected $table = 'informasi_bank';
     protected $fillable = ['*'];
+
+    public function identitas_perusahaan() {
+        return $this->belongsTo(IdentitasPerusahaan::class, 'identitas_perusahaan_id');
+    }
 }

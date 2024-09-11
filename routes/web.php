@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FormCustomerController as FormCustomer;
 use App\Http\Controllers\APIStorageController as APIStorage;
+use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +17,7 @@ use App\Http\Controllers\APIStorageController as APIStorage;
 |
 */
 
+Auth::routes();
 Route::get('/', [FormCustomer::class, 'index'])->name('form_customer.index');
 Route::post('/store', [FormCustomer::class, 'store'])->name('form_customer.store');
 Route::get('/detail', [FormCustomer::class, 'detail'])->name('form_customer.detail');
@@ -25,3 +28,8 @@ Route::post('/api/storage', [APIStorage::class, 'store'])->name('api_storage_sto
 
 // Get data select
 Route::get('/select/{id}', [FormCustomer::class, 'select'])->name('form_customer.select');
+
+Route::middleware('web')->group(function() {
+    Route::get('/panel', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/panel/detail', [HomeController::class, 'detail'])->name('home.detail');
+});

@@ -179,7 +179,7 @@
                         <th valign="top">Foto KTP</th>
                         <td valign="top">:</td>
                         <td>
-                            <div style="width: 20%; height: auto; aspect-ratio: 16 / 9; overflow: hidden;">
+                            <div style="width: 20%; height: auto; aspect-ratio: 16 / 9;">
                                 <img style="width: 100%; height: 100%; object-fit: cover;" src="/uploads/identitas_perusahaan/{{ $perusahaan['foto_ktp'] }}" alt="Foto KTP" class="rounded" data-action="zoom">
                             </div>
                         </td>
@@ -210,7 +210,7 @@
                         <th valign="top">Foto NPWP</th>
                         <td valign="top">:</td>
                         <td>
-                            <div style="width: 15%; height: auto; aspect-ratio: 16 / 9; overflow: hidden;">
+                            <div style="width: 20%; height: auto; aspect-ratio: 16 / 9;">
                                 <img style="width: 100%; height: 100%; object-fit: cover;" src="/uploads/identitas_perusahaan/{{ $perusahaan['foto_npwp'] }}" alt="Foto NPWP" class="rounded" data-action="zoom">
                             </div>
                         </td>
@@ -220,7 +220,7 @@
                             <th>Foto SPPKP</th>
                             <td>:</td>
                             <td>
-                                <div style="width: 20%; height: auto; aspect-ratio: 16 / 9; overflow: hidden;">
+                                <div style="width: 20%; height: auto; aspect-ratio: 16 / 9;">
                                     <img style="width: 100%; height: 100%; object-fit: cover;" src="/uploads/identitas_perusahaan/{{ $perusahaan['sppkp'] }}" alt="Foto SPPKP" class="rounded" data-action="zoom">
                                 </div>
                             </td>
@@ -285,7 +285,7 @@
                         <th valign="top">Foto KTP</th>
                         <td valign="top">:</td>
                         <td>
-                            <div style="width: 20%; height: auto; aspect-ratio: 16 / 9; overflow: hidden;">
+                            <div style="width: 20%; height: auto; aspect-ratio: 16 / 9;">
                                 <img style="width: 100%; height: 100%; object-fit: cover;" src="/uploads/penanggung_jawab/{{ $penanggung_jawab['foto'] }}" alt="Foto KTP" class="rounded" data-action="zoom">
                             </div>
                         </td>
@@ -295,7 +295,7 @@
                         <th valign="top">Foto NPWP</th>
                         <td valign="top">:</td>
                         <td>
-                            <div style="width: 20%; height: auto; aspect-ratio: 16 / 9; overflow: hidden;">
+                            <div style="width: 2    0%; height: auto; aspect-ratio: 16 / 9;">
                                 <img style="width: 100%; height: 100%; object-fit: cover;" src="/uploads/penanggung_jawab/{{ $penanggung_jawab['foto'] }}" alt="Foto NPWP" class="rounded" data-action="zoom">
                             </div>
                         </td>
