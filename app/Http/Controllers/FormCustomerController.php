@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class FormCustomerController extends Controller
 {
@@ -287,7 +288,6 @@ class FormCustomerController extends Controller
 
             return ['status' => true, 'link' => $link];
         } catch(\Exception $e) {
-            dd($e->getMessage());
             return ['status' => false, 'error' => 'Terjadi kesalahan'];
         }
     }
@@ -297,34 +297,11 @@ class FormCustomerController extends Controller
         $dekripsi = Crypt::decryptString($request->id);
 
         // Memanggil data berdasarkan id identitas perusahaan
-        $data_perusahaan = IdentitasPerusahaan::find($dekripsi);
-        $informasi_bank = InformasiBank::where('identitas_perusahaan_id', $dekripsi)->first();
-        $penanggung_jawab = DataIdentitas::where('identitas_perusahaan_id', $dekripsi)->first();
-
-        // Menyembunyikan data yang penting
-        $data_perusahaan->makeHidden([
-            'id',
-            'created_at',
-            'updated_at',
-        ]);
-        $informasi_bank->makeHidden([
-            'created_at',
-            'updated_at',
-            'id',
-            'identitas_perusahaan_id',
-        ]);
-        $penanggung_jawab->makeHidden([
-            'created_at',
-            'updated_at',
-            'id',
-            'identitas_perusahaan_id',
-        ]);
+        $data_perusahaan = IdentitasPerusahaan::with('data_identitas', 'informasi_bank')->where('id', $dekripsi)->first();
 
         return view('information', [
             'enkripsi' => $request->id,
-            'perusahaan' => $data_perusahaan->toArray(),
-            'bank' => $informasi_bank->toArray(),
-            'penanggung_jawab' => $penanggung_jawab->toArray(),
+            'perusahaan' => $data_perusahaan,
             'url' => route('form_customer.index', ['enkripsi' => $request->id])
         ]);
     }
@@ -356,5 +333,17 @@ class FormCustomerController extends Controller
         } catch(\Exception $e) {
             return ['status' => false];
         }
+    }
+
+    public function download_pdf(Request $request) {
+        $decrypt = Crypt::decryptString($request->id);
+        $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank')->where('id', $decrypt)->first();
+
+        $pdf = Pdf::loadView('pdf.index', [
+            'data' => $data
+        ]);
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->render();
+        return $pdf->stream();
     }
 }

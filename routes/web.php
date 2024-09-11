@@ -22,6 +22,7 @@ Route::get('/', [FormCustomer::class, 'index'])->name('form_customer.index');
 Route::post('/store', [FormCustomer::class, 'store'])->name('form_customer.store');
 Route::get('/detail', [FormCustomer::class, 'detail'])->name('form_customer.detail');
 Route::post('/confirmation', [FormCustomer::class, 'confirmation'])->name('form_customer.confirmation');
+Route::get('/pdf/{id}', [FormCustomer::class, 'download_pdf'])->name('form_customer.pdf');
 
 // API URL
 Route::post('/api/storage', [APIStorage::class, 'store'])->name('api_storage_store');

@@ -427,7 +427,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="content-footer mt-4">
+                <div class="content-footer mt-2">
                     @if($response)
                         <button type="button" class="btn waves-effect btn-outline-primary waves-light rounded btn-md rounded" id="cancel" data-url="{{ $url }}">Cancel</button>
                     @endif
