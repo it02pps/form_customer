@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-<title>List Data Customer</title>
+<title>List Data Customer | PT Papasari</title>
 @endsection
 
 @section('css')

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-<title>Login</title>
+<title>Login | PT Papasari</title>
 @endsection
 
 @section('content')

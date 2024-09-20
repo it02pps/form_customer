@@ -28,7 +28,7 @@ Route::get('/pdf/{id}', [FormCustomer::class, 'download_pdf'])->name('form_custo
 Route::post('/api/storage', [APIStorage::class, 'store'])->name('api_storage_store');
 
 // Get data select
-Route::get('/select/{id}', [FormCustomer::class, 'select'])->name('form_customer.select');
+Route::get('/select', [FormCustomer::class, 'select'])->name('form_customer.select');
 
 Route::middleware('web')->group(function() {
     Route::get('/panel', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

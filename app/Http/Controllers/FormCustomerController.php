@@ -18,43 +18,17 @@ class FormCustomerController extends Controller
     public function index(Request $request) {
         if($request->enkripsi) {
             $data = Crypt::decryptString($request->enkripsi);
-            $data_perusahaan = IdentitasPerusahaan::find($data);
-            $informasi_bank = InformasiBank::where('identitas_perusahaan_id', $data)->first();
-            $penanggung_jawab = DataIdentitas::where('identitas_perusahaan_id', $data)->first();
+            $data_perusahaan = IdentitasPerusahaan::with('informasi_bank', 'data_identitas')->where('id', $data)->first();
             $url = route('form_customer.detail', ['id' => $request->enkripsi]);
             $enkripsi = $request->enkripsi;
-
-            $data_perusahaan->makeHidden([
-                'id',
-                'created_at',
-                'updated_at',
-            ]);
-            $informasi_bank->makeHidden([
-                'created_at',
-                'updated_at',
-                'id',
-                'identitas_perusahaan_id',
-            ]);
-            $penanggung_jawab->makeHidden([
-                'created_at',
-                'updated_at',
-                'id',
-                'identitas_perusahaan_id',
-            ]);
-
-            $response = [
-                $data_perusahaan->toArray(),
-                $informasi_bank->toArray(),
-                $penanggung_jawab->toArray(),
-            ];
         } else {
-            $response = null;
+            $data_perusahaan = null;
             $url = null;
             $enkripsi = null;
         }
 
-        // dd($response);
-        return view('welcome', compact('response', 'url', 'enkripsi'));
+        // dd($data_perusahaan);
+        return view('welcome', compact('data_perusahaan', 'url', 'enkripsi'));
     }
 
     protected function validator($data) {
@@ -88,7 +62,9 @@ class FormCustomerController extends Controller
             'badan_usaha' => ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
             'email_faktur' => ($data['identitas_perusahaan'] == 'npwp' ? 'required|email' : ''),
             'foto_npwp' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['identitas_perusahaan'] == 'npwp' ? 'required|mimes:jpg,png,jpeg,pdf' : ''),
-            // 'foto_sppkp' => ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,png,jpeg,pdf' : '')
+            'foto_sppkp' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,png,jpeg,pdf' : ''),
+            'alamat_npwp' => $data['identitas_perusahaan'] == 'npwp' ? 'required' : '',
+            'kota_npwp' => $data['identitas_perusahaan'] == 'npwp' ? 'required' : ''
         ];
 
         $message = [
@@ -136,13 +112,14 @@ class FormCustomerController extends Controller
             'foto_npwp.mimes' => 'Format file harus berupa JPG, PNG, JPEG, atau PDF',
             'foto_sppkp.required' => 'Foto SPPKP harus diisi',
             'foto_sppkp.mimes' => 'Format file harus berupa JPG, PNG, JPEG, atau PDF',
+            'alamat_npwp.required' => 'Alamat NPWP harus diisi',
+            'kota_npwp.required' => 'Kota NPWP harus diisi'
         ];
 
         return Validator::make($data, $rules, $message);
     }
 
     public function store(Request $request) {
-        // dd($request->all());
         try {
             $validator = $this->validator($request->all());
             if($validator->fails()) {
@@ -166,7 +143,7 @@ class FormCustomerController extends Controller
             // $tahun_berdiri = Carbon::parse($request->tahun_berdiri)->format('Y');
             // $hasil = $sekarang - $tahun_berdiri;
 
-            $identitas_perusahaan->lama_usaha = Str::replace('tahun ', '', $request->lama_usaha);
+            $identitas_perusahaan->lama_usaha = Str::replace(' tahun', '', $request->lama_usaha);
             $identitas_perusahaan->tahun_berdiri = $request->tahun_berdiri;
             $identitas_perusahaan->alamat_email = $request->email_perusahaan;
             $identitas_perusahaan->nomor_handphone = $request->no_hp;
@@ -207,13 +184,15 @@ class FormCustomerController extends Controller
                     }
                     $foto = $request->file('foto_npwp');
                     $ext = $foto->getClientOriginalExtension();
-                    $filename = uniqid() . '-' . 'NPWP-' . Str::slug($request->nama_lengkap, '-') . '.' . $ext;
+                    $filename = uniqid() . '-' . 'NPWP-' . Str::slug($request->nama_npwp, '-') . '.' . $ext;
 
                     $foto->move('uploads/identitas_perusahaan/', $filename);
                     $identitas_perusahaan->foto_npwp = $filename;
                 }
                 $identitas_perusahaan->email_khusus_faktur_pajak = $request->email_faktur;
                 $identitas_perusahaan->status_pkp = $request->status_pkp;
+                $identitas_perusahaan->alamat_npwp = $request->alamat_npwp;
+                $identitas_perusahaan->kota_npwp = $request->kota_npwp;
 
                 if($request->status_pkp == 'pkp') {
                     if($request->hasFile('foto_sppkp')) {
@@ -307,18 +286,14 @@ class FormCustomerController extends Controller
     }
 
     public function select(Request $request) {
-        $dekripsi = Crypt::decryptString($request->id);
-        $data = IdentitasPerusahaan::where('id', $dekripsi)->get([
-            'status_kepemilikan',
-            'bidang_usaha',
-            'identitas',
-            'badan_usaha',
-            'status_pkp'
-        ]);
-
-        $informasi_bank = InformasiBank::where('identitas_perusahaan_id', $dekripsi)->pluck('status');
-
-        return ['status' => true, 'data' => $data, 'bank' => $informasi_bank];
+        if($request->id) {
+            $dekripsi = Crypt::decryptString($request->id);
+            $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank')->where('id', $dekripsi)->first();
+    
+            return ['status' => true, 'data' => $data];
+        } else {
+            return ['status' => false];
+        }
     }
 
     public function confirmation(Request $request) {
@@ -338,6 +313,7 @@ class FormCustomerController extends Controller
     public function download_pdf(Request $request) {
         $decrypt = Crypt::decryptString($request->id);
         $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank')->where('id', $decrypt)->first();
+        // dd($data);
 
         $pdf = Pdf::loadView('pdf.index', [
             'data' => $data
