@@ -7,6 +7,10 @@
 
 @section('css')
     <style>
+        body {
+            overflow-x: hidden;
+        }
+
         .content-body {
             border: 2px solid #1C4A9C;
             border-radius: 8px;
@@ -18,12 +22,11 @@
         }
 
         .content-footer {
-            border-radius: 8px;
-            width: 10%;
+            /* position: relative; */
             display: flex;
-            justify-content: center;
-            margin-left: auto;
-            margin-right: 302px;
+            justify-content: right;
+            border-radius: 8px;
+            width: 80%;
         }
 
         .section1 h4, .section2 h4, .section3 h4 {
@@ -77,12 +80,11 @@
             }
 
             .content-footer {
-                border-radius: 8px;
-                width: 10%;
+                /* position: relative; */
                 display: flex;
-                justify-content: center;
-                margin-left: auto;
-                margin-right: auto;
+                justify-content: right;
+                border-radius: 8px;
+                width: 95%;
             }
 
             .section1-body .row .col-xl-6:nth-of-type(1) {
@@ -435,9 +437,9 @@
                 </div>
                 <div class="content-footer mt-2">
                     @if($data_perusahaan)
-                        <button type="button" class="btn waves-effect btn-outline-primary waves-light rounded btn-md rounded" id="cancel" data-url="{{ $url }}">Cancel</button>
+                        <button type="button" class="btn waves-effect btn-outline-danger waves-light rounded btn-md rounded" id="cancel" data-url="{{ $url }}">Cancel</button>
                     @endif
-                    &nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;
                     <button type="submit" class="btn waves-effect waves-light btn-primary rounded btn-md rounded submit">Submit</button>
                 </div>
             </form>

@@ -6,6 +6,10 @@
 
 @section('css')
 <style>
+    body {
+        overflow-x: hidden;
+    }
+
     .content-body {
         border: 2px solid #1C4A9C;
         border-radius: 8px;
@@ -227,7 +231,7 @@
                             </div>
                         @else
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 npwp-section">
-                                <div class="form-group mb-3">
+                                <div class="form-group mb-4">
                                     <label for="">Badan Usaha</label>
                                     <p>{{ strtoupper($perusahaan['badan_usaha']) }}</p>
                                 </div>
@@ -235,13 +239,13 @@
                             <div class="npwp-section">
                                 <div class="row">
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="form-group mb-3">
+                                        <div class="form-group">
                                             <label for="">Nomor NPWP</label>
                                             <p>{{ $perusahaan['nomor_npwp'] }}</p>
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="form-group mb-3">
+                                        <div class="form-group mb-4">
                                             <label for="">Nama NPWP</label>
                                             <p>{{ $perusahaan['nama_npwp'] }}</p>
                                         </div>
@@ -249,12 +253,12 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="form-group mb-3">
-                                            <label for="">Alamat NPWP <span class="text-danger">*</span></label>
+                                        <div class="form-group mb-4">
+                                            <label for="">Alamat NPWP</label>
                                             <p>{{ $perusahaan['alamat_npwp'] }}</p>
                                         </div>
 
-                                        <div class="form-group mb-3">
+                                        <div class="form-group mb-4">
                                             <label for="">Email Khusus Untuk Faktur Pajak</label>
                                             <p>{{ $perusahaan['email_khusus_faktur_pajak'] }}</p>
                                         </div>
@@ -264,7 +268,7 @@
                                             <p>{{ str_replace("_", " ", strtoupper($perusahaan['status_pkp'])) }}</p>
                                         </div>
         
-                                        <div class="form-group mb-3 @if($perusahaan['status_pkp'] !=  'pkp') d-none @endif" id="sppkp-section">
+                                        <div class="form-group mb-4 @if($perusahaan['status_pkp'] !=  'pkp') d-none @endif" id="sppkp-section">
                                             <label for="">Foto SPPKP</label>
         
                                             <div id="preview_sppkp">
@@ -273,17 +277,17 @@
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                        <div class="form-group mb-4">
+                                            <label for="">Kota sesuai NPWP</label>
+                                            <p>{{ $perusahaan['kota_npwp'] }}</p>
+                                        </div>
+
                                         <div class="form-group">
                                             <label for="">Foto NPWP</label>
                                         </div>
         
                                         <div id="preview_npwp" class="@if($perusahaan['identitas'] != 'npwp') d-none @endif">
                                             <img id="preview_foto_npwp" src="{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_npwp']) }}" alt="Preview" data-action="zoom">
-                                        </div>
-
-                                        <div class="form-group mt-3">
-                                            <label for="">Kota sesuai NPWP <span class="text-danger">*</span></label>
-                                            <p>{{ $perusahaan['kota_npwp'] }}</p>
                                         </div>
                                     </div>
                                 </div>
