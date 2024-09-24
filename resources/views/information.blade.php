@@ -190,7 +190,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Bidang Usaha</label>
-                                    <p>{{ $perusahaan['bidang_usaha'] }}</p>
+                                    <p>{{ str_replace('_', ' ', ucwords($perusahaan['bidang_usaha'])) }}</p>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -224,7 +224,14 @@
                                         <label for="">Foto KTP</label>
         
                                         <div id="preview_ktp" class="@if($perusahaan['identitas'] != 'ktp') d-none @endif">
-                                            <img id="preview_foto_ktp" src="{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_ktp']) }}" alt="Preview" data-action="zoom">
+                                            @if(str_contains($perusahaan['foto_ktp'], '.pdf'))
+                                            <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_ktp']) }}')">
+                                                <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
+                                                <span>Click to preview</span>
+                                            </div>
+                                            @else
+                                                <img id="preview_foto_ktp" src="{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_ktp']) }}" data-action="zoom">
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -272,7 +279,14 @@
                                             <label for="">Foto SPPKP</label>
         
                                             <div id="preview_sppkp">
-                                                <img id="preview_foto_sppkp" src="{{ asset('uploads/identitas_perusahaan/'.$perusahaan['sppkp']) }}" alt="Preview" data-action="zoom">
+                                                @if(str_contains($perusahaan['sppkp'], '.pdf'))
+                                                    <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$perusahaan['sppkp']) }}')">
+                                                        <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
+                                                        <span>Click to preview</span>
+                                                    </div>
+                                                @else
+                                                    <img id="preview_foto_sppkp" src="{{ asset('uploads/identitas_perusahaan/'.$perusahaan['sppkp']) }}" data-action="zoom">
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -287,7 +301,14 @@
                                         </div>
         
                                         <div id="preview_npwp" class="@if($perusahaan['identitas'] != 'npwp') d-none @endif">
-                                            <img id="preview_foto_npwp" src="{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_npwp']) }}" alt="Preview" data-action="zoom">
+                                            @if(str_contains($perusahaan['foto_npwp'], '.pdf'))
+                                                <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_npwp']) }}')">
+                                                    <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
+                                                    <span>Click to preview</span>
+                                                </div>
+                                            @else
+                                                <img id="preview_foto_npwp" src="{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_npwp']) }}" data-action="zoom">
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -359,7 +380,14 @@
                                     <label for="">Foto KTP</label>
     
                                     <div id="preview_ktp_penanggung" class="@if($perusahaan['data_identitas']['identitas'] != 'ktp') d-none @endif">
-                                        <img id="preview_foto_ktp_penanggung" src="{{ asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto']) }}" alt="Preview" data-action="zoom">
+                                        @if(str_contains($perusahaan['data_identitas']['foto'], '.pdf'))
+                                            <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto']) }}')">
+                                                <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
+                                                <span>Click to preview</span>
+                                            </div>
+                                        @else
+                                            <img id="preview_foto_ktp_penanggung" src="{{ asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto']) }}" data-action="zoom">
+                                        @endif
                                     </div>
                                 </div>
     
@@ -367,7 +395,14 @@
                                     <label for="">Foto NPWP</label>
     
                                     <div id="preview_npwp_penanggung" class="d-none">
-                                        <img id="preview_foto_npwp_penanggung" src="{{ asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto']) }}" alt="Preview" data-action="zoom">
+                                        @if(str_contains($perusahaan['data_identitas']['foto'], '.pdf'))
+                                            <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto']) }}')">
+                                                <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;" alt="PDF">
+                                                <span>Click to preview</span>
+                                            </div>
+                                        @else
+                                            <img id="preview_foto_npwp_penanggung" src="{{ asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto']) }}" data-action="zoom">
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -376,7 +411,7 @@
                                 <div class="">
                                     <label for="">Tanda Tangan</label>
                                     <div id="signature">
-                                        <img src="data:{{ $perusahaan['data_identitas']['ttd'] }}" alt="" style="width: 100%;" data-action="zoom">
+                                        <img src="data:{{ $perusahaan['data_identitas']['ttd'] }}" style="width: 100%;" data-action="zoom">
                                     </div>
                                 </div>
                             </div>
@@ -398,6 +433,10 @@
 
 @section('script')
     <script>
+        function preview_pdf(that) {
+            window.open(that,'_blank');
+        }
+
         $(document).ready(function() {
             $(document).on('click', '#update_customer', function() {
                 let url = $(this).data('url');

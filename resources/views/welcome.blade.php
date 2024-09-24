@@ -55,6 +55,8 @@
             border-radius: 7px;
             margin-top: 2px;
             height: 180px;
+            display: flex;
+            align-items: center;
         }
 
         #preview_ktp img, #preview_npwp img, #preview_sppkp img, #preview_ktp_penanggung img,  #preview_npwp_penanggung img {
@@ -122,10 +124,14 @@
                 <h2>FORMULIR DATA CUSTOMER PT PAPASARI</h2>
             </div>
         
+            
             <form id="form_customer" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="update_id" id="update_id" value="{{ $enkripsi }}">
                 <div class="content-body">
+                    <div class="alert alert-danger" role="alert">
+                        <h5 class="text-center">Silahkan mengisi data sesuai dengan apa yang ada, harap di tanda tangan dan di cap!</h5>
+                    </div>
                     <div class="section1 mb-4">
                         <h4>IDENTITAS PERUSAHAAN</h4>
                         <div class="section1-body">
@@ -171,7 +177,7 @@
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label for="">Nomor Handphone <span class="text-danger">*</span></label>
+                                        <label for="">Nomor Handphone Contact Person <span class="text-danger">*</span></label>
                                         <input type="text" name="no_hp" id="no_hp" max="13" class="form-control" placeholder="Masukkan nomor handphone" required autocomplete="off" value="{{ $data_perusahaan ? $data_perusahaan['nomor_handphone'] : '' }}">
                                     </div>
                                 </div>
@@ -194,11 +200,11 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Bidang Usaha <span class="text-danger">*</span></label>
-                                        <select name="bidang_usaha" class="form-control" id="bidang_usaha" required >
+                                        <select name="bidang_usaha" class="form-control" id="bidang_usaha" required>
                                             <option value="">-- Pilih bidang usaha --</option>
-                                            <option value="b1">Toko Retail</option>
-                                            <option value="b2">BUMN</option>
-                                            <option value="b3">End User</option>
+                                            <option value="toko_retail">Toko Retail</option>
+                                            <option value="bumn">BUMN</option>
+                                            <option value="end_user">End User</option>
                                         </select>
                                     </div>
                                 </div>
@@ -360,8 +366,6 @@
                                             <option value="lainnya">Lainnya</option>
                                         </select>
                                     </div>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nama Bank <span class="text-danger">*</span></label>
                                         <input type="text" name="nama_bank" id="nama_bank" class="form-control" autocomplete="off" required placeholder="Masukkan nama bank" value="{{ $data_perusahaan ? $data_perusahaan['informasi_bank']['nama_bank'] : '' }}">
@@ -390,10 +394,14 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    {{-- <div class="form-group">
+                                        <label for="">Nomor Handphone <span class="text-danger">*</span></label>
+                                        <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" class="form-control" placeholder="Masukkan no hp penanggung jawab" required>
+                                    </div> --}}
                                     <div class="form-group mb-3">
                                         <label for="">Identitas Penanggung Jawab <span class="text-danger">*</span></label>
                                         <select name="identitas_penanggung_jawab" id="identitas_penanggung_jawab" class="form-control" accept=".jpg, .png, .pdf, .jpeg" required>
-                                            {{-- <option value="">-- Pilih identitas penanggung jawab --</option> --}}
+                                            <option value="">-- Pilih identitas penanggung jawab --</option>
                                             <option value="ktp">KTP</option>
                                             <option value="npwp">NPWP</option>
                                         </select>
@@ -420,10 +428,10 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     {{-- Signature --}}
                                     <div class="mt-2">
-                                        <label for="">Tanda Tangan <span class="text-danger">*</span></label>
+                                        <label for="">Tanda Tangan</label>
                                         <div id="signature"></div>
                                         <input type="button" id="clear_signature" class="btn btn-outline-primary mt-2" value="Bersihkan">
-                                        <input type="button" id="preview" class="btn btn-primary mt-2" value="Konfirmasi">
+                                        {{-- <input type="button" id="preview" class="btn btn-primary mt-2" value="Konfirmasi"> --}}
                                         <input type="hidden" name="hasil_ttd" id="hasil_ttd" value="{{ $data_perusahaan ? $data_perusahaan['data_identitas']['ttd'] : '' }}">
                                         
                                         {{-- <textarea name="hasil_ttd" id="hasil_ttd"></textarea> --}}
@@ -510,6 +518,24 @@
         }
         
         $(document).ready(function() {
+            // Signature
+            var $sigDiv = $('#signature').jSignature({'undoButton': true});
+            var data = $sigDiv.jSignature('getData', 'image');
+
+            $('#preview').on('click', function() {
+                var data = $sigDiv.jSignature('getData', 'image');
+
+                // Masukkan ke textarea
+                $('#hasil_ttd').val(data);
+
+                // $('#sign_prev').attr('src', "data:" + data);
+                // $('#sign_prev').show();
+            });
+
+            $('#clear_signature').on('click', function() {
+                $sigDiv.jSignature('reset');
+            });
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -616,6 +642,11 @@
 
             $(document).on('submit', '#form_customer', function(e) {
                 e.preventDefault();
+                var data = $sigDiv.jSignature('getData', 'image');
+
+                // Masukkan ke textarea
+                $('#hasil_ttd').val(data);
+
                 $.ajax({
                     url: '{{ route('form_customer.store') }}',
                     type: 'POST',
@@ -654,24 +685,6 @@
             $(document).on('click', '#cancel', function() {
                 let url = $(this).data('url');
                 window.location.href = url;
-            });
-
-            // Signature
-            var $sigDiv = $('#signature').jSignature({'undoButton': true});
-            var data = $sigDiv.jSignature('getData', 'image');
-
-            $('#preview').on('click', function() {
-                var data = $sigDiv.jSignature('getData', 'image');
-
-                // Masukkan ke textarea
-                $('#hasil_ttd').val(data);
-
-                // $('#sign_prev').attr('src', "data:" + data);
-                // $('#sign_prev').show();
-            });
-
-            $('#clear_signature').on('click', function() {
-                $sigDiv.jSignature('reset');
             });
 
             // Get data untuk select

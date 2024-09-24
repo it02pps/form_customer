@@ -30,6 +30,7 @@
                                     <th>Nama Perusahaan</th>
                                     <th>Alamat Lengkap</th>
                                     <th>Nomor handphone</th>
+                                    <th>Status Konfirmasi</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -40,6 +41,13 @@
                                         <td>{{ $loop_data->nama_perusahaan }}</td>
                                         <td>{{ $loop_data->alamat_lengkap . ', ' . $loop_data->kecamatan . ', ' . $loop_data->kota_kabupaten}}</td>
                                         <td>{{ $loop_data->nomor_handphone }}</td>
+                                        <td>
+                                            @if($loop_data->status_konfirmasi == 0)
+                                                <span class="badge bg-danger">Belum Terkonfirmasi</span>
+                                            @else
+                                                <span class="badge bg-success">Sudah Terkonfirmasi</span>
+                                            @endif
+                                        </td>
                                         <td>
                                             <button type="button"
                                                 class="btn btn-primary waves-effect waves-light rounded btn-md"

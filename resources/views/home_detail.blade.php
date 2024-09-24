@@ -219,7 +219,14 @@
                                     <label for="">Foto KTP</label>
     
                                     <div id="preview_ktp" class="@if($data['identitas'] != 'ktp') d-none @endif">
-                                        <img id="preview_foto_ktp" src="{{ asset('uploads/identitas_perusahaan/'.$data['foto_ktp']) }}" alt="Preview" data-action="zoom">
+                                        @if(str_contains($data['foto_ktp'], '.pdf'))
+                                            <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$data['foto_ktp']) }}')">
+                                                <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;" alt="PDF">
+                                                <span>Click to preview</span>
+                                            </div>
+                                        @else
+                                            <img id="preview_foto_ktp" src="{{ asset('uploads/identitas_perusahaan/'.$data['foto_ktp']) }}" alt="Preview" data-action="zoom">
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -267,7 +274,14 @@
                                         <label for="">Foto SPPKP</label>
     
                                         <div id="preview_sppkp">
-                                            <img id="preview_foto_sppkp" src="{{ asset('uploads/identitas_perusahaan/'.$data['sppkp']) }}" alt="Preview" data-action="zoom">
+                                            @if(str_contains($data['sppkp'], '.pdf'))
+                                                <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$data['sppkp']) }}')">
+                                                    <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;" alt="PDF">
+                                                    <span>Click to preview</span>
+                                                </div>
+                                            @else
+                                                <img id="preview_foto_sppkp" src="{{ asset('uploads/identitas_perusahaan/'.$data['sppkp']) }}" alt="Preview" data-action="zoom">
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -282,7 +296,14 @@
                                     </div>
     
                                     <div id="preview_npwp" class="@if($data['identitas'] != 'npwp') d-none @endif">
-                                        <img id="preview_foto_npwp" src="{{ asset('uploads/identitas_perusahaan/'.$data['foto_npwp']) }}" alt="Preview" data-action="zoom">
+                                        @if(str_contains($data['foto_npwp'], '.pdf'))
+                                            <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$data['foto_npwp']) }}')">
+                                                <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;" alt="PDF">
+                                                <span>Click to preview</span>
+                                            </div>
+                                        @else
+                                            <img id="preview_foto_npwp" src="{{ asset('uploads/identitas_perusahaan/'.$data['foto_npwp']) }}" alt="Preview" data-action="zoom">
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -354,7 +375,14 @@
                                 <label for="">Foto KTP</label>
 
                                 <div id="preview_ktp_penanggung" class="@if($data['data_identitas']['identitas'] != 'ktp') d-none @endif">
-                                    <img id="preview_foto_ktp_penanggung" src="{{ asset('uploads/penanggung_jawab/'.$data['data_identitas']['foto']) }}" alt="Preview" data-action="zoom">
+                                    @if(str_contains($data['data_identitas']['foto'], '.pdf'))
+                                        <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/penanggung_jawab/'.$data['data_identitas']['foto']) }}')">
+                                            <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;" alt="PDF">
+                                            <span>Click to preview</span>
+                                        </div>
+                                    @else
+                                        <img id="preview_foto_ktp_penanggung" src="{{ asset('uploads/penanggung_jawab/'.$data['data_identitas']['foto']) }}" alt="Preview" data-action="zoom">
+                                    @endif
                                 </div>
                             </div>
 
@@ -362,7 +390,14 @@
                                 <label for="">Foto NPWP</label>
 
                                 <div id="preview_npwp_penanggung" class="d-none">
-                                    <img id="preview_foto_npwp_penanggung" src="{{ asset('uploads/penanggung_jawab/'.$data['data_identitas']['foto']) }}" alt="Preview" data-action="zoom">
+                                    @if(str_contains($data['data_identitas']['foto'], '.pdf'))
+                                        <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/penanggung_jawab/'.$data['data_identitas']['foto']) }}')">
+                                            <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;" alt="PDF">
+                                            <span>Click to preview</span>
+                                        </div>
+                                    @else
+                                        <img id="preview_foto_npwp_penanggung" src="{{ asset('uploads/penanggung_jawab/'.$data['data_identitas']['foto']) }}" alt="Preview" data-action="zoom">
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -388,6 +423,10 @@
 
 @section('script')
     <script>
+        function preview_pdf(that) {
+            window.open(that,'_blank');
+        }
+
         function back() {
             window.location.href = '/panel';
         }

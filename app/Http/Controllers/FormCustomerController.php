@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Helper\ApiStorage;
 
 class FormCustomerController extends Controller
 {
@@ -94,14 +95,17 @@ class FormCustomerController extends Controller
             'nama_bank.required' => 'Nama bank harus diisi',
             'foto_ktp_penanggung.required' => 'Foto KTP penanggung jawab harus diisi',
             'foto_ktp_penanggung.mimes' => 'Format file harus berupa JPG, PNG, JPEG, atau PDF',
+            'foto_ktp_penanggung.max' => 'Maksimal ukuran file 2MB',
             'foto_npwp_penanggung.required' => 'Foto NPWP penanggung jawab harus diisi',
             'foto_npwp_penanggung.mimes' => 'Format file harus berupa JPG, PNG, JPEG, atau PDF',
+            'foto_npwp_penanggung.max' => 'Maksimal ukuran file 2MB',
             'nama_lengkap.required' => 'Nama lengkap harus diisi',
             'nomor_ktp.required' => 'Nomor KTP harus diisi',
             'nomor_ktp.numeric' => 'Nomor KTP harus berupa angka',
             'nomor_ktp.digits' => 'Nomor KTP harus 16 digit',
             'foto_ktp.required' => 'Foto KTP harus diisi',
             'foto_ktp.mimes' => 'Format file harus berupa JPG, PNG, JPEG, atau PDF',
+            'foto_ktp.max' => 'Maksimal ukuran file 2MB',
             'nomor_npwp.required' => 'Nomor NPWP harus diisi',
             'nomor_npwp.digits_between' => 'Nomor NPWP harus diantara 15 - 16 digit',
             'nama_npwp.required' => 'Nama NPWP harus diisi',
@@ -110,8 +114,10 @@ class FormCustomerController extends Controller
             'email_faktur.email' => 'Format email harus valid',
             'foto_npwp.required' => 'Foto NPWP harus diisi',
             'foto_npwp.mimes' => 'Format file harus berupa JPG, PNG, JPEG, atau PDF',
+            'foto_npwp.max' => 'Maksimal ukuran file 2MB',
             'foto_sppkp.required' => 'Foto SPPKP harus diisi',
             'foto_sppkp.mimes' => 'Format file harus berupa JPG, PNG, JPEG, atau PDF',
+            'foto_sppkp.max' => 'Maksimal ukuran file 2MB',
             'alamat_npwp.required' => 'Alamat NPWP harus diisi',
             'kota_npwp.required' => 'Kota NPWP harus diisi'
         ];
@@ -120,6 +126,7 @@ class FormCustomerController extends Controller
     }
 
     public function store(Request $request) {
+        // dd($request->all());
         try {
             $validator = $this->validator($request->all());
             if($validator->fails()) {
@@ -161,6 +168,55 @@ class FormCustomerController extends Controller
                     $foto = $request->file('foto_ktp');
                     $ext = $foto->getClientOriginalExtension();
                     $filename = uniqid() . '-' . 'KTP-' . Str::slug($request->nama_lengkap, '-') . '.' . $ext;
+
+                    // ApiStorage::store_file($request);
+                    // API START
+                    $apiKey = 'Telor-Asin-951357-Papasari';
+                    $apiUrl = 'http://192.168.2.239:9292/upload'; // Endpoint API Express Anda
+
+                    $file = $foto;
+                    $filePath = $file->getPathname();
+                    $fileName = $file->getClientOriginalName();
+
+                    $client = new \GuzzleHttp\Client();
+                    try {
+                        $response = $client->request('POST', $apiUrl, [
+                            'headers' => [
+                                'x-api-key' => $apiKey,
+                            ],
+                            'multipart' => [
+                                [
+                                    'name'     => 'file',
+                                    'contents' => fopen($filePath, 'r'),
+                                    'filename' => $fileName,
+                                ],
+                                [
+                                    'name'     => 'category',
+                                    'contents' => $request->identitas_perusahaan,
+                                ],
+                                [
+                                    'name'     => 'CustomerName',
+                                    'contents' => $request->nama_lengkap,
+                                ],
+                            ],
+                        ]);
+
+                        dd($response);
+
+                        // Periksa apakah permintaan berhasil
+                        if ($response->getStatusCode() == 200) {
+                            $responseBody = json_decode($response->getBody(), true);
+                            dd($responseBody);
+                            // $filename = $responseBody['filename'];
+                            // $filepath = $responseBody['filepath'];
+                            // return response()->json(['success' => true, 'namafile' => $filename]);
+                        } else {
+                            // return response()->json(['success' => false, 'message' => "File uploaded Not successfully"]);
+                        }
+                    } catch (\Exception $e) {
+                        return response()->json(['success' => false, 'message' => $e->getMessage()]);
+                    }
+                    // API END
 
                     $foto->move('uploads/identitas_perusahaan/', $filename);
                     $identitas_perusahaan->foto_ktp = $filename;
@@ -267,6 +323,7 @@ class FormCustomerController extends Controller
 
             return ['status' => true, 'link' => $link];
         } catch(\Exception $e) {
+            dd($e);
             return ['status' => false, 'error' => 'Terjadi kesalahan'];
         }
     }

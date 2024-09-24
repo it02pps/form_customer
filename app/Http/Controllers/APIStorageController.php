@@ -8,39 +8,56 @@ use GuzzleHttp\Client;
 class APIStorageController extends Controller
 {
     public function store(Request $request) {
-        if(strpos($request['CustomerName'], ".") === true) {
-            return response()->json([
-                'error' => 'Nama Customer tidak boleh mengandung titik (.)',
-            ], 500);
-        }
+        $apiKey = 'Telor-Asin-951357-Papasari';
+        $apiUrl = 'http://localhost:3000/upload'; // Endpoint API Express Anda
 
-        $client = new Client();
+        $file = $request->file('foto_ktp');
+        $filePath = $file->getPathname();
+        $fileName = $file->getClientOriginalName();
 
+        $client = new \GuzzleHttp\Client();
         try {
-            // Mengirim POST ke URL API
-            $response = $client->post('http://localhost:8000/api/storage', [
+            $response = $client->request('POST', $apiUrl, [
                 'headers' => [
-                    'x-api-key' => 'Telor-Asin-951357-Papasari',
+                    'x-api-key' => $apiKey,
                 ],
-                'json' => [
-                    'CustomerName' => trim($request['CustomerName']),
-                    'Jenis' => trim($request['Jenis']),
+                'multipart' => [
+                    [
+                        'name'     => 'file',
+                        'contents' => fopen($filePath, 'r'),
+                        'filename' => $fileName,
+                    ],
+                    [
+                        'name'     => 'category',
+                        'contents' => $request->input('category'),
+                    ],
+                    [
+                        'name'     => 'CustomerName',
+                        'contents' => $request->input('CustomerName'),
+                    ],
                 ],
             ]);
 
-            // Response API
-            $responseData = json_decode($response->getBody(), true);
+            // Periksa apakah permintaan berhasil
+            if ($response->getStatusCode() == 200) {
+                $responseBody = json_decode($response->getBody(), true);
+                $filename = $responseBody['filename'];
+                $filepath = $responseBody['filepath'];
 
-            // Mengembalikan response
-            return response()->json([
-                'message' => 'Berhasil!',
-                'api_response' => $responseData,
-            ], 200);
-        } catch(\Exception $e) {
-            return response()->json([
-                'error' => 'Gagal!',
-                'details' => $e->getMessage()
-            ], 500);
+                // Simpan informasi file di database
+                Upload::create([
+                    'customer_name' => $request->input('CustomerName'),
+                    'category' => $request->input('category'),
+                    'filename' => $filename,
+                    'file_path' => $filepath,
+                ]);
+
+                return response()->json(['success' => true, 'message' => "File uploaded successfully: $filename"]);
+            } else {
+                return response()->json(['success' => false, 'message' => "File uploaded Not successfully"]);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 }
