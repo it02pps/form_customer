@@ -24,9 +24,11 @@
         .content-footer {
             /* position: relative; */
             display: flex;
-            justify-content: right;
+            justify-content: space-between;
             border-radius: 8px;
-            width: 80%;
+            width: 60%;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .section1 h4, .section2 h4, .section3 h4 {
@@ -128,10 +130,17 @@
             <form id="form_customer" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="update_id" id="update_id" value="{{ $enkripsi }}">
+                <input type="hidden" name="">
                 <div class="content-body">
-                    <div class="alert alert-danger" role="alert">
-                        <h5 class="text-center">Silahkan mengisi data sesuai dengan apa yang ada, harap di tanda tangan dan di cap!</h5>
-                    </div>
+                    @if($menu == 'badan-usaha')
+                        <div class="alert alert-danger" role="alert">
+                            <p style="font-size: 18px; font-weight: bold;" class="text-center mb-0">Silahkan mengisi data terkini, kemudian ditanda tangan dan cap perusahaan</p>
+                        </div>
+                    @else
+                        <div class="alert alert-danger" role="alert">
+                            <p style="font-size: 18px; font-weight: bold;" class="text-center mb-0">Silahkan mengisi data terkini, kemudian ditanda tangan</p>
+                        </div>
+                    @endif
                     <div class="section1 mb-4">
                         <h4>IDENTITAS PERUSAHAAN</h4>
                         <div class="section1-body">
@@ -171,7 +180,7 @@
                             <div class="row mb-3">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label for="">Alamat Email Pemilik <span class="text-danger">*</span></label>
+                                        <label for="">Alamat Email Koresponden<span class="text-danger">*</span></label>
                                         <input type="email" name="email_perusahaan" id="email_perusahaan" class="form-control" autocomplete="off" required placeholder="Masukkan alamat email" value="{{ $data_perusahaan ? $data_perusahaan['alamat_email'] : '' }}">
                                     </div>
                                 </div>
@@ -222,7 +231,7 @@
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group mb-2">
-                                    <label for="">Identitas Pemilik Perusahaan <span class="text-danger">*</span></label>
+                                    <label for="">Identitas Perusahaan <span class="text-danger">*</span></label>
                                     <select name="identitas_perusahaan" id="identitas_perusahaan" class="form-control" required>
                                         <option value="ktp">KTP</option>
                                         <option value="npwp">NPWP</option>
@@ -263,7 +272,7 @@
                                         <option value="pt">PT</option>
                                         <option value="cv">CV</option>
                                         <option value="pd">PD</option>
-                                        <option value="pribadi">Pribadi</option>
+                                        {{-- <option value="pribadi">Pribadi</option> --}}
                                     </select>
                                 </div>
                             </div>
@@ -271,28 +280,18 @@
                                 <div class="row">
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="form-group mb-3">
-                                            <label for="">Nomor NPWP <span class="text-danger">*</span></label>
-                                            <input type="text" name="nomor_npwp" id="nomor_npwp" class="form-control" autocomplete="off" placeholder="Masukkan nomor NPWP" value="{{ $data_perusahaan ? ($data_perusahaan['identitas'] == 'npwp' ? $data_perusahaan['nomor_npwp'] : '' ) : '' }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="form-group mb-3">
                                             <label for="">Nama NPWP <span class="text-danger">*</span></label>
                                             <input type="text" name="nama_npwp" id="nama_npwp" class="form-control" autocomplete="off" placeholder="Masukkan nama NPWP" value="{{ $data_perusahaan ? ($data_perusahaan['identitas'] == 'npwp' ? $data_perusahaan['nama_npwp'] : '') : '' }}">
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="form-group">
-                                            <label for="">Foto NPWP <span class="text-danger">*</span></label>
-                                            <input type="file" name="foto_npwp" id="foto_npwp" class="form-control" onchange="previewFileNpwp(this);" accept=".jpg, .png, .pdf, .jpeg" autocomplete="off">
-                                        </div>
-        
-                                        <div id="preview_npwp" class="@if($data_perusahaan) @if($data_perusahaan['identitas'] != 'npwp') d-none @endif @else d-none @endif">
-                                            <img id="preview_foto_npwp" src="{{ $data_perusahaan ? asset('uploads/identitas_perusahaan/'.$data_perusahaan['foto_npwp']) : '' }}" alt="Preview" data-action="zoom">
+                                        <div class="form-group mb-3">
+                                            <label for="">Nomor NPWP <span class="text-danger">*</span></label>
+                                            <input type="text" name="nomor_npwp" id="nomor_npwp" class="form-control" autocomplete="off" placeholder="Masukkan nomor NPWP" value="{{ $data_perusahaan ? ($data_perusahaan['identitas'] == 'npwp' ? $data_perusahaan['nomor_npwp'] : '' ) : '' }}">
                                         </div>
                                     </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="form-group mt-3">
                                             <label for="">Alamat NPWP <span class="text-danger">*</span></label>
@@ -302,6 +301,16 @@
                                         <div class="form-group mb-3 mt-3">
                                             <label for="">Kota sesuai NPWP <span class="text-danger">*</span></label>
                                             <input type="text" name="kota_npwp" id="kota_npwp" class="form-control" placeholder="Masukkan kota" autocomplete="off" value="{{ $data_perusahaan ? $data_perusahaan['kota_npwp'] : '' }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label for="">Foto NPWP <span class="text-danger">*</span></label>
+                                            <input type="file" name="foto_npwp" id="foto_npwp" class="form-control" onchange="previewFileNpwp(this);" accept=".jpg, .png, .pdf, .jpeg" autocomplete="off">
+                                        </div>
+        
+                                        <div id="preview_npwp" class="@if($data_perusahaan) @if($data_perusahaan['identitas'] != 'npwp') d-none @endif @else d-none @endif">
+                                            <img id="preview_foto_npwp" src="{{ $data_perusahaan ? asset('uploads/identitas_perusahaan/'.$data_perusahaan['foto_npwp']) : '' }}" alt="Preview" data-action="zoom">
                                         </div>
                                     </div>
                                 </div>
@@ -366,6 +375,8 @@
                                             <option value="lainnya">Lainnya</option>
                                         </select>
                                     </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nama Bank <span class="text-danger">*</span></label>
                                         <input type="text" name="nama_bank" id="nama_bank" class="form-control" autocomplete="off" required placeholder="Masukkan nama bank" value="{{ $data_perusahaan ? $data_perusahaan['informasi_bank']['nama_bank'] : '' }}">
@@ -394,10 +405,6 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    {{-- <div class="form-group">
-                                        <label for="">Nomor Handphone <span class="text-danger">*</span></label>
-                                        <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" class="form-control" placeholder="Masukkan no hp penanggung jawab" required>
-                                    </div> --}}
                                     <div class="form-group mb-3">
                                         <label for="">Identitas Penanggung Jawab <span class="text-danger">*</span></label>
                                         <select name="identitas_penanggung_jawab" id="identitas_penanggung_jawab" class="form-control" accept=".jpg, .png, .pdf, .jpeg" required>
@@ -426,29 +433,38 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    {{-- Signature --}}
-                                    <div class="mt-2">
-                                        <label for="">Tanda Tangan</label>
-                                        <div id="signature"></div>
-                                        <input type="button" id="clear_signature" class="btn btn-outline-primary mt-2" value="Bersihkan">
-                                        {{-- <input type="button" id="preview" class="btn btn-primary mt-2" value="Konfirmasi"> --}}
-                                        <input type="hidden" name="hasil_ttd" id="hasil_ttd" value="{{ $data_perusahaan ? $data_perusahaan['data_identitas']['ttd'] : '' }}">
-                                        
-                                        {{-- <textarea name="hasil_ttd" id="hasil_ttd"></textarea> --}}
-        
-                                        {{-- <img src="" id="sign_prev" style="display: none;"> --}}
+                                    <div class="form-group">
+                                        <label for="">Nomor Handphone <span class="text-danger">*</span></label>
+                                        <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" class="form-control" placeholder="Masukkan no hp penanggung jawab" required>
                                     </div>
+                                    @if($menu == 'perorangan')
+                                        {{-- Signature --}}
+                                        <div class="mt-2">
+                                            <label for="">Tanda Tangan</label>
+                                            <div id="signature"></div>
+                                            <input type="button" id="clear_signature" class="btn btn-outline-primary mt-2" value="Bersihkan">
+                                            {{-- <input type="button" id="preview" class="btn btn-primary mt-2" value="Konfirmasi"> --}}
+                                            <input type="hidden" name="hasil_ttd" id="hasil_ttd" value="{{ $data_perusahaan ? $data_perusahaan['data_identitas']['ttd'] : '' }}">
+                                            
+                                            {{-- <textarea name="hasil_ttd" id="hasil_ttd"></textarea> --}}
+            
+                                            {{-- <img src="" id="sign_prev" style="display: none;"> --}}
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="content-footer mt-2">
-                    @if($data_perusahaan)
-                        <button type="button" class="btn waves-effect btn-outline-danger waves-light rounded btn-md rounded" id="cancel" data-url="{{ $url }}">Cancel</button>
-                    @endif
-                    &nbsp;&nbsp;
-                    <button type="submit" class="btn waves-effect waves-light btn-primary rounded btn-md rounded submit">Submit</button>
+                    <button type="button" class="btn waves-effect btn-danger waves-light rounded btn-md rounded" id="back" onclick="kembali()">Back</button>
+                    <div>
+                        @if($data_perusahaan)
+                            <button type="button" class="btn waves-effect btn-outline-danger waves-light rounded btn-md rounded" id="cancel" data-url="{{ $url }}">Cancel</button>
+                        @endif
+                        &nbsp;&nbsp;
+                        <button type="submit" class="btn waves-effect waves-light btn-primary rounded btn-md rounded submit">Submit</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -457,6 +473,10 @@
 
 @section('script')
     <script>
+        function kembali() {
+            window.location.href = '/';
+        }
+
         function previewFileKtp(input) {
             var file = $('#foto_ktp').prop('files');
             if(file){

@@ -16,7 +16,12 @@ use App\Helper\ApiStorage;
 
 class FormCustomerController extends Controller
 {
-    public function index(Request $request) {
+    public function index() {
+        return view('menu');
+    }
+
+    public function view($menu, Request $request) {
+        $menu = $menu;
         if($request->enkripsi) {
             $data = Crypt::decryptString($request->enkripsi);
             $data_perusahaan = IdentitasPerusahaan::with('informasi_bank', 'data_identitas')->where('id', $data)->first();
@@ -29,7 +34,7 @@ class FormCustomerController extends Controller
         }
 
         // dd($data_perusahaan);
-        return view('welcome', compact('data_perusahaan', 'url', 'enkripsi'));
+        return view('welcome', compact('data_perusahaan', 'url', 'enkripsi', 'menu'));
     }
 
     protected function validator($data) {
@@ -65,7 +70,8 @@ class FormCustomerController extends Controller
             'foto_npwp' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['identitas_perusahaan'] == 'npwp' ? 'required|mimes:jpg,png,jpeg,pdf' : ''),
             'foto_sppkp' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,png,jpeg,pdf' : ''),
             'alamat_npwp' => $data['identitas_perusahaan'] == 'npwp' ? 'required' : '',
-            'kota_npwp' => $data['identitas_perusahaan'] == 'npwp' ? 'required' : ''
+            'kota_npwp' => $data['identitas_perusahaan'] == 'npwp' ? 'required' : '',
+            'nomor_hp_penanggung_jawab' => 'required|numeric|digits_between:10,13'
         ];
 
         $message = [
@@ -119,7 +125,10 @@ class FormCustomerController extends Controller
             'foto_sppkp.mimes' => 'Format file harus berupa JPG, PNG, JPEG, atau PDF',
             'foto_sppkp.max' => 'Maksimal ukuran file 2MB',
             'alamat_npwp.required' => 'Alamat NPWP harus diisi',
-            'kota_npwp.required' => 'Kota NPWP harus diisi'
+            'kota_npwp.required' => 'Kota NPWP harus diisi',
+            'nomor_hp_penanggung_jawab.required' => 'Nomor HP penanggung jawab harus diisi',
+            'nomor_hp_penanggung_jawab.numeric' => 'Nomor HP penanggung jawab harus berupa angka',
+            'nomor_hp_penanggung_jawab.digits_between' => 'Nomor HP penanggung jawab harus diantara 10 - 13 digit'
         ];
 
         return Validator::make($data, $rules, $message);
@@ -171,51 +180,51 @@ class FormCustomerController extends Controller
 
                     // ApiStorage::store_file($request);
                     // API START
-                    $apiKey = 'Telor-Asin-951357-Papasari';
-                    $apiUrl = 'http://192.168.2.239:9292/upload'; // Endpoint API Express Anda
+                    // $apiKey = 'Telor-Asin-951357-Papasari';
+                    // $apiUrl = 'http://192.168.2.239:9292/upload'; // Endpoint API Express Anda
 
-                    $file = $foto;
-                    $filePath = $file->getPathname();
-                    $fileName = $file->getClientOriginalName();
+                    // $file = $foto;
+                    // $filePath = $file->getPathname();
+                    // $fileName = $file->getClientOriginalName();
 
-                    $client = new \GuzzleHttp\Client();
-                    try {
-                        $response = $client->request('POST', $apiUrl, [
-                            'headers' => [
-                                'x-api-key' => $apiKey,
-                            ],
-                            'multipart' => [
-                                [
-                                    'name'     => 'file',
-                                    'contents' => fopen($filePath, 'r'),
-                                    'filename' => $fileName,
-                                ],
-                                [
-                                    'name'     => 'category',
-                                    'contents' => $request->identitas_perusahaan,
-                                ],
-                                [
-                                    'name'     => 'CustomerName',
-                                    'contents' => $request->nama_lengkap,
-                                ],
-                            ],
-                        ]);
+                    // $client = new \GuzzleHttp\Client();
+                    // try {
+                    //     $response = $client->request('POST', $apiUrl, [
+                    //         'headers' => [
+                    //             'x-api-key' => $apiKey,
+                    //         ],
+                    //         'multipart' => [
+                    //             [
+                    //                 'name'     => 'file',
+                    //                 'contents' => fopen($filePath, 'r'),
+                    //                 'filename' => $fileName,
+                    //             ],
+                    //             [
+                    //                 'name'     => 'category',
+                    //                 'contents' => $request->identitas_perusahaan,
+                    //             ],
+                    //             [
+                    //                 'name'     => 'CustomerName',
+                    //                 'contents' => $request->nama_lengkap,
+                    //             ],
+                    //         ],
+                    //     ]);
 
-                        dd($response);
+                    //     dd($response);
 
-                        // Periksa apakah permintaan berhasil
-                        if ($response->getStatusCode() == 200) {
-                            $responseBody = json_decode($response->getBody(), true);
-                            dd($responseBody);
-                            // $filename = $responseBody['filename'];
-                            // $filepath = $responseBody['filepath'];
-                            // return response()->json(['success' => true, 'namafile' => $filename]);
-                        } else {
-                            // return response()->json(['success' => false, 'message' => "File uploaded Not successfully"]);
-                        }
-                    } catch (\Exception $e) {
-                        return response()->json(['success' => false, 'message' => $e->getMessage()]);
-                    }
+                    //     // Periksa apakah permintaan berhasil
+                    //     if ($response->getStatusCode() == 200) {
+                    //         $responseBody = json_decode($response->getBody(), true);
+                    //         dd($responseBody);
+                    //         // $filename = $responseBody['filename'];
+                    //         // $filepath = $responseBody['filepath'];
+                    //         // return response()->json(['success' => true, 'namafile' => $filename]);
+                    //     } else {
+                    //         // return response()->json(['success' => false, 'message' => "File uploaded Not successfully"]);
+                    //     }
+                    // } catch (\Exception $e) {
+                    //     return response()->json(['success' => false, 'message' => $e->getMessage()]);
+                    // }
                     // API END
 
                     $foto->move('uploads/identitas_perusahaan/', $filename);
@@ -280,6 +289,7 @@ class FormCustomerController extends Controller
             $identitas_penanggung_jawab->nama = $request->nama_penanggung_jawab;
             $identitas_penanggung_jawab->jabatan = $request->jabatan;
             $identitas_penanggung_jawab->identitas = $request->identitas_penanggung_jawab;
+            $identitas_penanggung_jawab->no_hp = $request->nomor_hp_penanggung_jawab;
             $identitas_penanggung_jawab->ttd = $request->hasil_ttd;
             if($request->identitas_penanggung_jawab == 'ktp') {
                 if($request->hasFile('foto_ktp_penanggung')) {
@@ -323,7 +333,6 @@ class FormCustomerController extends Controller
 
             return ['status' => true, 'link' => $link];
         } catch(\Exception $e) {
-            dd($e);
             return ['status' => false, 'error' => 'Terjadi kesalahan'];
         }
     }

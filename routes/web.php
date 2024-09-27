@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 
 Auth::routes();
 Route::get('/', [FormCustomer::class, 'index'])->name('form_customer.index');
+Route::get('/form-customer/{menu}', [FormCustomer::class, 'view'])->name("form_customer.view");
 Route::post('/store', [FormCustomer::class, 'store'])->name('form_customer.store');
 Route::get('/detail', [FormCustomer::class, 'detail'])->name('form_customer.detail');
 Route::post('/confirmation', [FormCustomer::class, 'confirmation'])->name('form_customer.confirmation');
