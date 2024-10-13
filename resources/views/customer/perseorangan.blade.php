@@ -130,32 +130,37 @@
             <form id="form_customer" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="update_id" id="update_id" value="{{ $enkripsi }}">
-                <input type="hidden" name="">
+                <input type="hidden" name="bentuk_usaha" id="bentuk_usaha" value="perseorangan">
                 <div class="content-body">
-                    @if($menu == 'badan-usaha')
-                        <div class="alert alert-danger" role="alert">
-                            <p style="font-size: 18px; font-weight: bold;" class="text-center mb-0">Silahkan mengisi data terkini, kemudian ditanda tangan dan cap perusahaan</p>
-                        </div>
-                    @else
-                        <div class="alert alert-danger" role="alert">
-                            <p style="font-size: 18px; font-weight: bold;" class="text-center mb-0">Silahkan mengisi data terkini, kemudian ditanda tangan</p>
-                        </div>
-                    @endif
+                    <div class="alert alert-danger" role="alert">
+                        <p style="font-size: 18px; font-weight: bold;" class="text-center mb-0">Silahkan mengisi data terkini, kemudian ditanda tangan</p>
+                    </div>
                     <div class="section1 mb-4">
-                        <h4>IDENTITAS PERUSAHAAN</h4>
+                        <div class="opsi">
+                            <div class="form-group mb-4">
+                                <label for="">Jenis Transaksi <span class="text-danger">*</span></label>
+                                <br>
+                                <input type="radio" name="jenis_transaksi" id="cash" value="cash">
+                                <label for="">Cash</label>
+                                <br>
+                                <input type="radio" name="jenis_transaksi" id="credit" value="credit">
+                                <label for="">Credit</label>
+                            </div>
+                        </div>
+                        <h4>IDENTITAS PERSEORANGAN</h4>
                         <div class="section1-body">
                             <div class="row mb-2">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label for="">Nama Perusahaan <span class="text-danger">*</span></label>
-                                        <input type="text" name="nama_perusahaan" id="nama_perusahaan" class="form-control" placeholder="Masukkan nama perusahaan" autocomplete="off" required value="{{ $data_perusahaan ? $data_perusahaan['nama_perusahaan'] : '' }}">
+                                        <label for="">Nama Merk Usaha <span class="text-danger">*</span></label>
+                                        <input type="text" name="nama_perusahaan" id="nama_perusahaan" class="form-control" placeholder="Masukkan nama merk usaha" autocomplete="off" required value="{{ $data_perusahaan ? $data_perusahaan['nama_perusahaan'] : '' }}">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label for="">Nama Group Perusahaan <span class="text-danger">*</span></label>
-                                        <input type="text" name="nama_group_perusahaan" id="nama_group_perusahaan" class="form-control" placeholder="Masukkan nama group perusahaan" autocomplete="off" required value="{{ $data_perusahaan ? $data_perusahaan['nama_group_perusahaan'] : '' }}">
-                                        <span class="text-danger">*Jika tidak ada, maka diisi dengan nama perusahaan</span>
+                                        <label for="">Nama Group Usaha <span class="text-danger">*</span></label>
+                                        <input type="text" name="nama_group_perusahaan" id="nama_group_perusahaan" class="form-control" placeholder="Masukkan nama group usaha" autocomplete="off" required value="{{ $data_perusahaan ? $data_perusahaan['nama_group_perusahaan'] : '' }}">
+                                        <span class="text-danger">*Jika tidak ada, maka diisi dengan nama merk usaha</span>
                                     </div>
                                 </div>
                             </div>
@@ -194,14 +199,14 @@
                             <div class="row mb-3">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label for="">Tahun Berdiri <span class="text-danger">*</span></label>
-                                        <input type="date" name="tahun_berdiri" id="tahun_berdiri" class="form-control" required value="{{ $data_perusahaan ? $data_perusahaan['tahun_berdiri'] : '' }}">
+                                        <label for="">Tahun Berdiri</label>
+                                        <input type="date" name="tahun_berdiri" id="tahun_berdiri" class="form-control" value="{{ $data_perusahaan ? $data_perusahaan['tahun_berdiri'] : '' }}">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label for="">Lama Usaha (Tahun) <span class="text-danger">*</span></label>
-                                        <input type="text" name="lama_usaha" id="lama_usaha" class="form-control" autocomplete="off" required readonly value="{{ $data_perusahaan ? $data_perusahaan['lama_usaha'] : '' }}">
+                                        <label for="">Lama Usaha (Tahun)</label>
+                                        <input type="text" name="lama_usaha" id="lama_usaha" class="form-control" autocomplete="off" readonly value="{{ $data_perusahaan ? $data_perusahaan['lama_usaha'] : '' }}">
                                     </div>
                                 </div>
                             </div>
@@ -211,9 +216,9 @@
                                         <label for="">Bidang Usaha <span class="text-danger">*</span></label>
                                         <select name="bidang_usaha" class="form-control" id="bidang_usaha" required>
                                             <option value="">-- Pilih bidang usaha --</option>
-                                            <option value="toko_retail">Toko Retail</option>
-                                            <option value="bumn">BUMN</option>
-                                            <option value="end_user">End User</option>
+                                            @foreach ($bidang_usaha as $loop_bidang_usaha)
+                                                <option value="{{ $loop_bidang_usaha }}">{{ str_replace('_', ' ', strtoupper($loop_bidang_usaha)) }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -231,7 +236,7 @@
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group mb-2">
-                                    <label for="">Identitas Perusahaan <span class="text-danger">*</span></label>
+                                    <label for="">Identitas Perseorangan <span class="text-danger">*</span></label>
                                     <select name="identitas_perusahaan" id="identitas_perusahaan" class="form-control" required>
                                         <option value="ktp">KTP</option>
                                         <option value="npwp">NPWP</option>
@@ -364,24 +369,31 @@
                             <div class="row mb-3">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label for="">Status Rekening <span class="text-danger">*</span></label>
-                                        <select name="status_rekening" id="status_rekening" class="form-control" required>
-                                            <option value="">-- Pilih status rekening --</option>
-                                            <option value="rekening_perusahaan">Rekening Perusahaan</option>
-                                            <option value="rekening_pribadi">Rekening Pribadi</option>
-                                            <option value="rekening_suami">Rekening Suami</option>
-                                            <option value="rekening_istri">Rekening Istri</option>
-                                            <option value="rekening_anak">Rekening Anak</option>
-                                            <option value="lainnya">Lainnya</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group">
                                         <label for="">Nama Bank <span class="text-danger">*</span></label>
                                         <input type="text" name="nama_bank" id="nama_bank" class="form-control" autocomplete="off" required placeholder="Masukkan nama bank" value="{{ $data_perusahaan ? $data_perusahaan['informasi_bank']['nama_bank'] : '' }}">
                                     </div>
                                 </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label for="">Status Rekening <span class="text-danger">*</span></label>
+                                        <select name="status_rekening" id="status_rekening" class="form-control" required>
+                                            <option value="rekening_perusahaan">Rekening Perusahaan</option>
+                                            <option value="lainnya">Lainnya</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3 d-none" id="div_rekening_lainnya">
+                                {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12"> --}}
+                                    <div class="form-group">
+                                        <label for="">Lainnya <span class="text-danger">*</span></label>
+                                        <select name="rekening_lain" id="rekening_lain" class="form-control" required>
+                                            <option value="rekening_suami_istri">Rekening Suami / Istri</option>
+                                            <option value="rekening_anak_saudara">Rekening Anak / Saudara</option>
+                                            <option value="rekening_karyawan">Rekening Karyawan</option>
+                                        </select>
+                                    </div>
+                                {{-- </div> --}}
                             </div>
                         </div>
                     </div>
@@ -392,22 +404,22 @@
                             <div class="row mb-3">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label for="">Nama Penanggung Jawab <span class="text-danger">*</span></label>
-                                        <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" class="form-control" autocomplete="off" required placeholder="Masukkan nama penanggung jawab" value="{{ $data_perusahaan ? $data_perusahaan['data_identitas']['nama'] : '' }}">
+                                        <label for="">Nama Penanggung Jawab</label>
+                                        <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" class="form-control" autocomplete="off" placeholder="Masukkan nama penanggung jawab" value="{{ $data_perusahaan ? $data_perusahaan['data_identitas']['nama'] : '' }}">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label for="">Jabatan <span class="text-danger">*</span></label>
-                                        <input type="text" name="jabatan" id="jabatan" class="form-control" required autocomplete="off" placeholder="Masukkan jabatan" value="{{ $data_perusahaan ? $data_perusahaan['data_identitas']['jabatan'] : '' }}">
+                                        <label for="">Jabatan</label>
+                                        <input type="text" name="jabatan" id="jabatan" class="form-control" autocomplete="off" placeholder="Masukkan jabatan" value="{{ $data_perusahaan ? $data_perusahaan['data_identitas']['jabatan'] : '' }}">
                                     </div>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group mb-3">
-                                        <label for="">Identitas Penanggung Jawab <span class="text-danger">*</span></label>
-                                        <select name="identitas_penanggung_jawab" id="identitas_penanggung_jawab" class="form-control" accept=".jpg, .png, .pdf, .jpeg" required>
+                                        <label for="">Identitas Penanggung Jawab</label>
+                                        <select name="identitas_penanggung_jawab" id="identitas_penanggung_jawab" class="form-control" accept=".jpg, .png, .pdf, .jpeg">
                                             <option value="">-- Pilih identitas penanggung jawab --</option>
                                             <option value="ktp">KTP</option>
                                             <option value="npwp">NPWP</option>
@@ -415,7 +427,7 @@
                                     </div>
         
                                     <div class="form-group mb-2" id="penanggung_ktp">
-                                        <label for="">Foto KTP <span class="text-danger">*</span></label>
+                                        <label for="">Foto KTP</label>
                                         <input type="file" name="foto_ktp_penanggung" id="foto_ktp_penanggung" onchange="previewFileKtpPenanggung(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
         
                                         <div id="preview_ktp_penanggung" class="@if($data_perusahaan) @if($data_perusahaan['data_identitas']['identitas'] != 'ktp') d-none @endif @else d-none @endif">
@@ -424,7 +436,7 @@
                                     </div>
         
                                     <div class="form-group @if($data_perusahaan) @if($data_perusahaan['data_identitas']['identitas'] != 'npwp') d-none @endif @else d-none @endif" id="penanggung_npwp">
-                                        <label for="">Foto NPWP <span class="text-danger">*</span></label>
+                                        <label for="">Foto NPWP</label>
                                         <input type="file" name="foto_npwp_penanggung" id="foto_npwp_penanggung" onchange="previewFileNpwpPenanggung(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
         
                                         <div id="preview_npwp_penanggung" class="d-none">
@@ -434,35 +446,36 @@
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label for="">Nomor Handphone <span class="text-danger">*</span></label>
-                                        <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" class="form-control" placeholder="Masukkan no hp penanggung jawab" required>
+                                        <label for="">Nomor Handphone</label>
+                                        <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" class="form-control" placeholder="Masukkan no hp penanggung jawab" autocomplete="off" required>
                                     </div>
-                                    @if($menu == 'perorangan')
-                                        {{-- Signature --}}
-                                        <div class="mt-2">
-                                            <label for="">Tanda Tangan</label>
-                                            <div id="signature"></div>
-                                            <input type="button" id="clear_signature" class="btn btn-outline-primary mt-2" value="Bersihkan">
-                                            {{-- <input type="button" id="preview" class="btn btn-primary mt-2" value="Konfirmasi"> --}}
-                                            <input type="hidden" name="hasil_ttd" id="hasil_ttd" value="{{ $data_perusahaan ? $data_perusahaan['data_identitas']['ttd'] : '' }}">
-                                            
-                                            {{-- <textarea name="hasil_ttd" id="hasil_ttd"></textarea> --}}
-            
-                                            {{-- <img src="" id="sign_prev" style="display: none;"> --}}
-                                        </div>
-                                    @endif
+                                    {{-- Signature --}}
+                                    <div class="mt-2">
+                                        <label for="">Tanda Tangan</label>
+                                        <div id="signature"></div>
+                                        <input type="button" id="clear_signature" class="btn btn-outline-primary mt-2" value="Bersihkan">
+                                        {{-- <input type="button" id="preview" class="btn btn-primary mt-2" value="Konfirmasi"> --}}
+                                        <input type="hidden" name="hasil_ttd" id="hasil_ttd" value="{{ $data_perusahaan ? $data_perusahaan['data_identitas']['ttd'] : '' }}">
+                                        
+                                        {{-- <textarea name="hasil_ttd" id="hasil_ttd"></textarea> --}}
+        
+                                        {{-- <img src="" id="sign_prev" style="display: none;"> --}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="content-footer mt-2">
-                    <button type="button" class="btn waves-effect btn-danger waves-light rounded btn-md rounded" id="back" onclick="kembali()">Back</button>
+                    <div>
+                        @if(!$data_perusahaan)
+                            <button type="button" class="btn waves-effect btn-danger waves-light rounded btn-md rounded" id="back" onclick="kembali()">Back</button>
+                        @endif
+                    </div>
                     <div>
                         @if($data_perusahaan)
                             <button type="button" class="btn waves-effect btn-outline-danger waves-light rounded btn-md rounded" id="cancel" data-url="{{ $url }}">Cancel</button>
                         @endif
-                        &nbsp;&nbsp;
                         <button type="submit" class="btn waves-effect waves-light btn-primary rounded btn-md rounded submit">Submit</button>
                     </div>
                 </div>
@@ -474,7 +487,7 @@
 @section('script')
     <script>
         function kembali() {
-            window.location.href = '/';
+            window.location.href = '/form-customer';
         }
 
         function previewFileKtp(input) {
@@ -581,8 +594,19 @@
             });
 
             $('#status_rekening').select2({
-                placeholder: 'Pilih status rekening',
-                allowClear: true
+                placeholder: 'Pilih status rekening'
+            });
+
+            $(document).on('change', '#status_rekening', function() {
+                let value = $(this).val();
+                if(value == 'lainnya') {
+                    $('#div_rekening_lainnya').removeClass('d-none');
+                    $('#rekening_lain').select2({
+                        placeholder: 'Pilih rekening lainnya'
+                    });
+                } else {
+                    $('#div_rekening_lainnya').addClass('d-none');
+                }
             });
 
             $(document).on('change', '#identitas_penanggung_jawab', function() {
@@ -666,9 +690,9 @@
 
                 // Masukkan ke textarea
                 $('#hasil_ttd').val(data);
-
+                const bentuk_usaha = $('#bentuk_usaha').val();
                 $.ajax({
-                    url: '{{ route('form_customer.store') }}',
+                    url: '/form-customer/'+bentuk_usaha+'/store',
                     type: 'POST',
                     data: new FormData(this),
                     contentType: false,
@@ -732,6 +756,23 @@
                         $('#status_rekening').val('').change();
                         $('#identitas_penanggung_jawab').val('ktp').change();
                     }
+                }
+            });
+
+            $('input[name="jenis_transaksi"]').change(function() {
+                let rad_val = $(this).val();
+                if(rad_val == 'cash') {
+                    $('#nama_penanggung_jawab').prop('required', false);
+                    $('#jabatan').prop('required', false);
+                    $('#identitas_penanggung_jawab').prop('required', false);
+                    $('#nomor_hp_penanggung_jawab').prop('required', false);
+                    $('.section3-body .row label').find('span').remove();
+                } else {
+                    $('#nama_penanggung_jawab').prop('required', true);
+                    $('#jabatan').prop('required', true);
+                    $('#identitas_penanggung_jawab').prop('required', true);
+                    $('#nomor_hp_penanggung_jawab').prop('required', true);
+                    $('.section3-body .row').find('label').append(' <span class="text-danger">*</span>');
                 }
             });
         });

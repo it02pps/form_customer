@@ -21,20 +21,33 @@ class FormCustomerController extends Controller
     }
 
     public function view($menu, Request $request) {
-        $menu = $menu;
         if($request->enkripsi) {
             $data = Crypt::decryptString($request->enkripsi);
-            $data_perusahaan = IdentitasPerusahaan::with('informasi_bank', 'data_identitas')->where('id', $data)->first();
-            $url = route('form_customer.detail', ['id' => $request->enkripsi]);
+            $data_perusahaan = IdentitasPerusahaan::with('informasi_bank', 'data_identitas')->where('bentuk_usaha', str_replace('-', '_', $menu))->where('id', $data)->first();
+            $url = route('form_customer.detail', ['menu' => $menu, 'id' => $request->enkripsi]);
             $enkripsi = $request->enkripsi;
         } else {
             $data_perusahaan = null;
             $url = null;
             $enkripsi = null;
         }
+        $bidang_usaha = [
+            'toko_retail',
+            'bumn',
+            'reseller',
+            'pabrik',
+            'kontraktor',
+            'toko_online',
+            'dock_kapal',
+            'end_user',
+            'ekspedisi'
+        ];
 
-        // dd($data_perusahaan);
-        return view('welcome', compact('data_perusahaan', 'url', 'enkripsi', 'menu'));
+        if($menu === 'perseorangan') {
+            return view('customer.perseorangan', compact('data_perusahaan', 'url', 'enkripsi', 'menu', 'bidang_usaha'));
+        } else {
+            return view('customer.badan_usaha', compact('data_perusahaan', 'url', 'enkripsi', 'menu', 'bidang_usaha'));
+        }
     }
 
     protected function validator($data) {
@@ -46,15 +59,13 @@ class FormCustomerController extends Controller
             'no_hp' => 'required|numeric|digits_between:10,13',
             'kecamatan' => 'required',
             'bidang_usaha' => 'required',
-            'tahun_berdiri' => 'required|date',
-            'lama_usaha' => 'required',
             'email_perusahaan' => 'required|email',
-            'foto_ktp_penanggung' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['identitas_penanggung_jawab'] == 'ktp' ? 'required|mimes:jpg,png,jpeg,pdf' : ''),
-            'foto_npwp_penanggung' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['identitas_penanggung_jawab'] == 'npwp' ? 'required|mimes:jpg,png,jpeg,pdf' : ''),
+            'foto_ktp_penanggung' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['identitas_penanggung_jawab'] == 'ktp' ? ($data['jenis_transaksi'] == 'credit' ? 'required|mimes:jpg,png,jpeg,pdf' : 'mimes:jpg,png,jpeg,pdf') : ''),
+            'foto_npwp_penanggung' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['identitas_penanggung_jawab'] == 'npwp' ? ($data['jenis_transaksi'] == 'credit' ? 'required|mimes:jpg,png,jpeg,pdf' : 'mimes:jpg,png,jpeg,pdf') : ''),
             'status_kepemilikan' => 'required',
-            'nama_penanggung_jawab' => 'required',
-            'jabatan' => 'required',
-            'identitas_penanggung_jawab' => 'required',
+            'nama_penanggung_jawab' => ($data['jenis_transaksi'] == 'credit') ? 'required' : '',
+            'jabatan' => ($data['jenis_transaksi'] == 'credit') ? 'required' : '',
+            'identitas_penanggung_jawab' => ($data['jenis_transaksi'] == 'credit') ? 'required' : '',
             'identitas_perusahaan' => 'required',
             'nomor_rekening' => 'required|numeric|digits_between:10,16',
             'nama_rekening' => 'required',
@@ -71,7 +82,9 @@ class FormCustomerController extends Controller
             'foto_sppkp' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,png,jpeg,pdf' : ''),
             'alamat_npwp' => $data['identitas_perusahaan'] == 'npwp' ? 'required' : '',
             'kota_npwp' => $data['identitas_perusahaan'] == 'npwp' ? 'required' : '',
-            'nomor_hp_penanggung_jawab' => 'required|numeric|digits_between:10,13'
+            'nomor_hp_penanggung_jawab' => ($data['jenis_transaksi'] == 'credit') ? 'required|numeric|digits_between:10,13' : '',
+            'jenis_transaksi' => 'required',
+            'rekening_lain' => ($data['status_rekening'] == 'lainnya') ? 'required' : ''
         ];
 
         $message = [
@@ -84,8 +97,6 @@ class FormCustomerController extends Controller
             'no_hp.digits_between' => 'Nomor Handphone harus diantara 10 - 13 digit',
             'kecamatan.required' => 'Kecamatan harus diisi',
             'bidang_usaha.required' => 'Bidang usaha harus diisi',
-            'tahun_berdiri.required' => 'Tahun berdiri harus diisi',
-            'tahun_berdiri.date' => 'Tahun berdiri harus berupa tanggal',
             'email_perusahaan.required' => 'Email perusahaan harus diisi',
             'email_perusahaan.email' => 'Email perusahaan harus valid',
             'status_kepemilikan.required' => 'Status kepemilikan harus diisi',
@@ -128,14 +139,15 @@ class FormCustomerController extends Controller
             'kota_npwp.required' => 'Kota NPWP harus diisi',
             'nomor_hp_penanggung_jawab.required' => 'Nomor HP penanggung jawab harus diisi',
             'nomor_hp_penanggung_jawab.numeric' => 'Nomor HP penanggung jawab harus berupa angka',
-            'nomor_hp_penanggung_jawab.digits_between' => 'Nomor HP penanggung jawab harus diantara 10 - 13 digit'
+            'nomor_hp_penanggung_jawab.digits_between' => 'Nomor HP penanggung jawab harus diantara 10 - 13 digit',
+            'jenis_transaksi.required' => 'Jenis transaksi harus diisi',
+            'rekening_lain.required' => 'Rekening lain wajib diisi'
         ];
 
         return Validator::make($data, $rules, $message);
     }
 
     public function store(Request $request) {
-        // dd($request->all());
         try {
             $validator = $this->validator($request->all());
             if($validator->fails()) {
@@ -164,7 +176,9 @@ class FormCustomerController extends Controller
             $identitas_perusahaan->alamat_email = $request->email_perusahaan;
             $identitas_perusahaan->nomor_handphone = $request->no_hp;
             $identitas_perusahaan->status_kepemilikan = $request->status_kepemilikan;
-            $identitas_perusahaan->identitas = $request->identitas_perusahaan;
+            $identitas_perusahaan->identitas = strtolower($request->identitas_perusahaan);
+            $identitas_perusahaan->jenis_transaksi = $request->jenis_transaksi;
+            $identitas_perusahaan->bentuk_usaha = $request->bentuk_usaha;
 
             // Kondisi jika identitas perusahaan yang dipakai KTP / NPWP
             if($request->identitas_perusahaan == 'ktp') {
@@ -282,41 +296,45 @@ class FormCustomerController extends Controller
             $identitas_perusahaan->save();
 
             // Identitas penanggung jawab
-            $identitas_penanggung_jawab = DataIdentitas::firstOrNew([
-                'identitas_perusahaan_id' => $dekripsi
-            ]);
-            $identitas_penanggung_jawab->identitas_perusahaan_id = $identitas_perusahaan->id;
-            $identitas_penanggung_jawab->nama = $request->nama_penanggung_jawab;
-            $identitas_penanggung_jawab->jabatan = $request->jabatan;
-            $identitas_penanggung_jawab->identitas = $request->identitas_penanggung_jawab;
-            $identitas_penanggung_jawab->no_hp = $request->nomor_hp_penanggung_jawab;
-            $identitas_penanggung_jawab->ttd = $request->hasil_ttd;
-            if($request->identitas_penanggung_jawab == 'ktp') {
-                if($request->hasFile('foto_ktp_penanggung')) {
-                    if(File::exists('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto)) {
-                        File::delete('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto);
+            if($request->nama_penanggung_jawab || $request->jabatan || $request->identitas_penanggung_jawab || $request->nomor_hp_penanggung_jawab) {
+                $identitas_penanggung_jawab = DataIdentitas::firstOrNew([
+                    'identitas_perusahaan_id' => $dekripsi
+                ]);
+                $identitas_penanggung_jawab->identitas_perusahaan_id = $identitas_perusahaan->id;
+                $identitas_penanggung_jawab->nama = $request->nama_penanggung_jawab;
+                $identitas_penanggung_jawab->jabatan = $request->jabatan;
+                $identitas_penanggung_jawab->identitas = $request->identitas_penanggung_jawab;
+                $identitas_penanggung_jawab->no_hp = $request->nomor_hp_penanggung_jawab;
+                $identitas_penanggung_jawab->ttd = $request->hasil_ttd;
+                if($request->identitas_penanggung_jawab == 'ktp') {
+                    if($request->hasFile('foto_ktp_penanggung')) {
+                        if(File::exists('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto)) {
+                            File::delete('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto);
+                        }
+                        $foto = $request->file('foto_ktp_penanggung');
+                        $ext = $foto->getClientOriginalExtension();
+                        $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $ext;
+    
+                        $foto->move('uploads/penanggung_jawab/', $filename);
+                        $identitas_penanggung_jawab->foto = $filename;
                     }
-                    $foto = $request->file('foto_ktp_penanggung');
-                    $ext = $foto->getClientOriginalExtension();
-                    $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $ext;
-
-                    $foto->move('uploads/penanggung_jawab/', $filename);
-                    $identitas_penanggung_jawab->foto = $filename;
+                } else {
+                    if($request->hasFile('foto_npwp_penanggung')) {
+                        if(File::exists('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto)) {
+                            File::delete('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto);
+                        }
+                        $foto = $request->file('foto_npwp_penanggung');
+                        $ext = $foto->getClientOriginalExtension();
+                        $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $ext;
+    
+                        $foto->move('uploads/penanggung_jawab/', $filename);
+                        $identitas_penanggung_jawab->foto = $filename;
+                    }
                 }
+                $identitas_penanggung_jawab->save();
             } else {
-                if($request->hasFile('foto_npwp_penanggung')) {
-                    if(File::exists('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto)) {
-                        File::delete('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto);
-                    }
-                    $foto = $request->file('foto_npwp_penanggung');
-                    $ext = $foto->getClientOriginalExtension();
-                    $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $ext;
-
-                    $foto->move('uploads/penanggung_jawab/', $filename);
-                    $identitas_penanggung_jawab->foto = $filename;
-                }
+                DataIdentitas::where('identitas_perusahaan_id', $dekripsi)->delete();
             }
-            $identitas_penanggung_jawab->save();
 
             // Informasi Bank
             $bank = InformasiBank::firstOrNew([
@@ -327,28 +345,38 @@ class FormCustomerController extends Controller
             $bank->nama_rekening = $request->nama_rekening;
             $bank->status = $request->status_rekening;
             $bank->nama_bank = $request->nama_bank;
+            $bank->rekening_lain = $request->rekening_lain;
             $bank->save();
 
-            $link = route('form_customer.detail', ['id' => Crypt::encryptString($identitas_perusahaan->id)]);
-
+            $link = route('form_customer.detail', ['menu' => str_replace('_', '-', $request->bentuk_usaha), 'id' => Crypt::encryptString($identitas_perusahaan->id)]);
             return ['status' => true, 'link' => $link];
         } catch(\Exception $e) {
+            dd($e);
             return ['status' => false, 'error' => 'Terjadi kesalahan'];
         }
     }
 
-    public function detail(Request $request) {
+    public function detail($menu, Request $request) {
         // Mendekripsikan id
         $dekripsi = Crypt::decryptString($request->id);
 
         // Memanggil data berdasarkan id identitas perusahaan
         $data_perusahaan = IdentitasPerusahaan::with('data_identitas', 'informasi_bank')->where('id', $dekripsi)->first();
 
-        return view('information', [
-            'enkripsi' => $request->id,
-            'perusahaan' => $data_perusahaan,
-            'url' => route('form_customer.index', ['enkripsi' => $request->id])
-        ]);
+        if($menu == 'badan-usaha' || $menu == 'badan_usaha') {
+            $menu = str_replace('_', '-', $menu);
+            return view('customer.badan_usaha_detail', [
+                'enkripsi' => $request->id,
+                'perusahaan' => $data_perusahaan,
+                'url' => route('form_customer.view', ['menu' => $menu, 'enkripsi' => $request->id])
+            ]);
+        } else {
+            return view('customer.perseorangan_detail', [
+                'enkripsi' => $request->id,
+                'perusahaan' => $data_perusahaan,
+                'url' => route('form_customer.view', ['menu' => $menu, 'enkripsi' => $request->id])
+            ]);
+        }
     }
 
     public function select(Request $request) {
@@ -362,7 +390,7 @@ class FormCustomerController extends Controller
         }
     }
 
-    public function confirmation(Request $request) {
+    public function confirmation($menu, Request $request) {
         try {
             $dekripsi = Crypt::decryptString($request->id);
 
@@ -376,14 +404,20 @@ class FormCustomerController extends Controller
         }
     }
 
-    public function download_pdf(Request $request) {
+    public function download_pdf($menu, Request $request) {
         $decrypt = Crypt::decryptString($request->id);
         $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank')->where('id', $decrypt)->first();
         // dd($data);
 
-        $pdf = Pdf::loadView('pdf.index', [
-            'data' => $data
-        ]);
+        if($menu == 'badan_usaha' || $menu == 'badan-usaha') {
+            $pdf = Pdf::loadView('pdf.badan_usaha_pdf', [
+                'data' => $data
+            ]);
+        } else {
+            $pdf = Pdf::loadView('pdf.perseorangan_pdf', [
+                'data' => $data
+            ]);
+        }
         $pdf->setPaper('A4', 'portrait');
         $pdf->render();
         return $pdf->stream();

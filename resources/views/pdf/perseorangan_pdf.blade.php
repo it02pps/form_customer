@@ -151,43 +151,45 @@
                     <p class="label">Nomor Rekening</p>
                     <p>{{ $data['informasi_bank']['nomor_rekening'] }}</p>
 
-                    <p class="label">Status Rekening</p>
-                    <p>{{ str_replace("_", " ", ucwords($data['informasi_bank']['status'])) }}</p>
+                    <p class="label">Nama Bank</p>
+                    <p>{{ $data['informasi_bank']['nama_bank'] }}</p>
                 </div>
                 <div class="column">
                     <p class="label">Nama Rekening</p>
                     <p>{{ $data['informasi_bank']['nama_rekening'] }}</p>
 
-                    <p class="label">Nama Rekening</p>
-                    <p>{{ $data['informasi_bank']['nama_bank'] }}</p>
+                    <p class="label">Status Rekening</p>
+                    <p>{{ $data['informasi_bank']['rekening_lain'] ? str_replace('_', ' ', ucwords($data['informasi_bank']['rekening_lain'])) : str_replace("_", " ", ucwords($data['informasi_bank']['status'])) }}</p>
                 </div>
             </div>
 
             <hr>
-            <div class="break"></div>
+            {{-- <div class="break"></div> --}}
             
             <h3>DATA IDENTITAS PENANGGUNG JAWAB</h3>
             <div class="row">
                 <div class="column">
                     <p class="label">Nama Penanggung Jawab</p>
-                    <p>{{ $data['data_identitas']['nama'] }}</p>
+                    <p>{{ $data['data_identitas'] ? ($data['data_identitas']['nama'] ? $data['data_identitas']['nama'] : '-') : '-' }}</p>
 
                     <p class="label">Identitas Penanggung Jawab</p>
-                    <p>{{ strtoupper($data['data_identitas']['identitas']) }}</p>
+                    <p>{{ $data['data_identitas'] ? ($data['data_identitas']['identitas'] ? strtoupper($data['data_identitas']['identitas']) : '-') : '-' }}</p>
                 </div>
                 <div class="column">
                     <p class="label">Jabatan</p>
-                    <p>{{ $data['data_identitas']['jabatan'] }}</p>
+                    <p>{{ $data['data_identitas'] ? ($data['data_identitas']['jabatan'] ? $data['data_identitas']['jabatan'] : '-') : '-' }}</p>
 
-                    @if($data['data_identitas']['identitas'] == 'ktp')
-                        <p class="label">Foto KTP</p>
-                    @else
-                        <p class="label">Foto NPWP</p>
+                    @if($data['data_identitas'])
+                        @if($data['data_identitas']['identitas'] == 'ktp')
+                            <p class="label">Foto KTP</p>
+                        @else
+                            <p class="label">Foto NPWP</p>
+                        @endif
+                        <img src="uploads/penanggung_jawab/{{ $data['data_identitas']['foto'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
                     @endif
-                    <img src="uploads/penanggung_jawab/{{ $data['data_identitas']['foto'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
 
                     <p class="label">Tanda Tangan</p>
-                    <img src="data:{{ $data['data_identitas']['ttd'] }}" alt="" style="width: 70%;">
+                    {{-- <img src="data:{{ $data['data_identitas']['ttd'] }}" alt="" style="width: 70%;"> --}}
                 </div>
             </div>
         </div>

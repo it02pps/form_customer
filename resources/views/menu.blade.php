@@ -47,7 +47,7 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <h3 class="text-center" onclick="form_customer('perorangan')">PERORANGAN</h3>
+                <h3 class="text-center" onclick="form_customer('perseorangan')">PERSEORANGAN</h3>
                 {{-- <button type="button" class="btn btn-primary waves-effect waves-light rounded btn-md">Pilih</button> --}}
             </div>
         </div>
