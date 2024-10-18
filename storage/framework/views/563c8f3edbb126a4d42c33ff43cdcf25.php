@@ -1,11 +1,11 @@
 
-@extends('layouts.app')
 
-@section('title')
+
+<?php $__env->startSection('title'); ?>
     <title>Form Customer | PT Papasari</title>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('css')
+<?php $__env->startSection('css'); ?>
     <style>
         body {
             overflow-x: hidden;
@@ -116,9 +116,9 @@
             }
         }
     </style>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="container">
         <div class="row justify-content-center">
 
@@ -128,8 +128,8 @@
         
             
             <form id="form_customer" enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" name="update_id" id="update_id" value="{{ $enkripsi }}">
+                <?php echo csrf_field(); ?>
+                <input type="hidden" name="update_id" id="update_id" value="<?php echo e($enkripsi); ?>">
                 <input type="hidden" name="bentuk_usaha" id="bentuk_usaha" value="badan_usaha">
                 <div class="content-body">
                     <div class="alert alert-danger" role="alert">
@@ -153,13 +153,13 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nama Perusahaan <span class="text-danger">*</span></label>
-                                        <input type="text" name="nama_perusahaan" id="nama_perusahaan" class="form-control" placeholder="Masukkan nama perusahaan" autocomplete="off" required value="{{ $data_perusahaan ? $data_perusahaan['nama_perusahaan'] : '' }}">
+                                        <input type="text" name="nama_perusahaan" id="nama_perusahaan" class="form-control" placeholder="Masukkan nama perusahaan" autocomplete="off" required value="<?php echo e($data_perusahaan ? $data_perusahaan['nama_perusahaan'] : ''); ?>">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nama Group Perusahaan <span class="text-danger">*</span></label>
-                                        <input type="text" name="nama_group_perusahaan" id="nama_group_perusahaan" class="form-control" placeholder="Masukkan nama group perusahaan" autocomplete="off" required value="{{ $data_perusahaan ? $data_perusahaan['nama_group_perusahaan'] : '' }}">
+                                        <input type="text" name="nama_group_perusahaan" id="nama_group_perusahaan" class="form-control" placeholder="Masukkan nama group perusahaan" autocomplete="off" required value="<?php echo e($data_perusahaan ? $data_perusahaan['nama_group_perusahaan'] : ''); ?>">
                                         <span class="text-danger">*Jika tidak ada, maka diisi dengan nama perusahaan</span>
                                     </div>
                                 </div>
@@ -168,17 +168,17 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Alamat Lengkap <span class="text-danger">*</span></label>
-                                        <textarea name="alamat_lengkap" id="alamat_lengkap" cols="30" rows="5" class="form-control" required autocomplete="off" placeholder="Masukkan alamat lengkap perusahaan">{{ $data_perusahaan ? $data_perusahaan['alamat_lengkap'] : '' }}</textarea>
+                                        <textarea name="alamat_lengkap" id="alamat_lengkap" cols="30" rows="5" class="form-control" required autocomplete="off" placeholder="Masukkan alamat lengkap perusahaan"><?php echo e($data_perusahaan ? $data_perusahaan['alamat_lengkap'] : ''); ?></textarea>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group mb-2">
                                         <label for="">Kota / Kabupaten <span class="text-danger">*</span></label>
-                                        <input type="text" name="kota_kabupaten" id="kota_kabupaten" class="form-control" placeholder="Masukkan kota / kabupaten" autocomplete="off" required value="{{ $data_perusahaan ? $data_perusahaan['kota_kabupaten'] : '' }}">
+                                        <input type="text" name="kota_kabupaten" id="kota_kabupaten" class="form-control" placeholder="Masukkan kota / kabupaten" autocomplete="off" required value="<?php echo e($data_perusahaan ? $data_perusahaan['kota_kabupaten'] : ''); ?>">
                                     </div>
                                     <div class="form-gorup">
                                         <label for="">Kecamatan <span class="text-danger">*</span></label>
-                                        <input type="text" name="kecamatan" id="kecamatan" class="form-control" placeholder="Masukkan kecamatan" autocomplete="off" required value="{{ $data_perusahaan ? $data_perusahaan['kecamatan'] : '' }}">
+                                        <input type="text" name="kecamatan" id="kecamatan" class="form-control" placeholder="Masukkan kecamatan" autocomplete="off" required value="<?php echo e($data_perusahaan ? $data_perusahaan['kecamatan'] : ''); ?>">
                                     </div>
                                 </div>
                             </div>
@@ -186,13 +186,13 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Alamat Email Koresponden<span class="text-danger">*</span></label>
-                                        <input type="email" name="email_perusahaan" id="email_perusahaan" class="form-control" autocomplete="off" required placeholder="Masukkan alamat email" value="{{ $data_perusahaan ? $data_perusahaan['alamat_email'] : '' }}">
+                                        <input type="email" name="email_perusahaan" id="email_perusahaan" class="form-control" autocomplete="off" required placeholder="Masukkan alamat email" value="<?php echo e($data_perusahaan ? $data_perusahaan['alamat_email'] : ''); ?>">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nomor Handphone Contact Person <span class="text-danger">*</span></label>
-                                        <input type="text" name="no_hp" id="no_hp" max="13" class="form-control" placeholder="Masukkan nomor handphone" required autocomplete="off" value="{{ $data_perusahaan ? $data_perusahaan['nomor_handphone'] : '' }}">
+                                        <input type="text" name="no_hp" id="no_hp" max="13" class="form-control" placeholder="Masukkan nomor handphone" required autocomplete="off" value="<?php echo e($data_perusahaan ? $data_perusahaan['nomor_handphone'] : ''); ?>">
                                     </div>
                                 </div>
                             </div>
@@ -200,13 +200,13 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Tahun Berdiri</label>
-                                        <input type="date" name="tahun_berdiri" id="tahun_berdiri" class="form-control" value="{{ $data_perusahaan ? $data_perusahaan['tahun_berdiri'] : '' }}">
+                                        <input type="date" name="tahun_berdiri" id="tahun_berdiri" class="form-control" value="<?php echo e($data_perusahaan ? $data_perusahaan['tahun_berdiri'] : ''); ?>">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Lama Usaha (Tahun)</label>
-                                        <input type="text" name="lama_usaha" id="lama_usaha" class="form-control" autocomplete="off" readonly value="{{ $data_perusahaan ? $data_perusahaan['lama_usaha'] : '' }}">
+                                        <input type="text" name="lama_usaha" id="lama_usaha" class="form-control" autocomplete="off" readonly value="<?php echo e($data_perusahaan ? $data_perusahaan['lama_usaha'] : ''); ?>">
                                     </div>
                                 </div>
                             </div>
@@ -215,9 +215,9 @@
                                     <div class="form-group">
                                         <label for="">Bidang Usaha <span class="text-danger">*</span></label>
                                         <select name="bidang_usaha" class="form-control" id="bidang_usaha" required>
-                                            @foreach ($bidang_usaha as $loop_bidang_usaha)
-                                                <option value="{{ $loop_bidang_usaha }}">{{ str_replace('_', ' ', strtoupper($loop_bidang_usaha)) }}</option>
-                                            @endforeach
+                                            <?php $__currentLoopData = $bidang_usaha; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $loop_bidang_usaha): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($loop_bidang_usaha); ?>"><?php echo e(str_replace('_', ' ', strtoupper($loop_bidang_usaha))); ?></option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </select>
                                     </div>
                                 </div>
@@ -238,14 +238,14 @@
                                             <option value="pt">PT</option>
                                             <option value="cv">CV</option>
                                             <option value="pd">PD</option>
-                                            {{-- <option value="pribadi">Pribadi</option> --}}
+                                            
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group mb-3">
                                         <label for="">Nama NPWP <span class="text-danger">*</span></label>
-                                        <input type="text" name="nama_npwp" id="nama_npwp" class="form-control" autocomplete="off" placeholder="Masukkan nama NPWP" value="{{ $data_perusahaan ? ($data_perusahaan['identitas'] == 'npwp' ? $data_perusahaan['nama_npwp'] : '') : '' }}">
+                                        <input type="text" name="nama_npwp" id="nama_npwp" class="form-control" autocomplete="off" placeholder="Masukkan nama NPWP" value="<?php echo e($data_perusahaan ? ($data_perusahaan['identitas'] == 'npwp' ? $data_perusahaan['nama_npwp'] : '') : ''); ?>">
                                     </div>
                                 </div>
                             </div>
@@ -253,7 +253,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group mb-3">
                                         <label for="">Nomor NPWP <span class="text-danger">*</span></label>
-                                        <input type="text" name="nomor_npwp" id="nomor_npwp" class="form-control" autocomplete="off" placeholder="Masukkan nomor NPWP" value="{{ $data_perusahaan ? ($data_perusahaan['identitas'] == 'npwp' ? $data_perusahaan['nomor_npwp'] : '' ) : '' }}">
+                                        <input type="text" name="nomor_npwp" id="nomor_npwp" class="form-control" autocomplete="off" placeholder="Masukkan nomor NPWP" value="<?php echo e($data_perusahaan ? ($data_perusahaan['identitas'] == 'npwp' ? $data_perusahaan['nomor_npwp'] : '' ) : ''); ?>">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -262,8 +262,8 @@
                                         <input type="file" name="foto_npwp" id="foto_npwp" class="form-control" onchange="previewFileNpwp(this);" accept=".jpg, .png, .pdf, .jpeg" autocomplete="off">
                                     </div>
     
-                                    <div id="preview_npwp" class="@if($data_perusahaan) @if($data_perusahaan['identitas'] != 'npwp') d-none @endif @else d-none @endif">
-                                        <img id="preview_foto_npwp" src="{{ $data_perusahaan ? asset('uploads/identitas_perusahaan/'.$data_perusahaan['foto_npwp']) : '' }}" alt="Preview" data-action="zoom">
+                                    <div id="preview_npwp" class="<?php if($data_perusahaan): ?> <?php if($data_perusahaan['identitas'] != 'npwp'): ?> d-none <?php endif; ?> <?php else: ?> d-none <?php endif; ?>">
+                                        <img id="preview_foto_npwp" src="<?php echo e($data_perusahaan ? asset('uploads/identitas_perusahaan/'.$data_perusahaan['foto_npwp']) : ''); ?>" alt="Preview" data-action="zoom">
                                     </div>
                                 </div>
                             </div>
@@ -271,7 +271,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Alamat NPWP <span class="text-danger">*</span></label>
-                                        <textarea name="alamat_npwp" id="alamat_npwp" cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NPWP">{{ $data_perusahaan ? $data_perusahaan['alamat_npwp'] : '' }}</textarea>
+                                        <textarea name="alamat_npwp" id="alamat_npwp" cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NPWP"><?php echo e($data_perusahaan ? $data_perusahaan['alamat_npwp'] : ''); ?></textarea>
                                     </div>
 
                                     <div class="form-group mt-3">
@@ -286,20 +286,20 @@
                                     <div class="form-group">
                                         <div class="form-group">
                                             <label for="">Kota sesuai NPWP <span class="text-danger">*</span></label>
-                                            <input type="text" name="kota_npwp" id="kota_npwp" class="form-control" placeholder="Masukkan kota" autocomplete="off" value="{{ $data_perusahaan ? $data_perusahaan['kota_npwp'] : '' }}">
+                                            <input type="text" name="kota_npwp" id="kota_npwp" class="form-control" placeholder="Masukkan kota" autocomplete="off" value="<?php echo e($data_perusahaan ? $data_perusahaan['kota_npwp'] : ''); ?>">
                                         </div>
 
                                         <div class="form-group mt-3">
                                             <label for="">Email Khusus Untuk Faktur Pajak <span class="text-danger">*</span></label>
-                                            <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Masukkan email faktur" value="{{ $data_perusahaan ? ($data_perusahaan['identitas'] == 'npwp' ? $data_perusahaan['email_khusus_faktur_pajak'] : '') : '' }}">
+                                            <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Masukkan email faktur" value="<?php echo e($data_perusahaan ? ($data_perusahaan['identitas'] == 'npwp' ? $data_perusahaan['email_khusus_faktur_pajak'] : '') : ''); ?>">
                                         </div>
 
-                                        <div class="form-group mt-3 @if($data_perusahaan) @if($data_perusahaan['status_pkp'] !=  'pkp') d-none @endif @else d-none @endif" id="sppkp-section">
+                                        <div class="form-group mt-3 <?php if($data_perusahaan): ?> <?php if($data_perusahaan['status_pkp'] !=  'pkp'): ?> d-none <?php endif; ?> <?php else: ?> d-none <?php endif; ?>" id="sppkp-section">
                                             <label for="">Foto SPPKP <span class="text-danger">*</span></label>
                                             <input type="file" name="foto_sppkp" id="foto_sppkp" onchange="previewFileSppkp(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
         
                                             <div id="preview_sppkp">
-                                                <img id="preview_foto_sppkp" src="{{ $data_perusahaan ? asset('uploads/identitas_perusahaan/'.$data_perusahaan['sppkp']) : '' }}" alt="Preview" data-action="zoom">
+                                                <img id="preview_foto_sppkp" src="<?php echo e($data_perusahaan ? asset('uploads/identitas_perusahaan/'.$data_perusahaan['sppkp']) : ''); ?>" alt="Preview" data-action="zoom">
                                             </div>
                                         </div>
                                     </div>
@@ -315,13 +315,13 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nomor Rekening <span class="text-danger">*</span></label>
-                                        <input type="text" name="nomor_rekening" id="nomor_rekening" class="form-control" autocomplete="off" required placeholder="Masukkan nomor rekening" value="{{ $data_perusahaan ? $data_perusahaan['informasi_bank']['nomor_rekening'] : '' }}">
+                                        <input type="text" name="nomor_rekening" id="nomor_rekening" class="form-control" autocomplete="off" required placeholder="Masukkan nomor rekening" value="<?php echo e($data_perusahaan ? $data_perusahaan['informasi_bank']['nomor_rekening'] : ''); ?>">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nama Rekening <span class="text-danger">*</span></label>
-                                        <input type="text" name="nama_rekening" id="nama_rekening" class="form-control" autocomplete="off" required placeholder="Masukkan nama rekening" value="{{ $data_perusahaan ? $data_perusahaan['informasi_bank']['nama_rekening'] : '' }}">
+                                        <input type="text" name="nama_rekening" id="nama_rekening" class="form-control" autocomplete="off" required placeholder="Masukkan nama rekening" value="<?php echo e($data_perusahaan ? $data_perusahaan['informasi_bank']['nama_rekening'] : ''); ?>">
                                     </div>
                                 </div>
                             </div>
@@ -329,7 +329,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nama Bank <span class="text-danger">*</span></label>
-                                        <input type="text" name="nama_bank" id="nama_bank" class="form-control" autocomplete="off" required placeholder="Masukkan nama bank" value="{{ $data_perusahaan ? $data_perusahaan['informasi_bank']['nama_bank'] : '' }}">
+                                        <input type="text" name="nama_bank" id="nama_bank" class="form-control" autocomplete="off" required placeholder="Masukkan nama bank" value="<?php echo e($data_perusahaan ? $data_perusahaan['informasi_bank']['nama_bank'] : ''); ?>">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -343,17 +343,13 @@
                                 </div>
                             </div>
                             <div class="row mb-3 d-none" id="div_rekening_lainnya">
-                                {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12"> --}}
+                                
                                     <div class="form-group">
                                         <label for="">Lainnya <span class="text-danger">*</span></label>
-                                        {{-- <select name="rekening_lain" id="rekening_lain" class="form-control">
-                                            <option value="rekening_suami_istri">Rekening Suami / Istri</option>
-                                            <option value="rekening_anak_saudara">Rekening Anak / Saudara</option>
-                                            <option value="rekening_karyawan">Rekening Karyawan</option>
-                                        </select> --}}
+                                        
                                         <input type="text" class="form-control" id="rekening_lain" name="rekening_lain" placeholder="Masukkan pemilik rekening">
                                     </div>
-                                {{-- </div> --}}
+                                
                             </div>
                         </div>
                     </div>
@@ -365,13 +361,13 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nama Penanggung Jawab</label>
-                                        <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" class="form-control" autocomplete="off" placeholder="Masukkan nama penanggung jawab" value="{{ $data_perusahaan ? $data_perusahaan['data_identitas'] ? $data_perusahaan['data_identitas']['nama'] : '' : '' }}">
+                                        <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" class="form-control" autocomplete="off" placeholder="Masukkan nama penanggung jawab" value="<?php echo e($data_perusahaan ? $data_perusahaan['data_identitas'] ? $data_perusahaan['data_identitas']['nama'] : '' : ''); ?>">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Jabatan</label>
-                                        <input type="text" name="jabatan" id="jabatan" class="form-control" autocomplete="off" placeholder="Masukkan jabatan" value="{{ $data_perusahaan ? $data_perusahaan['data_identitas'] ? $data_perusahaan['data_identitas']['jabatan'] : '' : '' }}">
+                                        <input type="text" name="jabatan" id="jabatan" class="form-control" autocomplete="off" placeholder="Masukkan jabatan" value="<?php echo e($data_perusahaan ? $data_perusahaan['data_identitas'] ? $data_perusahaan['data_identitas']['jabatan'] : '' : ''); ?>">
                                     </div>
                                 </div>
                             </div>
@@ -390,24 +386,24 @@
                                         <label for="">Foto KTP</label>
                                         <input type="file" name="foto_ktp_penanggung" id="foto_ktp_penanggung" onchange="previewFileKtpPenanggung(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
         
-                                        <div id="preview_ktp_penanggung" class="@if($data_perusahaan) @if($data_perusahaan['data_identitas']) @if($data_perusahaan['data_identitas']['identitas'] != 'ktp') d-none @endif @else d-none @endif @else d-none @endif">
-                                            <img id="preview_foto_ktp_penanggung" src="{{ $data_perusahaan ? ($data_perusahaan['data_identitas'] ? asset('uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '') : '' }}" alt="Preview" data-action="zoom">
+                                        <div id="preview_ktp_penanggung" class="<?php if($data_perusahaan): ?> <?php if($data_perusahaan['data_identitas']): ?> <?php if($data_perusahaan['data_identitas']['identitas'] != 'ktp'): ?> d-none <?php endif; ?> <?php else: ?> d-none <?php endif; ?> <?php else: ?> d-none <?php endif; ?>">
+                                            <img id="preview_foto_ktp_penanggung" src="<?php echo e($data_perusahaan ? ($data_perusahaan['data_identitas'] ? asset('uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '') : ''); ?>" alt="Preview" data-action="zoom">
                                         </div>
                                     </div>
         
-                                    <div class="form-group @if($data_perusahaan) @if($data_perusahaan['data_identitas']) @if($data_perusahaan['data_identitas']['identitas'] != 'npwp') d-none @endif @else d-none @endif @else d-none @endif" id="penanggung_npwp">
+                                    <div class="form-group <?php if($data_perusahaan): ?> <?php if($data_perusahaan['data_identitas']): ?> <?php if($data_perusahaan['data_identitas']['identitas'] != 'npwp'): ?> d-none <?php endif; ?> <?php else: ?> d-none <?php endif; ?> <?php else: ?> d-none <?php endif; ?>" id="penanggung_npwp">
                                         <label for="">Foto NPWP</label>
                                         <input type="file" name="foto_npwp_penanggung" id="foto_npwp_penanggung" onchange="previewFileNpwpPenanggung(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
         
                                         <div id="preview_npwp_penanggung" class="d-none">
-                                            <img id="preview_foto_npwp_penanggung" src="{{ $data_perusahaan ? ($data_perusahaan['data_identitas'] ? asset('uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '') : '' }}" alt="Preview" data-action="zoom">
+                                            <img id="preview_foto_npwp_penanggung" src="<?php echo e($data_perusahaan ? ($data_perusahaan['data_identitas'] ? asset('uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '') : ''); ?>" alt="Preview" data-action="zoom">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nomor Handphone</label>
-                                        <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" class="form-control" autocomplete="off" placeholder="Masukkan no hp penanggung jawab" value="{{ $data_perusahaan ? ($data_perusahaan['data_identitas'] ? $data_perusahaan['data_identitas']['no_hp'] : '') : '' }}">
+                                        <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" class="form-control" autocomplete="off" placeholder="Masukkan no hp penanggung jawab" value="<?php echo e($data_perusahaan ? ($data_perusahaan['data_identitas'] ? $data_perusahaan['data_identitas']['no_hp'] : '') : ''); ?>">
                                     </div>
                                 </div>
                             </div>
@@ -416,23 +412,23 @@
                 </div>
                 <div class="content-footer mt-2">
                     <div>
-                        @if(!$data_perusahaan)
+                        <?php if(!$data_perusahaan): ?>
                             <button type="button" class="btn waves-effect btn-danger waves-light rounded btn-md rounded" id="back" onclick="kembali()">Back</button>
-                        @endif
+                        <?php endif; ?>
                     </div>
                     <div>
-                        @if($data_perusahaan)
-                            <button type="button" class="btn waves-effect btn-outline-danger waves-light rounded btn-md rounded" id="cancel" data-url="{{ $url }}">Cancel</button>
-                        @endif
+                        <?php if($data_perusahaan): ?>
+                            <button type="button" class="btn waves-effect btn-outline-danger waves-light rounded btn-md rounded" id="cancel" data-url="<?php echo e($url); ?>">Cancel</button>
+                        <?php endif; ?>
                         <button type="submit" class="btn waves-effect waves-light btn-primary rounded btn-md rounded submit">Submit</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('script')
+<?php $__env->startSection('script'); ?>
     <script>
         function kembali() {
             window.location.href = '/form-customer';
@@ -645,7 +641,7 @@
 
             // Get data untuk select
             var enkripsi = $('#update_id').val();
-            let url = '{{ route('form_customer.select', ':id') }}';
+            let url = '<?php echo e(route('form_customer.select', ':id')); ?>';
             url = url.replace(':id', enkripsi);
             $.ajax({
                 url: url,
@@ -708,4 +704,6 @@
             });
         });
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Other\laragon\www\FormCustomer\resources\views/customer/badan_usaha.blade.php ENDPATH**/ ?>

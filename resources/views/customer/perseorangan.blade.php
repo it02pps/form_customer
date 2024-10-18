@@ -215,7 +215,6 @@
                                     <div class="form-group">
                                         <label for="">Bidang Usaha <span class="text-danger">*</span></label>
                                         <select name="bidang_usaha" class="form-control" id="bidang_usaha" required>
-                                            <option value="">-- Pilih bidang usaha --</option>
                                             @foreach ($bidang_usaha as $loop_bidang_usaha)
                                                 <option value="{{ $loop_bidang_usaha }}">{{ str_replace('_', ' ', strtoupper($loop_bidang_usaha)) }}</option>
                                             @endforeach
@@ -225,7 +224,6 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <label for="">Status Kepemilikan Tempat Usaha <span class="text-danger">*</span></label>
                                     <select name="status_kepemilikan" id="status_kepemilikan" class="form-control" required>
-                                        <option value="">-- Pilih status kepemilikan --</option>
                                         <option value="milik_sendiri">Milik Sendiri</option>
                                         <option value="sewa">Sewa</option>
                                         <option value="group">Group</option>
@@ -271,9 +269,8 @@
                             {{-- NPWP section --}}
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 npwp-section d-none">
                                 <div class="form-group mb-3">
-                                    <label for="">Badan Usaha <span class="text-danger">*</span></label>
+                                    <label for="">Jenis Badan Usaha <span class="text-danger">*</span></label>
                                     <select name="badan_usaha" id="badan_usaha" class="form-control">
-                                        <option value="">-- Pilih bidang usaha --</option>
                                         <option value="pt">PT</option>
                                         <option value="cv">CV</option>
                                         <option value="pd">PD</option>
@@ -375,7 +372,7 @@
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label for="">Status Rekening <span class="text-danger">*</span></label>
+                                        <label for="">Pemilik Rekening <span class="text-danger">*</span></label>
                                         <select name="status_rekening" id="status_rekening" class="form-control" required>
                                             <option value="rekening_perusahaan">Rekening Perusahaan</option>
                                             <option value="lainnya">Lainnya</option>
@@ -387,11 +384,12 @@
                                 {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12"> --}}
                                     <div class="form-group">
                                         <label for="">Lainnya <span class="text-danger">*</span></label>
-                                        <select name="rekening_lain" id="rekening_lain" class="form-control" required>
+                                        {{-- <select name="rekening_lain" id="rekening_lain" class="form-control" required>
                                             <option value="rekening_suami_istri">Rekening Suami / Istri</option>
                                             <option value="rekening_anak_saudara">Rekening Anak / Saudara</option>
                                             <option value="rekening_karyawan">Rekening Karyawan</option>
-                                        </select>
+                                        </select> --}}
+                                        <input type="text" class="form-control" id="rekening_lain" name="rekening_lain" placeholder="Masukkan pemilik rekening">
                                     </div>
                                 {{-- </div> --}}
                             </div>
@@ -405,13 +403,13 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nama Penanggung Jawab</label>
-                                        <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" class="form-control" autocomplete="off" placeholder="Masukkan nama penanggung jawab" value="{{ $data_perusahaan ? $data_perusahaan['data_identitas']['nama'] : '' }}">
+                                        <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" class="form-control" autocomplete="off" placeholder="Masukkan nama penanggung jawab" value="{{ $data_perusahaan ? $data_perusahaan['data_identitas'] ? $data_perusahaan['data_identitas']['nama'] : '' : '' }}">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Jabatan</label>
-                                        <input type="text" name="jabatan" id="jabatan" class="form-control" autocomplete="off" placeholder="Masukkan jabatan" value="{{ $data_perusahaan ? $data_perusahaan['data_identitas']['jabatan'] : '' }}">
+                                        <input type="text" name="jabatan" id="jabatan" class="form-control" autocomplete="off" placeholder="Masukkan jabatan" value="{{ $data_perusahaan ? $data_perusahaan['data_identitas'] ? $data_perusahaan['data_identitas']['jabatan'] : '' : '' }}">
                                     </div>
                                 </div>
                             </div>
@@ -431,7 +429,7 @@
                                         <input type="file" name="foto_ktp_penanggung" id="foto_ktp_penanggung" onchange="previewFileKtpPenanggung(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
         
                                         <div id="preview_ktp_penanggung" class="@if($data_perusahaan) @if($data_perusahaan['data_identitas']['identitas'] != 'ktp') d-none @endif @else d-none @endif">
-                                            <img id="preview_foto_ktp_penanggung" src="{{ $data_perusahaan ? asset('uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '' }}" alt="Preview" data-action="zoom">
+                                            <img id="preview_foto_ktp_penanggung" src="{{ $data_perusahaan ? $data_perusahaan['data_identitas'] ? asset('uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '' : '' }}" alt="Preview" data-action="zoom">
                                         </div>
                                     </div>
         
@@ -440,14 +438,14 @@
                                         <input type="file" name="foto_npwp_penanggung" id="foto_npwp_penanggung" onchange="previewFileNpwpPenanggung(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
         
                                         <div id="preview_npwp_penanggung" class="d-none">
-                                            <img id="preview_foto_npwp_penanggung" src="{{ $data_perusahaan ? asset('uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '' }}" alt="Preview" data-action="zoom">
+                                            <img id="preview_foto_npwp_penanggung" src="{{ $data_perusahaan ? $data_perusahaan['data_identitas'] ? asset('uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '' : '' }}" alt="Preview" data-action="zoom">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nomor Handphone</label>
-                                        <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" class="form-control" placeholder="Masukkan no hp penanggung jawab" autocomplete="off" required>
+                                        <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" class="form-control" placeholder="Masukkan no hp penanggung jawab" autocomplete="off" value="{{ $data_perusahaan ? $data_perusahaan['data_identitas'] ? $data_perusahaan['data_identitas']['no_hp'] : '' : '' }}">
                                     </div>
                                     {{-- Signature --}}
                                     <div class="mt-2">
@@ -455,7 +453,7 @@
                                         <div id="signature"></div>
                                         <input type="button" id="clear_signature" class="btn btn-outline-primary mt-2" value="Bersihkan">
                                         {{-- <input type="button" id="preview" class="btn btn-primary mt-2" value="Konfirmasi"> --}}
-                                        <input type="hidden" name="hasil_ttd" id="hasil_ttd" value="{{ $data_perusahaan ? $data_perusahaan['data_identitas']['ttd'] : '' }}">
+                                        <input type="hidden" name="hasil_ttd" id="hasil_ttd" value="{{ $data_perusahaan ? $data_perusahaan['data_identitas'] ? $data_perusahaan['data_identitas']['ttd'] : '' : '' }}">
                                         
                                         {{-- <textarea name="hasil_ttd" id="hasil_ttd"></textarea> --}}
         
@@ -476,7 +474,7 @@
                         @if($data_perusahaan)
                             <button type="button" class="btn waves-effect btn-outline-danger waves-light rounded btn-md rounded" id="cancel" data-url="{{ $url }}">Cancel</button>
                         @endif
-                        <button type="submit" class="btn waves-effect waves-light btn-primary rounded btn-md rounded submit">Submit</button>
+                        <button type="submit" class="btn waves-effect waves-light btn-primary rounded btn-md rounded" aria-hidden="false">Submit</button>
                     </div>
                 </div>
             </form>
@@ -553,17 +551,17 @@
         $(document).ready(function() {
             // Signature
             var $sigDiv = $('#signature').jSignature({'undoButton': true});
-            var data = $sigDiv.jSignature('getData', 'image');
+            // var data = $sigDiv.jSignature('getData', 'image');
 
-            $('#preview').on('click', function() {
-                var data = $sigDiv.jSignature('getData', 'image');
+            // $('#preview').on('click', function() {
+            //     var data = $sigDiv.jSignature('getData', 'image');
 
-                // Masukkan ke textarea
-                $('#hasil_ttd').val(data);
+            //     // Masukkan ke textarea
+            //     $('#hasil_ttd').val(data);
 
-                // $('#sign_prev').attr('src', "data:" + data);
-                // $('#sign_prev').show();
-            });
+            //     // $('#sign_prev').attr('src', "data:" + data);
+            //     // $('#sign_prev').show();
+            // });
 
             $('#clear_signature').on('click', function() {
                 $sigDiv.jSignature('reset');
@@ -577,12 +575,10 @@
 
             $('#bidang_usaha').select2({
                 placeholder: 'Pilih bidang usaha',
-                allowClear: true
             });
 
             $('#status_kepemilikan').select2({
                 placeholder: 'Pilih status kepemilikan',
-                allowClear: true
             });
 
             $('#identitas_penanggung_jawab').select2({
@@ -601,11 +597,13 @@
                 let value = $(this).val();
                 if(value == 'lainnya') {
                     $('#div_rekening_lainnya').removeClass('d-none');
-                    $('#rekening_lain').select2({
-                        placeholder: 'Pilih rekening lainnya'
-                    });
+                    $('#rekening_lain').prop('required', true);
+                    // $('#rekening_lain').select2({
+                    //     placeholder: 'Pilih rekening lainnya'
+                    // });
                 } else {
                     $('#div_rekening_lainnya').addClass('d-none');
+                    $('#rekening_lain').prop('required', false);
                 }
             });
 
@@ -686,10 +684,9 @@
 
             $(document).on('submit', '#form_customer', function(e) {
                 e.preventDefault();
-                var data = $sigDiv.jSignature('getData', 'image');
-
+                var data = $sigDiv.jSignature('getData', 'base30');
                 // Masukkan ke textarea
-                $('#hasil_ttd').val(data);
+                $('#hasil_ttd').val(data[1]);
                 const bentuk_usaha = $('#bentuk_usaha').val();
                 $.ajax({
                     url: '/form-customer/'+bentuk_usaha+'/store',
@@ -747,6 +744,25 @@
                         $('#status_pkp').val(res.data.status_pkp).change();
                         $('#status_rekening').val(res.data.informasi_bank.status).change();
                         $('#identitas_penanggung_jawab').val(res.data.data_identitas.identitas).change();
+                        if(res.data.jenis_transaksi == 'credit') {
+                            $('.section1 #credit').prop('checked', true);
+                            $('.section1 #cash').prop('checked', false);
+
+                            $('#nama_penanggung_jawab').prop('required', true);
+                            $('#jabatan').prop('required', true);
+                            $('#identitas_penanggung_jawab').prop('required', true);
+                            $('#nomor_hp_penanggung_jawab').prop('required', true);
+                            $('.section3-body .row').find('label').append(' <span class="text-danger">*</span>');
+                        } else {
+                            $('.section1 #credit').prop('checked', false);
+                            $('.section1 #cash').prop('checked', true);
+
+                            $('#nama_penanggung_jawab').prop('required', false);
+                            $('#jabatan').prop('required', false);
+                            $('#identitas_penanggung_jawab').prop('required', false);
+                            $('#nomor_hp_penanggung_jawab').prop('required', false);
+                            $('.section3-body .row label').find('span').remove();
+                        }
                     } else {
                         $('#status_kepemilikan').val('').change();
                         $('#badan_usaha').val('').change();

@@ -1,10 +1,10 @@
-@extends('layouts.app')
 
-@section('title')
+
+<?php $__env->startSection('title'); ?>
 <title>Detail Form Customer | PT Papasari</title>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('css')
+<?php $__env->startSection('css'); ?>
 <style>
     body {
         overflow-x: hidden;
@@ -113,9 +113,9 @@
         }
     }
 </style>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="container">
     <div class="row justify-content-center">
 
@@ -124,8 +124,8 @@
         </div>
     
         <form id="form_customer" enctype="multipart/form-data">
-            @csrf
-            <input type="hidden" name="update_id" id="update_id" value="{{ $enkripsi }}">
+            <?php echo csrf_field(); ?>
+            <input type="hidden" name="update_id" id="update_id" value="<?php echo e($enkripsi); ?>">
             <div class="content-body">
                 <div class="section1 mb-4">
                     <h4 class="mb-4">IDENTITAS PERUSAHAAN</h4>
@@ -134,13 +134,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Perusahaan</label>
-                                    <p>{{ $perusahaan['nama_perusahaan'] }}</p>
+                                    <p><?php echo e($perusahaan['nama_perusahaan']); ?></p>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Group Perusahaan</label>
-                                    <p>{{ $perusahaan['nama_group_perusahaan'] }}</p>
+                                    <p><?php echo e($perusahaan['nama_group_perusahaan']); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -148,17 +148,17 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Alamat Lengkap</label>
-                                    <p>{{ $perusahaan['alamat_lengkap'] }}</p>
+                                    <p><?php echo e($perusahaan['alamat_lengkap']); ?></p>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group mb-2">
                                     <label for="">Kota / Kabupaten</label>
-                                    <p>{{ $perusahaan['kota_kabupaten'] }}</p>
+                                    <p><?php echo e($perusahaan['kota_kabupaten']); ?></p>
                                 </div>
                                 <div class="form-gorup">
                                     <label for="">Kecamatan</label>
-                                    <p>{{ $perusahaan['kecamatan'] }}</p>
+                                    <p><?php echo e($perusahaan['kecamatan']); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -166,13 +166,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Alamat Email Tempat Usaha</label>
-                                    <p>{{ $perusahaan['alamat_email'] }}</p>
+                                    <p><?php echo e($perusahaan['alamat_email']); ?></p>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nomor Handphone Contact Person</label>
-                                    <p>{{ $perusahaan['nomor_handphone'] }}</p>
+                                    <p><?php echo e($perusahaan['nomor_handphone']); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -180,13 +180,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Tahun Berdiri</label>
-                                    <p>{{ $perusahaan['tahun_berdiri'] ? \Carbon\Carbon::parse($perusahaan['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') : '-' }}</p>
+                                    <p><?php echo e($perusahaan['tahun_berdiri'] ? \Carbon\Carbon::parse($perusahaan['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') : '-'); ?></p>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Lama Usaha (Tahun)</label>
-                                    <p>{{ $perusahaan['lama_usaha'] ? $perusahaan['lama_usaha'] . ' tahun' : '-' }}</p>
+                                    <p><?php echo e($perusahaan['lama_usaha'] ? $perusahaan['lama_usaha'] . ' tahun' : '-'); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -194,12 +194,12 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Bidang Usaha</label>
-                                    <p>{{ str_replace('_', ' ', strtoupper($perusahaan['bidang_usaha'])) }}</p>
+                                    <p><?php echo e(str_replace('_', ' ', strtoupper($perusahaan['bidang_usaha']))); ?></p>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <label for="">Status Kepemilikan Tempat Usaha</label>
-                                <p>{{ str_replace("_", ' ', ucwords($perusahaan['status_kepemilikan'])) }}</p>
+                                <p><?php echo e(str_replace("_", ' ', ucwords($perusahaan['status_kepemilikan']))); ?></p>
                             </div>
                         </div>
                     </div>
@@ -207,44 +207,44 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group mb-2">
                                 <label for="">Identitas Pemilik Perusahaan</label>
-                                <p>{{ strtoupper($perusahaan['identitas']) }}</p>
+                                <p><?php echo e(strtoupper($perusahaan['identitas'])); ?></p>
                             </div>
                         </div>
                         
-                        @if($perusahaan['identitas'] == 'ktp')
+                        <?php if($perusahaan['identitas'] == 'ktp'): ?>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ktp-section">
                                 <div class="form-group mb-2">
                                     <label for="">Nama Lengkap</label>
-                                    <p>{{ $perusahaan['nama_lengkap'] }}</p>
+                                    <p><?php echo e($perusahaan['nama_lengkap']); ?></p>
                                 </div>
                             </div>
                             <div class="ktp-section">
                                 <div class="row">
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <label for="">Nomor KTP</label>
-                                        <p>{{ $perusahaan['nomor_ktp'] }}</p>
+                                        <p><?php echo e($perusahaan['nomor_ktp']); ?></p>
                                     </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <label for="">Foto KTP</label>
         
-                                        <div id="preview_ktp" class="@if($perusahaan['identitas'] != 'ktp') d-none @endif">
-                                            @if(str_contains($perusahaan['foto_ktp'], '.pdf'))
-                                            <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_ktp']) }}')">
-                                                <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
+                                        <div id="preview_ktp" class="<?php if($perusahaan['identitas'] != 'ktp'): ?> d-none <?php endif; ?>">
+                                            <?php if(str_contains($perusahaan['foto_ktp'], '.pdf')): ?>
+                                            <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('<?php echo e(asset('uploads/identitas_perusahaan/'.$perusahaan['foto_ktp'])); ?>')">
+                                                <img src="<?php echo e(asset('images/pdf.png')); ?>" style="width: 20% !important; height: auto;">
                                                 <span>Click to preview</span>
                                             </div>
-                                            @else
-                                                <img id="preview_foto_ktp" src="{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_ktp']) }}" data-action="zoom">
-                                            @endif
+                                            <?php else: ?>
+                                                <img id="preview_foto_ktp" src="<?php echo e(asset('uploads/identitas_perusahaan/'.$perusahaan['foto_ktp'])); ?>" data-action="zoom">
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        @else
+                        <?php else: ?>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 npwp-section">
                                 <div class="form-group mb-4">
                                     <label for="">Jenis Badan Usaha</label>
-                                    <p>{{ strtoupper($perusahaan['badan_usaha']) }}</p>
+                                    <p><?php echo e(strtoupper($perusahaan['badan_usaha'])); ?></p>
                                 </div>
                             </div>
                             <div class="npwp-section">
@@ -252,13 +252,13 @@
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="form-group">
                                             <label for="">Nomor NPWP</label>
-                                            <p>{{ $perusahaan['nomor_npwp'] }}</p>
+                                            <p><?php echo e($perusahaan['nomor_npwp']); ?></p>
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="form-group mb-4">
                                             <label for="">Nama NPWP</label>
-                                            <p>{{ $perusahaan['nama_npwp'] }}</p>
+                                            <p><?php echo e($perusahaan['nama_npwp']); ?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -266,58 +266,58 @@
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="form-group mb-4">
                                             <label for="">Alamat NPWP</label>
-                                            <p>{{ $perusahaan['alamat_npwp'] }}</p>
+                                            <p><?php echo e($perusahaan['alamat_npwp']); ?></p>
                                         </div>
 
                                         <div class="form-group mb-4">
                                             <label for="">Email Khusus Untuk Faktur Pajak</label>
-                                            <p>{{ $perusahaan['email_khusus_faktur_pajak'] }}</p>
+                                            <p><?php echo e($perusahaan['email_khusus_faktur_pajak']); ?></p>
                                         </div>
         
                                         <div class="form-group mb-3">
                                             <label for="">Status Pengusaha Kena Pajak (PKP)</label>
-                                            <p>{{ str_replace("_", " ", strtoupper($perusahaan['status_pkp'])) }}</p>
+                                            <p><?php echo e(str_replace("_", " ", strtoupper($perusahaan['status_pkp']))); ?></p>
                                         </div>
         
-                                        <div class="form-group mb-4 @if($perusahaan['status_pkp'] !=  'pkp') d-none @endif" id="sppkp-section">
+                                        <div class="form-group mb-4 <?php if($perusahaan['status_pkp'] !=  'pkp'): ?> d-none <?php endif; ?>" id="sppkp-section">
                                             <label for="">Foto SPPKP</label>
         
                                             <div id="preview_sppkp">
-                                                @if(str_contains($perusahaan['sppkp'], '.pdf'))
-                                                    <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$perusahaan['sppkp']) }}')">
-                                                        <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
+                                                <?php if(str_contains($perusahaan['sppkp'], '.pdf')): ?>
+                                                    <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('<?php echo e(asset('uploads/identitas_perusahaan/'.$perusahaan['sppkp'])); ?>')">
+                                                        <img src="<?php echo e(asset('images/pdf.png')); ?>" style="width: 20% !important; height: auto;">
                                                         <span>Click to preview</span>
                                                     </div>
-                                                @else
-                                                    <img id="preview_foto_sppkp" src="{{ asset('uploads/identitas_perusahaan/'.$perusahaan['sppkp']) }}" data-action="zoom">
-                                                @endif
+                                                <?php else: ?>
+                                                    <img id="preview_foto_sppkp" src="<?php echo e(asset('uploads/identitas_perusahaan/'.$perusahaan['sppkp'])); ?>" data-action="zoom">
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="form-group mb-4">
                                             <label for="">Kota sesuai NPWP</label>
-                                            <p>{{ $perusahaan['kota_npwp'] }}</p>
+                                            <p><?php echo e($perusahaan['kota_npwp']); ?></p>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="">Foto NPWP</label>
                                         </div>
         
-                                        <div id="preview_npwp" class="@if($perusahaan['identitas'] != 'npwp') d-none @endif">
-                                            @if(str_contains($perusahaan['foto_npwp'], '.pdf'))
-                                                <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_npwp']) }}')">
-                                                    <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
+                                        <div id="preview_npwp" class="<?php if($perusahaan['identitas'] != 'npwp'): ?> d-none <?php endif; ?>">
+                                            <?php if(str_contains($perusahaan['foto_npwp'], '.pdf')): ?>
+                                                <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('<?php echo e(asset('uploads/identitas_perusahaan/'.$perusahaan['foto_npwp'])); ?>')">
+                                                    <img src="<?php echo e(asset('images/pdf.png')); ?>" style="width: 20% !important; height: auto;">
                                                     <span>Click to preview</span>
                                                 </div>
-                                            @else
-                                                <img id="preview_foto_npwp" src="{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_npwp']) }}" data-action="zoom">
-                                            @endif
+                                            <?php else: ?>
+                                                <img id="preview_foto_npwp" src="<?php echo e(asset('uploads/identitas_perusahaan/'.$perusahaan['foto_npwp'])); ?>" data-action="zoom">
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        @endif
+                        <?php endif; ?>
     
                     </div>
                 </div>
@@ -329,13 +329,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nomor Rekening</label>
-                                    <p>{{ $perusahaan['informasi_bank']['nomor_rekening'] }}</p>
+                                    <p><?php echo e($perusahaan['informasi_bank']['nomor_rekening']); ?></p>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Rekening</label>
-                                    <p>{{ $perusahaan['informasi_bank']['nama_rekening'] }}</p>
+                                    <p><?php echo e($perusahaan['informasi_bank']['nama_rekening']); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -343,17 +343,17 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Bank</label>
-                                    <p>{{ $perusahaan['informasi_bank']['nama_bank'] }}</p>
+                                    <p><?php echo e($perusahaan['informasi_bank']['nama_bank']); ?></p>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Pemilik Rekening</label>
-                                    @if(!$perusahaan['informasi_bank']['rekening_lain'])
-                                        <p>{{ str_replace("_", " ", ucwords($perusahaan['informasi_bank']['status'])) }}</p>
-                                    @else
-                                        <p>{{ str_replace('_', ' ', ucwords($perusahaan['informasi_bank']['rekening_lain'])) }}</p>
-                                    @endif
+                                    <?php if(!$perusahaan['informasi_bank']['rekening_lain']): ?>
+                                        <p><?php echo e(str_replace("_", " ", ucwords($perusahaan['informasi_bank']['status']))); ?></p>
+                                    <?php else: ?>
+                                        <p><?php echo e(str_replace('_', ' ', ucwords($perusahaan['informasi_bank']['rekening_lain']))); ?></p>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -367,13 +367,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Penanggung Jawab</label>
-                                    <p>{{ $perusahaan['data_identitas'] ? ($perusahaan['data_identitas']['nama'] ? $perusahaan['data_identitas']['nama'] : '-') : '-' }}</p>
+                                    <p><?php echo e($perusahaan['data_identitas'] ? ($perusahaan['data_identitas']['nama'] ? $perusahaan['data_identitas']['nama'] : '-') : '-'); ?></p>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Jabatan</label>
-                                    <p>{{ $perusahaan['data_identitas'] ? ($perusahaan['data_identitas']['jabatan'] ? $perusahaan['data_identitas']['jabatan'] : '-') : '-' }}</p>
+                                    <p><?php echo e($perusahaan['data_identitas'] ? ($perusahaan['data_identitas']['jabatan'] ? $perusahaan['data_identitas']['jabatan'] : '-') : '-'); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -381,50 +381,50 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group mb-2">
                                     <label for="">Identitas Penanggung Jawab</label>
-                                    <p>{{ $perusahaan['data_identitas'] ? ($perusahaan['data_identitas']['identitas'] ? strtoupper($perusahaan['data_identitas']['identitas']) : '-') : '-' }}</p>
+                                    <p><?php echo e($perusahaan['data_identitas'] ? ($perusahaan['data_identitas']['identitas'] ? strtoupper($perusahaan['data_identitas']['identitas']) : '-') : '-'); ?></p>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group mb-2" id="penanggung_ktp">
                                     <label for="">Foto KTP</label>
     
-                                    @if($perusahaan['data_identitas'])
-                                        @if($perusahaan['data_identitas']['foto'])
-                                            <div id="preview_ktp_penanggung" class="@if($perusahaan['data_identitas']) @if($perusahaan['data_identitas']['identitas'] != 'ktp') d-none @endif @endif">
-                                                @if(str_contains($perusahaan['data_identitas']['foto'], '.pdf'))
-                                                    <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto']) }}')">
-                                                        <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
+                                    <?php if($perusahaan['data_identitas']): ?>
+                                        <?php if($perusahaan['data_identitas']['foto']): ?>
+                                            <div id="preview_ktp_penanggung" class="<?php if($perusahaan['data_identitas']): ?> <?php if($perusahaan['data_identitas']['identitas'] != 'ktp'): ?> d-none <?php endif; ?> <?php endif; ?>">
+                                                <?php if(str_contains($perusahaan['data_identitas']['foto'], '.pdf')): ?>
+                                                    <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('<?php echo e(asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto'])); ?>')">
+                                                        <img src="<?php echo e(asset('images/pdf.png')); ?>" style="width: 20% !important; height: auto;">
                                                         <span>Click to preview</span>
                                                     </div>
-                                                @else
-                                                    <img id="preview_foto_ktp_penanggung" src="{{ asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto']) }}" data-action="zoom">
-                                                @endif
+                                                <?php else: ?>
+                                                    <img id="preview_foto_ktp_penanggung" src="<?php echo e(asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto'])); ?>" data-action="zoom">
+                                                <?php endif; ?>
                                             </div>
-                                        @else
+                                        <?php else: ?>
                                             <p>-</p>
-                                        @endif
-                                    @else
+                                        <?php endif; ?>
+                                    <?php else: ?>
                                         <p>-</p>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
     
-                                <div class="form-group @if($perusahaan['data_identitas']) @if($perusahaan['data_identitas']['identitas'] != 'npwp') d-none @endif @else d-none @endif" id="penanggung_npwp">
+                                <div class="form-group <?php if($perusahaan['data_identitas']): ?> <?php if($perusahaan['data_identitas']['identitas'] != 'npwp'): ?> d-none <?php endif; ?> <?php else: ?> d-none <?php endif; ?>" id="penanggung_npwp">
                                     <label for="">Foto NPWP</label>
     
-                                    @if($perusahaan['data_identitas'])
+                                    <?php if($perusahaan['data_identitas']): ?>
                                         <div id="preview_npwp_penanggung" class="d-none">
-                                            @if(str_contains($perusahaan['data_identitas']['foto'], '.pdf'))
-                                                <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto']) }}')">
-                                                    <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;" alt="PDF">
+                                            <?php if(str_contains($perusahaan['data_identitas']['foto'], '.pdf')): ?>
+                                                <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('<?php echo e(asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto'])); ?>')">
+                                                    <img src="<?php echo e(asset('images/pdf.png')); ?>" style="width: 20% !important; height: auto;" alt="PDF">
                                                     <span>Click to preview</span>
                                                 </div>
-                                            @else
-                                                <img id="preview_foto_npwp_penanggung" src="{{ asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto']) }}" data-action="zoom">
-                                            @endif
+                                            <?php else: ?>
+                                                <img id="preview_foto_npwp_penanggung" src="<?php echo e(asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto'])); ?>" data-action="zoom">
+                                            <?php endif; ?>
                                         </div>
-                                    @else
+                                    <?php else: ?>
                                         <p>-</p>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -432,17 +432,17 @@
                 </div>
             </div>
             <div class="content-footer mt-2">
-                <button type="button" class="btn btn-outline-primary waves-effect waves-light rounded btn-md" id="update_customer" data-url="{{ $url }}" title="Edit Data Customer">Edit Data Customer</button>
+                <button type="button" class="btn btn-outline-primary waves-effect waves-light rounded btn-md" id="update_customer" data-url="<?php echo e($url); ?>" title="Edit Data Customer">Edit Data Customer</button>
                 &nbsp;
-                <a type="button" href="{{ route('form_customer.pdf', ['menu' => str_replace('_', '-', $perusahaan['bentuk_usaha']), 'id' => $enkripsi]) }}" target="_blank" class="btn btn-dark waves-effect waves-light rounded btn-md" id="pdf" data-id="{{ $enkripsi }}" title="Download PDF">Download PDF</a>
+                <a type="button" href="<?php echo e(route('form_customer.pdf', ['menu' => str_replace('_', '-', $perusahaan['bentuk_usaha']), 'id' => $enkripsi])); ?>" target="_blank" class="btn btn-dark waves-effect waves-light rounded btn-md" id="pdf" data-id="<?php echo e($enkripsi); ?>" title="Download PDF">Download PDF</a>
                 &nbsp;
-                <button type="button" class="btn btn-primary waves-effect waves-light rounded btn-md" id="upload_file" data-id="{{ $enkripsi }}" data-usaha="{{ str_replace('_', '-', $perusahaan['bentuk_usaha']) }}" title="Upload file">Upload File</button>
+                <button type="button" class="btn btn-primary waves-effect waves-light rounded btn-md" id="upload_file" data-id="<?php echo e($enkripsi); ?>" data-usaha="<?php echo e(str_replace('_', '-', $perusahaan['bentuk_usaha'])); ?>" title="Upload file">Upload File</button>
             </div>
         </form>
     </div>
 </div>
 
-{{-- Modal Upload --}}
+
 <div class="modal fade" id="modalUpload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -452,7 +452,7 @@
             </div>
             <div class="modal-body">
                 <form id="form_upload">
-                    @csrf
+                    <?php echo csrf_field(); ?>
                     <input type="hidden" name="encrypt" id="encrypt">
                     <div class="form-group">
                         <label for="" class="label_modal">Upload File <span class="text-danger">*</span></label>
@@ -468,9 +468,9 @@
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('script')
+<?php $__env->startSection('script'); ?>
     <script>
         function preview_pdf(that) {
             window.open(that,'_blank');
@@ -498,7 +498,7 @@
                     denyButtonText: `Batal`
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        let url = '{{ route('form_customer.confirmation', ':menu') }}';
+                        let url = '<?php echo e(route('form_customer.confirmation', ':menu')); ?>';
                         url = url.replace(':menu', usaha);
                         $.ajax({
                             url: url,
@@ -529,4 +529,6 @@
             });
         });
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Other\laragon\www\FormCustomer\resources\views/customer/badan_usaha_detail.blade.php ENDPATH**/ ?>

@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Helper\ApiStorage;
+use App\Helper\base30ToImage;
+use Illuminate\Support\Facades\Storage;
+use League\Flysystem\Visibility;
 
 class FormCustomerController extends Controller
 {
@@ -66,22 +69,22 @@ class FormCustomerController extends Controller
             'nama_penanggung_jawab' => ($data['jenis_transaksi'] == 'credit') ? 'required' : '',
             'jabatan' => ($data['jenis_transaksi'] == 'credit') ? 'required' : '',
             'identitas_penanggung_jawab' => ($data['jenis_transaksi'] == 'credit') ? 'required' : '',
-            'identitas_perusahaan' => 'required',
+            'identitas_perusahaan' => $data['bentuk_usaha'] == 'perseorangan' ? 'required' : '',
             'nomor_rekening' => 'required|numeric|digits_between:10,16',
             'nama_rekening' => 'required',
             'status_rekening' => 'required',
             'nama_bank' => 'required',
-            'nama_lengkap' => ($data['identitas_perusahaan'] == 'ktp' ? 'required' : ''),
-            'nomor_ktp' => ($data['identitas_perusahaan'] == 'ktp' ? 'required|numeric|digits:16' : ''),
-            'foto_ktp' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['identitas_perusahaan'] == 'ktp' ? 'required|mimes:jpg,png,jpeg,pdf' : ''),
-            'nomor_npwp' => ($data['identitas_perusahaan'] == 'npwp' ? 'required|digits_between:15,16' : ''),
-            'nama_npwp' => ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
-            'badan_usaha' => ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
-            'email_faktur' => ($data['identitas_perusahaan'] == 'npwp' ? 'required|email' : ''),
-            'foto_npwp' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['identitas_perusahaan'] == 'npwp' ? 'required|mimes:jpg,png,jpeg,pdf' : ''),
-            'foto_sppkp' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,png,jpeg,pdf' : ''),
-            'alamat_npwp' => $data['identitas_perusahaan'] == 'npwp' ? 'required' : '',
-            'kota_npwp' => $data['identitas_perusahaan'] == 'npwp' ? 'required' : '',
+            'nama_lengkap' => $data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'ktp' ? 'required' : '') : '',
+            'nomor_ktp' => $data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'ktp' ? 'required|numeric|digits:16' : '') : '',
+            'foto_ktp' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'ktp' ? 'required|mimes:jpg,png,jpeg,pdf' : '') : ''),
+            'nomor_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required|digits_between:15,16' : ($data['identitas_perusahaan'] == 'npwp' ? 'required|digits_between:15,16' : ''),
+            'nama_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
+            'badan_usaha' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
+            'email_faktur' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required|email' : ($data['identitas_perusahaan'] == 'npwp' ? 'required|email' : ''),
+            'foto_npwp' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['bentuk_usaha'] == 'badan_usaha' ? 'required|mimes:jpg,png,jpeg,pdf' : ($data['identitas_perusahaan'] == 'npwp' ? 'required|mimes:jpg,png,jpeg,pdf' : '')),
+            'foto_sppkp' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['bentuk_usaha'] == 'badan_usaha' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,png,jpeg,pdf' : '') : ($data['identitas_perusahaan'] == 'npwp' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,png,jpeg,pdf' : '') : '')),
+            'alamat_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
+            'kota_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
             'nomor_hp_penanggung_jawab' => ($data['jenis_transaksi'] == 'credit') ? 'required|numeric|digits_between:10,13' : '',
             'jenis_transaksi' => 'required',
             'rekening_lain' => ($data['status_rekening'] == 'lainnya') ? 'required' : ''
@@ -148,6 +151,7 @@ class FormCustomerController extends Controller
     }
 
     public function store(Request $request) {
+        // dd($request->all());
         try {
             $validator = $this->validator($request->all());
             if($validator->fails()) {
@@ -176,12 +180,12 @@ class FormCustomerController extends Controller
             $identitas_perusahaan->alamat_email = $request->email_perusahaan;
             $identitas_perusahaan->nomor_handphone = $request->no_hp;
             $identitas_perusahaan->status_kepemilikan = $request->status_kepemilikan;
-            $identitas_perusahaan->identitas = strtolower($request->identitas_perusahaan);
+            $identitas_perusahaan->identitas = ($request->bentuk_usaha == 'badan_usaha') ? 'npwp' : strtolower($request->identitas_perusahaan);
             $identitas_perusahaan->jenis_transaksi = $request->jenis_transaksi;
             $identitas_perusahaan->bentuk_usaha = $request->bentuk_usaha;
 
             // Kondisi jika identitas perusahaan yang dipakai KTP / NPWP
-            if($request->identitas_perusahaan == 'ktp') {
+            if($request->identitas_perusahaan == 'ktp' && $request->bentuk_usaha == 'perseorangan') {
                 $identitas_perusahaan->nama_lengkap = $request->nama_lengkap;
                 $identitas_perusahaan->nomor_ktp = $request->nomor_ktp;
                 if($request->hasFile('foto_ktp')) {
@@ -253,7 +257,7 @@ class FormCustomerController extends Controller
                 $identitas_perusahaan->email_khusus_faktur_pajak = null;
                 $identitas_perusahaan->status_pkp = 'non_pkp';
                 $identitas_perusahaan->sppkp = null;
-            } else {
+            } else if(($request->identitas_perusahaan == 'npwp' && $request->bentuk_usaha == 'perseorangan') || $request->bentuk_usaha == 'badan_usaha') {
                 $identitas_perusahaan->badan_usaha = $request->badan_usaha;
                 $identitas_perusahaan->nama_npwp = $request->nama_npwp;
                 $identitas_perusahaan->nomor_npwp = $request->nomor_npwp;
@@ -296,7 +300,7 @@ class FormCustomerController extends Controller
             $identitas_perusahaan->save();
 
             // Identitas penanggung jawab
-            if($request->nama_penanggung_jawab || $request->jabatan || $request->identitas_penanggung_jawab || $request->nomor_hp_penanggung_jawab) {
+            if($request->nama_penanggung_jawab || $request->jabatan || $request->identitas_penanggung_jawab || $request->nomor_hp_penanggung_jawab || $request->hasil_ttd) {
                 $identitas_penanggung_jawab = DataIdentitas::firstOrNew([
                     'identitas_perusahaan_id' => $dekripsi
                 ]);
@@ -305,7 +309,63 @@ class FormCustomerController extends Controller
                 $identitas_penanggung_jawab->jabatan = $request->jabatan;
                 $identitas_penanggung_jawab->identitas = $request->identitas_penanggung_jawab;
                 $identitas_penanggung_jawab->no_hp = $request->nomor_hp_penanggung_jawab;
-                $identitas_penanggung_jawab->ttd = $request->hasil_ttd;
+                
+                if($request->bentuk_usaha == 'perseorangan') {
+
+                    if(strlen($request->hasil_ttd) > 0 && $request->nama_penanggung_jawab == null) {
+                        return ['status' => false, 'error' => 'Nama identitas tidak boleh kosong, jika anda tanda tangan!'];
+                    }
+
+                    // Konversi base30 menjadi koordinat asli
+                    $JSignatureTools = new base30ToImage;
+                    $rawData = $JSignatureTools->base64ToNative($request->hasil_ttd);
+
+                    // Membuat canvas gambar
+                    $img = imagecreatetruecolor(367.2, 198);
+                    $white = imagecolorallocate($img, 255, 255, 255);
+                    $black = imagecolorallocate($img, 0, 0, 0);
+                    imagefill($img, 0, 0, $white);
+
+                    // Membuat fungsi untuk menggambar garis yang lebih tebal (bold)
+                    function drawBoldLine($image, $x1, $y1, $x2, $y2, $penColor, $thickness = 3)
+                    {
+                        // Loop untuk menggambar garis dengan ketebalan
+                        for ($i = -$thickness; $i <= $thickness; $i++) {
+                            for ($j = -$thickness; $j <= $thickness; $j++) {
+                                imageline($image, $x1 + $i, $y1 + $j, $x2 + $i, $y2 + $j, $penColor);
+                            }
+                        }
+                    }
+
+                    // Menggambar tanda tangan ke canvas
+                    foreach ($rawData as $stroke) {
+                        for ($i = 0; $i < count($stroke['x']); $i++) {
+                            if ($i > 0) {
+                                drawBoldLine(
+                                    $img,
+                                    $stroke['x'][$i - 1],
+                                    $stroke['y'][$i - 1],
+                                    $stroke['x'][$i],
+                                    $stroke['y'][$i],
+                                    $black,
+                                    0.5 // ketebalan garis
+                                );
+                            }
+                        }
+                    }
+                    
+                    // Nama file untuk menyimpan gambar
+                    $imageName = str_replace(' ', '-', $request->nama_penanggung_jawab) . '.png';
+                    $filePath = 'uploads/ttd/' . $imageName;
+
+                    // Menyimpan gambar ke storage
+                    $fullPath = public_path($filePath);
+                    imagepng($img, $fullPath);
+                    imagedestroy($img);
+                    
+                    $identitas_penanggung_jawab->ttd = $imageName;
+                }
+
                 if($request->identitas_penanggung_jawab == 'ktp') {
                     if($request->hasFile('foto_ktp_penanggung')) {
                         if(File::exists('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto)) {
@@ -333,7 +393,9 @@ class FormCustomerController extends Controller
                 }
                 $identitas_penanggung_jawab->save();
             } else {
-                DataIdentitas::where('identitas_perusahaan_id', $dekripsi)->delete();
+                if(DataIdentitas::where('identitas_perusahaan_id', $dekripsi)->first()) {
+                    DataIdentitas::where('identitas_perusahaan_id', $dekripsi)->delete();
+                }
             }
 
             // Informasi Bank
@@ -391,15 +453,25 @@ class FormCustomerController extends Controller
     }
 
     public function confirmation($menu, Request $request) {
+        // dd($request->all());
         try {
-            $dekripsi = Crypt::decryptString($request->id);
+            $dekripsi = Crypt::decryptString($request->encrypt);
 
             $confirmation = IdentitasPerusahaan::find($dekripsi);
             $confirmation->status_konfirmasi = '1';
+            if($request->hasFile('upload')) {
+                $file = $request->file('upload');
+                $ext = $file->getClientOriginalExtension();
+                $filename = uniqid() . '-upload-customer.' . $ext;
+
+                $file->move('uploads/identitas_perusahaan/final/'.$filename);
+                $confirmation->file_customer_external = $filename;
+            }
             $confirmation->save();
 
             return ['status' => true];
         } catch(\Exception $e) {
+            // dd($e->getMessage());
             return ['status' => false];
         }
     }
@@ -413,13 +485,17 @@ class FormCustomerController extends Controller
             $pdf = Pdf::loadView('pdf.badan_usaha_pdf', [
                 'data' => $data
             ]);
+            $pdf->setPaper('A4', 'portrait');
+            $pdf->render();
+            // return $pdf->stream();
+            return $pdf->download($data['nama_perusahaan'] . '.pdf');
         } else {
             $pdf = Pdf::loadView('pdf.perseorangan_pdf', [
                 'data' => $data
             ]);
-        }
-        $pdf->setPaper('A4', 'portrait');
-        $pdf->render();
-        return $pdf->stream();
+            $pdf->setPaper('A4', 'portrait');
+            $pdf->render();
+            return $pdf->download($data['nama_perusahaan'] . '.pdf');
+        } 
     }
 }

@@ -51,6 +51,11 @@
         .break {
             page-break-after: always;
         }
+
+        .content-ttd {
+            margin-top: 30px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -68,14 +73,14 @@
                     <p class="label">Alamat Lengkap</p>
                     <p>{{ $data['alamat_lengkap'] }}</p>
 
-                    <p class="label">Alamat Email Tempat Usaha</p>
+                    <p class="label">Alamat Email Koresponden</p>
                     <p>{{ $data['alamat_email'] }}</p>
 
                     <p class="label">Tahun Berdiri</p>
-                    <p>{{ \Carbon\Carbon::parse($data['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') }}</p>
+                    <p>{{ $data['tahun_berdiri'] ? ($data['tahun_berdiri'] ? \Carbon\Carbon::parse($data['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') : '-') : '-' }}</p>
 
                     <p class="label">Bidang Usaha</p>
-                    <p>{{ $data['bidang_usaha'] }}</p>
+                    <p>{{ strtoupper(str_replace('_', ' ', $data['bidang_usaha'])) }}</p>
 
                     <p class="label">Identitas Pemilik Usaha</p>
                     <p>{{ strtoupper($data['identitas']) }}</p>
@@ -83,8 +88,11 @@
                     @if($data['identitas'] == 'ktp')
                         <p class="label">Nomor KTP</p>
                         <p>{{ $data['nomor_ktp'] }}</p>
+
+                        <p class="label">Foto KTP</p>
+                        <img id="preview_foto_ktp" src="uploads/identitas_perusahaan/{{ $data['foto_ktp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
                     @else
-                        <p class="label">Badan Usaha</p>
+                        <p class="label">Jenis Badan Usaha</p>
                         <p>{{ strtoupper($data['badan_usaha']) }}</p>
 
                         <p class="label">Nama NPWP</p>
@@ -112,11 +120,11 @@
                     <p class="label">Kecamatan</p>
                     <p>{{ $data['kecamatan'] }}</p>
 
-                    <p class="label">Nomor Handphone</p>
-                    <p>{{ $data['nomor_handphone'] }}</p>
-
                     <p class="label">Lama Usaha (Tahun)</p>
-                    <p>{{ $data['lama_usaha'] }} Tahun</p>
+                    <p>{{ $data['lama_usaha'] ? $data['lama_usaha'].' tahun' : '-' }}</p>
+                    
+                    <p class="label">Nomor Handphone Contact Person</p>
+                    <p>{{ $data['nomor_handphone'] }}</p>
 
                     <p class="label">Status Kepemilikan Tempat Usaha</p>
                     <p>{{ str_replace("_", ' ', ucwords($data['status_kepemilikan'])) }}</p>
@@ -124,9 +132,6 @@
                     @if($data['identitas'] == 'ktp')
                         <p class="label">Nama Lengkap</p>
                         <p>{{ $data['nama_lengkap'] }}</p>
-
-                        <p class="label">Foto KTP</p>
-                        <img src="uploads/identitas_perusahaan/{{ $data['foto_ktp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
                     @else
                         <p class="label">Nomor NPWP</p>
                         <p>{{ $data['nomor_npwp'] }}</p>
@@ -136,10 +141,10 @@
 
                         <p class="label">Foto NPWP</p>
                         <img src="uploads/identitas_perusahaan/{{ $data['foto_npwp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
-
-                        <p class="label">Status Pengusaha Kena Pajak (PKP)</p>
-                        <p>{{ str_replace("_", " ", strtoupper($data['status_pkp'])) }}</p>
                     @endif
+
+                    <p class="label">Status Pengusaha Kena Pajak (PKP)</p>
+                    <p>{{ str_replace("_", " ", strtoupper($data['status_pkp'])) }}</p>
                 </div>
             </div>
 
@@ -158,7 +163,7 @@
                     <p class="label">Nama Rekening</p>
                     <p>{{ $data['informasi_bank']['nama_rekening'] }}</p>
 
-                    <p class="label">Status Rekening</p>
+                    <p class="label">Pemilik Rekening</p>
                     <p>{{ $data['informasi_bank']['rekening_lain'] ? str_replace('_', ' ', ucwords($data['informasi_bank']['rekening_lain'])) : str_replace("_", " ", ucwords($data['informasi_bank']['status'])) }}</p>
                 </div>
             </div>
@@ -186,10 +191,18 @@
                             <p class="label">Foto NPWP</p>
                         @endif
                         <img src="uploads/penanggung_jawab/{{ $data['data_identitas']['foto'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                    @else
+                        <p class="label">Foto</p>
+                        <p>-</p>
                     @endif
 
-                    <p class="label">Tanda Tangan</p>
+                    {{-- <p class="label">Tanda Tangan</p> --}}
                     {{-- <img src="data:{{ $data['data_identitas']['ttd'] }}" alt="" style="width: 70%;"> --}}
+                    <div class="content-ttd">
+                        <p>Penanggung Jawab</p>
+                        <br><br><br><br>
+                        <p>______________________</p>
+                    </div>
                 </div>
             </div>
         </div>
