@@ -456,7 +456,7 @@
                     <input type="hidden" name="encrypt" id="encrypt">
                     <div class="form-group">
                         <label for="" class="label_modal">Upload File <span class="text-danger">*</span></label>
-                        <input type="file" class="form-control" accept=".pdf" id="upload" name="upload">
+                        <input type="file" class="form-control" accept=".pdf" id="upload" name="upload" required>
                         <span class="text-danger">*Upload file PDF</span>
                     </div>
                     <div class="modal-footer">

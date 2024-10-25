@@ -58,7 +58,7 @@
 <?php $__env->startSection('script'); ?>
 <script>
     function form_customer(value) {
-        window.location.href = '/form-customer/'+value;
+        window.location.href = '/'+value;
     }
 </script>
 <?php $__env->stopSection(); ?>

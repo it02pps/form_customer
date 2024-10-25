@@ -385,7 +385,7 @@
                                     <div class="form-group">
                                         <label for="">Lainnya <span class="text-danger">*</span></label>
                                         
-                                        <input type="text" class="form-control" id="rekening_lain" name="rekening_lain" placeholder="Masukkan pemilik rekening">
+                                        <input type="text" class="form-control" id="rekening_lain" name="rekening_lain" placeholder="Masukkan pemilik rekening" autocomplete="off">
                                     </div>
                                 
                             </div>
@@ -424,17 +424,17 @@
                                         <label for="">Foto KTP</label>
                                         <input type="file" name="foto_ktp_penanggung" id="foto_ktp_penanggung" onchange="previewFileKtpPenanggung(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
         
-                                        <div id="preview_ktp_penanggung" class="<?php if($data_perusahaan): ?> <?php if($data_perusahaan['data_identitas']['identitas'] != 'ktp'): ?> d-none <?php endif; ?> <?php else: ?> d-none <?php endif; ?>">
-                                            <img id="preview_foto_ktp_penanggung" src="<?php echo e($data_perusahaan ? $data_perusahaan['data_identitas'] ? asset('uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '' : ''); ?>" alt="Preview" data-action="zoom">
+                                        <div id="preview_ktp_penanggung" class="<?php if($data_perusahaan): ?> <?php if($data_perusahaan['data_identitas']): ?> <?php if($data_perusahaan['data_identitas']['identitas'] != 'ktp'): ?> d-none <?php endif; ?> <?php else: ?> d-none <?php endif; ?> <?php else: ?> d-none <?php endif; ?>">
+                                            <img id="preview_foto_ktp_penanggung" src="<?php echo e($data_perusahaan ? ($data_perusahaan['data_identitas'] ? asset('uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '') : ''); ?>" alt="Preview" data-action="zoom">
                                         </div>
                                     </div>
         
-                                    <div class="form-group <?php if($data_perusahaan): ?> <?php if($data_perusahaan['data_identitas']['identitas'] != 'npwp'): ?> d-none <?php endif; ?> <?php else: ?> d-none <?php endif; ?>" id="penanggung_npwp">
+                                    <div class="form-group <?php if($data_perusahaan): ?> <?php if($data_perusahaan['data_identitas']): ?> <?php if($data_perusahaan['data_identitas']['identitas'] != 'npwp'): ?> d-none <?php endif; ?> <?php else: ?> d-none <?php endif; ?> <?php else: ?> d-none <?php endif; ?>" id="penanggung_npwp">
                                         <label for="">Foto NPWP</label>
                                         <input type="file" name="foto_npwp_penanggung" id="foto_npwp_penanggung" onchange="previewFileNpwpPenanggung(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
         
                                         <div id="preview_npwp_penanggung" class="d-none">
-                                            <img id="preview_foto_npwp_penanggung" src="<?php echo e($data_perusahaan ? $data_perusahaan['data_identitas'] ? asset('uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '' : ''); ?>" alt="Preview" data-action="zoom">
+                                            <img id="preview_foto_npwp_penanggung" src="<?php echo e($data_perusahaan ? ($data_perusahaan['data_identitas'] ? asset('uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '') : ''); ?>" alt="Preview" data-action="zoom">
                                         </div>
                                     </div>
                                 </div>
@@ -481,7 +481,7 @@
 <?php $__env->startSection('script'); ?>
     <script>
         function kembali() {
-            window.location.href = '/form-customer';
+            window.location.href = '/';
         }
 
         function previewFileKtp(input) {
@@ -685,7 +685,7 @@
                 $('#hasil_ttd').val(data[1]);
                 const bentuk_usaha = $('#bentuk_usaha').val();
                 $.ajax({
-                    url: '/form-customer/'+bentuk_usaha+'/store',
+                    url: '/'+bentuk_usaha+'/store',
                     type: 'POST',
                     data: new FormData(this),
                     contentType: false,
@@ -739,25 +739,25 @@
                         $('#identitas_perusahaan').val(res.data.identitas).change();
                         $('#status_pkp').val(res.data.status_pkp).change();
                         $('#status_rekening').val(res.data.informasi_bank.status).change();
-                        $('#identitas_penanggung_jawab').val(res.data.data_identitas.identitas).change();
-                        if(res.data.jenis_transaksi == 'credit') {
-                            $('.section1 #credit').prop('checked', true);
-                            $('.section1 #cash').prop('checked', false);
-
-                            $('#nama_penanggung_jawab').prop('required', true);
-                            $('#jabatan').prop('required', true);
-                            $('#identitas_penanggung_jawab').prop('required', true);
-                            $('#nomor_hp_penanggung_jawab').prop('required', true);
-                            $('.section3-body .row').find('label').append(' <span class="text-danger">*</span>');
-                        } else {
-                            $('.section1 #credit').prop('checked', false);
-                            $('.section1 #cash').prop('checked', true);
+                        if(res.data.data_identitas) {
+                            $('#identitas_penanggung_jawab').val(res.data.data_identitas.identitas).change();
+                        }
+                        if(res.data.jenis_transaksi == 'cash') {
+                            $('#cash').prop('checked', true);
 
                             $('#nama_penanggung_jawab').prop('required', false);
                             $('#jabatan').prop('required', false);
                             $('#identitas_penanggung_jawab').prop('required', false);
                             $('#nomor_hp_penanggung_jawab').prop('required', false);
                             $('.section3-body .row label').find('span').remove();
+                        } else {
+                            $('#credit').prop('checked', true);
+
+                            $('#nama_penanggung_jawab').prop('required', true);
+                            $('#jabatan').prop('required', true);
+                            $('#identitas_penanggung_jawab').prop('required', true);
+                            $('#nomor_hp_penanggung_jawab').prop('required', true);
+                            $('.section3-body .row').find('label').append(' <span class="text-danger">*</span>');
                         }
                     } else {
                         $('#status_kepemilikan').val('').change();
@@ -766,7 +766,7 @@
                         $('#identitas_perusahaan').val('ktp').change();
                         $('#status_pkp').val('non_pkp').change();
                         $('#status_rekening').val('').change();
-                        $('#identitas_penanggung_jawab').val('ktp').change();
+                        $('#identitas_penanggung_jawab').val('').change();
                     }
                 }
             });

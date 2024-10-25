@@ -177,7 +177,12 @@
                         @else
                             <p class="label">Foto NPWP</p>
                         @endif
-                        <img src="uploads/penanggung_jawab/{{ $data['data_identitas']['foto'] }}" alt="" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+
+                        @if($data['data_identitas']['foto'] != null)
+                            <img src="uploads/penanggung_jawab/{{ $data['data_identitas']['foto'] }}" alt="" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                        @else
+                            <p>-</p>
+                        @endif
                     @else
                         <p class="label">Foto</p>
                         <p>-</p>

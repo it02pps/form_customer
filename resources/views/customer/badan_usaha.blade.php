@@ -351,7 +351,7 @@
                                             <option value="rekening_anak_saudara">Rekening Anak / Saudara</option>
                                             <option value="rekening_karyawan">Rekening Karyawan</option>
                                         </select> --}}
-                                        <input type="text" class="form-control" id="rekening_lain" name="rekening_lain" placeholder="Masukkan pemilik rekening">
+                                        <input type="text" class="form-control" id="rekening_lain" name="rekening_lain" placeholder="Masukkan pemilik rekening" autocomplete="off" value="{{ $data_perusahaan ? $data_perusahaan['informasi_bank']['rekening_lain'] : '' }}">
                                     </div>
                                 {{-- </div> --}}
                             </div>
@@ -379,8 +379,8 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group mb-3">
                                         <label for="">Identitas Penanggung Jawab</label>
-                                        <select name="identitas_penanggung_jawab" id="identitas_penanggung_jawab" class="form-control" accept=".jpg, .png, .pdf, .jpeg">
-                                            <option value="">-- Pilih identitas penanggung jawab --</option>
+                                        <select name="identitas_penanggung_jawab" id="identitas_penanggung_jawab" class="form-control">
+                                            <option value=""></option>
                                             <option value="ktp">KTP</option>
                                             <option value="npwp">NPWP</option>
                                         </select>
@@ -435,7 +435,7 @@
 @section('script')
     <script>
         function kembali() {
-            window.location.href = '/form-customer';
+            window.location.href = '/';
         }
 
         function previewFileKtp(input) {
@@ -541,10 +541,11 @@
 
             $('#identitas_penanggung_jawab').select2({
                 placeholder: 'Pilih identitas penanggung jawab',
+                allowClear: true
             });
 
             $('#status_rekening').select2({
-                placeholder: 'Pilih status rekening'
+                placeholder: 'Pilih status rekening',
             });
 
             $(document).on('change', '#status_rekening', function() {
@@ -604,7 +605,7 @@
 
                 const bentuk_usaha = $('#bentuk_usaha').val();
                 $.ajax({
-                    url: '/form-customer/'+ bentuk_usaha +'/store',
+                    url: '/'+ bentuk_usaha +'/store',
                     type: 'POST',
                     data: new FormData(this),
                     contentType: false,
@@ -685,7 +686,7 @@
                         $('#identitas_perusahaan').val('ktp').change();
                         $('#status_pkp').val('non_pkp').change();
                         $('#status_rekening').val('').change();
-                        $('#identitas_penanggung_jawab').val('ktp').change();
+                        $('#identitas_penanggung_jawab').val('').change();
                     }
                 }
             });

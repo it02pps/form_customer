@@ -344,14 +344,12 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Pemilik Rekening</label>
-                                <p><?php echo e(str_replace("_", " ", ucwords($perusahaan['informasi_bank']['status']))); ?></p>
+                                <?php if(!$perusahaan['informasi_bank']['rekening_lain']): ?>
+                                    <p><?php echo e(str_replace("_", " ", ucwords($perusahaan['informasi_bank']['status']))); ?></p>
+                                <?php else: ?>
+                                    <p><?php echo e(str_replace('_', ' ', ucwords($perusahaan['informasi_bank']['rekening_lain']))); ?></p>
+                                <?php endif; ?>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="form-group">
-                            <label for="">Rekening Lainnya</label>
-                            <p><?php echo e(str_replace('_', ' ', ucwords($perusahaan['informasi_bank']['rekening_lain']))); ?></p>
                         </div>
                     </div>
                 </div>
@@ -426,28 +424,30 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                    
-                    <div class="">
-                        <label for="">Tanda Tangan</label>
-                        <?php if($perusahaan['data_identitas'] && $perusahaan['data_identitas']['ttd']): ?>
-                            <div id="signature">
-                                <img src="<?php echo e(asset('uploads/ttd/'.$perusahaan['data_identitas']['ttd'])); ?>" style="width: 100%;" data-action="zoom">
-                            </div>
-                        <?php else: ?>
-                            <p>-</p>
-                        <?php endif; ?>
+                <?php if($perusahaan['data_identitas']): ?>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        
+                        <div class="">
+                            <label for="">Tanda Tangan</label>
+                            <?php if($perusahaan['data_identitas'] && $perusahaan['data_identitas']['ttd']): ?>
+                                <div id="signature">
+                                    <img src="<?php echo e(asset('uploads/ttd/'.$perusahaan['data_identitas']['ttd'])); ?>" style="width: 100%;" data-action="zoom">
+                                </div>
+                            <?php else: ?>
+                                <p>-</p>
+                            <?php endif; ?>
+                        </div>
                     </div>
-                </div>
+                <?php endif; ?>
             </div>
         </div>
         <div class="content-footer mt-2">
             <button type="button" class="btn btn-outline-primary waves-effect waves-light rounded btn-md" id="update_customer" data-url="<?php echo e($url); ?>" title="Edit Data Customer">Edit Data Customer</button>
             &nbsp;
-            <?php if($perusahaan['data_identitas'] && $perusahaan['data_identitas']['ttd']): ?>
+            <?php if($perusahaan['data_identitas']): ?>
                 <button type="button" class="btn btn-primary waves-effect waves-light rounded btn-md" id="konfirmasi_without_upload" data-id="<?php echo e($enkripsi); ?>" data-usaha="<?php echo e(str_replace('_', '-', $perusahaan['bentuk_usaha'])); ?>" title="Konfirmasi penginputan data customer">Konfirmasi</button>
             <?php else: ?>
-                <a type="button" href="<?php echo e(route('form_customer.pdf', ['menu' => str_replace('_', '-', $perusahaan['bentuk_usaha']), 'id' => $enkripsi])); ?>" target="_blank" class="btn btn-outline-primary waves-effect waves-light rounded btn-md" id="pdf" data-id="<?php echo e($enkripsi); ?>" title="Download PDF">Download PDF</a>
+                <a type="button" href="<?php echo e(route('form_customer.pdf', ['menu' => str_replace('_', '-', $perusahaan['bentuk_usaha']), 'id' => $enkripsi])); ?>" target="_blank" class="btn btn-dark waves-effect waves-light rounded btn-md" id="pdf" data-id="<?php echo e($enkripsi); ?>" title="Download PDF">Download PDF</a>
                 &nbsp;
                 <button type="button" class="btn btn-primary waves-effect waves-light rounded btn-md" id="upload_file" data-id="<?php echo e($enkripsi); ?>" data-usaha="<?php echo e(str_replace('_', '-', $perusahaan['bentuk_usaha'])); ?>" title="Upload file">Upload File</button>
             <?php endif; ?>

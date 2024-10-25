@@ -177,7 +177,12 @@
                         <?php else: ?>
                             <p class="label">Foto NPWP</p>
                         <?php endif; ?>
-                        <img src="uploads/penanggung_jawab/<?php echo e($data['data_identitas']['foto']); ?>" alt="" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+
+                        <?php if($data['data_identitas']['foto'] != null): ?>
+                            <img src="uploads/penanggung_jawab/<?php echo e($data['data_identitas']['foto']); ?>" alt="" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                        <?php else: ?>
+                            <p>-</p>
+                        <?php endif; ?>
                     <?php else: ?>
                         <p class="label">Foto</p>
                         <p>-</p>

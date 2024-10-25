@@ -58,7 +58,7 @@
 @section('script')
 <script>
     function form_customer(value) {
-        window.location.href = '/form-customer/'+value;
+        window.location.href = '/'+value;
     }
 </script>
 @endsection

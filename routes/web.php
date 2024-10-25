@@ -18,12 +18,12 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Auth::routes();
-Route::get('/form-customer', [FormCustomer::class, 'index'])->name('form_customer.index');
-Route::get('/form-customer/{menu}', [FormCustomer::class, 'view'])->name("form_customer.view");
-Route::post('/form-customer/{menu}/store', [FormCustomer::class, 'store'])->name('form_customer.store');
-Route::get('/form-customer/{menu}/detail', [FormCustomer::class, 'detail'])->name('form_customer.detail');
-Route::post('/form-customer/{menu}/confirmation', [FormCustomer::class, 'confirmation'])->name('form_customer.confirmation');
-Route::get('/form-customer/{menu}/pdf/{id}', [FormCustomer::class, 'download_pdf'])->name('form_customer.pdf');
+Route::get('/', [FormCustomer::class, 'index'])->name('form_customer.index');
+Route::get('/{menu}', [FormCustomer::class, 'view'])->name("form_customer.view");
+Route::post('/{menu}/store', [FormCustomer::class, 'store'])->name('form_customer.store');
+Route::get('/{menu}/detail', [FormCustomer::class, 'detail'])->name('form_customer.detail');
+Route::post('/{menu}/confirmation', [FormCustomer::class, 'confirmation'])->name('form_customer.confirmation');
+Route::get('/{menu}/pdf/{id}', [FormCustomer::class, 'download_pdf'])->name('form_customer.pdf');
 
 // API URL
 Route::post('/api/storage', [APIStorage::class, 'store'])->name('api_storage_store');
