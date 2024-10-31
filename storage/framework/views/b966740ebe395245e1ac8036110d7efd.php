@@ -51,13 +51,13 @@
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
                         <?php if(auth()->guard()->guest()): ?>
-                            <?php if(Route::has('login')): ?>
+                            
                                 <li class="nav-item">
-                                    <a class="nav-link" href="<?php echo e(route('login')); ?>"><?php echo e(__('Login')); ?></a>
+                                    <a class="nav-link" href="<?php echo e(route('login.index')); ?>"><?php echo e(__('Login')); ?></a>
                                 </li>
-                            <?php endif; ?>
+                            
                         <?php else: ?>
-                        <a class="dropdown-item text-danger" href="<?php echo e(route('logout')); ?>"
+                        <a class="dropdown-item text-danger nav-link" href="<?php echo e(route('logout')); ?>"
                             onclick="event.preventDefault();
                                         document.getElementById('logout-form').submit();">
                             <?php echo e(__('Logout')); ?>

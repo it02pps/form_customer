@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-<title>Detail Form Customer | PT Papasari</title>
+<title>Detail Data Customer | PT Papasari</title>
 @endsection
 
 @section('css')
@@ -22,12 +22,9 @@
 
     .content-footer {
         display: flex;
-        justify-content: end;
-        margin-left: auto;
-        margin-right: auto;
+        justify-content: right;
         border-radius: 8px;
-        width: 60%;
-        padding: 0;
+        width: 62%;
     }
 
     .section1 h4, .section2 h4, .section3 h4 {
@@ -58,7 +55,7 @@
         border-radius: 7px;
     }
 
-    label:not(.label_modal) {
+    label {
         font-weight: bold;
         text-decoration: underline;
     }
@@ -79,12 +76,10 @@
         }
 
         .content-footer {
-            border-radius: 8px;
-            width: 10%;
             display: flex;
-            justify-content: center;
-            margin-left: auto;
-            margin-right: auto;
+            justify-content: right;
+            border-radius: 8px;
+            width: 62%;
         }
 
         .section1-body .row .col-xl-6:nth-of-type(1) {
@@ -119,7 +114,7 @@
     <div class="row justify-content-center">
 
         <div class="content-header text-center mb-4">
-            <h2>FORMULIR DATA CUSTOMER</h2>
+            <h2>DETAIL DATA CUSTOMER</h2>
         </div>
         <div class="content-body">
             <div class="section1 mb-4">
@@ -129,13 +124,13 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Nama Merk Usaha</label>
-                                <p>{{ $perusahaan['nama_perusahaan'] }}</p>
+                                <p>{{ $data['nama_perusahaan'] }}</p>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Nama Group Usaha</label>
-                                <p>{{ $perusahaan['nama_group_perusahaan'] }}</p>
+                                <p>{{ $data['nama_group_perusahaan'] }}</p>
                             </div>
                         </div>
                     </div>
@@ -143,17 +138,17 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Alamat Lengkap</label>
-                                <p>{{ $perusahaan['alamat_lengkap'] }}</p>
+                                <p>{{ $data['alamat_lengkap'] }}</p>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group mb-2">
                                 <label for="">Kota / Kabupaten</label>
-                                <p>{{ $perusahaan['kota_kabupaten'] }}</p>
+                                <p>{{ $data['kota_kabupaten'] }}</p>
                             </div>
                             <div class="form-gorup">
                                 <label for="">Kecamatan</label>
-                                <p>{{ $perusahaan['kecamatan'] }}</p>
+                                <p>{{ $data['kecamatan'] }}</p>
                             </div>
                         </div>
                     </div>
@@ -161,13 +156,13 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Alamat Email Tempat Usaha</label>
-                                <p>{{ $perusahaan['alamat_email'] }}</p>
+                                <p>{{ $data['alamat_email'] }}</p>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Nomor Handphone Contact Person</label>
-                                <p>{{ $perusahaan['nomor_handphone'] }}</p>
+                                <p>{{ $data['nomor_handphone'] }}</p>
                             </div>
                         </div>
                     </div>
@@ -175,13 +170,13 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Tahun Berdiri</label>
-                                <p>{{ $perusahaan['tahun_berdiri'] ? \Carbon\Carbon::parse($perusahaan['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') : '-' }}</p>
+                                <p>{{ $data['tahun_berdiri'] ? \Carbon\Carbon::parse($data['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') : '-' }}</p>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Lama Usaha (Tahun)</label>
-                                <p>{{ $perusahaan['lama_usaha'] ? $perusahaan['lama_usaha'] . ' tahun' : '-' }}</p>
+                                <p>{{ $data['lama_usaha'] ? $data['lama_usaha'] . ' tahun' : '-' }}</p>
                             </div>
                         </div>
                     </div>
@@ -189,12 +184,12 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Bidang Usaha</label>
-                                <p>{{ str_replace('_', ' ', strtoupper($perusahaan['bidang_usaha'])) }}</p>
+                                <p>{{ str_replace('_', ' ', strtoupper($data['bidang_usaha'])) }}</p>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <label for="">Status Kepemilikan Tempat Usaha</label>
-                            <p>{{ str_replace("_", ' ', ucwords($perusahaan['status_kepemilikan'])) }}</p>
+                            <p>{{ str_replace("_", ' ', ucwords($data['status_kepemilikan'])) }}</p>
                         </div>
                     </div>
                 </div>
@@ -202,34 +197,34 @@
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="form-group mb-2">
                             <label for="">Identitas Pemilik Perusahaan</label>
-                            <p>{{ strtoupper($perusahaan['identitas']) }}</p>
+                            <p>{{ strtoupper($data['identitas']) }}</p>
                         </div>
                     </div>
                     
-                    @if($perusahaan['identitas'] == 'ktp')
+                    @if($data['identitas'] == 'ktp')
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ktp-section">
                             <div class="form-group mb-2">
                                 <label for="">Nama Lengkap</label>
-                                <p>{{ $perusahaan['nama_lengkap'] }}</p>
+                                <p>{{ $data['nama_lengkap'] }}</p>
                             </div>
                         </div>
                         <div class="ktp-section">
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <label for="">Nomor KTP</label>
-                                    <p>{{ $perusahaan['nomor_ktp'] }}</p>
+                                    <p>{{ $data['nomor_ktp'] }}</p>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <label for="">Foto KTP</label>
     
-                                    <div id="preview_ktp" class="@if($perusahaan['identitas'] != 'ktp') d-none @endif">
-                                        @if(str_contains($perusahaan['foto_ktp'], '.pdf'))
-                                        <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_ktp']) }}')">
+                                    <div id="preview_ktp" class="@if($data['identitas'] != 'ktp') d-none @endif">
+                                        @if(str_contains($data['foto_ktp'], '.pdf'))
+                                        <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$data['foto_ktp']) }}')">
                                             <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
                                             <span>Click to preview</span>
                                         </div>
                                         @else
-                                            <img id="preview_foto_ktp" src="{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_ktp']) }}" data-action="zoom">
+                                            <img id="preview_foto_ktp" src="{{ asset('uploads/identitas_perusahaan/'.$data['foto_ktp']) }}" data-action="zoom">
                                         @endif
                                     </div>
                                 </div>
@@ -239,7 +234,7 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 npwp-section">
                             <div class="form-group mb-4">
                                 <label for="">Jenis Badan Usaha</label>
-                                <p>{{ strtoupper($perusahaan['badan_usaha']) }}</p>
+                                <p>{{ strtoupper($data['badan_usaha']) }}</p>
                             </div>
                         </div>
                         <div class="npwp-section">
@@ -247,13 +242,13 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nomor NPWP</label>
-                                        <p>{{ $perusahaan['nomor_npwp'] }}</p>
+                                        <p>{{ $data['nomor_npwp'] }}</p>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group mb-4">
                                         <label for="">Nama NPWP</label>
-                                        <p>{{ $perusahaan['nama_npwp'] }}</p>
+                                        <p>{{ $data['nama_npwp'] }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -261,30 +256,30 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group mb-4">
                                         <label for="">Alamat NPWP</label>
-                                        <p>{{ $perusahaan['alamat_npwp'] }}</p>
+                                        <p>{{ $data['alamat_npwp'] }}</p>
                                     </div>
 
                                     <div class="form-group mb-4">
                                         <label for="">Email Khusus Untuk Faktur Pajak</label>
-                                        <p>{{ $perusahaan['email_khusus_faktur_pajak'] }}</p>
+                                        <p>{{ $data['email_khusus_faktur_pajak'] }}</p>
                                     </div>
     
                                     <div class="form-group mb-3">
                                         <label for="">Status Pengusaha Kena Pajak (PKP)</label>
-                                        <p>{{ str_replace("_", " ", strtoupper($perusahaan['status_pkp'])) }}</p>
+                                        <p>{{ str_replace("_", " ", strtoupper($data['status_pkp'])) }}</p>
                                     </div>
     
-                                    <div class="form-group mb-4 @if($perusahaan['status_pkp'] !=  'pkp') d-none @endif" id="sppkp-section">
+                                    <div class="form-group mb-4 @if($data['status_pkp'] !=  'pkp') d-none @endif" id="sppkp-section">
                                         <label for="">Foto SPPKP</label>
     
                                         <div id="preview_sppkp">
-                                            @if(str_contains($perusahaan['sppkp'], '.pdf'))
-                                                <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$perusahaan['sppkp']) }}')">
+                                            @if(str_contains($data['sppkp'], '.pdf'))
+                                                <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$data['sppkp']) }}')">
                                                     <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
                                                     <span>Click to preview</span>
                                                 </div>
                                             @else
-                                                <img id="preview_foto_sppkp" src="{{ asset('uploads/identitas_perusahaan/'.$perusahaan['sppkp']) }}" data-action="zoom">
+                                                <img id="preview_foto_sppkp" src="{{ asset('uploads/identitas_perusahaan/'.$data['sppkp']) }}" data-action="zoom">
                                             @endif
                                         </div>
                                     </div>
@@ -292,21 +287,21 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group mb-4">
                                         <label for="">Kota sesuai NPWP</label>
-                                        <p>{{ $perusahaan['kota_npwp'] }}</p>
+                                        <p>{{ $data['kota_npwp'] }}</p>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="">Foto NPWP</label>
                                     </div>
     
-                                    <div id="preview_npwp" class="@if($perusahaan['identitas'] != 'npwp') d-none @endif">
-                                        @if(str_contains($perusahaan['foto_npwp'], '.pdf'))
-                                            <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_npwp']) }}')">
+                                    <div id="preview_npwp" class="@if($data['identitas'] != 'npwp') d-none @endif">
+                                        @if(str_contains($data['foto_npwp'], '.pdf'))
+                                            <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$data['foto_npwp']) }}')">
                                                 <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
                                                 <span>Click to preview</span>
                                             </div>
                                         @else
-                                            <img id="preview_foto_npwp" src="{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_npwp']) }}" data-action="zoom">
+                                            <img id="preview_foto_npwp" src="{{ asset('uploads/identitas_perusahaan/'.$data['foto_npwp']) }}" data-action="zoom">
                                         @endif
                                     </div>
                                 </div>
@@ -324,13 +319,13 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Nomor Rekening</label>
-                                <p>{{ $perusahaan['informasi_bank']['nomor_rekening'] }}</p>
+                                <p>{{ $data['informasi_bank']['nomor_rekening'] }}</p>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Nama Rekening</label>
-                                <p>{{ $perusahaan['informasi_bank']['nama_rekening'] }}</p>
+                                <p>{{ $data['informasi_bank']['nama_rekening'] }}</p>
                             </div>
                         </div>
                     </div>
@@ -338,16 +333,16 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Nama Bank</label>
-                                <p>{{ $perusahaan['informasi_bank']['nama_bank'] }}</p>
+                                <p>{{ $data['informasi_bank']['nama_bank'] }}</p>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Pemilik Rekening</label>
-                                @if(!$perusahaan['informasi_bank']['rekening_lain'])
-                                    <p>{{ str_replace("_", " ", ucwords($perusahaan['informasi_bank']['status'])) }}</p>
+                                @if(!$data['informasi_bank']['rekening_lain'])
+                                    <p>{{ str_replace("_", " ", ucwords($data['informasi_bank']['status'])) }}</p>
                                 @else
-                                    <p>{{ str_replace('_', ' ', ucwords($perusahaan['informasi_bank']['rekening_lain'])) }}</p>
+                                    <p>{{ str_replace('_', ' ', ucwords($data['informasi_bank']['rekening_lain'])) }}</p>
                                 @endif
                             </div>
                         </div>
@@ -362,13 +357,13 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Nama Penanggung Jawab</label>
-                                <p>{{ $perusahaan['data_identitas'] ? ($perusahaan['data_identitas']['nama'] ? $perusahaan['data_identitas']['nama'] : '-') : '-' }}</p>
+                                <p>{{ $data['data_identitas'] ? ($data['data_identitas']['nama'] ? $data['data_identitas']['nama'] : '-') : '-' }}</p>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Jabatan</label>
-                                <p>{{ $perusahaan['data_identitas'] ? ($perusahaan['data_identitas']['jabatan'] ? $perusahaan['data_identitas']['jabatan'] : '-') : '-' }}</p>
+                                <p>{{ $data['data_identitas'] ? ($data['data_identitas']['jabatan'] ? $data['data_identitas']['jabatan'] : '-') : '-' }}</p>
                             </div>
                         </div>
                     </div>
@@ -376,23 +371,23 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group mb-2">
                                 <label for="">Identitas Penanggung Jawab</label>
-                                <p>{{ $perusahaan['data_identitas'] ? ($perusahaan['data_identitas']['identitas'] ? strtoupper($perusahaan['data_identitas']['identitas']) : '-') : '-' }}</p>
+                                <p>{{ $data['data_identitas'] ? ($data['data_identitas']['identitas'] ? strtoupper($data['data_identitas']['identitas']) : '-') : '-' }}</p>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group mb-2" id="penanggung_ktp">
                                 <label for="">Foto KTP</label>
 
-                                @if($perusahaan['data_identitas'])
-                                    @if($perusahaan['data_identitas']['foto'])
-                                        <div id="preview_ktp_penanggung" class="@if($perusahaan['data_identitas']) @if($perusahaan['data_identitas']['identitas'] != 'ktp') d-none @endif @endif">
-                                            @if(str_contains($perusahaan['data_identitas']['foto'], '.pdf'))
-                                                <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto']) }}')">
+                                @if($data['data_identitas'])
+                                    @if($data['data_identitas']['foto'])
+                                        <div id="preview_ktp_penanggung" class="@if($data['data_identitas']) @if($data['data_identitas']['identitas'] != 'ktp') d-none @endif @endif">
+                                            @if(str_contains($data['data_identitas']['foto'], '.pdf'))
+                                                <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/penanggung_jawab/'.$data['data_identitas']['foto']) }}')">
                                                     <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
                                                     <span>Click to preview</span>
                                                 </div>
                                             @else
-                                                <img id="preview_foto_ktp_penanggung" src="{{ asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto']) }}" data-action="zoom">
+                                                <img id="preview_foto_ktp_penanggung" src="{{ asset('uploads/penanggung_jawab/'.$data['data_identitas']['foto']) }}" data-action="zoom">
                                             @endif
                                         </div>
                                     @else
@@ -403,18 +398,18 @@
                                 @endif
                             </div>
 
-                            <div class="form-group @if($perusahaan['data_identitas']) @if($perusahaan['data_identitas']['identitas'] != 'npwp') d-none @endif @else d-none @endif" id="penanggung_npwp">
+                            <div class="form-group @if($data['data_identitas']) @if($data['data_identitas']['identitas'] != 'npwp') d-none @endif @else d-none @endif" id="penanggung_npwp">
                                 <label for="">Foto NPWP</label>
 
-                                @if($perusahaan['data_identitas'])
+                                @if($data['data_identitas'])
                                     <div id="preview_npwp_penanggung" class="d-none">
-                                        @if(str_contains($perusahaan['data_identitas']['foto'], '.pdf'))
-                                            <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto']) }}')">
+                                        @if(str_contains($data['data_identitas']['foto'], '.pdf'))
+                                            <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/penanggung_jawab/'.$data['data_identitas']['foto']) }}')">
                                                 <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;" alt="PDF">
                                                 <span>Click to preview</span>
                                             </div>
                                         @else
-                                            <img id="preview_foto_npwp_penanggung" src="{{ asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto']) }}" data-action="zoom">
+                                            <img id="preview_foto_npwp_penanggung" src="{{ asset('uploads/penanggung_jawab/'.$data['data_identitas']['foto']) }}" data-action="zoom">
                                         @endif
                                     </div>
                                 @else
@@ -424,14 +419,14 @@
                         </div>
                     </div>
                 </div>
-                @if($perusahaan['data_identitas'])
+                @if($data['data_identitas'])
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                         {{-- Signature --}}
                         <div class="">
                             <label for="">Tanda Tangan</label>
-                            @if($perusahaan['data_identitas'] && $perusahaan['data_identitas']['ttd'])
+                            @if($data['data_identitas'] && $data['data_identitas']['ttd'])
                                 <div id="signature">
-                                    <img src="{{ asset('uploads/ttd/'.$perusahaan['data_identitas']['ttd']) }}" style="width: 100%;" data-action="zoom">
+                                    <img src="{{ asset('uploads/ttd/'.$data['data_identitas']['ttd']) }}" style="width: 100%;" data-action="zoom">
                                 </div>
                             @else
                                 <p>-</p>
@@ -442,42 +437,7 @@
             </div>
         </div>
         <div class="content-footer mt-2">
-            <button type="button" class="btn btn-outline-primary waves-effect waves-light rounded btn-md" id="update_customer" data-url="{{ $url }}" title="Edit Data Customer">Edit Data Customer</button>
-            &nbsp;
-            @if($perusahaan['data_identitas'])
-                <button type="button" class="btn btn-primary waves-effect waves-light rounded btn-md" id="konfirmasi_without_upload" data-id="{{ $enkripsi }}" data-usaha="{{ str_replace('_', '-', $perusahaan['bentuk_usaha']) }}" title="Konfirmasi penginputan data customer">Konfirmasi</button>
-            @else
-                <a type="button" href="{{ route('form_customer.pdf', ['menu' => str_replace('_', '-', $perusahaan['bentuk_usaha']), 'id' => $enkripsi]) }}" target="_blank" class="btn btn-dark waves-effect waves-light rounded btn-md" id="pdf" data-id="{{ $enkripsi }}" title="Download PDF">Download PDF</a>
-                &nbsp;
-                <button type="button" class="btn btn-primary waves-effect waves-light rounded btn-md" id="upload_file" data-id="{{ $enkripsi }}" data-usaha="{{ str_replace('_', '-', $perusahaan['bentuk_usaha']) }}" title="Upload file">Upload File</button>
-            @endif
-        </div>
-    </div>
-</div>
-
-{{-- Modal Upload --}}
-<div class="modal fade" id="modalUpload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Upload PDF</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="form_upload">
-                    @csrf
-                    <input type="hidden" name="encrypt" id="encrypt">
-                    <div class="form-group">
-                        <label for="" class="label_modal">Upload File <span class="text-danger">*</span></label>
-                        <input type="file" class="form-control" accept=".pdf" id="upload" name="upload">
-                        <span class="text-danger">*Upload file PDF</span>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger waves-effect waves-light rounded btn-md" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary waves-effect waves-light rounded btn-md">Konfirmasi</button>
-                    </div>
-                </form>
-            </div>
+            <button type="button" class="btn btn-danger btn-md waves-effect waves-light rounded" onclick="back()">Back</button>
         </div>
     </div>
 </div>
@@ -489,104 +449,8 @@
             window.open(that,'_blank');
         }
 
-        $(document).ready(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $(document).on('click', '#update_customer', function() {
-                let url = $(this).data('url');
-                window.location.href = url;
-            });
-
-            $(document).on('click', '#upload_file', function() {
-                $('#modalUpload').modal('show');
-                $('#form_upload').find('#encrypt').val($(this).data('id'));
-            });
-
-            $(document).on('submit', '#form_upload', function(e) {
-                e.preventDefault();
-                let usaha = $('#upload_file').data('usaha');
-                Swal.fire({
-                    icon: 'question',
-                    title: "Apakah anda sudah yakin data yang diisikan?",
-                    showCancelButton: true,
-                    confirmButtonText: "Konfirmasi",
-                    denyButtonText: `Batal`
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        let url = '{{ route('form_customer.confirmation', ':menu') }}';
-                        url = url.replace(':menu', usaha);
-                        $.ajax({
-                            url: url,
-                            type: 'POST',
-                            data: new FormData(this),
-                            cache: false,
-                            contentType: false,
-                            processData: false,
-                            success: res => {
-                                if(res.status == true) {
-                                    Swal.fire({
-                                        title: 'Berhasil!',
-                                        text: 'Data Customer Berhasil Diupload!',
-                                        icon: 'success',
-                                    });
-                                    window.location.href = 'https://papasari.com';
-                                } else {
-                                    Swal.fire({
-                                        title: 'Gagal!',
-                                        text: 'Terjadi Kesalahan!',
-                                        icon: 'error'
-                                    });
-                                }
-                            }
-                        })
-                    }
-                });
-            });
-
-            $(document).on('click', '#konfirmasi_without_upload', function() {
-                let id = $(this).data('id');
-                let usaha = $(this).data('usaha');
-                Swal.fire({
-                    icon: 'question',
-                    title: "Apakah anda sudah yakin data yang diisikan?",
-                    showCancelButton: true,
-                    confirmButtonText: "Konfirmasi",
-                    denyButtonText: `Batal`
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        let url = '{{ route('form_customer.confirmation', ':menu') }}';
-                        url = url.replace(':menu', usaha);
-                        $.ajax({
-                            url: url,
-                            type: 'POST',
-                            data: {
-                                '_token': "{{ csrf_token() }}",
-                                'encrypt': id
-                            },
-                            success: res => {
-                                if(res.status == true) {
-                                    Swal.fire({
-                                        title: 'Berhasil!',
-                                        text: 'Data Customer Berhasil Diupload!',
-                                        icon: 'success',
-                                    });
-                                    window.location.href = 'https://papasari.com';
-                                } else {
-                                    Swal.fire({
-                                        title: 'Gagal!',
-                                        text: 'Terjadi Kesalahan!',
-                                        icon: 'error'
-                                    });
-                                }
-                            }
-                        })
-                    }
-                });
-            });
-        });
+        function back() {
+            window.location.href = '/internal/panel';
+        }
     </script>
 @endsection

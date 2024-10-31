@@ -51,13 +51,13 @@
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
                         @guest
-                            @if (Route::has('login'))
+                            {{-- @if (Route::has('login')) --}}
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                    <a class="nav-link" href="{{ route('login.index') }}">{{ __('Login') }}</a>
                                 </li>
-                            @endif
+                            {{-- @endif --}}
                         @else
-                        <a class="dropdown-item text-danger" href="{{ route('logout') }}"
+                        <a class="dropdown-item text-danger nav-link" href="{{ route('logout') }}"
                             onclick="event.preventDefault();
                                         document.getElementById('logout-form').submit();">
                             {{ __('Logout') }}

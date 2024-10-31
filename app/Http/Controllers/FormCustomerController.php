@@ -34,6 +34,7 @@ class FormCustomerController extends Controller
             $url = null;
             $enkripsi = null;
         }
+        
         $bidang_usaha = [
             'toko_retail',
             'bumn',
@@ -413,7 +414,6 @@ class FormCustomerController extends Controller
             $link = route('form_customer.detail', ['menu' => str_replace('_', '-', $request->bentuk_usaha), 'id' => Crypt::encryptString($identitas_perusahaan->id)]);
             return ['status' => true, 'link' => $link];
         } catch(\Exception $e) {
-            dd($e);
             return ['status' => false, 'error' => 'Terjadi kesalahan'];
         }
     }

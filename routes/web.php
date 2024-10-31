@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FormCustomerController as FormCustomer;
 use App\Http\Controllers\APIStorageController as APIStorage;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,7 +32,14 @@ Route::post('/api/storage', [APIStorage::class, 'store'])->name('api_storage_sto
 // Get data select
 Route::get('/select/{id}', [FormCustomer::class, 'select'])->name('form_customer.select');
 
+// Login
+Route::get('/login', [LoginController::class, 'index'])->name('login.index');
+Route::post('/login-store', [LoginController::class, 'login'])->name('login.store');
+
 Route::middleware('web')->group(function() {
-    Route::get('/panel', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    Route::get('/panel/detail', [HomeController::class, 'detail'])->name('home.detail');
+    Route::get('/internal/panel', [HomeController::class, 'index'])->name('home');
+    Route::get('/internal/panel/detail', [HomeController::class, 'detail'])->name('home.detail');
+    Route::get('/internal/panel/edit/{id}', [HomeController::class, 'edit'])->name('home.edit');
+    Route::post('/internal/panel/edit-store', [HomeController::class, 'edit_store'])->name('home.edit_store');
+    Route::get('/internal/panel/select/{id}', [HomeController::class, 'select'])->name('home.select');
 });

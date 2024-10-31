@@ -120,7 +120,7 @@
     <div class="row justify-content-center">
 
         <div class="content-header text-center mb-4">
-            <h2>FORMULIR DATA CUSTOMER PT PAPASARI</h2>
+            <h2>FORMULIR DATA CUSTOMER</h2>
         </div>
     
         <form id="form_customer" enctype="multipart/form-data">

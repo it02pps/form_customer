@@ -1,18 +1,16 @@
-@extends('layouts.app')
-
-@section('title')
+<?php $__env->startSection('title'); ?>
 <title>List Data Customer | PT Papasari</title>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('css')
+<?php $__env->startSection('css'); ?>
 <style>
     body {
         overflow-x: hidden;
     }
 </style>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -27,6 +25,7 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Bentuk Usaha</th>
                                     <th>Nama Perusahaan</th>
                                     <th>Alamat Lengkap</th>
                                     <th>Nomor handphone</th>
@@ -35,28 +34,34 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data as $loop_data)
+                                <?php $__currentLoopData = $data; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $loop_data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $loop_data->nama_perusahaan }}</td>
-                                        <td>{{ $loop_data->alamat_lengkap . ', ' . $loop_data->kecamatan . ', ' . $loop_data->kota_kabupaten}}</td>
-                                        <td>{{ $loop_data->nomor_handphone }}</td>
+                                        <td><?php echo e($loop->iteration); ?></td>
+                                        <td><?php echo e(str_replace('_', ' ', strtoupper($loop_data->bentuk_usaha))); ?></td>
+                                        <td><?php echo e($loop_data->nama_perusahaan); ?></td>
+                                        <td><?php echo e($loop_data->alamat_lengkap . ', ' . $loop_data->kecamatan . ', ' . $loop_data->kota_kabupaten); ?></td>
+                                        <td><?php echo e($loop_data->nomor_handphone); ?></td>
                                         <td>
-                                            @if($loop_data->status_konfirmasi == 0)
+                                            <?php if($loop_data->status_konfirmasi == 0): ?>
                                                 <span class="badge bg-danger">Belum Terkonfirmasi</span>
-                                            @else
+                                            <?php else: ?>
                                                 <span class="badge bg-success">Sudah Terkonfirmasi</span>
-                                            @endif
+                                            <?php endif; ?>
                                         </td>
                                         <td>
+                                            <button type="button"
+                                                class="btn btn-warning waves-effect waves-light rounded btn-md"
+                                                title="Edit Data Customer"
+                                                id="edit"
+                                                data-id="<?php echo e(Crypt::encryptString($loop_data->id)); ?>">Edit</button>
                                             <button type="button"
                                                 class="btn btn-primary waves-effect waves-light rounded btn-md"
                                                 title="Detail Data Customer"
                                                 id="detail"
-                                                data-url="{{ route('home.detail', ['id' => Crypt::encryptString($loop_data->id)]) }}">Detail</button>
+                                                data-url="<?php echo e(route('home.detail', ['id' => Crypt::encryptString($loop_data->id)])); ?>">Detail</button>
                                         </td>
                                     </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
                     </div>
@@ -65,9 +70,9 @@
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('script')
+<?php $__env->startSection('script'); ?>
     <script>
         $(document).ready(function() {
             $('#datatable').DataTable({
@@ -80,4 +85,5 @@
             })
         });
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Other\laragon\www\FormCustomer\resources\views/user/home.blade.php ENDPATH**/ ?>

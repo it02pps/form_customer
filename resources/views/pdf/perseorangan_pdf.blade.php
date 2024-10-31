@@ -61,7 +61,7 @@
 <body>
     <div class="container">
         <div class="content-header">
-            <h2>FORMULIR DATA CUSTOMER PT PAPASARI</h2>
+            <h2>FORMULIR DATA CUSTOMER</h2>
         </div>
         <div class="content-body">
             <h3>IDENTITAS PERUSAHAAN</h3>

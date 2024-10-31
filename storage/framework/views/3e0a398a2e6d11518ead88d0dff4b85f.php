@@ -10,7 +10,7 @@
                 <div class="card-header"><?php echo e(__('Login')); ?></div>
 
                 <div class="card-body">
-                    <form method="POST" action="<?php echo e(route('login')); ?>">
+                    <form method="POST" action="<?php echo e(route('login.store')); ?>">
                         <?php echo csrf_field(); ?>
 
                         <div class="row mb-3">
