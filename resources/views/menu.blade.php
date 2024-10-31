@@ -33,7 +33,6 @@
 @endsection
 
 @section('content')
-<h1>Testing</h1>
 <div class="container" style="height: 80vh;">
     <div class="head">
         <h3 class="text-center">Pilih Menu</h3>
