@@ -29,6 +29,18 @@
         color: #fff;
         transition: 0.5s;
     }
+
+    @media screen and (max-width: 769px) {
+        .content {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card {
+            margin-top: 3vh;
+            width: 80% !important;
+        }
+    }
 </style>
 <?php $__env->stopSection(); ?>
 
