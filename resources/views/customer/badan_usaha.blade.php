@@ -492,7 +492,7 @@
                 var reader = new FileReader();
                 $("#preview_npwp_penanggung").removeClass('d-none');
                 reader.onload = function() {
-                    $("#foto_npwp_penanggung").attr("src", reader.result);
+                    $("#preview_foto_npwp_penanggung").attr("src", reader.result);
                 }
                 reader.readAsDataURL(file[0]);
             }

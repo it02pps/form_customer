@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="{{ asset('images/Vertical PNG 977 x 1188 px.png') }}">
+    <link rel="icon" href="{{ env('ASSET_LOCAL_IMAGES').'Vertical PNG 977 x 1188 px.png' }}">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -100,9 +100,9 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{{ asset('js/jSignature.min.js') }}"></script>
-<script src="{{ asset('js/modernizr.js') }}"></script>
-<script src="{{ asset('js/zoom.js') }}"></script>
+<script src="{{ env('ASSET_LOCAL_JS').'jSignature.min.js' }}"></script>
+<script src="{{ env('ASSET_LOCAL_JS').'js/modernizr.js' }}"></script>
+<script src="{{ env('ASSET_LOCAL_JS').'js/zoom.js' }}"></script>
 <script src="https://cdn.datatables.net/2.1.6/js/dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/2.1.6/js/dataTables.bootstrap5.min.js"></script>
 @yield('script')

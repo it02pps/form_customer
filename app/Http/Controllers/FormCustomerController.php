@@ -16,15 +16,18 @@ use App\Helper\ApiStorage;
 use App\Helper\base30ToImage;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\Visibility;
+use Illuminate\Support\Facades\Http;
 
 class FormCustomerController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         return view('menu');
     }
 
-    public function view($menu, Request $request) {
-        if($request->enkripsi) {
+    public function view($menu, Request $request)
+    {
+        if ($request->enkripsi) {
             $data = Crypt::decryptString($request->enkripsi);
             $data_perusahaan = IdentitasPerusahaan::with('informasi_bank', 'data_identitas')->where('bentuk_usaha', str_replace('-', '_', $menu))->where('id', $data)->first();
             $url = route('form_customer.detail', ['menu' => $menu, 'id' => $request->enkripsi]);
@@ -34,7 +37,7 @@ class FormCustomerController extends Controller
             $url = null;
             $enkripsi = null;
         }
-        
+
         $bidang_usaha = [
             'toko_retail',
             'bumn',
@@ -47,14 +50,15 @@ class FormCustomerController extends Controller
             'ekspedisi'
         ];
 
-        if($menu === 'perseorangan') {
+        if ($menu === 'perseorangan') {
             return view('customer.perseorangan', compact('data_perusahaan', 'url', 'enkripsi', 'menu', 'bidang_usaha'));
         } else {
             return view('customer.badan_usaha', compact('data_perusahaan', 'url', 'enkripsi', 'menu', 'bidang_usaha'));
         }
     }
 
-    protected function validator($data) {
+    protected function validator($data)
+    {
         $rules = [
             'nama_perusahaan' => 'required',
             'nama_group_perusahaan' => 'required',
@@ -64,8 +68,8 @@ class FormCustomerController extends Controller
             'kecamatan' => 'required',
             'bidang_usaha' => 'required',
             'email_perusahaan' => 'required|email',
-            'foto_ktp_penanggung' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['identitas_penanggung_jawab'] != '' && $data['identitas_penanggung_jawab'] == 'ktp' ? ($data['jenis_transaksi'] == 'credit' ? 'required|mimes:jpg,png,jpeg,pdf' : 'mimes:jpg,png,jpeg,pdf') : ''),
-            'foto_npwp_penanggung' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['identitas_penanggung_jawab'] != '' && $data['identitas_penanggung_jawab'] == 'npwp' ? ($data['jenis_transaksi'] == 'credit' ? 'required|mimes:jpg,png,jpeg,pdf' : 'mimes:jpg,png,jpeg,pdf') : ''),
+            'foto_ktp_penanggung' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf|max:2048' : ($data['identitas_penanggung_jawab'] != '' && $data['identitas_penanggung_jawab'] == 'ktp' ? ($data['jenis_transaksi'] == 'credit' ? 'required|mimes:jpg,jpeg,pdf|max:2048' : 'mimes:jpg,jpeg,pdf|max:2048') : ''),
+            'foto_npwp_penanggung' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf|max:2048' : ($data['identitas_penanggung_jawab'] != '' && $data['identitas_penanggung_jawab'] == 'npwp' ? ($data['jenis_transaksi'] == 'credit' ? 'required|mimes:jpg,jpeg,pdf|max:2048' : 'mimes:jpg,jpeg,pdf|max:2048') : ''),
             'status_kepemilikan' => 'required',
             'nama_penanggung_jawab' => ($data['jenis_transaksi'] == 'credit') ? 'required' : '',
             'jabatan' => ($data['jenis_transaksi'] == 'credit') ? 'required' : '',
@@ -77,13 +81,13 @@ class FormCustomerController extends Controller
             'nama_bank' => 'required',
             'nama_lengkap' => $data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'ktp' ? 'required' : '') : '',
             'nomor_ktp' => $data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'ktp' ? 'required|numeric|digits:16' : '') : '',
-            'foto_ktp' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'ktp' ? 'required|mimes:jpg,png,jpeg,pdf' : '') : ''),
+            'foto_ktp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf|max:2048' : ($data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'ktp' ? 'required|mimes:jpg,jpeg,pdf|max:2048' : '') : ''),
             'nomor_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required|digits_between:15,16' : ($data['identitas_perusahaan'] == 'npwp' ? 'required|digits_between:15,16' : ''),
             'nama_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
             'badan_usaha' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
             'email_faktur' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required|email' : ($data['identitas_perusahaan'] == 'npwp' ? 'required|email' : ''),
-            'foto_npwp' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['bentuk_usaha'] == 'badan_usaha' ? 'required|mimes:jpg,png,jpeg,pdf' : ($data['identitas_perusahaan'] == 'npwp' ? 'required|mimes:jpg,png,jpeg,pdf' : '')),
-            'foto_sppkp' => $data['update_id'] ? 'mimes:jpg,png,jpeg,pdf' : ($data['bentuk_usaha'] == 'badan_usaha' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,png,jpeg,pdf' : '') : ($data['identitas_perusahaan'] == 'npwp' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,png,jpeg,pdf' : '') : '')),
+            'foto_npwp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf|max:2048' : ($data['bentuk_usaha'] == 'badan_usaha' ? 'required|mimes:jpg,jpeg,pdf|max:2048' : ($data['identitas_perusahaan'] == 'npwp' ? 'required|mimes:jpg,jpeg,pdf|max:2048' : '')),
+            'foto_sppkp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf|max:2048' : ($data['bentuk_usaha'] == 'badan_usaha' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,jpeg,pdf|max:2048' : '') : ($data['identitas_perusahaan'] == 'npwp' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,jpeg,pdf|max:2048' : '') : '')),
             'alamat_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
             'kota_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
             'nomor_hp_penanggung_jawab' => ($data['jenis_transaksi'] == 'credit') ? 'required|numeric|digits_between:10,13' : '',
@@ -151,11 +155,14 @@ class FormCustomerController extends Controller
         return Validator::make($data, $rules, $message);
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         // dd($request->all());
         try {
+            $apiKey = 'Telor-Asin-951357-Papasari';
+            $apiUrl = env('API_URL') . 'upload';
             $validator = $this->validator($request->all());
-            if($validator->fails()) {
+            if ($validator->fails()) {
                 return ['status' => false, 'error' => $validator->errors()->all()];
             }
 
@@ -186,70 +193,39 @@ class FormCustomerController extends Controller
             $identitas_perusahaan->bentuk_usaha = $request->bentuk_usaha;
 
             // Kondisi jika identitas perusahaan yang dipakai KTP / NPWP
-            if($request->identitas_perusahaan == 'ktp' && $request->bentuk_usaha == 'perseorangan') {
+            if ($request->identitas_perusahaan == 'ktp' && $request->bentuk_usaha == 'perseorangan') {
                 $identitas_perusahaan->nama_lengkap = $request->nama_lengkap;
                 $identitas_perusahaan->nomor_ktp = $request->nomor_ktp;
-                if($request->hasFile('foto_ktp')) {
-                    if(File::exists('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_ktp)) {
-                        File::delete('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_ktp);
-                    }
+                if ($request->hasFile('foto_ktp')) {
+                    // if (File::exists('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_ktp)) {
+                    //     File::delete('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_ktp);
+                    // }
                     $foto = $request->file('foto_ktp');
                     $ext = $foto->getClientOriginalExtension();
                     $filename = uniqid() . '-' . 'KTP-' . Str::slug($request->nama_lengkap, '-') . '.' . $ext;
+                    // $foto->move('uploads/identitas_perusahaan/', $filename);
+                    // $identitas_perusahaan->foto_ktp = $filename;
 
-                    // ApiStorage::store_file($request);
-                    // API START
-                    // $apiKey = 'Telor-Asin-951357-Papasari';
-                    // $apiUrl = 'http://192.168.2.239:9292/upload'; // Endpoint API Express Anda
+                    $foto_ktp = fopen($request->file('foto_ktp')->getPathname(), 'r');
+                    $response = Http::withHeaders([
+                        'x-api-key' => $apiKey,
+                    ])->attach(
+                        'file',
+                        $foto_ktp,
+                        $request->file('foto_ktp')->getClientOriginalName()
+                    )->post($apiUrl, [
+                        'category' => 'ktp',
+                        'filename' => $filename,
+                    ]);
 
-                    // $file = $foto;
-                    // $filePath = $file->getPathname();
-                    // $fileName = $file->getClientOriginalName();
+                    fclose($foto_ktp);
 
-                    // $client = new \GuzzleHttp\Client();
-                    // try {
-                    //     $response = $client->request('POST', $apiUrl, [
-                    //         'headers' => [
-                    //             'x-api-key' => $apiKey,
-                    //         ],
-                    //         'multipart' => [
-                    //             [
-                    //                 'name'     => 'file',
-                    //                 'contents' => fopen($filePath, 'r'),
-                    //                 'filename' => $fileName,
-                    //             ],
-                    //             [
-                    //                 'name'     => 'category',
-                    //                 'contents' => $request->identitas_perusahaan,
-                    //             ],
-                    //             [
-                    //                 'name'     => 'CustomerName',
-                    //                 'contents' => $request->nama_lengkap,
-                    //             ],
-                    //         ],
-                    //     ]);
-
-                    //     dd($response);
-
-                    //     // Periksa apakah permintaan berhasil
-                    //     if ($response->getStatusCode() == 200) {
-                    //         $responseBody = json_decode($response->getBody(), true);
-                    //         dd($responseBody);
-                    //         // $filename = $responseBody['filename'];
-                    //         // $filepath = $responseBody['filepath'];
-                    //         // return response()->json(['success' => true, 'namafile' => $filename]);
-                    //     } else {
-                    //         // return response()->json(['success' => false, 'message' => "File uploaded Not successfully"]);
-                    //     }
-                    // } catch (\Exception $e) {
-                    //     return response()->json(['success' => false, 'message' => $e->getMessage()]);
-                    // }
-                    // API END
-
-                    $foto->move('uploads/identitas_perusahaan/', $filename);
-                    $identitas_perusahaan->foto_ktp = $filename;
+                    if ($response->successful()) {
+                        $filename = $response->json('filename');
+                        $filepath = $response->json('filepath');
+                        $identitas_perusahaan->foto_ktp = $filename;
+                    }
                 }
-
                 // Clear NPWP column
                 $identitas_perusahaan->badan_usaha = null;
                 $identitas_perusahaan->nama_npwp = null;
@@ -258,37 +234,74 @@ class FormCustomerController extends Controller
                 $identitas_perusahaan->email_khusus_faktur_pajak = null;
                 $identitas_perusahaan->status_pkp = 'non_pkp';
                 $identitas_perusahaan->sppkp = null;
-            } else if(($request->identitas_perusahaan == 'npwp' && $request->bentuk_usaha == 'perseorangan') || $request->bentuk_usaha == 'badan_usaha') {
+            } else if (($request->identitas_perusahaan == 'npwp' && $request->bentuk_usaha == 'perseorangan') || $request->bentuk_usaha == 'badan_usaha') {
                 $identitas_perusahaan->badan_usaha = $request->badan_usaha;
                 $identitas_perusahaan->nama_npwp = $request->nama_npwp;
                 $identitas_perusahaan->nomor_npwp = $request->nomor_npwp;
-                if($request->hasFile('foto_npwp')) {
-                    if(File::exists('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_npwp)) {
-                        File::delete('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_npwp);
-                    }
+                if ($request->hasFile('foto_npwp')) {
+                    // if (File::exists('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_npwp)) {
+                    //     File::delete('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_npwp);
+                    // }
                     $foto = $request->file('foto_npwp');
                     $ext = $foto->getClientOriginalExtension();
                     $filename = uniqid() . '-' . 'NPWP-' . Str::slug($request->nama_npwp, '-') . '.' . $ext;
+                    // $foto->move('uploads/identitas_perusahaan/', $filename);
 
-                    $foto->move('uploads/identitas_perusahaan/', $filename);
-                    $identitas_perusahaan->foto_npwp = $filename;
+
+                    $foto_npwp = fopen($request->file('foto_npwp')->getPathname(), 'r');
+                    $response = Http::withHeaders([
+                        'x-api-key' => $apiKey,
+                    ])->attach(
+                        'file',
+                        $foto_npwp,
+                        $request->file('foto_npwp')->getClientOriginalName()
+                    )->post($apiUrl, [
+                        'category' => 'npwp',
+                        'filename' => $filename,
+                    ]);
+
+                    fclose($foto_npwp);
+                    if ($response->successful()) {
+                        $filename = $response->json('filename');
+                        $filepath = $response->json('filepath');
+                        $identitas_perusahaan->foto_npwp = $filename;
+                    }
                 }
                 $identitas_perusahaan->email_khusus_faktur_pajak = $request->email_faktur;
                 $identitas_perusahaan->status_pkp = $request->status_pkp;
                 $identitas_perusahaan->alamat_npwp = $request->alamat_npwp;
                 $identitas_perusahaan->kota_npwp = $request->kota_npwp;
 
-                if($request->status_pkp == 'pkp') {
-                    if($request->hasFile('foto_sppkp')) {
-                        if(File::exists('uploads/identitas_perusahaan/' . $identitas_perusahaan->sppkp)) {
-                            File::delete('uploads/identitas_perusahaan/' . $identitas_perusahaan->sppkp);
-                        }
+                if ($request->status_pkp == 'pkp') {
+                    if ($request->hasFile('foto_sppkp')) {
+                        // if (File::exists('uploads/identitas_perusahaan/' . $identitas_perusahaan->sppkp)) {
+                        //     File::delete('uploads/identitas_perusahaan/' . $identitas_perusahaan->sppkp);
+                        // }
                         $foto = $request->file('foto_sppkp');
                         $ext = $foto->getClientOriginalExtension();
                         $filename = uniqid() . '-SPPKP' . '.' . $ext;
-    
-                        $foto->move('uploads/identitas_perusahaan/', $filename);
-                        $identitas_perusahaan->sppkp = $filename;
+
+                        // $foto->move('uploads/identitas_perusahaan/', $filename);
+
+                        $foto_sppkp = fopen($request->file('foto_sppkp')->getPathname(), 'r');
+                        $response = Http::withHeaders([
+                            'x-api-key' => $apiKey,
+                        ])->attach(
+                            'file',
+                            $foto_sppkp,
+                            $request->file('foto_sppkp')->getClientOriginalName()
+                        )->post($apiUrl, [
+                            'category' => 'sppkp',
+                            'filename' => $filename,
+                        ]);
+
+                        fclose($foto_sppkp);
+
+                        if ($response->successful()) {
+                            $filename = $response->json('filename');
+                            $filepath = $response->json('filepath');
+                            $identitas_perusahaan->sppkp = $filename;
+                        }
                     }
                 }
 
@@ -301,7 +314,7 @@ class FormCustomerController extends Controller
             $identitas_perusahaan->save();
 
             // Identitas penanggung jawab
-            if($request->nama_penanggung_jawab || $request->jabatan || $request->identitas_penanggung_jawab || $request->nomor_hp_penanggung_jawab || $request->hasil_ttd) {
+            if ($request->nama_penanggung_jawab || $request->jabatan || $request->identitas_penanggung_jawab || $request->nomor_hp_penanggung_jawab || $request->hasil_ttd) {
                 $identitas_penanggung_jawab = DataIdentitas::firstOrNew([
                     'identitas_perusahaan_id' => $dekripsi
                 ]);
@@ -310,10 +323,10 @@ class FormCustomerController extends Controller
                 $identitas_penanggung_jawab->jabatan = $request->jabatan;
                 $identitas_penanggung_jawab->identitas = $request->identitas_penanggung_jawab;
                 $identitas_penanggung_jawab->no_hp = $request->nomor_hp_penanggung_jawab;
-                
-                if($request->bentuk_usaha == 'perseorangan') {
 
-                    if(strlen($request->hasil_ttd) > 0 && $request->nama_penanggung_jawab == null) {
+                if ($request->bentuk_usaha == 'perseorangan') {
+
+                    if (strlen($request->hasil_ttd) > 0 && $request->nama_penanggung_jawab == null) {
                         return ['status' => false, 'error' => 'Nama identitas tidak boleh kosong, jika anda tanda tangan!'];
                     }
 
@@ -354,7 +367,7 @@ class FormCustomerController extends Controller
                             }
                         }
                     }
-                    
+
                     // Nama file untuk menyimpan gambar
                     $imageName = str_replace(' ', '-', $request->nama_penanggung_jawab) . '.png';
                     $filePath = 'uploads/ttd/' . $imageName;
@@ -363,38 +376,96 @@ class FormCustomerController extends Controller
                     $fullPath = public_path($filePath);
                     imagepng($img, $fullPath);
                     imagedestroy($img);
-                    
-                    $identitas_penanggung_jawab->ttd = $imageName;
+
+                    // Mengirim gambar ke API
+                    $foto_ttd = fopen($filePath, 'r');
+                    // dd($foto_ttd);
+                    $response = Http::withHeaders([
+                        'x-api-key' => $apiKey,
+                    ])->attach(
+                        'file',
+                        $foto_ttd,
+                        $imageName
+                    )->post($apiUrl, [
+                        'category' => 'sign',
+                        'filename' => $imageName,
+                    ]);
+
+                    fclose($foto_ttd);
+
+                    // dd($response);
+                    if ($response->successful()) {
+                        $filename = $response->json('filename');
+                        $filepath = $response->json('filepath');
+                        $identitas_penanggung_jawab->ttd = $filename;
+                    }
                 }
 
-                if($request->identitas_penanggung_jawab == 'ktp') {
-                    if($request->hasFile('foto_ktp_penanggung')) {
-                        if(File::exists('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto)) {
-                            File::delete('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto);
-                        }
+                if ($request->identitas_penanggung_jawab == 'ktp') {
+                    if ($request->hasFile('foto_ktp_penanggung')) {
+                        // if (File::exists('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto)) {
+                        //     File::delete('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto);
+                        // }
                         $foto = $request->file('foto_ktp_penanggung');
                         $ext = $foto->getClientOriginalExtension();
                         $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $ext;
-    
-                        $foto->move('uploads/penanggung_jawab/', $filename);
-                        $identitas_penanggung_jawab->foto = $filename;
+                        // $foto->move('uploads/penanggung_jawab/', $filename);
+
+                        $foto_ktp_penanggung = fopen($request->file('foto_ktp_penanggung')->getPathname(), 'r');
+                        // dd($request->file('foto_ktp_penanggung')->getClientOriginalName());
+                        $response = Http::withHeaders([
+                            'x-api-key' => $apiKey,
+                        ])->attach(
+                            'file',
+                            $foto_ktp_penanggung,
+                            $request->file('foto_ktp_penanggung')->getClientOriginalName()
+                        )->post($apiUrl, [
+                            'category' => 'ktp_responsible',
+                            'filename' => $filename,
+                        ]);
+
+                        fclose($foto_ktp_penanggung);
+
+                        if ($response->successful()) {
+                            $filename = $response->json('filename');
+                            $filepath = $response->json('filepath');
+                            $identitas_penanggung_jawab->foto = $filename;
+                        }
                     }
                 } else {
-                    if($request->hasFile('foto_npwp_penanggung')) {
-                        if(File::exists('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto)) {
-                            File::delete('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto);
-                        }
+                    if ($request->hasFile('foto_npwp_penanggung')) {
+                        // if (File::exists('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto)) {
+                        //     File::delete('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto);
+                        // }
                         $foto = $request->file('foto_npwp_penanggung');
                         $ext = $foto->getClientOriginalExtension();
                         $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $ext;
-    
-                        $foto->move('uploads/penanggung_jawab/', $filename);
-                        $identitas_penanggung_jawab->foto = $filename;
+                        // $foto->move('uploads/penanggung_jawab/', $filename);
+
+                        $foto_npwp_penanggung = fopen($request->file('foto_npwp_penanggung')->getPathname(), 'r');
+                        $response = Http::withHeaders([
+                            'x-api-key' => $apiKey,
+                        ])->attach(
+                            'file',
+                            $foto_npwp_penanggung,
+                            $request->file('foto_npwp_penanggung')->getClientOriginalName()
+                        )->post($apiUrl, [
+                            'category' => 'npwp_responsible',
+                            'filename' => $filename,
+                        ]);
+
+                        fclose($foto_npwp_penanggung);
+
+                        if ($response->successful()) {
+                            $filename = $response->json('filename');
+                            $filepath = $response->json('filepath');
+                            $identitas_penanggung_jawab->foto = $filename;
+                        }
                     }
                 }
                 $identitas_penanggung_jawab->save();
             } else {
-                if(DataIdentitas::where('identitas_perusahaan_id', $dekripsi)->first()) {
+                if (DataIdentitas::where('identitas_perusahaan_id', $dekripsi)->first()) {
                     DataIdentitas::where('identitas_perusahaan_id', $dekripsi)->delete();
                 }
             }
@@ -413,19 +484,20 @@ class FormCustomerController extends Controller
 
             $link = route('form_customer.detail', ['menu' => str_replace('_', '-', $request->bentuk_usaha), 'id' => Crypt::encryptString($identitas_perusahaan->id)]);
             return ['status' => true, 'link' => $link];
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return ['status' => false, 'error' => 'Terjadi kesalahan'];
         }
     }
 
-    public function detail($menu, Request $request) {
+    public function detail($menu, Request $request)
+    {
         // Mendekripsikan id
         $dekripsi = Crypt::decryptString($request->id);
 
         // Memanggil data berdasarkan id identitas perusahaan
         $data_perusahaan = IdentitasPerusahaan::with('data_identitas', 'informasi_bank')->where('id', $dekripsi)->first();
 
-        if($menu == 'badan-usaha' || $menu == 'badan_usaha') {
+        if ($menu == 'badan-usaha' || $menu == 'badan_usaha') {
             $menu = str_replace('_', '-', $menu);
             return view('customer.badan_usaha_detail', [
                 'enkripsi' => $request->id,
@@ -441,47 +513,70 @@ class FormCustomerController extends Controller
         }
     }
 
-    public function select(Request $request) {
-        if($request->id) {
+    public function select(Request $request)
+    {
+        if ($request->id) {
             $dekripsi = Crypt::decryptString($request->id);
             $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank')->where('id', $dekripsi)->first();
-    
+
             return ['status' => true, 'data' => $data];
         } else {
             return ['status' => false];
         }
     }
 
-    public function confirmation($menu, Request $request) {
+    public function confirmation($menu, Request $request)
+    {
         // dd($request->all());
         try {
+            $apiKey = 'Telor-Asin-951357-Papasari';
+            $apiUrl = env('API_URL') . 'upload';
             $dekripsi = Crypt::decryptString($request->encrypt);
-
             $confirmation = IdentitasPerusahaan::find($dekripsi);
             $confirmation->status_konfirmasi = '1';
-            if($request->hasFile('upload')) {
+            if ($request->hasFile('upload')) {
                 $file = $request->file('upload');
                 $ext = $file->getClientOriginalExtension();
                 $filename = uniqid() . '-upload-customer.' . $ext;
+                // $file->move('uploads/identitas_perusahaan/final/' . $filename);
 
-                $file->move('uploads/identitas_perusahaan/final/'.$filename);
-                $confirmation->file_customer_external = $filename;
+
+                $upload = fopen($request->file('upload')->getPathname(), 'r');
+                $response = Http::withHeaders([
+                    'x-api-key' => $apiKey,
+                ])->attach(
+                    'file',
+                    $upload,
+                    $request->file('upload')->getClientOriginalName()
+                )->post($apiUrl, [
+                    'category' => 'final_result',
+                    'filename' => $filename,
+                ]);
+
+                fclose($upload);
+
+                if ($response->successful()) {
+                    $filename = $response->json('filename');
+                    $filepath = $response->json('filepath');
+                    $confirmation->file_customer_external = $filename;
+                }
             }
             $confirmation->save();
 
             return ['status' => true];
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             // dd($e->getMessage());
             return ['status' => false];
         }
     }
 
-    public function download_pdf($menu, Request $request) {
+    public function download_pdf($menu, Request $request)
+    {
         $decrypt = Crypt::decryptString($request->id);
         $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank')->where('id', $decrypt)->first();
         // dd($data);
 
-        if($menu == 'badan_usaha' || $menu == 'badan-usaha') {
+        if ($menu == 'badan_usaha' || $menu == 'badan-usaha') {
             $pdf = Pdf::loadView('pdf.badan_usaha_pdf', [
                 'data' => $data
             ]);
@@ -496,6 +591,6 @@ class FormCustomerController extends Controller
             $pdf->setPaper('A4', 'portrait');
             $pdf->render();
             return $pdf->download($data['nama_perusahaan'] . '.pdf');
-        } 
+        }
     }
 }

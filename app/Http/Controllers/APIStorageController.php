@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 
 class APIStorageController extends Controller
 {
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $apiKey = 'Telor-Asin-951357-Papasari';
         $apiUrl = 'http://localhost:3000/upload'; // Endpoint API Express Anda
 
