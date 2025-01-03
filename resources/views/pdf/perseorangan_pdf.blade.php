@@ -56,6 +56,10 @@
             margin-top: 30px;
             text-align: center;
         }
+
+        .lampiran .content-body {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -90,7 +94,7 @@
                         <p>{{ $data['nomor_ktp'] }}</p>
 
                         <p class="label">Foto KTP</p>
-                        <img id="preview_foto_ktp" src="uploads/identitas_perusahaan/{{ $data['foto_ktp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                        <p>Lampiran KTP</p>
                     @else
                         <p class="label">Jenis Badan Usaha</p>
                         <p>{{ strtoupper($data['badan_usaha']) }}</p>
@@ -103,11 +107,6 @@
 
                         <p class="label">Kota Sesuai NPWP</p>
                         <p>{{ $data['kota_npwp'] }}</p>
-
-                        @if($data['status_pkp'] == 'pkp')
-                            <p class="label">Foto SPPKP</p>
-                            <img id="preview_foto_sppkp" src="uploads/identitas_perusahaan/{{ $data['sppkp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
-                        @endif
                     @endif
                 </div>
                 <div class="column">
@@ -116,9 +115,6 @@
 
                     <p class="label">Kota / Kabupaten</p>
                     <p>{{ $data['kota_kabupaten'] }}</p>
-
-                    <p class="label">Kecamatan</p>
-                    <p>{{ $data['kecamatan'] }}</p>
 
                     <p class="label">Lama Usaha (Tahun)</p>
                     <p>{{ $data['lama_usaha'] ? $data['lama_usaha'].' tahun' : '-' }}</p>
@@ -140,7 +136,7 @@
                         <p>{{ $data['alamat_npwp'] }}</p>
 
                         <p class="label">Foto NPWP</p>
-                        <img src="uploads/identitas_perusahaan/{{ $data['foto_npwp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                        <p>Lampiran NPWP</p>
                     @endif
 
                     <p class="label">Status Pengusaha Kena Pajak (PKP)</p>
@@ -191,8 +187,8 @@
                             <p class="label">Foto NPWP</p>
                         @endif
 
-                        @if($data['data_identitas']['foto'] != null)
-                            <img src="uploads/penanggung_jawab/{{ $data['data_identitas']['foto'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                        @if($data['data_identitas']['foto'])
+                            <p>Lampiran Penanggung Jawab</p>
                         @else
                             <p>-</p>
                         @endif
@@ -210,6 +206,43 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="break"></div>
+    <div class="lampiran container">
+        <div class="content-header">
+            <h2>Lampiran</h2>
+        </div>
+        <div class="content-body">
+            @if($data['foto_ktp'])
+                <div class="lampiranKtp">
+                    <h3>Lampiran KTP</h3>
+                    <img id="preview_foto_ktp" src="uploads/identitas_perusahaan/{{ $data['foto_ktp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                </div>
+            @endif
+
+            @if($data['foto_npwp'])
+                <div class="lampiranNpwp">
+                    <h3>Lampiran NPWP</h3>
+                    <img src="uploads/identitas_perusahaan/{{ $data['foto_npwp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                </div>
+            @endif
+
+            @if($data['status_pkp'] == 'pkp')
+                <div class="lampiranSppkp">
+                    <h3>Lampiran SPPKP</h3>
+                    <img id="preview_foto_sppkp" src="uploads/identitas_perusahaan/{{ $data['sppkp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                </div>
+            @endif
+
+            @if($data['data_identitas'])
+                @if($data['data_identitas']->foto)
+                    <div class="lampiranPenanggungJawab">
+                        <h3>Lampiran Penanggung Jawab</h3>
+                        <img src="uploads/penanggung_jawab/{{ $data['data_identitas']['foto'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                    </div>
+                @endif
+            @endif
         </div>
     </div>
 </body>

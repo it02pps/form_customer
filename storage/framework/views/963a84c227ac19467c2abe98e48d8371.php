@@ -46,7 +46,7 @@
         border-radius: 7px;
     }
 
-    #preview_ktp img, #preview_npwp img, #preview_sppkp img, #preview_ktp_penanggung img,  #preview_npwp_penanggung img {
+    #preview_ktp img, #preview_npwp img, #preview_sppkp img, #preview_penanggung img {
         width: 100%;
         height: 180px;
         object-fit: fill;
@@ -144,16 +144,12 @@
                                 <label for="">Kota / Kabupaten</label>
                                 <p><?php echo e($data['kota_kabupaten']); ?></p>
                             </div>
-                            <div class="form-gorup">
-                                <label for="">Kecamatan</label>
-                                <p><?php echo e($data['kecamatan']); ?></p>
-                            </div>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="">Alamat Email Tempat Usaha</label>
+                                <label for="">Alamat Email Perusahaan</label>
                                 <p><?php echo e($data['alamat_email']); ?></p>
                             </div>
                         </div>
@@ -182,12 +178,20 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Bidang Usaha</label>
-                                <p><?php echo e(str_replace('_', ' ', strtoupper($data['bidang_usaha']))); ?></p>
+                                <?php if($data['bidang_usaha'] == 'lainnya'): ?>
+                                    <p><?php echo e(ucfirst($data['bidang_usaha_lain'])); ?></p>
+                                <?php else: ?>
+                                    <p><?php echo e(str_replace('_', ' ', ucfirst($data['bidang_usaha']))); ?></p>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <label for="">Status Kepemilikan Tempat Usaha</label>
-                            <p><?php echo e(str_replace("_", ' ', ucwords($data['status_kepemilikan']))); ?></p>
+                            <?php if($data['status_kepemilikan'] == 'group'): ?>
+                                <p><?php echo e(ucfirst($data['nama_group'])); ?></p>
+                            <?php else: ?>
+                                <p><?php echo e(str_replace("_", ' ', ucfirst($data['status_kepemilikan']))); ?></p>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -198,115 +202,74 @@
                             <p><?php echo e(strtoupper($data['identitas'])); ?></p>
                         </div>
                     </div>
-                    
-                    <?php if($data['identitas'] == 'ktp'): ?>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ktp-section">
-                            <div class="form-group mb-2">
-                                <label for="">Nama Lengkap</label>
-                                <p><?php echo e($data['nama_lengkap']); ?></p>
-                            </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 npwp-section">
+                        <div class="form-group mb-4">
+                            <label for="">Jenis Badan Usaha</label>
+                            <p><?php echo e(strtoupper($data['badan_usaha'])); ?></p>
                         </div>
-                        <div class="ktp-section">
-                            <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <label for="">Nomor KTP</label>
-                                    <p><?php echo e($data['nomor_ktp']); ?></p>
+                    </div>
+                    <div class="npwp-section">
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Nomor NPWP</label>
+                                    <p><?php echo e($data['nomor_npwp']); ?></p>
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <label for="">Foto KTP</label>
-    
-                                    <div id="preview_ktp" class="<?php if($data['identitas'] != 'ktp'): ?> d-none <?php endif; ?>">
-                                        <?php if(str_contains($data['foto_ktp'], '.pdf')): ?>
-                                        <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('<?php echo e(asset('uploads/identitas_perusahaan/'.$data['foto_ktp'])); ?>')">
-                                            <img src="<?php echo e(asset('images/pdf.png')); ?>" style="width: 20% !important; height: auto;">
-                                            <span>Click to preview</span>
-                                        </div>
-                                        <?php else: ?>
-                                            <img id="preview_foto_ktp" src="<?php echo e(asset('uploads/identitas_perusahaan/'.$data['foto_ktp'])); ?>" data-action="zoom">
-                                        <?php endif; ?>
-                                    </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group mb-4">
+                                    <label for="">Nama NPWP</label>
+                                    <p><?php echo e($data['nama_npwp']); ?></p>
                                 </div>
                             </div>
                         </div>
-                    <?php else: ?>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 npwp-section">
-                            <div class="form-group mb-4">
-                                <label for="">Jenis Badan Usaha</label>
-                                <p><?php echo e(strtoupper($data['badan_usaha'])); ?></p>
-                            </div>
-                        </div>
-                        <div class="npwp-section">
-                            <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group">
-                                        <label for="">Nomor NPWP</label>
-                                        <p><?php echo e($data['nomor_npwp']); ?></p>
-                                    </div>
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group mb-4">
+                                    <label for="">Alamat NPWP</label>
+                                    <p><?php echo e($data['alamat_npwp']); ?></p>
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group mb-4">
-                                        <label for="">Nama NPWP</label>
-                                        <p><?php echo e($data['nama_npwp']); ?></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group mb-4">
-                                        <label for="">Alamat NPWP</label>
-                                        <p><?php echo e($data['alamat_npwp']); ?></p>
-                                    </div>
 
-                                    <div class="form-group mb-4">
-                                        <label for="">Email Khusus Untuk Faktur Pajak</label>
-                                        <p><?php echo e($data['email_khusus_faktur_pajak']); ?></p>
-                                    </div>
-    
-                                    <div class="form-group mb-3">
-                                        <label for="">Status Pengusaha Kena Pajak (PKP)</label>
-                                        <p><?php echo e(str_replace("_", " ", strtoupper($data['status_pkp']))); ?></p>
-                                    </div>
-    
-                                    <div class="form-group mb-4 <?php if($data['status_pkp'] !=  'pkp'): ?> d-none <?php endif; ?>" id="sppkp-section">
-                                        <label for="">Foto SPPKP</label>
-    
-                                        <div id="preview_sppkp">
-                                            <?php if(str_contains($data['sppkp'], '.pdf')): ?>
-                                                <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('<?php echo e(asset('uploads/identitas_perusahaan/'.$data['sppkp'])); ?>')">
-                                                    <img src="<?php echo e(asset('images/pdf.png')); ?>" style="width: 20% !important; height: auto;">
-                                                    <span>Click to preview</span>
-                                                </div>
-                                            <?php else: ?>
-                                                <img id="preview_foto_sppkp" src="<?php echo e(asset('uploads/identitas_perusahaan/'.$data['sppkp'])); ?>" data-action="zoom">
-                                            <?php endif; ?>
-                                        </div>
-                                    </div>
+                                <div class="form-group mb-4">
+                                    <label for="">Email Khusus Untuk Faktur Pajak</label>
+                                    <p><?php echo e($data['email_khusus_faktur_pajak']); ?></p>
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group mb-4">
-                                        <label for="">Kota sesuai NPWP</label>
-                                        <p><?php echo e($data['kota_npwp']); ?></p>
-                                    </div>
 
-                                    <div class="form-group">
-                                        <label for="">Foto NPWP</label>
-                                    </div>
-    
+                                <div class="form-group mb-3">
+                                    <label for="">Status Pengusaha Kena Pajak (PKP)</label>
+                                    <p><?php echo e(str_replace("_", " ", strtoupper($data['status_pkp']))); ?></p>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group mb-4">
+                                    <label for="">Kota sesuai NPWP</label>
+                                    <p><?php echo e($data['kota_npwp']); ?></p>
+                                </div>
+
+                                <div class="form-group mb-4">
+                                    <label for="">Foto NPWP</label>
+                                    
                                     <div id="preview_npwp" class="<?php if($data['identitas'] != 'npwp'): ?> d-none <?php endif; ?>">
-                                        <?php if(str_contains($data['foto_npwp'], '.pdf')): ?>
-                                            <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('<?php echo e(asset('uploads/identitas_perusahaan/'.$data['foto_npwp'])); ?>')">
-                                                <img src="<?php echo e(asset('images/pdf.png')); ?>" style="width: 20% !important; height: auto;">
-                                                <span>Click to preview</span>
-                                            </div>
-                                        <?php else: ?>
-                                            <img id="preview_foto_npwp" src="<?php echo e(asset('uploads/identitas_perusahaan/'.$data['foto_npwp'])); ?>" data-action="zoom">
-                                        <?php endif; ?>
+                                        <img src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp'])); ?>" alt="Foto NPWP" data-action="zoom">
+                                        
+                                        
+                                        
+                                    </div>
+                                </div>
+
+                                <div class="form-group  <?php if($data['status_pkp'] !=  'pkp'): ?> d-none <?php endif; ?>" id="sppkp-section">
+                                    <label for="">Foto SPPKP</label>
+
+                                    <div id="preview_sppkp">
+                                        <img src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['sppkp'])); ?>" alt="SPPKP" data-action="zoom">
+                                        
+                                            
+                                        
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    <?php endif; ?>
-
+                    </div>
                 </div>
             </div>
             <hr>
@@ -373,46 +336,14 @@
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="form-group mb-2" id="penanggung_ktp">
-                                <label for="">Foto KTP</label>
-
-                                <?php if($data['data_identitas']): ?>
-                                    <?php if($data['data_identitas']['foto']): ?>
-                                        <div id="preview_ktp_penanggung" class="<?php if($data['data_identitas']): ?> <?php if($data['data_identitas']['identitas'] != 'ktp'): ?> d-none <?php endif; ?> <?php endif; ?>">
-                                            <?php if(str_contains($data['data_identitas']['foto'], '.pdf')): ?>
-                                                <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('<?php echo e(asset('uploads/penanggung_jawab/'.$data['data_identitas']['foto'])); ?>')">
-                                                    <img src="<?php echo e(asset('images/pdf.png')); ?>" style="width: 20% !important; height: auto;">
-                                                    <span>Click to preview</span>
-                                                </div>
-                                            <?php else: ?>
-                                                <img id="preview_foto_ktp_penanggung" src="<?php echo e(asset('uploads/penanggung_jawab/'.$data['data_identitas']['foto'])); ?>" data-action="zoom">
-                                            <?php endif; ?>
-                                        </div>
-                                    <?php else: ?>
-                                        <p>-</p>
-                                    <?php endif; ?>
-                                <?php else: ?>
-                                    <p>-</p>
-                                <?php endif; ?>
-                            </div>
-
-                            <div class="form-group <?php if($data['data_identitas']): ?> <?php if($data['data_identitas']['identitas'] != 'npwp'): ?> d-none <?php endif; ?> <?php else: ?> d-none <?php endif; ?>" id="penanggung_npwp">
-                                <label for="">Foto NPWP</label>
-
-                                <?php if($data['data_identitas']): ?>
-                                    <div id="preview_npwp_penanggung" class="d-none">
-                                        <?php if(str_contains($data['data_identitas']['foto'], '.pdf')): ?>
-                                            <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('<?php echo e(asset('uploads/penanggung_jawab/'.$data['data_identitas']['foto'])); ?>')">
-                                                <img src="<?php echo e(asset('images/pdf.png')); ?>" style="width: 20% !important; height: auto;" alt="PDF">
-                                                <span>Click to preview</span>
-                                            </div>
-                                        <?php else: ?>
-                                            <img id="preview_foto_npwp_penanggung" src="<?php echo e(asset('uploads/penanggung_jawab/'.$data['data_identitas']['foto'])); ?>" data-action="zoom">
-                                        <?php endif; ?>
-                                    </div>
-                                <?php else: ?>
-                                    <p>-</p>
-                                <?php endif; ?>
+                            <div class="form-group mb-2">
+                                <label for="">Foto</label>
+                                <div id="preview_penanggung">
+                                    <img src="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $data['data_identitas']['foto'])); ?>" alt="Foto" data-action="zoom">
+                                    
+                                        
+                                    
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -421,6 +352,8 @@
         </div>
         <div class="content-footer mt-2">
             <button type="button" class="btn btn-danger btn-md waves-effect waves-light rounded" onclick="back()">Back</button>
+            &nbsp;
+            <a type="button" href="<?php echo e(route('form_customer.pdf', ['menu' => str_replace('_', '-', $data['bentuk_usaha']), 'id' => $enkripsi])); ?>" target="_blank" class="btn btn-dark waves-effect waves-light rounded btn-md" id="pdf" data-id="<?php echo e($enkripsi); ?>" title="Download PDF">Download PDF</a>
         </div>
     </div>
 </div>

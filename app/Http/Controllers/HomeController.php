@@ -14,12 +14,16 @@ use Illuminate\Support\Facades\File;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Helper\ApiStorage;
 use App\Helper\base30ToImage;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\Visibility;
 use Illuminate\Support\Facades\Http;
 
 class HomeController extends Controller
 {
+    public $apiKey;
+    public $apiUrl;
     /**
      * Create a new controller instance.
      *
@@ -27,6 +31,8 @@ class HomeController extends Controller
      */
     public function __construct()
     {
+        $this->apiKey = 'Telor-Asin-951357-Papasari';
+        $this->apiUrl = env('API_URL') . 'upload';
         $this->middleware('web');
     }
 
@@ -44,11 +50,13 @@ class HomeController extends Controller
     public function detail(Request $request)
     {
         $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank')->where('id', Crypt::decryptString($request->id))->first();
+        // dd($data);
+        $enkripsi = $request->id;
 
         if ($data->bentuk_usaha == 'perseorangan') {
-            return view('panel.home_detail_perseorangan', compact('data'));
+            return view('panel.home_detail_perseorangan', compact('data', 'enkripsi'));
         } else {
-            return view('panel.home_detail_badan_usaha', compact('data'));
+            return view('panel.home_detail_badan_usaha', compact('data', 'enkripsi'));
         }
     }
 
@@ -69,10 +77,11 @@ class HomeController extends Controller
             'ekspedisi'
         ];
 
+        $url = route('home');
         if ($data->bentuk_usaha == 'perseorangan') {
-            return view('panel.home_edit_perseorangan', compact('data', 'enkripsi', 'bidang_usaha'));
+            return view('panel.home_edit_perseorangan', compact('data', 'enkripsi', 'bidang_usaha', 'url'));
         } else {
-            return view('panel.home_edit_badan_usaha', compact('data', 'enkripsi', 'bidang_usaha'));
+            return view('panel.home_edit_badan_usaha', compact('data', 'enkripsi', 'bidang_usaha', 'url'));
         }
     }
 
@@ -84,7 +93,6 @@ class HomeController extends Controller
             'alamat_lengkap' => 'required',
             'kota_kabupaten' => 'required',
             'no_hp' => 'required|numeric|digits_between:10,13',
-            'kecamatan' => 'required',
             'bidang_usaha' => 'required',
             'email_perusahaan' => 'required|email',
             'foto_ktp_penanggung' => $data['update_id'] ? 'mimes:jpg,pdf|max:2048' : ($data['identitas_penanggung_jawab'] != '' && $data['identitas_penanggung_jawab'] == 'ktp' ? ($data['jenis_transaksi'] == 'credit' ? 'required|mimes:jpg,pdf|max:2048' : 'mimes:jpg,pdf|max:2048') : ''),
@@ -122,7 +130,6 @@ class HomeController extends Controller
             'no_hp.required' => 'Nomor handphone harus diisi',
             'no_hp.numeric' => 'Nomor handphone harus berupa angka',
             'no_hp.digits_between' => 'Nomor Handphone harus diantara 10 - 13 digit',
-            'kecamatan.required' => 'Kecamatan harus diisi',
             'bidang_usaha.required' => 'Bidang usaha harus diisi',
             'email_perusahaan.required' => 'Email perusahaan harus diisi',
             'email_perusahaan.email' => 'Email perusahaan harus valid',
@@ -177,8 +184,6 @@ class HomeController extends Controller
     public function edit_store(Request $request)
     {
         try {
-            $apiKey = 'Telor-Asin-951357-Papasari';
-            $apiUrl = env('API_URL') . 'upload';
             $validator = $this->validator($request->all());
             if ($validator->fails()) {
                 return ['status' => false, 'error' => $validator->errors()->all()];
@@ -193,7 +198,6 @@ class HomeController extends Controller
             $identitas_perusahaan->nama_group_perusahaan = $request->nama_group_perusahaan;
             $identitas_perusahaan->alamat_lengkap = $request->alamat_lengkap;
             $identitas_perusahaan->kota_kabupaten = $request->kota_kabupaten;
-            $identitas_perusahaan->kecamatan = $request->kecamatan;
             $identitas_perusahaan->bidang_usaha = $request->bidang_usaha;
 
             // Hitung lama usaha berdasarkan tahun berdiri dengan tahun sekarang
@@ -224,12 +228,12 @@ class HomeController extends Controller
                     // $foto->move('uploads/identitas_perusahaan/', $filename);
                     $foto_ktp = fopen($request->file('foto_ktp')->getPathname(), 'r');
                     $response = Http::withHeaders([
-                        'x-api-key' => $apiKey,
+                        'x-api-key' => $this->apiKey,
                     ])->attach(
                         'file',
                         $foto_ktp,
                         $request->file('foto_ktp')->getClientOriginalName()
-                    )->post($apiUrl, [
+                    )->post($this->apiUrl, [
                         'category' => 'ktp',
                         'filename' => $filename,
                     ]);
@@ -265,12 +269,12 @@ class HomeController extends Controller
                     // $foto->move('uploads/identitas_perusahaan/', $filename);
                     $foto_npwp = fopen($request->file('foto_npwp')->getPathname(), 'r');
                     $response = Http::withHeaders([
-                        'x-api-key' => $apiKey,
+                        'x-api-key' => $this->apiKey,
                     ])->attach(
                         'file',
                         $foto_npwp,
                         $request->file('foto_npwp')->getClientOriginalName()
-                    )->post($apiUrl, [
+                    )->post($this->apiUrl, [
                         'category' => 'npwp',
                         'filename' => $filename,
                     ]);
@@ -299,12 +303,12 @@ class HomeController extends Controller
                         // $foto->move('uploads/identitas_perusahaan/', $filename);
                         $foto_sppkp = fopen($request->file('foto_sppkp')->getPathname(), 'r');
                         $response = Http::withHeaders([
-                            'x-api-key' => $apiKey,
+                            'x-api-key' => $this->apiKey,
                         ])->attach(
                             'file',
                             $foto_sppkp,
                             $request->file('foto_sppkp')->getClientOriginalName()
-                        )->post($apiUrl, [
+                        )->post($this->apiUrl, [
                             'category' => 'sppkp',
                             'filename' => $filename,
                         ]);
@@ -395,12 +399,12 @@ class HomeController extends Controller
                     $foto_ttd = fopen($filePath, 'r');
                     // dd($foto_ttd);
                     $response = Http::withHeaders([
-                        'x-api-key' => $apiKey,
+                        'x-api-key' => $this->apiKey,
                     ])->attach(
                         'file',
                         $foto_ttd,
                         $imageName
-                    )->post($apiUrl, [
+                    )->post($this->apiUrl, [
                         'category' => 'sign',
                         'filename' => $imageName,
                     ]);
@@ -428,12 +432,12 @@ class HomeController extends Controller
                         $foto_ktp_penanggung = fopen($request->file('foto_ktp_penanggung')->getPathname(), 'r');
                         // dd($request->file('foto_ktp_penanggung')->getClientOriginalName());
                         $response = Http::withHeaders([
-                            'x-api-key' => $apiKey,
+                            'x-api-key' => $this->apiKey,
                         ])->attach(
                             'file',
                             $foto_ktp_penanggung,
                             $request->file('foto_ktp_penanggung')->getClientOriginalName()
-                        )->post($apiUrl, [
+                        )->post($this->apiUrl, [
                             'category' => 'ktp_responsible',
                             'filename' => $filename,
                         ]);
@@ -458,12 +462,12 @@ class HomeController extends Controller
                         // $foto->move('uploads/penanggung_jawab/', $filename);
                         $foto_npwp_penanggung = fopen($request->file('foto_npwp_penanggung')->getPathname(), 'r');
                         $response = Http::withHeaders([
-                            'x-api-key' => $apiKey,
+                            'x-api-key' => $this->apiKey,
                         ])->attach(
                             'file',
                             $foto_npwp_penanggung,
                             $request->file('foto_npwp_penanggung')->getClientOriginalName()
-                        )->post($apiUrl, [
+                        )->post($this->apiUrl, [
                             'category' => 'npwp_responsible',
                             'filename' => $filename,
                         ]);
@@ -511,6 +515,60 @@ class HomeController extends Controller
             return ['status' => true, 'data' => $data];
         } else {
             return ['status' => false];
+        }
+    }
+
+    protected function validasi_profil($data) {
+        $rules = [
+            'id' => 'required',
+            'nama' => ($data['jenis'] == 'identitas') ? 'required' : '',
+            'username' => ($data['jenis'] == 'identitas') ? 'required' : '',
+            'password_lama' => ($data['jenis'] == 'password') ? 'required' : '',
+            'password_baru' => ($data['jenis'] == 'password') ? 'required|confirmed' : ''
+        ];
+
+        $message = [
+            'id.required' => 'ID tidak boleh kosong',
+            'nama.required' => 'Nama harus diisi',
+            'username.required' => 'Username harus diisi',
+            'password_lama.required' => 'Password lama harus diisi',
+            'password_baru.required' => 'Password baru harus diisi',
+            'password_baru.confirmed' => 'Konfirmasi password tidak sesuai'
+        ];
+
+        return Validator::make($data, $rules, $message);
+    }
+
+    public function update_profil(Request $request) {
+        try {
+            $decrypt = Crypt::decryptString($request->id);
+
+            $validation = $this->validasi_profil($request->all());
+            if ($validation->fails()) {
+                return ['status' => false, 'error' => $validation->errors()->all()];
+            }
+
+            $profil = User::find($decrypt);
+            if($request->jenis == 'identitas') {
+                $profil->name = $request->nama;
+                $profil->username = $request->username;
+            } else {
+                if(Hash::check($request->password_lama, $profil->password)) {
+                    if(Hash::check($request->password_baru, $profil->password)) {
+                        return ['status' => false, 'error' => 'Password baru tidak boleh sama dengan password lama'];
+                    } else {
+                        $profil->password = Hash::make($request->password_baru);
+                    }
+                } else {
+                    return ['status' => false, 'error' => 'Password lama tidak sesuai'];
+                }
+            }
+            $profil->save();
+
+            return ['status' => true, 'pesan' => 'Profil berhasil diubah'];
+        } catch(\Exception $e) {
+            dd($e);
+            return ['status' => false, 'error' => 'Terjadi Kesalahan Pada Sistem'];
         }
     }
 }

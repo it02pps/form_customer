@@ -6,6 +6,7 @@ use App\Http\Controllers\APIStorageController as APIStorage;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\PreviewPdfController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -21,13 +22,12 @@ use Illuminate\Support\Facades\Auth;
 
 Auth::routes();
 Route::get('/', [FormCustomer::class, 'index'])->name('form_customer.index');
-Route::get('/showimage/{category}/{filename}', [ImageController::class, 'index'])->name("showimage.view");
+// Route::get('/showimage/{category}/{filename}', [ImageController::class, 'index'])->name("showimage.view");
 Route::get('/{menu}', [FormCustomer::class, 'view'])->name("form_customer.view");
 Route::post('/{menu}/store', [FormCustomer::class, 'store'])->name('form_customer.store');
 Route::get('/{menu}/detail', [FormCustomer::class, 'detail'])->name('form_customer.detail');
 Route::post('/{menu}/confirmation', [FormCustomer::class, 'confirmation'])->name('form_customer.confirmation');
 Route::get('/{menu}/pdf/{id}', [FormCustomer::class, 'download_pdf'])->name('form_customer.pdf');
-
 
 
 
@@ -44,4 +44,7 @@ Route::middleware('web')->group(function () {
     Route::get('/internal/panel/edit/{id}', [HomeController::class, 'edit'])->name('home.edit');
     Route::post('/internal/panel/edit-store', [HomeController::class, 'edit_store'])->name('home.edit_store');
     Route::get('/internal/panel/select/{id}', [HomeController::class, 'select'])->name('home.select');
+
+    // Update profil
+    Route::post('/internal/panel/update-profil', [HomeController::class, 'update_profil'])->name('home.update_profil');
 });

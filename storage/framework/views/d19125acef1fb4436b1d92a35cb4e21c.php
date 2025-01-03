@@ -74,36 +74,40 @@
                     <p class="label">Nama Perusahaan</p>
                     <p><?php echo e($data['nama_perusahaan']); ?></p>
 
-                    <p class="label">Alamat Lengkap Perusahaan</p>
+                    <p class="label">Alamat Lengkap</p>
                     <p><?php echo e($data['alamat_lengkap']); ?></p>
 
-                    <p class="label">Alamat Email Perusahaan</p>
+                    <p class="label">Alamat Email Koresponden</p>
                     <p><?php echo e($data['alamat_email']); ?></p>
 
-                    <p class="label">Lama Usaha (Tahun)</p>
-                    <p><?php echo e($data['lama_usaha'] ? $data['lama_usaha'].' tahun' : '-'); ?></p>
+                    <p class="label">Tahun Berdiri</p>
+                    <p><?php echo e($data['tahun_berdiri'] ? ($data['tahun_berdiri'] ? \Carbon\Carbon::parse($data['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') : '-') : '-'); ?></p>
 
                     <p class="label">Bidang Usaha</p>
-                    <?php if($data['bidang_usaha'] == 'lainnya'): ?>
-                        <p><?php echo e(ucfirst($data['bidang_usaha_lain'])); ?></p>
-                    <?php else: ?>
-                        <p><?php echo e(ucfirst(str_replace('_', ' ', $data['bidang_usaha']))); ?></p>
-                    <?php endif; ?>
+                    <p><?php echo e(strtoupper(str_replace('_', ' ', $data['bidang_usaha']))); ?></p>
 
                     <p class="label">Identitas Pemilik Usaha</p>
                     <p><?php echo e(strtoupper($data['identitas'])); ?></p>
                     
-                    <p class="label">Jenis Badan Usaha</p>
-                    <p><?php echo e(strtoupper($data['badan_usaha'])); ?></p>
+                    <?php if($data['identitas'] == 'ktp'): ?>
+                        <p class="label">Nomor KTP</p>
+                        <p><?php echo e($data['nomor_ktp']); ?></p>
 
-                    <p class="label">Nama NPWP</p>
-                    <p><?php echo e($data['nama_npwp']); ?></p>
+                        <p class="label">Foto KTP</p>
+                        <p>Lampiran KTP</p>
+                    <?php else: ?>
+                        <p class="label">Jenis Badan Usaha</p>
+                        <p><?php echo e(strtoupper($data['badan_usaha'])); ?></p>
 
-                    <p class="label">Kota Sesuai NPWP</p>
-                    <p><?php echo e($data['kota_npwp']); ?></p>
-                    
-                    <p class="label">Email Khusus Untuk Faktur Pajak</p>
-                    <p><?php echo e($data['email_khusus_faktur_pajak']); ?></p>
+                        <p class="label">Nama NPWP</p>
+                        <p><?php echo e($data['nama_npwp']); ?></p>
+
+                        <p class="label">Email Khusus Untuk Faktur Pajak</p>
+                        <p><?php echo e($data['email_khusus_faktur_pajak']); ?></p>
+
+                        <p class="label">Kota Sesuai NPWP</p>
+                        <p><?php echo e($data['kota_npwp']); ?></p>
+                    <?php endif; ?>
                 </div>
                 <div class="column">
                     <p class="label">Nama Group Perusahaan</p>
@@ -112,43 +116,31 @@
                     <p class="label">Kota / Kabupaten</p>
                     <p><?php echo e($data['kota_kabupaten']); ?></p>
 
-                    <p class="label">Tahun Berdiri</p>
-                    <p><?php echo e($data['tahun_berdiri'] ? ($data['tahun_berdiri'] ? \Carbon\Carbon::parse($data['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') : '-') : '-'); ?></p>
+                    <p class="label">Lama Usaha (Tahun)</p>
+                    <p><?php echo e($data['lama_usaha'] ? $data['lama_usaha'].' tahun' : '-'); ?></p>
                     
                     <p class="label">Nomor Handphone Contact Person</p>
                     <p><?php echo e($data['nomor_handphone']); ?></p>
 
                     <p class="label">Status Kepemilikan Tempat Usaha</p>
-                    <?php if($data['status_kepemilikan'] == 'group'): ?>
-                        <p><?php echo e(ucfirst($data['nama_group'])); ?></p>
+                    <p><?php echo e(str_replace("_", ' ', ucwords($data['status_kepemilikan']))); ?></p>
+
+                    <?php if($data['identitas'] == 'ktp'): ?>
+                        <p class="label">Nama Lengkap</p>
+                        <p><?php echo e($data['nama_lengkap']); ?></p>
                     <?php else: ?>
-                        <p><?php echo e(str_replace("_", ' ', ucfirst($data['status_kepemilikan']))); ?></p>
-                    <?php endif; ?>
+                        <p class="label">Nomor NPWP</p>
+                        <p><?php echo e($data['nomor_npwp']); ?></p>
 
-                    <p class="label">Nomor NPWP</p>
-                    <p><?php echo e($data['nomor_npwp']); ?></p>
+                        <p class="label">Alamat NPWP</p>
+                        <p><?php echo e($data['alamat_npwp']); ?></p>
 
-                    <p class="label">Alamat NPWP</p>
-                    <p><?php echo e($data['alamat_npwp']); ?></p>
-
-                    <p class="label">Foto NPWP</p>
-                    <?php if(!$data['foto_npwp']): ?>
-                        <p>-</p>
-                    <?php else: ?>
+                        <p class="label">Foto NPWP</p>
                         <p>Lampiran NPWP</p>
                     <?php endif; ?>
 
                     <p class="label">Status Pengusaha Kena Pajak (PKP)</p>
                     <p><?php echo e(str_replace("_", " ", strtoupper($data['status_pkp']))); ?></p>
-
-                    <?php if($data['status_pkp'] == 'pkp'): ?>
-                        <p class="label">Foto SPPKP</p>
-                        <?php if(!$data['sppkp']): ?>
-                            <p>-</p>
-                        <?php else: ?>
-                            <p>Lampiran SPPKP</p>
-                        <?php endif; ?>
-                    <?php endif; ?>
                 </div>
             </div>
 
@@ -195,9 +187,8 @@
                             <p class="label">Foto NPWP</p>
                         <?php endif; ?>
 
-                        <?php if($data['data_identitas']['foto'] != null): ?>
+                        <?php if($data['data_identitas']['foto']): ?>
                             <p>Lampiran Penanggung Jawab</p>
-                            
                         <?php else: ?>
                             <p>-</p>
                         <?php endif; ?>
@@ -223,10 +214,19 @@
             <h2>Lampiran</h2>
         </div>
         <div class="content-body">
-            <div class="lampiranNpwp">
-                <h3>Lampiran NPWP</h3>
-                <img src="uploads/identitas_perusahaan/<?php echo e($data['foto_npwp']); ?>" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
-            </div>
+            <?php if($data['foto_ktp']): ?>
+                <div class="lampiranKtp">
+                    <h3>Lampiran KTP</h3>
+                    <img id="preview_foto_ktp" src="uploads/identitas_perusahaan/<?php echo e($data['foto_ktp']); ?>" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                </div>
+            <?php endif; ?>
+
+            <?php if($data['foto_npwp']): ?>
+                <div class="lampiranNpwp">
+                    <h3>Lampiran NPWP</h3>
+                    <img src="uploads/identitas_perusahaan/<?php echo e($data['foto_npwp']); ?>" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                </div>
+            <?php endif; ?>
 
             <?php if($data['status_pkp'] == 'pkp'): ?>
                 <div class="lampiranSppkp">
@@ -234,16 +234,16 @@
                     <img id="preview_foto_sppkp" src="uploads/identitas_perusahaan/<?php echo e($data['sppkp']); ?>" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
                 </div>
             <?php endif; ?>
-            
+
             <?php if($data['data_identitas']): ?>
                 <?php if($data['data_identitas']->foto): ?>
                     <div class="lampiranPenanggungJawab">
                         <h3>Lampiran Penanggung Jawab</h3>
-                        <img src="uploads/penanggung_jawab/<?php echo e($data['data_identitas']['foto']); ?>" alt="" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                        <img src="uploads/penanggung_jawab/<?php echo e($data['data_identitas']['foto']); ?>" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
                     </div>
                 <?php endif; ?>
             <?php endif; ?>
         </div>
     </div>
 </body>
-</html><?php /**PATH C:\Other\laragon\www\FormCustomer\resources\views/pdf/badan_usaha_pdf.blade.php ENDPATH**/ ?>
+</html><?php /**PATH C:\Other\laragon\www\FormCustomer\resources\views/pdf/perseorangan_pdf.blade.php ENDPATH**/ ?>

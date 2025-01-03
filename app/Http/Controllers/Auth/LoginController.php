@@ -44,8 +44,17 @@ class LoginController extends Controller
     }
 
     public function login(Request $request) {
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect()->route('home');
+        // dd($request->all());
+        try {
+            if(Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
+                // dd(true);
+                return redirect()->route('home');
+            } else {
+                // dd(false);
+                return redirect()->back()->withErrors(['error' => 'Username atau password salah']);
+            }
+        } catch(\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Terjadi Kesalahan']);
         }
     }
 }

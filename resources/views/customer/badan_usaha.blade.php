@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('title')
@@ -66,6 +65,16 @@
             height: 180px;
             object-fit: fill;
             border-radius: 7px;
+        }
+
+        .select2-selection__rendered {
+            line-height: 31px !important;
+        }
+        .select2-container .select2-selection--single {
+            height: 37px !important;
+        }
+        .select2-selection__arrow {
+            height: 37px !important;
         }
 
         @media only screen and (max-width: 500px) {
@@ -136,17 +145,6 @@
                     <p style="font-size: 18px; font-weight: bold;" class="text-center mb-0">Silahkan mengisi data terkini, kemudian ditanda tangan dan cap perusahaan</p>
                 </div>
                 <div class="section1 mb-4">
-                    <div class="opsi">
-                        <div class="form-group mb-4">
-                            <label for="">Jenis Transaksi <span class="text-danger">*</span></label>
-                            <br>
-                            <input type="radio" name="jenis_transaksi" id="cash" value="cash">
-                            <label for="">Cash</label>
-                            <br>
-                            <input type="radio" name="jenis_transaksi" id="credit" value="credit">
-                            <label for="">Credit</label>
-                        </div>
-                    </div>
                     <h4>IDENTITAS PERUSAHAAN</h4>
                     <div class="section1-body">
                         <div class="row mb-2">
@@ -167,7 +165,7 @@
                         <div class="row mb-2">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Alamat Lengkap <span class="text-danger">*</span></label>
+                                    <label for="">Alamat Lengkap Perusahaan<span class="text-danger">*</span></label>
                                     <textarea name="alamat_lengkap" id="alamat_lengkap" cols="30" rows="5" class="form-control" required autocomplete="off" placeholder="Masukkan alamat lengkap perusahaan">{{ $data_perusahaan ? $data_perusahaan['alamat_lengkap'] : '' }}</textarea>
                                 </div>
                             </div>
@@ -176,41 +174,34 @@
                                     <label for="">Kota / Kabupaten <span class="text-danger">*</span></label>
                                     <input type="text" name="kota_kabupaten" id="kota_kabupaten" class="form-control" placeholder="Masukkan kota / kabupaten" autocomplete="off" required value="{{ $data_perusahaan ? $data_perusahaan['kota_kabupaten'] : '' }}">
                                 </div>
-                                <div class="form-gorup">
-                                    <label for="">Kecamatan <span class="text-danger">*</span></label>
-                                    <input type="text" name="kecamatan" id="kecamatan" class="form-control" placeholder="Masukkan kecamatan" autocomplete="off" required value="{{ $data_perusahaan ? $data_perusahaan['kecamatan'] : '' }}">
+                                <div class="form-group">
+                                    <label for="">Alamat Email Perusahaan<span class="text-danger">*</span></label>
+                                    <input type="email" name="email_perusahaan" id="email_perusahaan" class="form-control" autocomplete="off" required placeholder="Contoh: perusahaan@gmail.com" value="{{ $data_perusahaan ? $data_perusahaan['alamat_email'] : '' }}">
                                 </div>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Alamat Email Koresponden<span class="text-danger">*</span></label>
-                                    <input type="email" name="email_perusahaan" id="email_perusahaan" class="form-control" autocomplete="off" required placeholder="Masukkan alamat email" value="{{ $data_perusahaan ? $data_perusahaan['alamat_email'] : '' }}">
-                                </div>
-                            </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nomor Handphone Contact Person <span class="text-danger">*</span></label>
-                                    <input type="text" name="no_hp" id="no_hp" max="13" class="form-control" placeholder="Masukkan nomor handphone" required autocomplete="off" value="{{ $data_perusahaan ? $data_perusahaan['nomor_handphone'] : '' }}">
+                                    {{-- <input type="text" name="no_hp" id="no_hp" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="13" class="form-control" placeholder="Masukkan nomor handphone" required autocomplete="off" value="{{ $data_perusahaan ? $data_perusahaan['nomor_handphone'] : '' }}"> --}}
+                                    <input type="text" name="no_hp" id="no_hp" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" maxlength="14" class="form-control" placeholder="Masukkan nomor handphone" required autocomplete="off" value="{{ $data_perusahaan ? $data_perusahaan['nomor_handphone'] : '' }}">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mb-3">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Tahun Berdiri</label>
                                     <input type="date" name="tahun_berdiri" id="tahun_berdiri" class="form-control" value="{{ $data_perusahaan ? $data_perusahaan['tahun_berdiri'] : '' }}">
                                 </div>
                             </div>
+                        </div>
+                        <div class="row mb-3">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Lama Usaha (Tahun)</label>
                                     <input type="text" name="lama_usaha" id="lama_usaha" class="form-control" autocomplete="off" readonly value="{{ $data_perusahaan ? $data_perusahaan['lama_usaha'] : '' }}">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mb-3">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Bidang Usaha <span class="text-danger">*</span></label>
@@ -219,8 +210,15 @@
                                             <option value="{{ $loop_bidang_usaha }}">{{ str_replace('_', ' ', strtoupper($loop_bidang_usaha)) }}</option>
                                         @endforeach
                                     </select>
+                                    @if($data_perusahaan)
+                                        @if($data_perusahaan['bidang_usaha'] == 'lainnya')
+                                            <input type="text" class="form-control" placeholder="Masukkan bidang usaha lain" id="bidang_usaha_lain" name="bidang_usaha_lain" autocomplete="off" value="{{ $data_perusahaan['bidang_usaha_lain'] }}">
+                                        @endif
+                                    @endif
                                 </div>
                             </div>
+                        </div>
+                        <div class="row mb-3">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <label for="">Status Kepemilikan Tempat Usaha <span class="text-danger">*</span></label>
                                 <select name="status_kepemilikan" id="status_kepemilikan" class="form-control" required>
@@ -228,9 +226,12 @@
                                     <option value="sewa">Sewa</option>
                                     <option value="group">Group</option>
                                 </select>
+                                @if($data_perusahaan)
+                                    @if($data_perusahaan['status_kepemilikan'] == 'lainnya')
+                                        <input type="text" class="form-control" autocomplete="off" placeholder="Masukkan nama group" id="nama_group" name="nama_group" value="{{ $data_perusahaan['nama_group'] }}">
+                                    @endif
+                                @endif
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group mb-3">
                                     <label for="">Jenis Badan Usaha <span class="text-danger">*</span></label>
@@ -242,20 +243,22 @@
                                     </select>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group mb-3">
                                     <label for="">Nama NPWP <span class="text-danger">*</span></label>
                                     <input type="text" name="nama_npwp" id="nama_npwp" class="form-control" autocomplete="off" placeholder="Masukkan nama NPWP" value="{{ $data_perusahaan ? ($data_perusahaan['identitas'] == 'npwp' ? $data_perusahaan['nama_npwp'] : '') : '' }}">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group mb-3">
                                     <label for="">Nomor NPWP <span class="text-danger">*</span></label>
-                                    <input type="text" name="nomor_npwp" id="nomor_npwp" class="form-control" autocomplete="off" placeholder="Masukkan nomor NPWP" value="{{ $data_perusahaan ? ($data_perusahaan['identitas'] == 'npwp' ? $data_perusahaan['nomor_npwp'] : '' ) : '' }}">
+                                    <input type="text" name="nomor_npwp" id="nomor_npwp" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="20" class="form-control" autocomplete="off" placeholder="Masukkan nomor NPWP" value="{{ $data_perusahaan ? ($data_perusahaan['identitas'] == 'npwp' ? $data_perusahaan['nomor_npwp'] : '' ) : '' }}">
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Foto NPWP <span class="text-danger">*</span></label>
@@ -263,17 +266,29 @@
                                 </div>
 
                                 <div id="preview_npwp" class="@if($data_perusahaan) @if($data_perusahaan['identitas'] != 'npwp') d-none @endif @else d-none @endif">
-                                    <img id="preview_foto_npwp" src="{{ $data_perusahaan ? asset('uploads/identitas_perusahaan/'.$data_perusahaan['foto_npwp']) : '' }}" alt="Preview" data-action="zoom">
+                                    <img id="preview_foto_npwp" src="{{ $data_perusahaan ? asset('../../uploads/identitas_perusahaan/'.$data_perusahaan['foto_npwp']) : '' }}" alt="Preview" data-action="zoom">
+                                </div>
+
+                                {{-- Kota NPWP --}}
+                                <div class="form-group mt-3">
+                                    <label for="">Kota Sesuai NPWP <span class="text-danger">*</span></label>
+                                    <input type="text" name="kota_npwp" id="kota_npwp" class="form-control" placeholder="Masukkan kota" autocomplete="off" value="{{ $data_perusahaan ? $data_perusahaan['kota_npwp'] : '' }}">
+                                </div>
+
+                                {{-- Email Faktur Pajak --}}
+                                <div class="form-group">
+                                    <div class="form-group mt-3">
+                                        <label for="">Email Khusus Untuk Faktur Pajak <span class="text-danger">*</span></label>
+                                        <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Contoh: faktur@gmail.com" value="{{ $data_perusahaan ? ($data_perusahaan['identitas'] == 'npwp' ? $data_perusahaan['email_khusus_faktur_pajak'] : '') : '' }}">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Alamat NPWP <span class="text-danger">*</span></label>
                                     <textarea name="alamat_npwp" id="alamat_npwp" cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NPWP">{{ $data_perusahaan ? $data_perusahaan['alamat_npwp'] : '' }}</textarea>
                                 </div>
-
+    
                                 <div class="form-group mt-3">
                                     <label for="">Status Pengusaha Kena Pajak (PKP) <span class="text-danger">*</span></label>
                                     <select name="status_pkp" id="status_pkp" class="form-control">
@@ -281,30 +296,22 @@
                                         <option value="pkp">PKP</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <label for="">Kota sesuai NPWP <span class="text-danger">*</span></label>
-                                        <input type="text" name="kota_npwp" id="kota_npwp" class="form-control" placeholder="Masukkan kota" autocomplete="off" value="{{ $data_perusahaan ? $data_perusahaan['kota_npwp'] : '' }}">
-                                    </div>
 
-                                    <div class="form-group mt-3">
-                                        <label for="">Email Khusus Untuk Faktur Pajak <span class="text-danger">*</span></label>
-                                        <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Masukkan email faktur" value="{{ $data_perusahaan ? ($data_perusahaan['identitas'] == 'npwp' ? $data_perusahaan['email_khusus_faktur_pajak'] : '') : '' }}">
-                                    </div>
+                                <div class="form-group mt-3 @if($data_perusahaan) @if($data_perusahaan['status_pkp'] !=  'pkp') d-none @endif @else d-none @endif" id="sppkp-section">
+                                    <label for="">Foto SPPKP <span class="text-danger">*</span></label>
+                                    <input type="file" name="foto_sppkp" id="foto_sppkp" onchange="previewFileSppkp(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
 
-                                    <div class="form-group mt-3 @if($data_perusahaan) @if($data_perusahaan['status_pkp'] !=  'pkp') d-none @endif @else d-none @endif" id="sppkp-section">
-                                        <label for="">Foto SPPKP <span class="text-danger">*</span></label>
-                                        <input type="file" name="foto_sppkp" id="foto_sppkp" onchange="previewFileSppkp(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
-    
-                                        <div id="preview_sppkp">
-                                            <img id="preview_foto_sppkp" src="{{ $data_perusahaan ? asset('uploads/identitas_perusahaan/'.$data_perusahaan['sppkp']) : '' }}" alt="Preview" data-action="zoom">
-                                        </div>
+                                    <div id="preview_sppkp">
+                                        <img id="preview_foto_sppkp" src="{{ $data_perusahaan ? asset('../../uploads/identitas_perusahaan/'.$data_perusahaan['sppkp']) : '' }}" alt="Preview" data-action="zoom">
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        {{-- <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                
+                            </div>
+                        </div> --}}
                     </div>
                 </div>
                 <hr>
@@ -315,7 +322,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nomor Rekening <span class="text-danger">*</span></label>
-                                    <input type="text" name="nomor_rekening" id="nomor_rekening" class="form-control" autocomplete="off" required placeholder="Masukkan nomor rekening" value="{{ $data_perusahaan ? $data_perusahaan['informasi_bank']['nomor_rekening'] : '' }}">
+                                    <input type="text" name="nomor_rekening" oninput="this.value = this.value.replace(/\D+/g, '')" id="nomor_rekening" maxlength="15" class="form-control" autocomplete="off" required placeholder="Masukkan nomor rekening" value="{{ $data_perusahaan ? $data_perusahaan['informasi_bank']['nomor_rekening'] : '' }}">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -339,21 +346,13 @@
                                         <option value="rekening_perusahaan">Rekening Perusahaan</option>
                                         <option value="lainnya">Lainnya</option>
                                     </select>
+                                    @if($data_perusahaan)
+                                        @if($data_perusahaan['informasi_bank']['status'] == 'lainnya')
+                                            <input type="text" class="form-control" id="rekening_lain" name="rekening_lain" placeholder="Masukkan pemilik rekening" autocomplete="off" value="{{ $data_perusahaan['informasi_bank']['rekening_lain'] }}">
+                                        @endif
+                                    @endif
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mb-3 d-none" id="div_rekening_lainnya">
-                            {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12"> --}}
-                                <div class="form-group">
-                                    <label for="">Lainnya <span class="text-danger">*</span></label>
-                                    {{-- <select name="rekening_lain" id="rekening_lain" class="form-control">
-                                        <option value="rekening_suami_istri">Rekening Suami / Istri</option>
-                                        <option value="rekening_anak_saudara">Rekening Anak / Saudara</option>
-                                        <option value="rekening_karyawan">Rekening Karyawan</option>
-                                    </select> --}}
-                                    <input type="text" class="form-control" id="rekening_lain" name="rekening_lain" placeholder="Masukkan pemilik rekening" autocomplete="off" value="{{ $data_perusahaan ? $data_perusahaan['informasi_bank']['rekening_lain'] : '' }}">
-                                </div>
-                            {{-- </div> --}}
                         </div>
                     </div>
                 </div>
@@ -364,13 +363,13 @@
                         <div class="row mb-3">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Nama Penanggung Jawab</label>
+                                    <label for="">Nama Penanggung Jawab <span class="text-danger">*</span></label>
                                     <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" class="form-control" autocomplete="off" placeholder="Masukkan nama penanggung jawab" value="{{ $data_perusahaan ? $data_perusahaan['data_identitas'] ? $data_perusahaan['data_identitas']['nama'] : '' : '' }}">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Jabatan</label>
+                                    <label for="">Jabatan <span class="text-danger">*</span></label>
                                     <input type="text" name="jabatan" id="jabatan" class="form-control" autocomplete="off" placeholder="Masukkan jabatan" value="{{ $data_perusahaan ? $data_perusahaan['data_identitas'] ? $data_perusahaan['data_identitas']['jabatan'] : '' : '' }}">
                                 </div>
                             </div>
@@ -378,7 +377,7 @@
                         <div class="row mb-3">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group mb-3">
-                                    <label for="">Identitas Penanggung Jawab</label>
+                                    <label for="">Identitas Penanggung Jawab <span class="text-danger">*</span></label>
                                     <select name="identitas_penanggung_jawab" id="identitas_penanggung_jawab" class="form-control">
                                         <option value=""></option>
                                         <option value="ktp">KTP</option>
@@ -386,28 +385,20 @@
                                     </select>
                                 </div>
     
-                                <div class="form-group mb-2" id="penanggung_ktp">
-                                    <label for="">Foto KTP</label>
-                                    <input type="file" name="foto_ktp_penanggung" id="foto_ktp_penanggung" onchange="previewFileKtpPenanggung(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
+                                <div class="form-group mb-2">
+                                    <label for="">Foto <span class="text-danger">*</span></label>
+                                    <input type="file" name="foto_penanggung" id="foto_penanggung" onchange="previewFilePenanggung(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
     
-                                    <div id="preview_ktp_penanggung" class="@if($data_perusahaan) @if($data_perusahaan['data_identitas']) @if($data_perusahaan['data_identitas']['identitas'] != 'ktp') d-none @endif @else d-none @endif @else d-none @endif">
-                                        <img id="preview_foto_ktp_penanggung" src="{{ $data_perusahaan ? ($data_perusahaan['data_identitas'] ? asset('uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '') : '' }}" alt="Preview" data-action="zoom">
-                                    </div>
-                                </div>
-    
-                                <div class="form-group @if($data_perusahaan) @if($data_perusahaan['data_identitas']) @if($data_perusahaan['data_identitas']['identitas'] != 'npwp') d-none @endif @else d-none @endif @else d-none @endif" id="penanggung_npwp">
-                                    <label for="">Foto NPWP</label>
-                                    <input type="file" name="foto_npwp_penanggung" id="foto_npwp_penanggung" onchange="previewFileNpwpPenanggung(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
-    
-                                    <div id="preview_npwp_penanggung" class="d-none">
-                                        <img id="preview_foto_npwp_penanggung" src="{{ $data_perusahaan ? ($data_perusahaan['data_identitas'] ? asset('uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '') : '' }}" alt="Preview" data-action="zoom">
+                                    <div id="preview_ktp_penanggung">
+                                        <img id="preview_foto_penanggung" src="{{ $data_perusahaan ? ($data_perusahaan['data_identitas'] ? asset('../../uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '') : '' }}" alt="Preview" data-action="zoom">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Nomor Handphone</label>
-                                    <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" class="form-control" autocomplete="off" placeholder="Masukkan no hp penanggung jawab" value="{{ $data_perusahaan ? ($data_perusahaan['data_identitas'] ? $data_perusahaan['data_identitas']['no_hp'] : '') : '' }}">
+                                    <label for="">Nomor Handphone <span class="text-danger">*</span></label>
+                                    {{-- <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" oninput="this.value = this.value.replace(/\D+/g, '')" class="form-control" autocomplete="off" maxlength="13" placeholder="Masukkan no hp penanggung jawab" value="{{ $data_perusahaan ? ($data_perusahaan['data_identitas'] ? $data_perusahaan['data_identitas']['no_hp'] : '') : '' }}"> --}}
+                                    <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" class="form-control" autocomplete="off" maxlength="14" placeholder="Masukkan no hp penanggung jawab" value="{{ $data_perusahaan ? ($data_perusahaan['data_identitas'] ? $data_perusahaan['data_identitas']['no_hp'] : '') : '' }}">
                                 </div>
                             </div>
                         </div>
@@ -438,25 +429,25 @@
             window.location.href = '/';
         }
 
-        function previewFileKtp(input) {
-            var file = $('#foto_ktp').prop('files');
-            if(file){
-                var reader = new FileReader();
-                $("#preview_ktp").removeClass('d-none');
-                reader.onload = function() {
-                    $("#preview_foto_ktp").attr("src", reader.result);
-                }
-                reader.readAsDataURL(file[0]);
-            }
-        }
-
         function previewFileNpwp(input) {
             var file = $("#foto_npwp").prop('files');
             if(file){
+                let ext = file[0].type.split('/')[1];
                 var reader = new FileReader();
                 $("#preview_npwp").removeClass('d-none');
-                reader.onload = function() {
-                    $("#preview_foto_npwp").attr("src", reader.result);
+                if(ext == 'pdf') {
+                    $('#preview_foto_npwp').find('img').remove();
+                    reader.onload = function() {
+                        let filename = reader.result.split(',')[1];
+                        $('#preview_npwp').html('<iframe src="'+reader.result+'" style="width: 100%; height: 180px;" target="_blank">'+file[0].name+'</iframe>');
+                    }
+                } else {
+                    $("#preview_npwp").css('height', '180px');
+                    $('#preview_npwp').html('<img id="preview_foto_npwp" src="" alt="Preview" data-action="zoom">');
+                    $('#preview_npwp').find('a').remove();
+                    reader.onload = function() {
+                        $("#preview_foto_npwp").attr("src", reader.result);
+                    }
                 }
                 reader.readAsDataURL(file[0]);
             }
@@ -465,36 +456,69 @@
         function previewFileSppkp(input) {
             var file = $("#foto_sppkp").prop('files');
             if(file){
+                let ext = file[0].type.split('/')[1];
                 var reader = new FileReader();
                 $("#preview_sppkp").removeClass('d-none');
-                reader.onload = function() {
-                    $("#preview_foto_sppkp").attr("src", reader.result);
+                if(ext == 'pdf') {
+                    $('#preview_foto_sppkp').find('img').remove();
+                    reader.onload = function() {
+                        let filename = reader.result.split(',')[1];
+                        $('#preview_sppkp').html('<iframe src="'+reader.result+'" style="width: 100%; height: 180px;" target="_blank">'+file[0].name+'</iframe>');
+                    }
+                } else {
+                    reader.onload = function() {
+                        $("#preview_foto_sppkp").attr("src", reader.result);
+                    }
                 }
                 reader.readAsDataURL(file[0]);
             }
         }
 
-        function previewFileKtpPenanggung(input) {
-            var file = $("#foto_ktp_penanggung").prop('files');
+        function previewFilePenanggung(input) {
+            var file = $("#foto_penanggung").prop('files');
             if(file){
+                let ext = file[0].type.split('/')[1];
                 var reader = new FileReader();
-                $("#preview_ktp_penanggung").removeClass('d-none');
-                reader.onload = function() {
-                    $("#preview_foto_ktp_penanggung").attr("src", reader.result);
+                $("#preview_penanggung").removeClass('d-none');
+                if(ext == 'pdf') {
+                    $('#preview_penanggung').find('img').remove();
+                    reader.onload = function() {
+                        let filename = reader.result.split(',')[1];
+                        $('#preview_foto_penanggung').html('<iframe src="'+reader.result+'" style="width: 100%; height: 180px;" target="_blank">'+file[0].name+'</iframe>');
+                    }
+                } else {
+                    reader.onload = function() {
+                        $("#preview_foto_penanggung").attr("src", reader.result);
+                    }
                 }
                 reader.readAsDataURL(file[0]);
             }
         }
 
-        function previewFileNpwpPenanggung(input) {
-            var file = $("#foto_npwp_penanggung").prop('files');
-            if(file){
-                var reader = new FileReader();
-                $("#preview_npwp_penanggung").removeClass('d-none');
-                reader.onload = function() {
-                    $("#preview_foto_npwp_penanggung").attr("src", reader.result);
-                }
-                reader.readAsDataURL(file[0]);
+        // Auto format NPWP
+        const npwp = document.getElementById('nomor_npwp');
+        npwp.oninput = (e) => {
+            e.target.value = autoFormatNPWP(e.target.value);
+        }
+        function autoFormatNPWP(NPWPString) {
+            try {
+                var cleaned = ("" + NPWPString).replace(/\D/g, "");
+                var match = cleaned.match(/(\d{0,2})?(\d{0,3})?(\d{0,3})?(\d{0,1})?(\d{0,3})?(\d{0,3})$/);
+                return [      
+                        match[1], 
+                        match[2] ? ".": "",
+                        match[2], 
+                        match[3] ? ".": "",
+                        match[3],
+                        match[4] ? ".": "",
+                        match[4],
+                        match[5] ? "-": "",
+                        match[5],
+                        match[6] ? ".": "",
+                        match[6]].join("")
+                
+            } catch(err) {
+                return "";
             }
         }
         
@@ -539,6 +563,26 @@
                 placeholder: 'Pilih status kepemilikan',
             });
 
+            // Bidang usaha
+            $('#bidang_usaha').on('change', function() {
+                let val = $(this).val();
+                if(val == 'lainnya') {
+                    $('#bidang_usaha_lain').removeClass('d-none').prop('required', true);
+                } else {
+                    $('#bidang_usaha_lain').addClass('d-none').prop('required', false);
+                }
+            });
+
+            // Status kepemilikan
+            $('#status_kepemilikan').on('change', function() {
+                let val = $(this).val();
+                if(val == 'group') {
+                    $('#nama_group').removeClass('d-none').prop('required', true);
+                } else {
+                    $('#nama_group').addClass('d-none').prop('required', false);
+                }
+            });
+
             $('#identitas_penanggung_jawab').select2({
                 placeholder: 'Pilih identitas penanggung jawab',
                 allowClear: true
@@ -551,25 +595,14 @@
             $(document).on('change', '#status_rekening', function() {
                 let value = $(this).val();
                 if(value == 'lainnya') {
-                    $('#div_rekening_lainnya').removeClass('d-none');
-                    $('#rekening_lain').prop('required', true);
+                    $('#rekening_lain').removeClass('d-none').prop('required', true);
+                    // $('#rekening_lain').prop('required', true);
                     // $('#rekening_lain').select2({
                     //     placeholder: 'Pilih rekening lainnya'
                     // });
                 } else {
-                    $('#div_rekening_lainnya').addClass('d-none');
-                    $('#rekening_lain').prop('required', false);
-                }
-            });
-
-            $(document).on('change', '#identitas_penanggung_jawab', function() {
-                let identitas = $(this).val();
-                if(identitas == 'ktp') {
-                    $('#penanggung_ktp').removeClass('d-none');
-                    $('#penanggung_npwp').addClass('d-none');
-                } else {
-                    $('#penanggung_ktp').addClass('d-none');
-                    $('#penanggung_npwp').removeClass('d-none');
+                    $('#rekening_lain').addClass('d-none').prop('required', false);
+                    // $('#rekening_lain').prop('required', false);
                 }
             });
 
@@ -662,23 +695,6 @@
                         if(res.data.data_identitas) {
                             $('#identitas_penanggung_jawab').val(res.data.data_identitas.identitas).change();
                         }
-                        if(res.data.jenis_transaksi == 'cash') {
-                            $('#cash').prop('checked', true);
-
-                            $('#nama_penanggung_jawab').prop('required', false);
-                            $('#jabatan').prop('required', false);
-                            $('#identitas_penanggung_jawab').prop('required', false);
-                            $('#nomor_hp_penanggung_jawab').prop('required', false);
-                            $('.section3-body .row label').find('span').remove();
-                        } else {
-                            $('#credit').prop('checked', true);
-
-                            $('#nama_penanggung_jawab').prop('required', true);
-                            $('#jabatan').prop('required', true);
-                            $('#identitas_penanggung_jawab').prop('required', true);
-                            $('#nomor_hp_penanggung_jawab').prop('required', true);
-                            $('.section3-body .row').find('label').append(' <span class="text-danger">*</span>');
-                        }
                     } else {
                         $('#status_kepemilikan').val('').change();
                         $('#badan_usaha').val('').change();
@@ -688,23 +704,6 @@
                         $('#status_rekening').val('').change();
                         $('#identitas_penanggung_jawab').val('').change();
                     }
-                }
-            });
-
-            $('input[name="jenis_transaksi"]').change(function() {
-                let rad_val = $(this).val();
-                if(rad_val == 'cash') {
-                    $('#nama_penanggung_jawab').prop('required', false);
-                    $('#jabatan').prop('required', false);
-                    $('#identitas_penanggung_jawab').prop('required', false);
-                    $('#nomor_hp_penanggung_jawab').prop('required', false);
-                    $('.section3-body .row label').find('span').remove();
-                } else {
-                    $('#nama_penanggung_jawab').prop('required', true);
-                    $('#jabatan').prop('required', true);
-                    $('#identitas_penanggung_jawab').prop('required', true);
-                    $('#nomor_hp_penanggung_jawab').prop('required', true);
-                    $('.section3-body .row').find('label').append(' <span class="text-danger">*</span>');
                 }
             });
         });

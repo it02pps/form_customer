@@ -6,27 +6,31 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            <?php if($errors->any()): ?>
+                <div class="alert alert-danger" role="alert">
+                    <?php echo e($errors->first()); ?>
+
+                </div>
+            <?php endif; ?>
             <div class="card">
                 <div class="card-header"><?php echo e(__('Login')); ?></div>
-
                 <div class="card-body">
                     <form method="POST" action="<?php echo e(route('login.store')); ?>">
                         <?php echo csrf_field(); ?>
-
                         <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end"><?php echo e(__('Email Address')); ?></label>
+                            <label for="username" class="col-md-4 col-form-label text-md-end"><?php echo e(__('Username')); ?></label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control <?php $__errorArgs = ['email'];
+                                <input id="username" type="text" class="form-control <?php $__errorArgs = ['username'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" name="email" value="<?php echo e(old('email')); ?>" required autocomplete="email" autofocus>
+unset($__errorArgs, $__bag); ?>" name="username" value="<?php echo e(old('username')); ?>" required autocomplete="username" autofocus>
 
-                                <?php $__errorArgs = ['email'];
+                                <?php $__errorArgs = ['name'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }

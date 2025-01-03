@@ -51,7 +51,7 @@
         border-radius: 7px;
     }
 
-    #preview_ktp img, #preview_npwp img, #preview_sppkp img, #preview_ktp_penanggung img,  #preview_npwp_penanggung img {
+    #preview_ktp img, #preview_npwp img, #preview_sppkp img, #preview_penanggung img{
         width: 100%;
         height: 180px;
         object-fit: fill;
@@ -128,7 +128,7 @@
                     <div class="row mb-2">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="">Nama Merk Usaha</label>
+                                <label for="">Nama Usaha</label>
                                 <p>{{ $perusahaan['nama_perusahaan'] }}</p>
                             </div>
                         </div>
@@ -142,7 +142,7 @@
                     <div class="row mb-2">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="">Alamat Lengkap</label>
+                                <label for="">Alamat Lengkap Usaha</label>
                                 <p>{{ $perusahaan['alamat_lengkap'] }}</p>
                             </div>
                         </div>
@@ -151,16 +151,12 @@
                                 <label for="">Kota / Kabupaten</label>
                                 <p>{{ $perusahaan['kota_kabupaten'] }}</p>
                             </div>
-                            <div class="form-gorup">
-                                <label for="">Kecamatan</label>
-                                <p>{{ $perusahaan['kecamatan'] }}</p>
-                            </div>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="">Alamat Email Tempat Usaha</label>
+                                <label for="">Alamat Email Usaha</label>
                                 <p>{{ $perusahaan['alamat_email'] }}</p>
                             </div>
                         </div>
@@ -189,12 +185,20 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Bidang Usaha</label>
-                                <p>{{ str_replace('_', ' ', strtoupper($perusahaan['bidang_usaha'])) }}</p>
+                                @if($perusahaan['bidang_usaha'] == 'lainnya')
+                                    <p>{{ ucfirst($perusahaan['bidang_usaha_lain']) }}</p>
+                                @else
+                                    <p>{{ str_replace('_', ' ', ucfirst($perusahaan['bidang_usaha'])) }}</p>
+                                @endif
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <label for="">Status Kepemilikan Tempat Usaha</label>
-                            <p>{{ str_replace("_", ' ', ucwords($perusahaan['status_kepemilikan'])) }}</p>
+                            @if($perusahaan['status_kepemilikan'] == 'group')
+                                <p>{{ ucfirst($perusahaan['nama_group']) }}</p>
+                            @else
+                                <p>{{ str_replace("_", ' ', ucfirst($perusahaan['status_kepemilikan'])) }}</p>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -216,53 +220,55 @@
                         <div class="ktp-section">
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <label for="">Nomor KTP</label>
-                                    <p>{{ $perusahaan['nomor_ktp'] }}</p>
+                                    <div class="form-group mt-3">
+                                        <label for="">Nomor KTP</label>
+                                        <p>{{ $perusahaan['nomor_ktp'] }}</p>
+                                    </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <label for="">Foto KTP</label>
-    
-                                    <div id="preview_ktp" class="@if($perusahaan['identitas'] != 'ktp') d-none @endif">
-                                        @if(str_contains($perusahaan['foto_ktp'], '.pdf'))
-                                        <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_ktp']) }}')">
-                                            <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
-                                            <span>Click to preview</span>
+                                    <div class="form-group mt-3">
+                                        <label for="">Foto KTP</label>
+        
+                                        <div id="preview_ktp" class="@if($perusahaan['identitas'] != 'ktp') d-none @endif">
+                                            {{-- @if(str_contains($perusahaan['foto_ktp'], '.pdf')) --}}
+                                            {{-- <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_ktp']) }}')">
+                                                <img src="{{ asset('../../images/pdf.png') }}" style="width: 20% !important; height: auto;">
+                                                <span>Click to preview</span>
+                                            </div> --}}
+                                            {{-- @else --}}
+                                            {{-- <img id="preview_foto_ktp" src="{{ route('showimage.view', ['category' => 'KTP', 'filename' => $perusahaan['foto_ktp']]) }}" data-action="zoom"> --}}
+                                            {{-- @endif --}}
+                                            <img src="{{ asset('../../uploads/identitas_perusahaan/'.$perusahaan['foto_ktp']) }}" alt="Foto KTP" data-action="zoom">
                                         </div>
-                                        @else
-                                            <img id="preview_foto_ktp" src="{{ route('showimage.view', ['category' => 'KTP', 'filename' => $perusahaan['foto_ktp']]) }}" data-action="zoom">
-                                        @endif
                                     </div>
                                 </div>
                             </div>
                         </div>
                     @else
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 npwp-section">
-                            <div class="form-group mb-4">
-                                <label for="">Jenis Badan Usaha</label>
-                                <p>{{ strtoupper($perusahaan['badan_usaha']) }}</p>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="">Nomor NPWP</label>
+                                <p>{{ $perusahaan['nomor_npwp'] }}</p>
                             </div>
                         </div>
                         <div class="npwp-section">
                             <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group">
-                                        <label for="">Nomor NPWP</label>
-                                        <p>{{ $perusahaan['nomor_npwp'] }}</p>
-                                    </div>
-                                </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group mb-4">
                                         <label for="">Nama NPWP</label>
                                         <p>{{ $perusahaan['nama_npwp'] }}</p>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group mb-4">
                                         <label for="">Alamat NPWP</label>
                                         <p>{{ $perusahaan['alamat_npwp'] }}</p>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    
 
                                     <div class="form-group mb-4">
                                         <label for="">Email Khusus Untuk Faktur Pajak</label>
@@ -278,14 +284,15 @@
                                         <label for="">Foto SPPKP</label>
     
                                         <div id="preview_sppkp">
-                                            @if(str_contains($perusahaan['sppkp'], '.pdf'))
+                                            {{-- @if(str_contains($perusahaan['sppkp'], '.pdf'))
                                                 <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$perusahaan['sppkp']) }}')">
                                                     <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
                                                     <span>Click to preview</span>
                                                 </div>
                                             @else
                                                 <img id="preview_foto_sppkp" src="{{ route('showimage.view', ['category' => 'SPPKP', 'filename' => $perusahaan['sppkp']]) }}" data-action="zoom">
-                                            @endif
+                                            @endif --}}
+                                            <img src="{{ asset('../../uploads/idetitas_perusahaan/'.$perusahaan['sppkp']) }}" alt="SPPKP" data-action="zoom">
                                         </div>
                                     </div>
                                 </div>
@@ -300,24 +307,24 @@
                                     </div>
     
                                     <div id="preview_npwp" class="@if($perusahaan['identitas'] != 'npwp') d-none @endif">
-                                        @if(str_contains($perusahaan['foto_npwp'], '.pdf'))
+                                        {{-- @if(str_contains($perusahaan['foto_npwp'], '.pdf'))
                                             <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_npwp']) }}')">
                                                 <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
                                                 <span>Click to preview</span>
                                             </div>
                                         @else
                                             <img id="preview_foto_npwp" src="{{ route('showimage.view', ['category' => 'NPWP', 'filename' => $perusahaan['foto_npwp']]) }}" data-action="zoom">
-                                        @endif
+                                        @endif --}}
+                                        <img src="{{ asset('../../uploads/identitas_perusahaan/'.$perusahaan['foto_npwp']) }}" alt="Foto NPWP" data-action="zoom">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     @endif
-
                 </div>
             </div>
-            <hr>
             <div class="section2 mt-4 mb-4">
+                <hr>
                 <h4>INFORMASI BANK</h4>
                 <div class="section2-body">
                     <div class="row mb-3">
@@ -354,8 +361,8 @@
                     </div>
                 </div>
             </div>
-            <hr>
             <div class="section3 mt-4">
+                <hr>
                 <h4>DATA IDENTITAS PENANGGUNG JAWAB</h4>
                 <div class="section3-body">
                     <div class="row mb-3">
@@ -380,66 +387,23 @@
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="form-group mb-2" id="penanggung_ktp">
-                                <label for="">Foto KTP</label>
-
-                                @if($perusahaan['data_identitas'])
-                                    @if($perusahaan['data_identitas']['foto'])
-                                        <div id="preview_ktp_penanggung" class="@if($perusahaan['data_identitas']) @if($perusahaan['data_identitas']['identitas'] != 'ktp') d-none @endif @endif">
-                                            @if(str_contains($perusahaan['data_identitas']['foto'], '.pdf'))
-                                                <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto']) }}')">
-                                                    <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
-                                                    <span>Click to preview</span>
-                                                </div>
-                                            @else
-                                                <img id="preview_foto_ktp_penanggung" src="{{ route('showimage.view', 
-                                                    ['category' => 'KTP_responsible', 'filename' => $perusahaan['data_identitas']['foto']])  }}" data-action="zoom">
-                                            @endif
-                                        </div>
-                                    @else
-                                        <p>-</p>
-                                    @endif
-                                @else
-                                    <p>-</p>
-                                @endif
+                            <div class="form-group mb-2">
+                                <label for="">Foto</label>
+                                <div id="preview_penanggung">
+                                    <img src="{{ asset('../../uploads/penanggung_jawab/' . $perusahaan['data_identitas']['foto']) }}" alt="Foto" data-action="zoom">
+                                </div>
                             </div>
 
-                            <div class="form-group @if($perusahaan['data_identitas']) @if($perusahaan['data_identitas']['identitas'] != 'npwp') d-none @endif @else d-none @endif" id="penanggung_npwp">
-                                <label for="">Foto NPWP</label>
-
-                                @if($perusahaan['data_identitas'])
-                                    <div id="preview_npwp_penanggung" class="d-none">
-                                        @if(str_contains($perusahaan['data_identitas']['foto'], '.pdf'))
-                                            <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto']) }}')">
-                                                <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;" alt="PDF">
-                                                <span>Click to preview</span>
-                                            </div>
-                                        @else
-                                            <img id="preview_foto_npwp_penanggung" src="{{ route('showimage.view', ['category' => 'NPWP_responsible', 'filename' => $perusahaan['data_identitas']['foto']]) }}" data-action="zoom">
-                                        @endif
-                                    </div>
-                                @else
-                                    <p>-</p>
-                                @endif
+                            {{-- Signature --}}
+                            <div class="">
+                                <label for="">Tanda Tangan</label>
+                                <div id="signature">
+                                    <img src="{{ asset('../../uploads/ttd/'.$perusahaan['data_identitas']['ttd']) }}" style="width: 90%;" data-action="zoom">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                @if($perusahaan['data_identitas'])
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                        {{-- Signature --}}
-                        <div class="">
-                            <label for="">Tanda Tangan</label>
-                            @if($perusahaan['data_identitas'] && $perusahaan['data_identitas']['ttd'])
-                                <div id="signature">
-                                    <img src="{{ asset('uploads/ttd/'.$perusahaan['data_identitas']['ttd']) }}" style="width: 100%;" data-action="zoom">
-                                </div>
-                            @else
-                                <p>-</p>
-                            @endif
-                        </div>
-                    </div>
-                @endif
             </div>
         </div>
         <div class="content-footer mt-2">

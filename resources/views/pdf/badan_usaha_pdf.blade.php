@@ -56,6 +56,10 @@
             margin-top: 30px;
             text-align: center;
         }
+
+        .lampiran .content-body {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -70,17 +74,21 @@
                     <p class="label">Nama Perusahaan</p>
                     <p>{{ $data['nama_perusahaan'] }}</p>
 
-                    <p class="label">Alamat Lengkap</p>
+                    <p class="label">Alamat Lengkap Perusahaan</p>
                     <p>{{ $data['alamat_lengkap'] }}</p>
 
-                    <p class="label">Alamat Email Koresponden</p>
+                    <p class="label">Alamat Email Perusahaan</p>
                     <p>{{ $data['alamat_email'] }}</p>
 
-                    <p class="label">Tahun Berdiri</p>
-                    <p>{{ $data['tahun_berdiri'] ? ($data['tahun_berdiri'] ? \Carbon\Carbon::parse($data['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') : '-') : '-' }}</p>
+                    <p class="label">Lama Usaha (Tahun)</p>
+                    <p>{{ $data['lama_usaha'] ? $data['lama_usaha'].' tahun' : '-' }}</p>
 
                     <p class="label">Bidang Usaha</p>
-                    <p>{{ strtoupper(str_replace('_', ' ', $data['bidang_usaha'])) }}</p>
+                    @if($data['bidang_usaha'] == 'lainnya')
+                        <p>{{ ucfirst($data['bidang_usaha_lain']) }}</p>
+                    @else
+                        <p>{{ ucfirst(str_replace('_', ' ', $data['bidang_usaha'])) }}</p>
+                    @endif
 
                     <p class="label">Identitas Pemilik Usaha</p>
                     <p>{{ strtoupper($data['identitas']) }}</p>
@@ -91,19 +99,11 @@
                     <p class="label">Nama NPWP</p>
                     <p>{{ $data['nama_npwp'] }}</p>
 
-                    <p class="label">Email Khusus Untuk Faktur Pajak</p>
-                    <p>{{ $data['email_khusus_faktur_pajak'] }}</p>
-
                     <p class="label">Kota Sesuai NPWP</p>
                     <p>{{ $data['kota_npwp'] }}</p>
-
-                    <p class="label">Status Pengusaha Kena Pajak (PKP)</p>
-                    <p>{{ str_replace("_", " ", strtoupper($data['status_pkp'])) }}</p>
-
-                    @if($data['status_pkp'] == 'pkp')
-                        <p class="label">Foto SPPKP</p>
-                        <img id="preview_foto_sppkp" src="uploads/identitas_perusahaan/{{ $data['sppkp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
-                    @endif
+                    
+                    <p class="label">Email Khusus Untuk Faktur Pajak</p>
+                    <p>{{ $data['email_khusus_faktur_pajak'] }}</p>
                 </div>
                 <div class="column">
                     <p class="label">Nama Group Perusahaan</p>
@@ -112,17 +112,18 @@
                     <p class="label">Kota / Kabupaten</p>
                     <p>{{ $data['kota_kabupaten'] }}</p>
 
-                    <p class="label">Kecamatan</p>
-                    <p>{{ $data['kecamatan'] }}</p>
-
-                    <p class="label">Lama Usaha (Tahun)</p>
-                    <p>{{ $data['lama_usaha'] ? $data['lama_usaha'].' tahun' : '-' }}</p>
+                    <p class="label">Tahun Berdiri</p>
+                    <p>{{ $data['tahun_berdiri'] ? ($data['tahun_berdiri'] ? \Carbon\Carbon::parse($data['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') : '-') : '-' }}</p>
                     
                     <p class="label">Nomor Handphone Contact Person</p>
                     <p>{{ $data['nomor_handphone'] }}</p>
 
                     <p class="label">Status Kepemilikan Tempat Usaha</p>
-                    <p>{{ str_replace("_", ' ', ucwords($data['status_kepemilikan'])) }}</p>
+                    @if($data['status_kepemilikan'] == 'group')
+                        <p>{{ ucfirst($data['nama_group']) }}</p>
+                    @else
+                        <p>{{ str_replace("_", ' ', ucfirst($data['status_kepemilikan'])) }}</p>
+                    @endif
 
                     <p class="label">Nomor NPWP</p>
                     <p>{{ $data['nomor_npwp'] }}</p>
@@ -131,7 +132,23 @@
                     <p>{{ $data['alamat_npwp'] }}</p>
 
                     <p class="label">Foto NPWP</p>
-                    <img src="uploads/identitas_perusahaan/{{ $data['foto_npwp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                    @if(!$data['foto_npwp'])
+                        <p>-</p>
+                    @else
+                        <p>Lampiran NPWP</p>
+                    @endif
+
+                    <p class="label">Status Pengusaha Kena Pajak (PKP)</p>
+                    <p>{{ str_replace("_", " ", strtoupper($data['status_pkp'])) }}</p>
+
+                    @if($data['status_pkp'] == 'pkp')
+                        <p class="label">Foto SPPKP</p>
+                        @if(!$data['sppkp'])
+                            <p>-</p>
+                        @else
+                            <p>Lampiran SPPKP</p>
+                        @endif
+                    @endif
                 </div>
             </div>
 
@@ -179,7 +196,8 @@
                         @endif
 
                         @if($data['data_identitas']['foto'] != null)
-                            <img src="uploads/penanggung_jawab/{{ $data['data_identitas']['foto'] }}" alt="" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                            <p>Lampiran Penanggung Jawab</p>
+                            {{-- <img src="uploads/penanggung_jawab/{{ $data['data_identitas']['foto'] }}" alt="" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9"> --}}
                         @else
                             <p>-</p>
                         @endif
@@ -197,6 +215,34 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="break"></div>
+    <div class="lampiran container">
+        <div class="content-header">
+            <h2>Lampiran</h2>
+        </div>
+        <div class="content-body">
+            <div class="lampiranNpwp">
+                <h3>Lampiran NPWP</h3>
+                <img src="uploads/identitas_perusahaan/{{ $data['foto_npwp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+            </div>
+
+            @if($data['status_pkp'] == 'pkp')
+                <div class="lampiranSppkp">
+                    <h3>Lampiran SPPKP</h3>
+                    <img id="preview_foto_sppkp" src="uploads/identitas_perusahaan/{{ $data['sppkp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                </div>
+            @endif
+            
+            @if($data['data_identitas'])
+                @if($data['data_identitas']->foto)
+                    <div class="lampiranPenanggungJawab">
+                        <h3>Lampiran Penanggung Jawab</h3>
+                        <img src="uploads/penanggung_jawab/{{ $data['data_identitas']['foto'] }}" alt="" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                    </div>
+                @endif
+            @endif
         </div>
     </div>
 </body>

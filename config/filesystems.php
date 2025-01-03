@@ -47,6 +47,7 @@ return [
         'custom_path' => [
             'driver' => 'local',
             'root' => public_path() . '/uploads',
+            'visibility' => 'public'
         ],
 
         's3' => [
