@@ -18,4 +18,8 @@ class IdentitasPerusahaan extends Model
     public function informasi_bank() {
         return $this->hasOne(InformasiBank::class, 'identitas_perusahaan_id', 'id');
     }
+
+    public function tipe_customer() {
+        return $this->hasOne(TipeCustomer::class, 'identitas_perusahaan_id', 'id');
+    }
 }

@@ -29,8 +29,6 @@ Route::get('/{menu}/detail', [FormCustomer::class, 'detail'])->name('form_custom
 Route::post('/{menu}/confirmation', [FormCustomer::class, 'confirmation'])->name('form_customer.confirmation');
 Route::get('/{menu}/pdf/{id}', [FormCustomer::class, 'download_pdf'])->name('form_customer.pdf');
 
-
-
 // Get data select
 Route::get('/select/{id}', [FormCustomer::class, 'select'])->name('form_customer.select');
 
@@ -48,3 +46,10 @@ Route::middleware('web')->group(function () {
     // Update profil
     Route::post('/internal/panel/update-profil', [HomeController::class, 'update_profil'])->name('home.update_profil');
 });
+
+// Fix view form customer
+Route::get('/fix-form-customer/testing/menu', [FormCustomer::class, 'menuFix'])->name('form_customer.menuFix');
+Route::get('/fix-form-customer/badan-usaha', [FormCustomer::class, 'indexBadanUsaha'])->name('form_customer.indexBadanUsaha');
+Route::get('/login/fix', [LoginController::class, 'loginFix'])->name('form_customer.loginFix');
+Route::get('/lupa-password/fix/1', [LoginController::class, 'lupa_password'])->name('form_customer.lupa_password');
+// Route::get('/fix-form-customer/perseorangan', [FormCustomer::class, 'indexPerseorangan'])->name('form_customer.indexPerseorangan');

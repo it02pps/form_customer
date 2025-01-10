@@ -57,4 +57,12 @@ class LoginController extends Controller
             return redirect()->back()->withErrors(['error' => 'Terjadi Kesalahan']);
         }
     }
+
+    public function loginFix() {
+        return view('auth.loginfix');
+    }
+
+    public function lupa_password() {
+        return view('auth.lupa_password');
+    }
 }

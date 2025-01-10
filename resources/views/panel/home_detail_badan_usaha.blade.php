@@ -27,7 +27,7 @@
         width: 62%;
     }
 
-    .section1 h4, .section2 h4, .section3 h4 {
+    .section1 h4, .section2 h4, .section3 h4, .section4 h4 {
         text-align: center;
     }
 
@@ -123,60 +123,66 @@
                     <div class="row mb-2">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="">Nama Perusahaan</label>
-                                <p>{{ $data['nama_perusahaan'] }}</p>
+                                <label for="">Jenis Customer</label>
+                                <p>{{ ucfirst($data['status_cust']) }}</p>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="">Nama Group Perusahaan</label>
-                                <p>{{ $data['nama_group_perusahaan'] }}</p>
+                                <label for="">Nama Perusahaan</label>
+                                <p>{{ $data['nama_perusahaan'] }}</p>
                             </div>
                         </div>
                     </div>
                     <div class="row mb-2">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
+                                <label for="">Nama Group Perusahaan</label>
+                                <p>{{ $data['nama_group_perusahaan'] }}</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
                                 <label for="">Alamat Lengkap</label>
                                 <p>{{ $data['alamat_lengkap'] }}</p>
                             </div>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group mb-2">
                                 <label for="">Kota / Kabupaten</label>
                                 <p>{{ $data['kota_kabupaten'] }}</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="row mb-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Alamat Email Perusahaan</label>
                                 <p>{{ $data['alamat_email'] }}</p>
                             </div>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Nomor Handphone Contact Person</label>
                                 <p>{{ $data['nomor_handphone'] }}</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="row mb-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Tahun Berdiri</label>
                                 <p>{{ $data['tahun_berdiri'] ? \Carbon\Carbon::parse($data['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') : '-' }}</p>
                             </div>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Lama Usaha (Tahun)</label>
                                 <p>{{ $data['lama_usaha'] ? $data['lama_usaha'] . ' tahun' : '-' }}</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="row mb-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Bidang Usaha</label>
@@ -187,7 +193,11 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="form-group">
                             <label for="">Status Kepemilikan Tempat Usaha</label>
                             @if($data['status_kepemilikan'] == 'group')
                                 <p>{{ ucfirst($data['nama_group']) }}</p>
@@ -196,37 +206,39 @@
                             @endif
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 npwp-section">
                         <div class="form-group mb-2">
                             <label for="">Identitas Pemilik Perusahaan</label>
                             <p>{{ strtoupper($data['identitas']) }}</p>
                         </div>
                     </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 npwp-section">
-                        <div class="form-group mb-4">
-                            <label for="">Jenis Badan Usaha</label>
-                            <p>{{ strtoupper($data['badan_usaha']) }}</p>
-                        </div>
-                    </div>
                     <div class="npwp-section">
                         <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group mb-4">
+                                    <label for="">Jenis Badan Usaha</label>
+                                    <p>{{ strtoupper($data['badan_usaha']) }}</p>
+                                </div>
+                            </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nomor NPWP</label>
                                     <p>{{ $data['nomor_npwp'] }}</p>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">NITKU</label>
+                                    <p>{{ $data['nitku'] }}</p>
+                                </div>
+                                
                                 <div class="form-group mb-4">
                                     <label for="">Nama NPWP</label>
                                     <p>{{ $data['nama_npwp'] }}</p>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+
                                 <div class="form-group mb-4">
                                     <label for="">Alamat NPWP</label>
                                     <p>{{ $data['alamat_npwp'] }}</p>
@@ -243,16 +255,16 @@
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group mb-4">
+                                <div class="form-group mb-3">
                                     <label for="">Kota sesuai NPWP</label>
                                     <p>{{ $data['kota_npwp'] }}</p>
                                 </div>
 
-                                <div class="form-group mb-4">
+                                <div class="form-group mb-2">
                                     <label for="">Foto NPWP</label>
                                     
                                     <div id="preview_npwp" class="@if($data['identitas'] != 'npwp') d-none @endif">
-                                        <img src="{{ asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp']) }}" alt="Foto NPWP" data-action="zoom">
+                                        <img src="{{ asset('uploads/identitas_perusahaan/' . $data['foto_npwp']) }}" alt="Foto NPWP" data-action="zoom">
                                         {{-- @if(str_contains($data['foto_npwp'], '.pdf')) --}}
                                         {{-- <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$data['foto_npwp']) }}')">
                                             <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
@@ -268,7 +280,7 @@
                                     <label for="">Foto SPPKP</label>
 
                                     <div id="preview_sppkp">
-                                        <img src="{{ asset('../../../uploads/identitas_perusahaan/' . $data['sppkp']) }}" alt="SPPKP" data-action="zoom">
+                                        <img src="{{ asset('uploads/identitas_perusahaan/' . $data['sppkp']) }}" alt="SPPKP" data-action="zoom">
                                         {{-- @if(str_contains($data['sppkp'], '.pdf')) --}}
                                             {{-- <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$data['sppkp']) }}')">
                                                 <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
@@ -351,7 +363,7 @@
                             <div class="form-group mb-2">
                                 <label for="">Foto</label>
                                 <div id="preview_penanggung">
-                                    <img src="{{ asset('../../../uploads/penanggung_jawab/' . $data['data_identitas']['foto']) }}" alt="Foto" data-action="zoom">
+                                    <img src="{{ asset('uploads/penanggung_jawab/' . $data['data_identitas']['foto']) }}" alt="Foto" data-action="zoom">
                                     {{-- @if(str_contains($data['data_identitas']['foto'], '.pdf')) --}}
                                         {{-- <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/penanggung_jawab/'.$data['data_identitas']['foto']) }}')">
                                             <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
@@ -364,6 +376,66 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section4 mt-4 mb-4">
+                <hr>
+                <h4>Tipe Customer</h4>
+                <div class="section4-body">
+                    <div class="row mb-3">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="">Jenis Transaksi</label>
+                                <p>{{ $data['tipe_customer'] ? ucfirst($data['tipe_customer']['jenis_transaksi']) : '-' }}</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="">Tipe Harga</label>
+                                <p>{{ $data['tipe_customer'] ? ucfirst(str_replace('_', ' ', $data['tipe_customer']['tipe_harga'])) : '-' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="">Kategori Customer</label>
+                                <p>{{ $data['tipe_customer'] ? ucfirst(str_replace('_', ' ', $data['tipe_customer']['kategori_customer'])) : '-' }}</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="">Plafond</label>
+                                <p>{{ $data['tipe_customer'] ? 'Rp ' . number_format($data['tipe_customer']['plafond'], 0, ',', '.') : '-' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="">Term of Payment</label>
+                                <p>{{ $data['tipe_customer'] ? ucwords($data['tipe_customer']['payment_term']) : '-' }}</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="">Channel Distributor</label>
+                                @if($data['tipe_customer'])
+                                    @if($data['tipe_customer']['channel_distributor'] == 'allptk')
+                                        <p>Semua Jalur Pontianak</p>
+                                    @else
+                                        <p>Semua Jalur Jakarta</p>
+                                    @endif
+                                @else
+                                    <p>-</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Channel Distributor</label>
+                        <p>{{ $data['tipe_customer'] ? $data['tipe_customer']['keterangan'] : '-' }}</p>
                     </div>
                 </div>
             </div>

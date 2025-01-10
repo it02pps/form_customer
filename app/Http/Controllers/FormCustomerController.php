@@ -71,24 +71,16 @@ class FormCustomerController extends Controller
     protected function validator($data)
     {
         $rules = [
+            // Identitas Perusahaan
             'nama_perusahaan' => 'required',
             'nama_group_perusahaan' => 'required',
             'alamat_lengkap' => 'required',
             'kota_kabupaten' => 'required',
             'no_hp' => 'required',
             'bidang_usaha' => 'required',
-            'email_perusahaan' => 'required|email',
-            'foto_ktp_penanggung' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf|max:2048' : ($data['identitas_penanggung_jawab'] != '' && $data['identitas_penanggung_jawab'] == 'ktp' ? 'required|mimes:jpg,jpeg,pdf|max:2048' : ''),
-            'foto_npwp_penanggung' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf|max:2048' : ($data['identitas_penanggung_jawab'] != '' && $data['identitas_penanggung_jawab'] == 'npwp' ? 'required|mimes:jpg,jpeg,pdf|max:2048' : ''),
+            'email_perusahaan' => ($data['email_perusahaan'] != '') ? 'email' : '',
             'status_kepemilikan' => 'required',
-            'nama_penanggung_jawab' => 'required',
-            'jabatan' => 'required',
-            'identitas_penanggung_jawab' => 'required',
             'identitas_perusahaan' => $data['bentuk_usaha'] == 'perseorangan' ? 'required' : '',
-            'nomor_rekening' => 'required|numeric|digits_between:10,16',
-            'nama_rekening' => 'required',
-            'status_rekening' => 'required',
-            'nama_bank' => 'required',
             'nama_lengkap' => $data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'ktp' ? 'required' : '') : '',
             'nomor_ktp' => $data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'ktp' ? 'required|numeric|digits:16' : '') : '',
             'foto_ktp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf|max:2048' : ($data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'ktp' ? 'required|mimes:jpg,jpeg,pdf|max:2048' : '') : ''),
@@ -100,13 +92,29 @@ class FormCustomerController extends Controller
             'foto_sppkp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf|max:2048' : ($data['bentuk_usaha'] == 'badan_usaha' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,jpeg,pdf|max:2048' : '') : ($data['identitas_perusahaan'] == 'npwp' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,jpeg,pdf|max:2048' : '') : '')),
             'alamat_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
             'kota_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
-            'nomor_hp_penanggung_jawab' => 'required',
-            'rekening_lain' => ($data['status_rekening'] == 'lainnya') ? 'required' : '',
             'nama_group' => ($data['status_kepemilikan'] == 'group') ? 'required' : '',
-            'bidang_usaha_lain' => ($data['bidang_usaha'] == 'lainnya') ? 'required' : ''
+            'bidang_usaha_lain' => ($data['bidang_usaha'] == 'lainnya') ? 'required' : '',
+            'nitku' => $data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'npwp' ? ($data['status_cabang'] == 'ada' ? 'required|max:22' : '') : '') : ($data['status_cabang'] == 'ada' ? 'required|max:22' : ''),
+            'jenis_cust' => 'required',
+            'status_cabang' => 'required',
+
+            // Informasi Bank
+            'nomor_rekening' => 'required|numeric|digits_between:10,16',
+            'nama_rekening' => 'required',
+            'status_rekening' => 'required',
+            'nama_bank' => 'required',
+            'rekening_lain' => ($data['status_rekening'] == 'lainnya') ? 'required' : '',
+
+            // Identitas Penanggung Jawab
+            'foto_penanggung' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf|max:2048' : 'required|mimes:jpg,jpeg,pdf|max:2048',
+            'nama_penanggung_jawab' => 'required',
+            'jabatan' => 'required',
+            'identitas_penanggung_jawab' => 'required',
+            'nomor_hp_penanggung_jawab' => 'required'
         ];
 
         $message = [
+            // Identitas Perusahaan
             'nama_perusahaan.required' => 'Nama perusahaan harus diisi',
             'nama_group_perusahaan.required' => 'Nama group perusahaan harus diisi',
             'alamat_lengkap.required' => 'Alamat lengkap harus diisi',
@@ -115,25 +123,9 @@ class FormCustomerController extends Controller
             'no_hp.numeric' => 'Nomor handphone harus berupa angka',
             'no_hp.digits_between' => 'Nomor Handphone harus diantara 10 - 13 digit',
             'bidang_usaha.required' => 'Bidang usaha harus diisi',
-            'email_perusahaan.required' => 'Email perusahaan harus diisi',
             'email_perusahaan.email' => 'Email perusahaan harus valid',
             'status_kepemilikan.required' => 'Status kepemilikan harus diisi',
-            'nama_penanggung_jawab.required' => 'Nama penanggung jawab harus diisi',
-            'jabatan.required' => 'Jabatan harus diisi',
-            'identitas_penanggung_jawab.required' => 'Identitas penanggung jawab harus diisi',
             'identitas_perusahaan.required' => 'Identitas perusahaan harus diisi',
-            'nomor_rekening.required' => 'Nomor rekening harus diisi',
-            'nomor_rekening.numeric' => 'Nomor rekening harus berupa angka',
-            'nomor_rekening.digits_between' => 'Nomor rekening harus diantara 10 - 16 digit',
-            'nama_rekening.required' => 'Nama rekening harus diisi',
-            'status_rekening' => 'Status rekening harus diisi',
-            'nama_bank.required' => 'Nama bank harus diisi',
-            'foto_ktp_penanggung.required' => 'Foto KTP penanggung jawab harus diisi',
-            'foto_ktp_penanggung.mimes' => 'Format file harus berupa JPG, PNG, JPEG, atau PDF',
-            'foto_ktp_penanggung.max' => 'Maksimal ukuran file 2MB',
-            'foto_npwp_penanggung.required' => 'Foto NPWP penanggung jawab harus diisi',
-            'foto_npwp_penanggung.mimes' => 'Format file harus berupa JPG, PNG, JPEG, atau PDF',
-            'foto_npwp_penanggung.max' => 'Maksimal ukuran file 2MB',
             'nama_lengkap.required' => 'Nama lengkap harus diisi',
             'nomor_ktp.required' => 'Nomor KTP harus diisi',
             'nomor_ktp.numeric' => 'Nomor KTP harus berupa angka',
@@ -155,12 +147,35 @@ class FormCustomerController extends Controller
             'foto_sppkp.max' => 'Maksimal ukuran file 2MB',
             'alamat_npwp.required' => 'Alamat NPWP harus diisi',
             'kota_npwp.required' => 'Kota NPWP harus diisi',
+            'nama_group.required' => 'Nama group harus diisi',
+            'bidang_usaha_lain.required' => 'Bidang usaha harus diisi',
+            'nitku.required' => 'NITKU harus diisi',
+            'nitku.max' => 'Nomor NPWP harus 22 digit',
+            'jenis_cust.required' => 'Jenis customer harus diisi',
+            'status_cabang.required' => 'Status cabang harus diisi',
+            
+            // Informasi Bank
+            'nomor_rekening.required' => 'Nomor rekening harus diisi',
+            'nomor_rekening.numeric' => 'Nomor rekening harus berupa angka',
+            'nomor_rekening.digits_between' => 'Nomor rekening harus diantara 10 - 16 digit',
+            'nama_rekening.required' => 'Nama rekening harus diisi',
+            'status_rekening' => 'Status rekening harus diisi',
+            'nama_bank.required' => 'Nama bank harus diisi',
+            'rekening_lain.required' => 'Rekening lain wajib diisi',
+            
+            // Identitas Penanggung Jawab
+            'nama_penanggung_jawab.required' => 'Nama penanggung jawab harus diisi',
+            'jabatan.required' => 'Jabatan harus diisi',
+            'identitas_penanggung_jawab.required' => 'Identitas penanggung jawab harus diisi',
+            'foto_ktp_penanggung.required' => 'Foto KTP penanggung jawab harus diisi',
+            'foto_ktp_penanggung.mimes' => 'Format file harus berupa JPG, PNG, JPEG, atau PDF',
+            'foto_ktp_penanggung.max' => 'Maksimal ukuran file 2MB',
+            'foto_npwp_penanggung.required' => 'Foto NPWP penanggung jawab harus diisi',
+            'foto_npwp_penanggung.mimes' => 'Format file harus berupa JPG, PNG, JPEG, atau PDF',
+            'foto_npwp_penanggung.max' => 'Maksimal ukuran file 2MB',
             'nomor_hp_penanggung_jawab.required' => 'Nomor HP penanggung jawab harus diisi',
             'nomor_hp_penanggung_jawab.numeric' => 'Nomor HP penanggung jawab harus berupa angka',
             'nomor_hp_penanggung_jawab.digits_between' => 'Nomor HP penanggung jawab harus diantara 10 - 13 digit',
-            'rekening_lain.required' => 'Rekening lain wajib diisi',
-            'nama_group.required' => 'Nama group harus diisi',
-            'bidang_usaha_lain.required' => 'Bidang usaha harus diisi'
         ];
 
         return Validator::make($data, $rules, $message);
@@ -185,6 +200,9 @@ class FormCustomerController extends Controller
             $identitas_perusahaan->alamat_lengkap = $request->alamat_lengkap;
             $identitas_perusahaan->kota_kabupaten = $request->kota_kabupaten;
             $identitas_perusahaan->bidang_usaha = $request->bidang_usaha;
+            $identitas_perusahaan->nitku = $request->nitku;
+            $identitas_perusahaan->status_cabang = $request->status_cabang;
+            $identitas_perusahaan->status_cust = $request->jenis_cust;
             if($request->bidang_usaha == 'lainnya') {
                 $identitas_perusahaan->bidang_usaha_lain = $request->bidang_usaha_lain;
             }
@@ -194,8 +212,8 @@ class FormCustomerController extends Controller
             // $tahun_berdiri = Carbon::parse($request->tahun_berdiri)->format('Y');
             // $hasil = $sekarang - $tahun_berdiri;
 
-            $identitas_perusahaan->lama_usaha = Str::replace(' tahun', '', $request->lama_usaha);
             $identitas_perusahaan->tahun_berdiri = $request->tahun_berdiri;
+            $identitas_perusahaan->lama_usaha = ($request->tahun_berdiri ? Str::replace(' tahun', '', $request->lama_usaha) : '');
             $identitas_perusahaan->alamat_email = $request->email_perusahaan;
             $identitas_perusahaan->nomor_handphone = $request->no_hp;
             $identitas_perusahaan->status_kepemilikan = $request->status_kepemilikan;
@@ -382,14 +400,15 @@ class FormCustomerController extends Controller
                             }
                         }
                     }
+                    if(!is_dir('uploads/ttd')) {
+                        mkdir('uploads/ttd/', 0777, true);
+                    }
+                    
                     // Nama file untuk menyimpan gambar
                     $imageName = str_replace(' ', '-', $request->nama_penanggung_jawab) . '.png';
                     $filePath = 'uploads/ttd/' . $imageName;
                     
                     // Menyimpan gambar ke storage
-                    if(!is_dir('uploads/ttd')) {
-                        mkdir('uploads/ttd/', 0777, true);
-                    }
                     $fullPath = public_path($filePath);
                     imagepng($img, $fullPath);
                     imagedestroy($img);
@@ -471,7 +490,7 @@ class FormCustomerController extends Controller
             $link = route('form_customer.detail', ['menu' => str_replace('_', '-', $request->bentuk_usaha), 'id' => Crypt::encryptString($identitas_perusahaan->id)]);
             return ['status' => true, 'link' => $link];
         } catch (\Exception $e) {
-            // dd($e);
+            dd($e);
             return ['status' => false, 'error' => 'Terjadi kesalahan'];
         }
     }
@@ -579,4 +598,16 @@ class FormCustomerController extends Controller
             return $pdf->download($data['nama_perusahaan'] . '.pdf');
         }
     }
+
+    public function menuFix() {
+        return view('customer.fix_menu_duplicate');
+    }
+
+    public function indexBadanUsaha() {
+        return view('customer.fix_badan_usaha_duplicate');
+    }
+
+    // public function indexPerseorangan() {
+    //     return view('customer.fix_perseorangan');
+    // }
 }

@@ -40,13 +40,13 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ str_replace('_', ' ', strtoupper($loop_data->bentuk_usaha)) }}</td>
                                         <td>{{ $loop_data->nama_perusahaan }}</td>
-                                        <td>{{ $loop_data->alamat_lengkap . ', ' . $loop_data->kecamatan . ', ' . $loop_data->kota_kabupaten}}</td>
+                                        <td>{{ $loop_data->alamat_lengkap . ', ' . $loop_data->kota_kabupaten}}</td>
                                         <td>{{ $loop_data->nomor_handphone }}</td>
                                         <td>
                                             <button type="button"
                                                 class="btn btn-warning waves-effect waves-light rounded btn-md"
                                                 title="Edit Data Customer"
-                                                id="edit" disabled
+                                                id="edit"
                                                 data-url="{{ route('home.edit', ['menu' => $loop_data->bentuk_usaha, 'id' => Crypt::encryptString($loop_data->id)]) }}">Edit</button>
                                             <button type="button"
                                                 class="btn btn-primary waves-effect waves-light rounded btn-md"

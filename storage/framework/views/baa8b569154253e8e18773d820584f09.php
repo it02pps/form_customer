@@ -144,6 +144,15 @@
                 <div class="section1 mb-4">
                     <h4>IDENTITAS PERSEORANGAN</h4>
                     <div class="section1-body">
+                        <div class="form-group mb-3">
+                            <label for="">Jenis Customer <span class="text-danger">*</span></label>
+                            <br>
+                            <input type="radio" name="jenis_cust" id="cust_lama" value="lama" checked> 
+                            <label for="">Customer Lama</label>
+                            <br>
+                            <input type="radio" name="jenis_cust" id="cust_baru" value="baru"> 
+                            <label for="">Customer Baru</label>
+                        </div>
                         <div class="row mb-2">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
@@ -172,8 +181,8 @@
                                     <input type="text" name="kota_kabupaten" id="kota_kabupaten" class="form-control" placeholder="Masukkan kota / kabupaten" autocomplete="off" required value="<?php echo e($data_perusahaan ? $data_perusahaan['kota_kabupaten'] : ''); ?>">
                                 </div>
                                 <div class="form-group mt-3">
-                                    <label for="">Alamat Email Usaha<span class="text-danger">*</span></label>
-                                    <input type="email" name="email_perusahaan" id="email_perusahaan" class="form-control" autocomplete="off" required placeholder="Contoh: usaha@gmail.com" value="<?php echo e($data_perusahaan ? $data_perusahaan['alamat_email'] : ''); ?>">
+                                    <label for="">Alamat Email Usaha</label>
+                                    <input type="email" name="email_perusahaan" id="email_perusahaan" class="form-control" autocomplete="off" placeholder="Contoh: usaha@gmail.com" value="<?php echo e($data_perusahaan ? $data_perusahaan['alamat_email'] : ''); ?>">
                                 </div>
                             </div>
                         </div>
@@ -207,7 +216,7 @@
                                             <option value="<?php echo e($loop_bidang_usaha); ?>"><?php echo e(str_replace('_', ' ', strtoupper($loop_bidang_usaha))); ?></option>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
-                                    <input type="text" class="form-control" placeholder="Masukkan bidang usaha lain" id="bidang_usaha_lain" name="bidang_usaha_lain" autocomplete="off" value="<?php echo e($data_perusahaan ? $data_perusahaan['bidang_usaha'] == 'lainnya' ? $data_perusahaan['bidang_usaha_lain'] : '' : ''); ?>">
+                                    <input type="text" class="form-control" placeholder="Masukkan bidang usaha lain" id="bidang_usaha_lain" name="bidang_usaha_lain" autocomplete="off" value="<?php echo e($data_perusahaan ? $data_perusahaan['bidang_usaha'] ? $data_perusahaan['bidang_usaha_lain'] : '' : ''); ?>">
                                 </div>
                             </div>
                         </div>
@@ -220,7 +229,7 @@
                                         <option value="sewa">Sewa</option>
                                         <option value="group">Group</option>
                                     </select>
-                                    <input type="text" class="form-control" autocomplete="off" placeholder="Masukkan nama group" id="nama_group" name="nama_group" value="<?php echo e($data_perusahaan ? $data_perusahaan['status_kepemilikan'] == 'group' ? $data_perusahaan['nama_group'] : '' : ''); ?>">
+                                    <input type="text" class="form-control" autocomplete="off" placeholder="Masukkan nama group" id="nama_group" name="nama_group" value="<?php echo e($data_perusahaan ? $data_perusahaan['status_kepemilikan'] == 'lainnya' ? $data_perusahaan['nama_group'] : '' : ''); ?>">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -277,6 +286,19 @@
                             </div>
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group mb-3 mt-2">
+                                        <label for="">Apakah ada cabang <span class="text-danger">*</span></label>
+                                        <select name="status_cabang" id="status_cabang" class="form-control">
+                                            <option value="0">Tidak</option>
+                                            <option value="1">Ada</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label for="">NITKU <span class="text-danger">*</span></label>
+                                        <input type="text" name="nitku" id="nitku" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="22" class="form-control" readonly placeholder="Masukkan NITKU" readonly autocomplete="off" value="<?php echo e($data_perusahaan ? $data_perusahaan['nitku'] : ''); ?>">
+                                    </div>
+
                                     <div class="form-group">
                                         <label for="">Alamat NPWP <span class="text-danger">*</span></label>
                                         <textarea name="alamat_npwp" id="alamat_npwp" cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NPWP"><?php echo e($data_perusahaan ? $data_perusahaan['alamat_npwp'] : ''); ?></textarea>
@@ -285,6 +307,11 @@
                                     <div class="form-group mb-3 mt-3">
                                         <label for="">Kota Sesuai NPWP <span class="text-danger">*</span></label>
                                         <input type="text" name="kota_npwp" id="kota_npwp" class="form-control" placeholder="Masukkan kota" autocomplete="off" value="<?php echo e($data_perusahaan ? $data_perusahaan['kota_npwp'] : ''); ?>">
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label for="">Email Khusus Untuk Faktur Pajak <span class="text-danger">*</span></label>
+                                        <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Contoh: faktur@gmail.com" value="<?php echo e($data_perusahaan ? ($data_perusahaan['identitas'] == 'npwp' ? $data_perusahaan['email_khusus_faktur_pajak'] : '') : ''); ?>">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -296,17 +323,8 @@
                                     <div id="preview_npwp" class="<?php if($data_perusahaan): ?> <?php if($data_perusahaan['identitas'] != 'npwp'): ?> d-none <?php endif; ?> <?php else: ?> d-none <?php endif; ?>">
                                         <img id="preview_foto_npwp" src="<?php echo e($data_perusahaan ? asset('../../uploads/identitas_perusahaan/'.$data_perusahaan['foto_npwp']) : ''); ?>" alt="Preview" data-action="zoom">
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group mb-3">
-                                        <label for="">Email Khusus Untuk Faktur Pajak <span class="text-danger">*</span></label>
-                                        <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Contoh: faktur@gmail.com" value="<?php echo e($data_perusahaan ? ($data_perusahaan['identitas'] == 'npwp' ? $data_perusahaan['email_khusus_faktur_pajak'] : '') : ''); ?>">
-                                    </div>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group mb-3">
+
+                                    <div class="form-group mb-3 mt-2">
                                         <label for="">Status Pengusaha Kena Pajak (PKP) <span class="text-danger">*</span></label>
                                         <select name="status_pkp" id="status_pkp" class="form-control">
                                             <option value="non_pkp">Non PKP</option>
@@ -359,7 +377,7 @@
                                         <option value="rekening_usaha">Rekening Usaha</option>
                                         <option value="lainnya">Lainnya</option>
                                     </select>
-                                    <input type="text" class="form-control" id="rekening_lain" name="rekening_lain" placeholder="Masukkan pemilik rekening" autocomplete="off" value="<?php echo e($data_perusahaan ? $data_perusahaan['informasi_bank']['status'] == 'lainnya' ? $data_perusahaan['informasi_bank']['rekening_lain'] : '' : ''); ?>">
+                                    <input type="text" class="form-control" id="rekening_lain" name="rekening_lain" placeholder="Masukkan pemilik rekening" autocomplete="off" value="<?php echo e($data_perusahaan ? $data_perusahaan['informasi_bank'] ? $data_perusahaan['informasi_bank']['rekening_lain'] : '' : ''); ?>">
                                 </div>
                             </div>
                         </div>
@@ -368,7 +386,7 @@
                 <div class="section3 mt-4">
                     <hr>
                     <h4>DATA IDENTITAS PENANGGUNG JAWAB</h4>
-                    <span class="text-danger">*Jika identitas perusahaan sama dengan identitas penanggung jawab, maka dii   si sama</span>
+                    <span class="text-danger">*Jika identitas perusahaan sama dengan identitas penanggung jawab, maka diisi sama</span>
                     <div class="section3-body" >
                         <div class="row mb-3">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -388,7 +406,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group mb-3">
                                     <label for="">Identitas Penanggung Jawab <span class="text-danger">*</span></label>
-                                    <select name="identitas_penanggung_jawab" id="identitas_penanggung_jawab" class="form-control" accept=".jpg, .png, .pdf, .jpeg">
+                                    <select name="identitas_penanggung_jawab" id="identitas_penanggung_jawab" class="form-control">
                                         <option value="">-- Pilih identitas penanggung jawab --</option>
                                         <option value="ktp">KTP</option>
                                         <option value="npwp">NPWP</option>
@@ -571,6 +589,10 @@
                 placeholder: 'Pilih status rekening'
             });
 
+            $('#status_cabang').select2({
+                placeholder: 'Apakah ada cabang',
+            });
+
             // Bidang usaha
             $('#bidang_usaha').on('change', function() {
                 let val = $(this).val();
@@ -578,6 +600,7 @@
                     $('#bidang_usaha_lain').removeClass('d-none').prop('required', true);
                 } else {
                     $('#bidang_usaha_lain').addClass('d-none').prop('required', false);
+                    $('#bidang_usaha_lain').val();
                 }
             });
 
@@ -588,6 +611,16 @@
                     $('#nama_group').removeClass('d-none').prop('required', true);
                 } else {
                     $('#nama_group').addClass('d-none').prop('required', false);
+                    $('#nama_group').val();
+                }
+            });
+
+            $(document).on('change', '#status_cabang', function() {
+                let val = $(this).val();
+                if(val == '0') {
+                    $('#nitku').val('').prop('readonly', true).prop('required', false);
+                } else {
+                    $('#nitku').prop('readonly', false).prop('required', true);
                 }
             });
 
@@ -601,6 +634,7 @@
                     // });
                 } else {
                     $('#rekening_lain').addClass('d-none').prop('required', false);
+                    $('#rekening_lain').val();
                     // $('#rekening_lain').prop('required', false);
                 }
             });
@@ -623,6 +657,7 @@
                     // $('#foto_npwp').val('');
                     $('#alamat_npwp').val('');
                     $('#kota_npwp').val('');
+                    $('#nitku').val('').prop('required', false);
                 } else {
                     $('.ktp-section').addClass('d-none');
                     $('.npwp-section').removeClass('d-none');
@@ -638,6 +673,7 @@
                     $('#nomor_ktp').val('');
                     // $('#foto_ktp').val('');
                     $('#nama_lengkap').val('');
+                    $('#nitku').prop('required', true);
                 }
             });
 
@@ -667,7 +703,7 @@
             $(document).on('submit', '#form_customer', function(e) {
                 e.preventDefault();
                 var data = $sigDiv.jSignature('getData', 'base30');
-                console.log(data);
+                // console.log(data);
                 // Masukkan ke textarea
                 $('#hasil_ttd').val(data[1]);
                 const bentuk_usaha = $('#bentuk_usaha').val();
@@ -728,6 +764,12 @@
                         if(res.data.data_identitas) {
                             $('#identitas_penanggung_jawab').val(res.data.data_identitas.identitas).change();
                         }
+                        if(res.data.status_cust == 'lama') {
+                            $('#cust_lama').prop('checked', true);
+                        } else {
+                            $('#cust_baru').prop('checked', true);
+                        }
+                        $('#status_cabang').val(res.data.status_cabang).change();
                     } else {
                         $('#status_kepemilikan').val('').change();
                         $('#bidang_usaha').val('').change();
@@ -735,6 +777,8 @@
                         $('#status_pkp').val('non_pkp').change();
                         $('#status_rekening').val('').change();
                         $('#identitas_penanggung_jawab').val('').change();
+                        $('#cust_lama').prop('checked', true);
+                        $('#status_cabang').val('').change();
                     }
                 }
             });

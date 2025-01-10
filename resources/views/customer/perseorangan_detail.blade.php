@@ -128,60 +128,66 @@
                     <div class="row mb-2">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="">Nama Usaha</label>
-                                <p>{{ $perusahaan['nama_perusahaan'] }}</p>
+                                <label for="">Jenis Customer</label>
+                                <p>{{ ucfirst($perusahaan['status_cust']) }}</p>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="">Nama Group Usaha</label>
-                                <p>{{ $perusahaan['nama_group_perusahaan'] }}</p>
+                                <label for="">Nama Usaha</label>
+                                <p>{{ $perusahaan['nama_perusahaan'] }}</p>
                             </div>
                         </div>
                     </div>
                     <div class="row mb-2">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
+                                <label for="">Nama Group Usaha</label>
+                                <p>{{ $perusahaan['nama_group_perusahaan'] }}</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
                                 <label for="">Alamat Lengkap Usaha</label>
                                 <p>{{ $perusahaan['alamat_lengkap'] }}</p>
                             </div>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group mb-2">
                                 <label for="">Kota / Kabupaten</label>
                                 <p>{{ $perusahaan['kota_kabupaten'] }}</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="row mb-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Alamat Email Usaha</label>
                                 <p>{{ $perusahaan['alamat_email'] }}</p>
                             </div>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Nomor Handphone Contact Person</label>
                                 <p>{{ $perusahaan['nomor_handphone'] }}</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="row mb-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Tahun Berdiri</label>
                                 <p>{{ $perusahaan['tahun_berdiri'] ? \Carbon\Carbon::parse($perusahaan['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') : '-' }}</p>
                             </div>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Lama Usaha (Tahun)</label>
                                 <p>{{ $perusahaan['lama_usaha'] ? $perusahaan['lama_usaha'] . ' tahun' : '-' }}</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="row mb-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Bidang Usaha</label>
@@ -192,21 +198,17 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="form-group">
                             <label for="">Status Kepemilikan Tempat Usaha</label>
                             @if($perusahaan['status_kepemilikan'] == 'group')
                                 <p>{{ ucfirst($perusahaan['nama_group']) }}</p>
                             @else
                                 <p>{{ str_replace("_", ' ', ucfirst($perusahaan['status_kepemilikan'])) }}</p>
                             @endif
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                        <div class="form-group mb-2">
-                            <label for="">Identitas Pemilik Perusahaan</label>
-                            <p>{{ strtoupper($perusahaan['identitas']) }}</p>
                         </div>
                     </div>
                     
@@ -246,30 +248,33 @@
                         </div>
                     @else
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label for="">Nomor NPWP</label>
-                                <p>{{ $perusahaan['nomor_npwp'] }}</p>
+                            <div class="form-group mb-2">
+                                <label for="">Identitas Pemilik Perusahaan</label>
+                                <p>{{ strtoupper($perusahaan['identitas']) }}</p>
                             </div>
                         </div>
                         <div class="npwp-section">
                             <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label for="">Nomor NPWP</label>
+                                        <p>{{ $perusahaan['nomor_npwp'] }}</p>
+                                    </div>
+                                </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group mb-4">
                                         <label for="">Nama NPWP</label>
                                         <p>{{ $perusahaan['nama_npwp'] }}</p>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group mb-4">
                                         <label for="">Alamat NPWP</label>
                                         <p>{{ $perusahaan['alamat_npwp'] }}</p>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     
-
                                     <div class="form-group mb-4">
                                         <label for="">Email Khusus Untuk Faktur Pajak</label>
                                         <p>{{ $perusahaan['email_khusus_faktur_pajak'] }}</p>

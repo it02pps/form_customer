@@ -121,60 +121,66 @@
                     <div class="row mb-2">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="">Nama Perusahaan</label>
-                                <p><?php echo e($data['nama_perusahaan']); ?></p>
+                                <label for="">Jenis Customer</label>
+                                <p><?php echo e(ucfirst($data['status_cust'])); ?></p>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="">Nama Group Perusahaan</label>
-                                <p><?php echo e($data['nama_group_perusahaan']); ?></p>
+                                <label for="">Nama Perusahaan</label>
+                                <p><?php echo e($data['nama_perusahaan']); ?></p>
                             </div>
                         </div>
                     </div>
                     <div class="row mb-2">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
+                                <label for="">Nama Group Perusahaan</label>
+                                <p><?php echo e($data['nama_group_perusahaan']); ?></p>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
                                 <label for="">Alamat Lengkap</label>
                                 <p><?php echo e($data['alamat_lengkap']); ?></p>
                             </div>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group mb-2">
                                 <label for="">Kota / Kabupaten</label>
                                 <p><?php echo e($data['kota_kabupaten']); ?></p>
                             </div>
                         </div>
-                    </div>
-                    <div class="row mb-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Alamat Email Perusahaan</label>
                                 <p><?php echo e($data['alamat_email']); ?></p>
                             </div>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Nomor Handphone Contact Person</label>
                                 <p><?php echo e($data['nomor_handphone']); ?></p>
                             </div>
                         </div>
-                    </div>
-                    <div class="row mb-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Tahun Berdiri</label>
                                 <p><?php echo e($data['tahun_berdiri'] ? \Carbon\Carbon::parse($data['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') : '-'); ?></p>
                             </div>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Lama Usaha (Tahun)</label>
                                 <p><?php echo e($data['lama_usaha'] ? $data['lama_usaha'] . ' tahun' : '-'); ?></p>
                             </div>
                         </div>
-                    </div>
-                    <div class="row mb-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Bidang Usaha</label>
@@ -185,7 +191,11 @@
                                 <?php endif; ?>
                             </div>
                         </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="form-group">
                             <label for="">Status Kepemilikan Tempat Usaha</label>
                             <?php if($data['status_kepemilikan'] == 'group'): ?>
                                 <p><?php echo e(ucfirst($data['nama_group'])); ?></p>
@@ -194,37 +204,39 @@
                             <?php endif; ?>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 npwp-section">
                         <div class="form-group mb-2">
                             <label for="">Identitas Pemilik Perusahaan</label>
                             <p><?php echo e(strtoupper($data['identitas'])); ?></p>
                         </div>
                     </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 npwp-section">
-                        <div class="form-group mb-4">
-                            <label for="">Jenis Badan Usaha</label>
-                            <p><?php echo e(strtoupper($data['badan_usaha'])); ?></p>
-                        </div>
-                    </div>
                     <div class="npwp-section">
                         <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group mb-4">
+                                    <label for="">Jenis Badan Usaha</label>
+                                    <p><?php echo e(strtoupper($data['badan_usaha'])); ?></p>
+                                </div>
+                            </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nomor NPWP</label>
                                     <p><?php echo e($data['nomor_npwp']); ?></p>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">NITKU</label>
+                                    <p><?php echo e($data['nitku']); ?></p>
+                                </div>
+                                
                                 <div class="form-group mb-4">
                                     <label for="">Nama NPWP</label>
                                     <p><?php echo e($data['nama_npwp']); ?></p>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+
                                 <div class="form-group mb-4">
                                     <label for="">Alamat NPWP</label>
                                     <p><?php echo e($data['alamat_npwp']); ?></p>
@@ -241,16 +253,16 @@
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group mb-4">
+                                <div class="form-group mb-3">
                                     <label for="">Kota sesuai NPWP</label>
                                     <p><?php echo e($data['kota_npwp']); ?></p>
                                 </div>
 
-                                <div class="form-group mb-4">
+                                <div class="form-group mb-2">
                                     <label for="">Foto NPWP</label>
                                     
                                     <div id="preview_npwp" class="<?php if($data['identitas'] != 'npwp'): ?> d-none <?php endif; ?>">
-                                        <img src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp'])); ?>" alt="Foto NPWP" data-action="zoom">
+                                        <img src="<?php echo e(asset('uploads/identitas_perusahaan/' . $data['foto_npwp'])); ?>" alt="Foto NPWP" data-action="zoom">
                                         
                                         
                                         
@@ -261,7 +273,7 @@
                                     <label for="">Foto SPPKP</label>
 
                                     <div id="preview_sppkp">
-                                        <img src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['sppkp'])); ?>" alt="SPPKP" data-action="zoom">
+                                        <img src="<?php echo e(asset('uploads/identitas_perusahaan/' . $data['sppkp'])); ?>" alt="SPPKP" data-action="zoom">
                                         
                                             
                                         
@@ -339,13 +351,73 @@
                             <div class="form-group mb-2">
                                 <label for="">Foto</label>
                                 <div id="preview_penanggung">
-                                    <img src="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $data['data_identitas']['foto'])); ?>" alt="Foto" data-action="zoom">
+                                    <img src="<?php echo e(asset('uploads/penanggung_jawab/' . $data['data_identitas']['foto'])); ?>" alt="Foto" data-action="zoom">
                                     
                                         
                                     
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section4 mt-4 mb-4">
+                <hr>
+                <h4>Tipe Customer</h4>
+                <div class="section4-body">
+                    <div class="row mb-3">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="">Jenis Transaksi</label>
+                                <p><?php echo e($data['tipe_customer'] ? ucfirst($data['tipe_customer']['jenis_transaksi']) : '-'); ?></p>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="">Tipe Harga</label>
+                                <p><?php echo e($data['tipe_customer'] ? ucfirst(str_replace('_', ' ', $data['tipe_customer']['tipe_harga'])) : '-'); ?></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="">Kategori Customer</label>
+                                <p><?php echo e($data['tipe_customer'] ? ucfirst(str_replace('_', ' ', $data['tipe_customer']['kategori_customer'])) : '-'); ?></p>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="">Plafond</label>
+                                <p><?php echo e($data['tipe_customer'] ? 'Rp ' . number_format($data['tipe_customer']['plafond'], 0, ',', '.') : '-'); ?></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="">Term of Payment</label>
+                                <p><?php echo e($data['tipe_customer'] ? ucwords($data['tipe_customer']['payment_term']) : '-'); ?></p>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="">Channel Distributor</label>
+                                <?php if($data['tipe_customer']): ?>
+                                    <?php if($data['tipe_customer']['channel_distributor'] == 'allptk'): ?>
+                                        <p>Semua Jalur Pontianak</p>
+                                    <?php else: ?>
+                                        <p>Semua Jalur Jakarta</p>
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <p>-</p>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Channel Distributor</label>
+                        <p><?php echo e($data['tipe_customer'] ? $data['tipe_customer']['keterangan'] : '-'); ?></p>
                     </div>
                 </div>
             </div>
