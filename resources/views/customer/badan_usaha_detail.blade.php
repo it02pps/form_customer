@@ -52,7 +52,7 @@
         border-radius: 7px;
     }
 
-    #preview_ktp img, #preview_npwp img, #preview_sppkp img, #preview_ktp_penanggung img,  #preview_npwp_penanggung img {
+    #preview_ktp img, #preview_npwp img, #preview_sppkp img, #preview_penanggung img {
         width: 100%;
         height: 180px;
         object-fit: fill;
@@ -62,6 +62,11 @@
     label:not(.label_modal) {
         font-weight: bold;
         text-decoration: underline;
+    }
+
+    #preview_penanggung .zoom-img-wrap .zoom-img, #preview_ktp .zoom-img-wrap .zoom-img, #preview_npwp .zoom-img-wrap .zoom-img, #preview_sppkp .zoom-img-wrap .zoom-img {
+        width: 100%;
+        height: 100%;
     }
 
     @media only screen and (max-width: 500px) {
@@ -168,7 +173,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Alamat Email Perusahaan</label>
-                                    <p>{{ $perusahaan['alamat_email'] }}</p>
+                                    <p>{{ $perusahaan['alamat_email'] ? $perusahaan['alamat_email'] : '-' }}</p>
                                 </div>
                             </div>
                         </div>
@@ -244,9 +249,9 @@
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label for="">Status Cabang</label>
+                                        <label for="">Cabang</label>
                                         @if($perusahaan['status_cabang'] == '0')
-                                            <p>Tidak</p>
+                                            <p>Tidak ada</p>
                                         @else
                                             <p>Ada</p>
                                         @endif
@@ -299,7 +304,7 @@
                                             {{-- @else
                                             <img id="preview_foto_npwp" src="{{ route('showimage.view', ['category' => 'NPWP', 'filename' => $perusahaan['foto_npwp']]) }}" data-action="zoom">
                                             @endif --}}
-                                            <img src="{{ asset('../../uploads/identitas_perusahaan/'.$perusahaan['foto_npwp']) }}" alt="Foto NPWP" data-action="zoom">
+                                            <img src="{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_npwp']) }}" alt="Foto NPWP" data-action="zoom">
                                         </div>
                                     </div>
                                 </div>
@@ -316,7 +321,7 @@
                                             {{-- @else
                                                 <img id="preview_foto_sppkp" src="{{ route('showimage.view', ['category' => 'SPPKP', 'filename' => $perusahaan['sppkp']]) }}" data-action="zoom">
                                             @endif --}}
-                                            <img src="{{ asset('../../uploads/identitas_perusahaan/'.$perusahaan['sppkp']) }}" alt="Foto SPPKP" data-action="zoom">
+                                            <img src="{{ asset('uploads/identitas_perusahaan/'.$perusahaan['sppkp']) }}" alt="Foto SPPKP" data-action="zoom">
                                         </div>
                                     </div>
                                 </div>
@@ -392,7 +397,7 @@
     
                                     @if($perusahaan['data_identitas'])
                                         @if($perusahaan['data_identitas']['foto'])
-                                            <div id="preview_ktp_penanggung" class="@if($perusahaan['data_identitas']) @if($perusahaan['data_identitas']['identitas'] != 'ktp') d-none @endif @endif">
+                                            <div id="preview_penanggung" class="@if($perusahaan['data_identitas']) @if($perusahaan['data_identitas']['identitas'] != 'ktp') d-none @endif @endif">
                                                 {{-- @if(str_contains($perusahaan['data_identitas']['foto'], '.pdf')) --}}
                                                     {{-- <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto']) }}')">
                                                         <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
@@ -402,7 +407,7 @@
                                                     <img id="preview_foto_ktp_penanggung" src="{{ route('showimage.view', 
                                                     ['category' => 'KTP_responsible', 'filename' => $perusahaan['data_identitas']['foto']])  }}" data-action="zoom">
                                                 @endif --}}
-                                                <img src="{{ asset('../../uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto']) }}" alt="Foto" data-action="zoom">
+                                                <img src="{{ asset('uploads/penanggung_jawab/'.$perusahaan['data_identitas']['foto']) }}" alt="Foto" data-action="zoom">
                                             </div>
                                         @else
                                             <p>-</p>

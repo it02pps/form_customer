@@ -39,7 +39,7 @@
             opacity: 1;
         }
 
-        #preview_ktp, #preview_npwp, #preview_sppkp, #preview_ktp_penanggung,  #preview_npwp_penanggung {
+        #preview_ktp, #preview_npwp, #preview_sppkp, #preview_penanggung {
             border: 1px solid #1C4A9C;
             border-radius: 7px;
             margin-top: 2px;
@@ -48,7 +48,7 @@
             align-items: center;
         }
 
-        #preview_ktp img, #preview_npwp img, #preview_sppkp img, #preview_ktp_penanggung img,  #preview_npwp_penanggung img {
+        #preview_ktp img, #preview_npwp img, #preview_sppkp img, #preview_penanggung img {
             width: 100%;
             height: 180px;
             object-fit: fill;
@@ -253,7 +253,7 @@
                                 </div>
 
                                 <div id="preview_npwp" class="@if($data_perusahaan) @if($data_perusahaan['identitas'] != 'npwp') d-none @endif @else d-none @endif">
-                                    <img id="preview_foto_npwp" src="{{ $data_perusahaan ? asset('../../uploads/identitas_perusahaan/'.$data_perusahaan['foto_npwp']) : '' }}" alt="Preview" data-action="zoom">
+                                    <img id="preview_foto_npwp" src="{{ $data_perusahaan ? asset('uploads/identitas_perusahaan/'.$data_perusahaan['foto_npwp']) : '' }}" alt="Preview" data-action="zoom">
                                 </div>
 
                                 {{-- Kota NPWP --}}
@@ -294,7 +294,7 @@
                                     <input type="file" name="foto_sppkp" id="foto_sppkp" onchange="previewFileSppkp(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
 
                                     <div id="preview_sppkp">
-                                        <img id="preview_foto_sppkp" src="{{ $data_perusahaan ? asset('../../uploads/identitas_perusahaan/'.$data_perusahaan['sppkp']) : '' }}" alt="Preview" data-action="zoom">
+                                        <img id="preview_foto_sppkp" src="{{ $data_perusahaan ? asset('uploads/identitas_perusahaan/'.$data_perusahaan['sppkp']) : '' }}" alt="Preview" data-action="zoom">
                                     </div>
                                 </div>
                             </div>
@@ -377,8 +377,8 @@
                                     <label for="">Foto <span class="text-danger">*</span></label>
                                     <input type="file" name="foto_penanggung" id="foto_penanggung" onchange="previewFilePenanggung(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
     
-                                    <div id="preview_ktp_penanggung">
-                                        <img id="preview_foto_penanggung" src="{{ $data_perusahaan ? ($data_perusahaan['data_identitas'] ? asset('../../uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '') : '' }}" alt="Preview" data-action="zoom">
+                                    <div id="preview_penanggung">
+                                        <img id="preview_foto_penanggung" src="{{ $data_perusahaan ? ($data_perusahaan['data_identitas'] ? asset('uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '') : '' }}" alt="Preview" data-action="zoom">
                                     </div>
                                 </div>
                             </div>
@@ -544,7 +544,7 @@
                     $('#bidang_usaha_lain').removeClass('d-none').prop('required', true);
                 } else {
                     $('#bidang_usaha_lain').addClass('d-none').prop('required', false);
-                    $('#bidang_usaha_lain').val();
+                    $('#bidang_usaha_lain').val('');
                 }
             });
 
@@ -555,7 +555,7 @@
                     $('#nama_group').removeClass('d-none').prop('required', true);
                 } else {
                     $('#nama_group').addClass('d-none').prop('required', false);
-                    $('#nama_group').val();
+                    $('#nama_group').val('');
                 }
             });
 

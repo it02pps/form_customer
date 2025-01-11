@@ -63,6 +63,11 @@
         text-decoration: underline;
     }
 
+    #preview_penanggung .zoom-img-wrap .zoom-img, #preview_ktp .zoom-img-wrap .zoom-img, #preview_npwp .zoom-img-wrap .zoom-img, #preview_sppkp .zoom-img-wrap .zoom-img {
+        width: 100%;
+        height: 100%;
+    }
+
     @media only screen and (max-width: 500px) {
         .content-header h2 {
             font-size: 22px;
@@ -163,7 +168,7 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Alamat Email Usaha</label>
-                                <p>{{ $perusahaan['alamat_email'] }}</p>
+                                <p>{{ $perusahaan['alamat_email'] ? $perusahaan['alamat_email'] : '' }}</p>
                             </div>
                         </div>
                     </div>
@@ -234,13 +239,13 @@
                                         <div id="preview_ktp" class="@if($perusahaan['identitas'] != 'ktp') d-none @endif">
                                             {{-- @if(str_contains($perusahaan['foto_ktp'], '.pdf')) --}}
                                             {{-- <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_ktp']) }}')">
-                                                <img src="{{ asset('../../images/pdf.png') }}" style="width: 20% !important; height: auto;">
+                                                <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
                                                 <span>Click to preview</span>
                                             </div> --}}
                                             {{-- @else --}}
                                             {{-- <img id="preview_foto_ktp" src="{{ route('showimage.view', ['category' => 'KTP', 'filename' => $perusahaan['foto_ktp']]) }}" data-action="zoom"> --}}
                                             {{-- @endif --}}
-                                            <img src="{{ asset('../../uploads/identitas_perusahaan/'.$perusahaan['foto_ktp']) }}" alt="Foto KTP" data-action="zoom">
+                                            <img src="{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_ktp']) }}" alt="Foto KTP" data-action="zoom">
                                         </div>
                                     </div>
                                 </div>
@@ -265,6 +270,24 @@
                                     <div class="form-group mb-4">
                                         <label for="">Nama NPWP</label>
                                         <p>{{ $perusahaan['nama_npwp'] }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label for="">Cabang</label>
+                                        @if($perusahaan['status_cabang'] == '0')
+                                            <p>Tidak ada</p>
+                                        @else
+                                            <p>Ada</p>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label for="">NITKU</label>
+                                        <p>{{ $perusahaan['nitku'] ? $perusahaan['nitku'] : '-' }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -297,7 +320,7 @@
                                             @else
                                                 <img id="preview_foto_sppkp" src="{{ route('showimage.view', ['category' => 'SPPKP', 'filename' => $perusahaan['sppkp']]) }}" data-action="zoom">
                                             @endif --}}
-                                            <img src="{{ asset('../../uploads/idetitas_perusahaan/'.$perusahaan['sppkp']) }}" alt="SPPKP" data-action="zoom">
+                                            <img src="{{ asset('uploads/identitas_perusahaan/'.$perusahaan['sppkp']) }}" alt="SPPKP" data-action="zoom">
                                         </div>
                                     </div>
                                 </div>
@@ -320,7 +343,7 @@
                                         @else
                                             <img id="preview_foto_npwp" src="{{ route('showimage.view', ['category' => 'NPWP', 'filename' => $perusahaan['foto_npwp']]) }}" data-action="zoom">
                                         @endif --}}
-                                        <img src="{{ asset('../../uploads/identitas_perusahaan/'.$perusahaan['foto_npwp']) }}" alt="Foto NPWP" data-action="zoom">
+                                        <img src="{{ asset('uploads/identitas_perusahaan/'.$perusahaan['foto_npwp']) }}" alt="Foto NPWP" data-action="zoom">
                                     </div>
                                 </div>
                             </div>
@@ -395,7 +418,7 @@
                             <div class="form-group mb-2">
                                 <label for="">Foto</label>
                                 <div id="preview_penanggung">
-                                    <img src="{{ asset('../../uploads/penanggung_jawab/' . $perusahaan['data_identitas']['foto']) }}" alt="Foto" data-action="zoom">
+                                    <img src="{{ asset('uploads/penanggung_jawab/' . $perusahaan['data_identitas']['foto']) }}" alt="Foto" data-action="zoom">
                                 </div>
                             </div>
 
@@ -403,7 +426,7 @@
                             <div class="">
                                 <label for="">Tanda Tangan</label>
                                 <div id="signature">
-                                    <img src="{{ asset('../../uploads/ttd/'.$perusahaan['data_identitas']['ttd']) }}" style="width: 90%;" data-action="zoom">
+                                    <img src="{{ asset('uploads/ttd/'.$perusahaan['data_identitas']['ttd']) }}" style="width: 100%; height: 100%;" data-action="zoom">
                                 </div>
                             </div>
                         </div>

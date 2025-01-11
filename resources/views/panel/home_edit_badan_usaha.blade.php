@@ -247,36 +247,45 @@
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group mb-3">
-                                    <label for="">NITKU <span class="text-danger">*</span></label>
-                                    <input type="text" name="nitku" id="nitku" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="22" class="form-control" placeholder="Masukkan NITKU" autocomplete="off" required value="{{ $data['nitku'] }}">
+                                    <label for="">Apakah ada cabang? <span class="text-danger">*</span></label>
+                                    <select name="status_cabang" id="status_cabang" class="form-control" required>
+                                        <option value="0">Tidak</option>
+                                        <option value="1">Ada</option>
+                                    </select>
                                 </div>
+                                
                                 <div class="form-group">
                                     <label for="">Foto NPWP <span class="text-danger">*</span></label>
                                     <input type="file" name="foto_npwp" id="foto_npwp" class="form-control" onchange="previewFileNpwp(this);" accept=".jpg, .png, .pdf, .jpeg" autocomplete="off">
                                 </div>
 
-                                <div id="preview_npwp">
-                                    <img id="preview_foto_npwp" src="{{ asset('../../uploads/identitas_perusahaan/'.$data['foto_npwp']) }}" alt="Preview" data-action="zoom">
+                                <div id="preview_npwp" class="@if($data) @if($data['identitas'] != 'npwp') d-none @endif @else d-none @endif">
+                                    <img id="preview_foto_npwp" src="{{ $data ? asset('../../uploads/identitas_perusahaan/'.$data['foto_npwp']) : '' }}" alt="Preview" data-action="zoom">
                                 </div>
 
                                 {{-- Kota NPWP --}}
                                 <div class="form-group mt-3">
                                     <label for="">Kota Sesuai NPWP <span class="text-danger">*</span></label>
-                                    <input type="text" name="kota_npwp" id="kota_npwp" class="form-control" placeholder="Masukkan kota" autocomplete="off" value="{{ $data['kota_npwp'] }}">
+                                    <input type="text" name="kota_npwp" id="kota_npwp" class="form-control" placeholder="Masukkan kota" autocomplete="off" value="{{ $data ? $data['kota_npwp'] : '' }}">
                                 </div>
 
                                 {{-- Email Faktur Pajak --}}
                                 <div class="form-group">
                                     <div class="form-group mt-3">
                                         <label for="">Email Khusus Untuk Faktur Pajak <span class="text-danger">*</span></label>
-                                        <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Contoh: faktur@gmail.com" value="{{ $data['email_khusus_faktur_pajak'] }}">
+                                        <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Contoh: faktur@gmail.com" value="{{ $data ? ($data['identitas'] == 'npwp' ? $data['email_khusus_faktur_pajak'] : '') : '' }}">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group mb-3">
+                                    <label for="">NITKU <span class="text-danger">*</span></label>
+                                    <input type="text" name="nitku" id="nitku" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="22" class="form-control" placeholder="Masukkan NITKU" readonly autocomplete="off" value="{{ $data ? $data['nitku'] : '' }}">
+                                </div>
+
                                 <div class="form-group">
                                     <label for="">Alamat NPWP <span class="text-danger">*</span></label>
-                                    <textarea name="alamat_npwp" id="alamat_npwp" cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NPWP">{{ $data['alamat_npwp'] }}</textarea>
+                                    <textarea name="alamat_npwp" id="alamat_npwp" cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NPWP">{{ $data ? $data['alamat_npwp'] : '' }}</textarea>
                                 </div>
     
                                 <div class="form-group mt-3">
@@ -628,6 +637,10 @@
                 placeholder: 'Pilih identitas perseorangan'
             });
 
+            $('#status_cabang').select2({
+                placeholder: 'Apakah ada cabang',
+            });
+
             // Bidang usaha
             $('#bidang_usaha').on('change', function() {
                 let val = $(this).val();
@@ -694,6 +707,15 @@
                 $('#lama_usaha_hide').val(result);
             });
 
+            $(document).on('change', '#status_cabang', function() {
+                let val = $(this).val();
+                if(val == '0') {
+                    $('#nitku').val('').prop('readonly', true).prop('required', false);
+                } else {
+                    $('#nitku').prop('readonly', false).prop('required', true);
+                }
+            });
+
             // Get data untuk select
             $.ajax({
                 url: '/internal/panel/select/' + $('#update_id').val(),
@@ -722,7 +744,7 @@
                             $('#channel_distributor').val(res.data.tipe_customer.channel_distributor).change();
                         }
 
-
+                        $('#status_cabang').val(res.data.status_cabang).change();
                         $('#bidang_usaha').val(res.data.bidang_usaha).change();
                         $('#status_kepemilikan').val(res.data.status_kepemilikan).change();
                         $('#identitas_perusahaan').val(res.data.identitas).change();
@@ -759,6 +781,7 @@
                         $('input[name="tipe_harga"]').val('end_user').prop('checked', true);
                         $('#kategori_customer').val('').change();
                         $('#channel_distributor').val('').change();
+                        $('#status_cabang').val('0').change();
                     }
                 }
             });

@@ -265,6 +265,24 @@
                             </div>
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label for="">Cabang</label>
+                                        <?php if($perusahaan['status_cabang'] == '0'): ?>
+                                            <p>Tidak ada</p>
+                                        <?php else: ?>
+                                            <p>Ada</p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label for="">NITKU</label>
+                                        <p><?php echo e($perusahaan['nitku'] ? $perusahaan['nitku'] : '-'); ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group mb-4">
                                         <label for="">Alamat NPWP</label>
                                         <p><?php echo e($perusahaan['alamat_npwp']); ?></p>

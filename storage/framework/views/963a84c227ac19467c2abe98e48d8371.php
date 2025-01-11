@@ -25,7 +25,7 @@
         width: 62%;
     }
 
-    .section1 h4, .section2 h4, .section3 h4 {
+    .section1 h4, .section2 h4, .section3 h4, .section4 h4 {
         text-align: center;
     }
 
@@ -118,7 +118,7 @@
             <div class="section1 mb-4">
                 <h4 class="mb-4">IDENTITAS PERUSAHAAN</h4>
                 <div class="section1-body">
-                    <div class="row mb-2">
+                    <div class="row">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Jenis Customer</label>
@@ -146,7 +146,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-3">
+                    <div class="row mb-2">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group mb-2">
                                 <label for="">Kota / Kabupaten</label>
@@ -192,10 +192,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                        <div class="form-group">
+                    <div class="row mb-3">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <label for="">Status Kepemilikan Tempat Usaha</label>
                             <?php if($data['status_kepemilikan'] == 'group'): ?>
                                 <p><?php echo e(ucfirst($data['nama_group'])); ?></p>
@@ -203,80 +201,100 @@
                                 <p><?php echo e(str_replace("_", ' ', ucfirst($data['status_kepemilikan']))); ?></p>
                             <?php endif; ?>
                         </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group mb-2">
+                                <label for="">Identitas Pemilik Perusahaan</label>
+                                <p><?php echo e(strtoupper($data['identitas'])); ?></p>
+                            </div>
+                        </div>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 npwp-section">
-                        <div class="form-group mb-2">
-                            <label for="">Identitas Pemilik Perusahaan</label>
-                            <p><?php echo e(strtoupper($data['identitas'])); ?></p>
+                        <div class="form-group mb-4">
+                            <label for="">Jenis Badan Usaha</label>
+                            <p><?php echo e(strtoupper($data['badan_usaha'])); ?></p>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="form-group">
+                            <label for="">Nomor NPWP</label>
+                            <p><?php echo e($data['nomor_npwp']); ?></p>
                         </div>
                     </div>
                     <div class="npwp-section">
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group mb-4">
-                                    <label for="">Jenis Badan Usaha</label>
-                                    <p><?php echo e(strtoupper($data['badan_usaha'])); ?></p>
+                                <div class="form-group">
+                                    <label for="">Nama NPWP</label>
+                                    <p><?php echo e($data['nama_npwp']); ?></p>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Nomor NPWP</label>
-                                    <p><?php echo e($data['nomor_npwp']); ?></p>
+                                    <label for="">Cabang</label>
+                                    <?php if($data['status_cabang'] == '0'): ?>
+                                        <p>Tidak ada</p>
+                                    <?php else: ?>
+                                        <p>Ada</p>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">NITKU</label>
-                                    <p><?php echo e($data['nitku']); ?></p>
-                                </div>
-                                
                                 <div class="form-group mb-4">
-                                    <label for="">Nama NPWP</label>
-                                    <p><?php echo e($data['nama_npwp']); ?></p>
+                                    <label for="">NITKU</label>
+                                    <p><?php echo e($data['nitku'] ? $data['nitku'] : '-'); ?></p>
                                 </div>
-
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group mb-4">
                                     <label for="">Alamat NPWP</label>
                                     <p><?php echo e($data['alamat_npwp']); ?></p>
                                 </div>
-
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group mb-4">
-                                    <label for="">Email Khusus Untuk Faktur Pajak</label>
-                                    <p><?php echo e($data['email_khusus_faktur_pajak']); ?></p>
-                                </div>
-
+                                    <label for="">Kota sesuai NPWP</label>
+                                    <p><?php echo e($data['kota_npwp']); ?></p>
+                                </div> 
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group mb-3">
                                     <label for="">Status Pengusaha Kena Pajak (PKP)</label>
                                     <p><?php echo e(str_replace("_", " ", strtoupper($data['status_pkp']))); ?></p>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group mb-3">
-                                    <label for="">Kota sesuai NPWP</label>
-                                    <p><?php echo e($data['kota_npwp']); ?></p>
+                                <div class="form-group mb-4">
+                                    <label for="">Email Khusus Untuk Faktur Pajak</label>
+                                    <p><?php echo e($data['email_khusus_faktur_pajak']); ?></p>
                                 </div>
-
-                                <div class="form-group mb-2">
+                                <div class="form-group mb-4">
                                     <label for="">Foto NPWP</label>
                                     
                                     <div id="preview_npwp" class="<?php if($data['identitas'] != 'npwp'): ?> d-none <?php endif; ?>">
-                                        <img src="<?php echo e(asset('uploads/identitas_perusahaan/' . $data['foto_npwp'])); ?>" alt="Foto NPWP" data-action="zoom">
                                         
                                         
                                         
+                                        <img src="<?php echo e(asset('../../uploads/identitas_perusahaan/'.$data['foto_npwp'])); ?>" alt="Foto NPWP" data-action="zoom">
                                     </div>
                                 </div>
-
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group  <?php if($data['status_pkp'] !=  'pkp'): ?> d-none <?php endif; ?>" id="sppkp-section">
                                     <label for="">Foto SPPKP</label>
 
                                     <div id="preview_sppkp">
-                                        <img src="<?php echo e(asset('uploads/identitas_perusahaan/' . $data['sppkp'])); ?>" alt="SPPKP" data-action="zoom">
                                         
                                             
                                         
+                                        <img src="<?php echo e(asset('../../uploads/identitas_perusahaan/'.$data['sppkp'])); ?>" alt="Foto SPPKP" data-action="zoom">
                                     </div>
                                 </div>
                             </div>

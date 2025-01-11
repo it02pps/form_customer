@@ -37,7 +37,7 @@
             opacity: 1;
         }
 
-        #preview_ktp, #preview_npwp, #preview_sppkp, #preview_ktp_penanggung,  #preview_npwp_penanggung {
+        #preview_ktp, #preview_npwp, #preview_sppkp, #preview_penanggung {
             border: 1px solid #1C4A9C;
             border-radius: 7px;
             margin-top: 2px;
@@ -46,7 +46,7 @@
             align-items: center;
         }
 
-        #preview_ktp img, #preview_npwp img, #preview_sppkp img, #preview_ktp_penanggung img,  #preview_npwp_penanggung img {
+        #preview_ktp img, #preview_npwp img, #preview_sppkp img, #preview_penanggung img {
             width: 100%;
             height: 180px;
             object-fit: fill;
@@ -538,7 +538,7 @@
                     $('#bidang_usaha_lain').removeClass('d-none').prop('required', true);
                 } else {
                     $('#bidang_usaha_lain').addClass('d-none').prop('required', false);
-                    $('#bidang_usaha_lain').val();
+                    $('#bidang_usaha_lain').val('');
                 }
             });
 
@@ -549,7 +549,7 @@
                     $('#nama_group').removeClass('d-none').prop('required', true);
                 } else {
                     $('#nama_group').addClass('d-none').prop('required', false);
-                    $('#nama_group').val();
+                    $('#nama_group').val('');
                 }
             });
 

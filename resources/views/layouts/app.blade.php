@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="{{ asset('../../../images/Vertical PNG 977 x 1188 px.png') }}">
+    <link rel="icon" href="{{ asset('images/Vertical PNG 977 x 1188 px.png') }}">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -24,7 +24,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     {{-- Zoom --}}
-    <link rel="stylesheet" href="{{ asset('../../../css/zoom.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/zoom.css') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.bootstrap5.min.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
@@ -70,7 +70,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('https://papasari.com') }}">
-                    <img src="{{ asset('../../../images/PNG 4125 x 913.png') }}" width="180" height="40">
+                    <img src="{{ asset('images/PNG 4125 x 913.png') }}" width="180" height="40">
                     {{-- PT. Papasari --}}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -201,9 +201,9 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{{ asset('../../../js/jSignature.min.js') }}"></script>
-<script src="{{ asset('../../../js/modernizr.js') }}"></script>
-<script src="{{ asset('../../../js/zoom.js') }}"></script>
+<script src="{{ asset('js/jSignature.min.js') }}"></script>
+<script src="{{ asset('js/modernizr.js') }}"></script>
+<script src="{{ asset('js/zoom.js') }}"></script>
 <script src="https://cdn.datatables.net/2.1.6/js/dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/2.1.6/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>

@@ -293,9 +293,17 @@
                             </div>
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group mb-3 mt-2">
+                                        <label for="">Apakah ada cabang <span class="text-danger">*</span></label>
+                                        <select name="status_cabang" id="status_cabang" class="form-control">
+                                            <option value="0">Tidak</option>
+                                            <option value="1">Ada</option>
+                                        </select>
+                                    </div>
+
                                     <div class="form-group mb-3">
                                         <label for="">NITKU <span class="text-danger">*</span></label>
-                                        <input type="text" name="nitku" id="nitku" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="22" class="form-control" placeholder="Masukkan NITKU" autocomplete="off" required value="{{ $data ? $data['nitku'] : '' }}">
+                                        <input type="text" name="nitku" id="nitku" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="22" class="form-control" readonly placeholder="Masukkan NITKU" readonly autocomplete="off" value="{{ $data ? $data['nitku'] : '' }}">
                                     </div>
 
                                     <div class="form-group">
@@ -666,6 +674,10 @@
                 placeholder: 'Pilih identitas perseorangan'
             });
 
+            $('#status_cabang').select2({
+                placeholder: 'Apakah ada cabang',
+            });
+
             // Bidang usaha
             $('#bidang_usaha').on('change', function() {
                 let val = $(this).val();
@@ -799,6 +811,15 @@
                 });
             });
 
+            $(document).on('change', '#status_cabang', function() {
+                let val = $(this).val();
+                if(val == '0') {
+                    $('#nitku').val('').prop('readonly', true).prop('required', false);
+                } else {
+                    $('#nitku').prop('readonly', false).prop('required', true);
+                }
+            });
+
             $.ajax({
                 url: '/internal/panel/select/' + $('#update_id').val(),
                 type: 'GET',
@@ -832,6 +853,7 @@
                         $('#status_pkp').val(res.data.status_pkp).change();
                         $('#status_rekening').val(res.data.informasi_bank.status).change();
                         $('#identitas_penanggung_jawab').val(res.data.data_identitas.identitas).change();
+                        $('#status_cabang').val(res.data.status_cabang).change();
 
                         if(res.data.bidang_usaha == 'lainnya') {
                             $('#bidang_usaha_lain').removeClass('d-none');
@@ -862,6 +884,7 @@
                         $('input[name="tipe_harga"]').val('end_user').prop('checked', true);
                         $('#kategori_customer').val('').change();
                         $('#channel_distributor').val('').change();
+                        $('#status_cabang').val('0').change();
                     }
                 }
             });

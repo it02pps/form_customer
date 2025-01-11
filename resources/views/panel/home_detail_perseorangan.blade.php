@@ -234,7 +234,7 @@
                             </div>
                         </div>
                     @else
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 npwp-section">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group mb-2">
                                 <label for="">Identitas Pemilik Perusahaan</label>
                                 <p>{{ strtoupper($data['identitas']) }}</p>
@@ -257,19 +257,53 @@
                             </div>
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group mb-4">
-                                        <label for="">NTKU</label>
-                                        <p>{{ $data['nitku'] }}</p>
+                                    <div class="form-group">
+                                        <label for="">Cabang</label>
+                                        @if($data['status_cabang'] == '0')
+                                            <p>Tidak ada</p>
+                                        @else
+                                            <p>Ada</p>
+                                        @endif
                                     </div>
-
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label for="">NITKU</label>
+                                        <p>{{ $data['nitku'] ? $data['nitku'] : '-' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group mb-4">
                                         <label for="">Alamat NPWP</label>
                                         <p>{{ $data['alamat_npwp'] }}</p>
                                     </div>
-
+                                    
                                     <div class="form-group mb-4">
                                         <label for="">Email Khusus Untuk Faktur Pajak</label>
                                         <p>{{ $data['email_khusus_faktur_pajak'] }}</p>
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label for="">Status Pengusaha Kena Pajak (PKP)</label>
+                                        <p>{{ str_replace("_", " ", strtoupper($data['status_pkp'])) }}</p>
+                                    </div>
+
+                                    <div class="form-group mb-4 @if($data['status_pkp'] !=  'pkp') d-none @endif" id="sppkp-section">
+                                        <label for="">Foto SPPKP</label>
+
+                                        <div id="preview_sppkp">
+                                            {{-- @if(str_contains($data['sppkp'], '.pdf'))
+                                                <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$data['sppkp']) }}')">
+                                                    <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
+                                                    <span>Click to preview</span>
+                                                </div>
+                                            @else
+                                                <img id="preview_foto_sppkp" src="{{ route('showimage.view', ['category' => 'SPPKP', 'filename' => $data['sppkp']]) }}" data-action="zoom">
+                                            @endif --}}
+                                            <img src="{{ asset('../../uploads/idetitas_perusahaan/'.$data['sppkp']) }}" alt="SPPKP" data-action="zoom">
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -281,44 +315,22 @@
                                     <div class="form-group">
                                         <label for="">Foto NPWP</label>
                                     </div>
-    
+
                                     <div id="preview_npwp" class="@if($data['identitas'] != 'npwp') d-none @endif">
-                                        <img src="{{ asset('uploads/identitas_perusahaan' . $data['foto_npwp']) }}" alt="Foto NPWP" data-action="zoom">
                                         {{-- @if(str_contains($data['foto_npwp'], '.pdf'))
                                             <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$data['foto_npwp']) }}')">
                                                 <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
                                                 <span>Click to preview</span>
                                             </div>
                                         @else
-                                            <img id="preview_foto_npwp" src="{{ asset('uploads/identitas_perusahaan/'.$data['foto_npwp']) }}" data-action="zoom">
+                                            <img id="preview_foto_npwp" src="{{ route('showimage.view', ['category' => 'NPWP', 'filename' => $data['foto_npwp']]) }}" data-action="zoom">
                                         @endif --}}
-                                    </div>
-
-                                    <div class="form-group mb-3 mt-3">
-                                        <label for="">Status Pengusaha Kena Pajak (PKP)</label>
-                                        <p>{{ str_replace("_", " ", strtoupper($data['status_pkp'])) }}</p>
-                                    </div>
-    
-                                    <div class="form-group mb-4 @if($data['status_pkp'] !=  'pkp') d-none @endif" id="sppkp-section">
-                                        <label for="">Foto SPPKP</label>
-    
-                                        <div id="preview_sppkp">
-                                            <img src="{{ asset('../../../identitas_perusahaan/' . $data['sppkp']) }}" alt="SPPKP" data-action="zoom">
-                                            {{-- @if(str_contains($data['sppkp'], '.pdf'))
-                                                <div id="preview_ktp" style="cursor: pointer;" onclick="preview_pdf('{{ asset('uploads/identitas_perusahaan/'.$data['sppkp']) }}')">
-                                                    <img src="{{ asset('images/pdf.png') }}" style="width: 20% !important; height: auto;">
-                                                    <span>Click to preview</span>
-                                                </div>
-                                            @else
-                                                <img id="preview_foto_sppkp" src="{{ asset('uploads/identitas_perusahaan/'.$data['sppkp']) }}" data-action="zoom">
-                                            @endif --}}
-                                        </div>
+                                        <img src="{{ asset('../../uploads/identitas_perusahaan/'.$data['foto_npwp']) }}" alt="Foto NPWP" data-action="zoom">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     @endif
-
                 </div>
             </div>
             <div class="section2 mt-4 mb-4">

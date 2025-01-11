@@ -78,7 +78,7 @@ class FormCustomerController extends Controller
             'kota_kabupaten' => 'required',
             'no_hp' => 'required',
             'bidang_usaha' => 'required',
-            'email_perusahaan' => ($data['email_perusahaan'] != '') ? 'email' : '',
+            'email_perusahaan' => $data['email_perusahaan'] != '' ? ($data['email_perusahaan'] != '-' ? 'email' : '') : '',
             'status_kepemilikan' => 'required',
             'identitas_perusahaan' => $data['bentuk_usaha'] == 'perseorangan' ? 'required' : '',
             'nama_lengkap' => $data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'ktp' ? 'required' : '') : '',
@@ -200,8 +200,6 @@ class FormCustomerController extends Controller
             $identitas_perusahaan->alamat_lengkap = $request->alamat_lengkap;
             $identitas_perusahaan->kota_kabupaten = $request->kota_kabupaten;
             $identitas_perusahaan->bidang_usaha = $request->bidang_usaha;
-            $identitas_perusahaan->nitku = $request->nitku;
-            $identitas_perusahaan->status_cabang = $request->status_cabang;
             $identitas_perusahaan->status_cust = $request->jenis_cust;
             if($request->bidang_usaha == 'lainnya') {
                 $identitas_perusahaan->bidang_usaha_lain = $request->bidang_usaha_lain;
@@ -266,10 +264,14 @@ class FormCustomerController extends Controller
                 $identitas_perusahaan->email_khusus_faktur_pajak = null;
                 $identitas_perusahaan->status_pkp = 'non_pkp';
                 $identitas_perusahaan->sppkp = null;
+                $identitas_perusahaan->nitku = null;
+                $identitas_perusahaan->status_cabang = '0';
             } else if (($request->identitas_perusahaan == 'npwp' && $request->bentuk_usaha == 'perseorangan') || $request->bentuk_usaha == 'badan_usaha') {
                 $identitas_perusahaan->badan_usaha = $request->badan_usaha;
                 $identitas_perusahaan->nama_npwp = $request->nama_npwp;
                 $identitas_perusahaan->nomor_npwp = $request->nomor_npwp;
+                $identitas_perusahaan->nitku = $request->nitku;
+                $identitas_perusahaan->status_cabang = $request->status_cabang;
                 if ($request->hasFile('foto_npwp')) {
                     if (File::exists('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_npwp)) {
                         File::delete('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_npwp);

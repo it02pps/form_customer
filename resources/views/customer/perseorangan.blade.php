@@ -265,7 +265,7 @@
                                     <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg" autocomplete="off" {{ $data_perusahaan ? ($data_perusahaan['identitas'] == 'ktp' ? $data_perusahaan['foto_ktp'] : '') : '' }}>
     
                                     <div id="preview_ktp" class="@if($data_perusahaan) @if($data_perusahaan['identitas'] != 'ktp') d-none @endif @else d-none @endif">
-                                        <img id="preview_foto_ktp" src="{{ $data_perusahaan ? asset('../../uploads/identitas_perusahaan/'.$data_perusahaan['foto_ktp']) : '' }}" alt="Preview" data-action="zoom">
+                                        <img id="preview_foto_ktp" src="{{ $data_perusahaan ? asset('uploads/identitas_perusahaan/'.$data_perusahaan['foto_ktp']) : '' }}" alt="Preview" data-action="zoom">
                                     </div>
                                 </div>
                             </div>
@@ -289,7 +289,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group mb-3 mt-2">
+                                    <div class="form-group mb-3">
                                         <label for="">Apakah ada cabang <span class="text-danger">*</span></label>
                                         <select name="status_cabang" id="status_cabang" class="form-control">
                                             <option value="0">Tidak</option>
@@ -324,7 +324,7 @@
                                     </div>
     
                                     <div id="preview_npwp" class="@if($data_perusahaan) @if($data_perusahaan['identitas'] != 'npwp') d-none @endif @else d-none @endif">
-                                        <img id="preview_foto_npwp" src="{{ $data_perusahaan ? asset('../../uploads/identitas_perusahaan/'.$data_perusahaan['foto_npwp']) : '' }}" alt="Preview" data-action="zoom">
+                                        <img id="preview_foto_npwp" src="{{ $data_perusahaan ? asset('uploads/identitas_perusahaan/'.$data_perusahaan['foto_npwp']) : '' }}" alt="Preview" data-action="zoom">
                                     </div>
 
                                     <div class="form-group mb-3 mt-2">
@@ -340,7 +340,7 @@
                                         <input type="file" name="foto_sppkp" id="foto_sppkp" onchange="previewFileSppkp(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
     
                                         <div id="preview_sppkp">
-                                            <img id="preview_foto_sppkp" src="{{ $data_perusahaan ? asset('../../uploads/identitas_perusahaan/'.$data_perusahaan['sppkp']) : '' }}" alt="Preview" data-action="zoom">
+                                            <img id="preview_foto_sppkp" src="{{ $data_perusahaan ? asset('uploads/identitas_perusahaan/'.$data_perusahaan['sppkp']) : '' }}" alt="Preview" data-action="zoom">
                                         </div>
                                     </div>
                                 </div>
@@ -421,7 +421,7 @@
                                     <input type="file" name="foto_penanggung" id="foto_penanggung" onchange="previewFilePenanggung(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
     
                                     <div id="preview_penanggung">
-                                        <img id="preview_foto_penanggung" src="{{ $data_perusahaan ? ($data_perusahaan['data_identitas'] ? asset('../../uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '') : '' }}" alt="Preview" data-action="zoom">
+                                        <img id="preview_foto_penanggung" src="{{ $data_perusahaan ? ($data_perusahaan['data_identitas'] ? asset('uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '') : '' }}" alt="Preview" data-action="zoom">
                                     </div>
                                 </div>
                             </div>
@@ -661,6 +661,7 @@
                     $('#alamat_npwp').val('');
                     $('#kota_npwp').val('');
                     $('#nitku').val('').prop('required', false);
+                    $('#status_cabang').val('0').prop('required', false);
                 } else {
                     $('.ktp-section').addClass('d-none');
                     $('.npwp-section').removeClass('d-none');
@@ -669,14 +670,18 @@
                     $("#preview_sppkp").removeClass('d-none');
 
                     $('#status_pkp').select2({
-                        placeholder: 'Pilih status PKP',
-                        allowClear: true
+                        placeholder: 'Pilih status PKP'
+                    });
+
+                    $('#status_cabang').select2({
+                        placeholder: 'Apakah ada cabang'
                     });
 
                     $('#nomor_ktp').val('');
                     // $('#foto_ktp').val('');
                     $('#nama_lengkap').val('');
                     $('#nitku').prop('required', true);
+                    $('#status_cabang').val('0').prop('required', true);
                 }
             });
 
@@ -691,16 +696,21 @@
                 }
             });
 
-            $(document).on('change', '#tahun_berdiri', function() {
-                let tgl = new Date();
-                let tgl_berdiri = new Date($(this).val());
-
-                let thn_berdiri = tgl_berdiri.getFullYear();
-                let thn_sekarang = tgl.getFullYear();
-                let result = thn_sekarang - thn_berdiri;
-                
-                $('#lama_usaha').val(result + ' tahun');
-                $('#lama_usaha_hide').val(result);
+            $(document).on('change', '#tahun_berdiri', function(e) {
+                if(e.target.value != '') {
+                    let tgl = new Date();
+                    let tgl_berdiri = new Date($(this).val());
+    
+                    let thn_berdiri = tgl_berdiri.getFullYear();
+                    let thn_sekarang = tgl.getFullYear();
+                    let result = thn_sekarang - thn_berdiri;
+                    
+                    $('#lama_usaha').val(result + ' tahun');
+                    $('#lama_usaha_hide').val(result);
+                } else {
+                    $('#lama_usaha').val('');
+                    $('#lama_usaha_hide').val('');
+                }
             });
 
             $(document).on('submit', '#form_customer', function(e) {
@@ -781,51 +791,10 @@
                         $('#status_rekening').val('').change();
                         $('#identitas_penanggung_jawab').val('').change();
                         $('#cust_lama').prop('checked', true);
-                        $('#status_cabang').val('').change();
+                        $('#status_cabang').val('0').change();
                     }
                 }
             });
-
-            // Function jenis transaksi
-            // $('.section3').addClass('d-none');
-            // $('input[name="jenis_transaksi"]').change(function() {
-            //     let rad_val = $(this).val();
-            //     if(rad_val == 'cash') {
-            //         $('#ttd_cash').html(`
-            //             <label for="">Tanda Tangan</label>
-            //             <div id="signature"></div>
-            //             <input type="button" id="clear_signature" class="btn btn-outline-primary mt-2" value="Bersihkan">
-            //             <input type="hidden" name="hasil_ttd" id="hasil_ttd" value="">
-            //             <img src="" id="sign_prev" style="display: none;">
-            //         `);
-            //         $('#ttd_credit').children().remove();
-            //         $('.section3').addClass('d-none');
-            //         $('#nama_penanggung_jawab').prop('required', false);
-            //         $('#jabatan').prop('required', false);
-            //         $('#identitas_penanggung_jawab').prop('required', false);
-            //         $('#nomor_hp_penanggung_jawab').prop('required', false);
-            //         $('.section3-body .row label').find('span').remove();
-            //         var $sigDiv = $('#signature').jSignature({'undoButton': true});
-            //         $sigDiv.jSignature('reset');
-            //     } else {
-            //         $('#ttd_cash').children().remove();
-            //         $('#ttd_credit').html(`
-            //             <label for="">Tanda Tangan</label>
-            //             <div id="signature"></div>
-            //             <input type="button" id="clear_signature" class="btn btn-outline-primary mt-2" value="Bersihkan">
-            //             <input type="hidden" name="hasil_ttd" id="hasil_ttd" value="">
-            //             <img src="" id="sign_prev" style="display: none;">
-            //         `);
-            //         $('.section3').removeClass('d-none');
-            //         $('#nama_penanggung_jawab').prop('required', true);
-            //         $('#jabatan').prop('required', true);
-            //         $('#identitas_penanggung_jawab').prop('required', true);
-            //         $('#nomor_hp_penanggung_jawab').prop('required', true);
-            //         $('.section3-body .row').find('label').append(' <span class="text-danger">*</span>');
-            //         var $sigDiv = $('#signature').jSignature({'undoButton': true});
-            //         $sigDiv.jSignature('reset');
-            //     }
-            // });
         });
     </script>
 @endsection
