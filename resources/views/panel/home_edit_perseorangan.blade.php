@@ -164,13 +164,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Usaha <span class="text-danger">*</span></label>
-                                    <input type="text" name="nama_perusahaan" id="nama_perusahaan" class="form-control" placeholder="Masukkan nama usaha" autocomplete="off" required value="{{ $data['nama_perusahaan'] }}">
+                                    <input type="text" name="nama_perusahaan" id="nama_perusahaan" class="form-control" placeholder="Masukkan nama usaha" autocomplete="off" required value="{{ $data ? $data['nama_perusahaan'] : '' }}">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Group Usaha <span class="text-danger">*</span></label>
-                                    <input type="text" name="nama_group_perusahaan" id="nama_group_perusahaan" class="form-control" placeholder="Masukkan nama group usaha" autocomplete="off" required value="{{ $data['nama_group_perusahaan'] }}">
+                                    <input type="text" name="nama_group_perusahaan" id="nama_group_perusahaan" class="form-control" placeholder="Masukkan nama group usaha" autocomplete="off" required value="{{ $data ? $data['nama_group_perusahaan'] : '' }}">
                                     <span class="text-danger">*Jika tidak ada, maka diisi dengan nama merk usaha</span>
                                 </div>
                             </div>
@@ -179,13 +179,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Alamat Lengkap Usaha <span class="text-danger">*</span></label>
-                                    <textarea name="alamat_lengkap" id="alamat_lengkap" cols="30" rows="5" class="form-control" required autocomplete="off" placeholder="Masukkan alamat lengkap usaha">{{ $data['alamat_lengkap'] }}</textarea>
+                                    <textarea name="alamat_lengkap" id="alamat_lengkap" cols="30" rows="5" class="form-control" required autocomplete="off" placeholder="Masukkan alamat lengkap usaha">{{ $data ? $data['alamat_lengkap'] : '' }}</textarea>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group mb-2">
                                     <label for="">Kota / Kabupaten <span class="text-danger">*</span></label>
-                                    <input type="text" name="kota_kabupaten" id="kota_kabupaten" class="form-control" placeholder="Masukkan kota / kabupaten" autocomplete="off" required value="{{ $data['kota_kabupaten'] }}">
+                                    <input type="text" name="kota_kabupaten" id="kota_kabupaten" class="form-control" placeholder="Masukkan kota / kabupaten" autocomplete="off" required value="{{ $data ? $data['kota_kabupaten'] : '' }}">
                                 </div>
                                 <div class="form-group mt-3">
                                     <label for="">Alamat Email Usaha</label>
@@ -198,7 +198,7 @@
                                 <div class="form-group">
                                     <label for="">Nomor Handphone Contact Person <span class="text-danger">*</span></label>
                                     {{-- <input type="text" name="no_hp" id="no_hp" maxlength="13" oninput="this.value = this.value.replace(/\D+/g, '')" class="form-control" placeholder="Contoh: 0812345678910" required autocomplete="off" value="{{ $data ? $data['nomor_handphone'] : '' }}"> --}}
-                                    <input type="text" name="no_hp" id="no_hp" maxlength="14" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" class="form-control" placeholder="Contoh: 0812345678910" required autocomplete="off" value="{{ $data['nomor_handphone'] }}">
+                                    <input type="text" name="no_hp" id="no_hp" maxlength="14" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" class="form-control" placeholder="Contoh: 0812345678910" required autocomplete="off" value="{{ $data ? $data['nomor_handphone'] : '' }}">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -249,102 +249,102 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        {{-- KTP section --}}
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ktp-section">
-                            <div class="form-group mb-2">
-                                <label for="">Nama Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
-                                <input type="text" name="nama_lengkap" id="nama_lengkap" class="form-control" autocomplete="off" placeholder="Masukkan nama lengkap sesuai identitas" value="{{ $data ? ($data['identitas'] == 'ktp' ? $data['nama_lengkap'] : '') : '' }}">
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ktp-section">
-                            <label for="">NIK <span class="text-danger">*</span></label>
-                            <input type="text" name="nomor_ktp" id="nomor_ktp" oninput="this.value = this.value.replace(/\D+/g, '')" class="form-control" maxlength="16" autocomplete="off" placeholder="Masukkan NIK" value="{{ $data ? ($data['identitas'] == 'ktp' ? $data['nomor_ktp'] : '') : '' }}">
-                        </div>
-                        <div class="ktp-section">
-                            <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <label for="">Foto KTP <span class="text-danger">*</span></label>
-                                    <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg" autocomplete="off" {{ $data ? ($data['identitas'] == 'ktp' ? $data['foto_ktp'] : '') : '' }}>
-    
-                                    <div id="preview_ktp" class="@if($data) @if($data['identitas'] != 'ktp') d-none @endif @else d-none @endif">
-                                        <img id="preview_foto_ktp" src="{{ $data ? asset('../../uploads/identitas_perusahaan/'.$data['foto_ktp']) : '' }}" alt="Preview" data-action="zoom">
-                                    </div>
+                        <div class="row">
+                            {{-- KTP section --}}
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ktp-section">
+                                <div class="form-group mb-2">
+                                    <label for="">Nama Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
+                                    <input type="text" name="nama_lengkap" id="nama_lengkap" class="form-control" autocomplete="off" placeholder="Masukkan nama lengkap sesuai identitas" value="{{ $data ? ($data['identitas'] == 'ktp' ? $data['nama_lengkap'] : '') : '' }}">
                                 </div>
                             </div>
-                        </div>
-    
-                        {{-- NPWP section --}}
-                        <div class="npwp-section d-none">
-                            <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group mb-3">
-                                        <label for="">Nama NPWP <span class="text-danger">*</span></label>
-                                        <input type="text" name="nama_npwp" id="nama_npwp" class="form-control" autocomplete="off" placeholder="Masukkan nama NPWP" value="{{ $data ? ($data['identitas'] == 'npwp' ? $data['nama_npwp'] : '') : '' }}">
-                                    </div>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group mb-3">
-                                        <label for="">Nomor NPWP <span class="text-danger">*</span></label>
-                                        <input type="text" name="nomor_npwp" id="nomor_npwp" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="20" class="form-control" autocomplete="off" placeholder="Masukkan nomor NPWP" value="{{ $data ? ($data['identitas'] == 'npwp' ? $data['nomor_npwp'] : '' ) : '' }}">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ktp-section">
+                                <label for="">NIK <span class="text-danger">*</span></label>
+                                <input type="text" name="nomor_ktp" id="nomor_ktp" oninput="this.value = this.value.replace(/\D+/g, '')" class="form-control" maxlength="16" autocomplete="off" placeholder="Masukkan NIK" value="{{ $data ? ($data['identitas'] == 'ktp' ? $data['nomor_ktp'] : '') : '' }}">
+                            </div>
+                            <div class="ktp-section">
+                                <div class="row">
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                        <label for="">Foto KTP <span class="text-danger">*</span></label>
+                                        <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg" autocomplete="off" {{ $data ? ($data['identitas'] == 'ktp' ? $data['foto_ktp'] : '') : '' }}>
+        
+                                        <div id="preview_ktp" class="@if($data) @if($data['identitas'] != 'ktp') d-none @endif @else d-none @endif">
+                                            <img id="preview_foto_ktp" src="{{ $data ? asset('uploads/identitas_perusahaan/'.$data['foto_ktp']) : '' }}" alt="Preview" data-action="zoom">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group mb-3 mt-2">
-                                        <label for="">Apakah ada cabang <span class="text-danger">*</span></label>
-                                        <select name="status_cabang" id="status_cabang" class="form-control">
-                                            <option value="0">Tidak</option>
-                                            <option value="1">Ada</option>
-                                        </select>
+        
+                            {{-- NPWP section --}}
+                            <div class="npwp-section d-none">
+                                <div class="row">
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                        <div class="form-group mb-3">
+                                            <label for="">Nama NPWP <span class="text-danger">*</span></label>
+                                            <input type="text" name="nama_npwp" id="nama_npwp" class="form-control" autocomplete="off" placeholder="Masukkan nama NPWP" value="{{ $data ? ($data['identitas'] == 'npwp' ? $data['nama_npwp'] : '') : '' }}">
+                                        </div>
                                     </div>
-
-                                    <div class="form-group mb-3">
-                                        <label for="">NITKU <span class="text-danger">*</span></label>
-                                        <input type="text" name="nitku" id="nitku" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="22" class="form-control" readonly placeholder="Masukkan NITKU" readonly autocomplete="off" value="{{ $data ? $data['nitku'] : '' }}">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="">Alamat NPWP <span class="text-danger">*</span></label>
-                                        <textarea name="alamat_npwp" id="alamat_npwp" cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NPWP">{{ $data ? $data['alamat_npwp'] : '' }}</textarea>
-                                    </div>
-
-                                    <div class="form-group mb-3 mt-3">
-                                        <label for="">Kota Sesuai NPWP <span class="text-danger">*</span></label>
-                                        <input type="text" name="kota_npwp" id="kota_npwp" class="form-control" placeholder="Masukkan kota" autocomplete="off" value="{{ $data ? $data['kota_npwp'] : '' }}">
-                                    </div>
-
-                                    <div class="form-group mb-3">
-                                        <label for="">Email Khusus Untuk Faktur Pajak <span class="text-danger">*</span></label>
-                                        <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Contoh: faktur@gmail.com" value="{{ $data ? ($data['identitas'] == 'npwp' ? $data['email_khusus_faktur_pajak'] : '') : '' }}">
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                        <div class="form-group mb-3">
+                                            <label for="">Nomor NPWP <span class="text-danger">*</span></label>
+                                            <input type="text" name="nomor_npwp" id="nomor_npwp" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="20" class="form-control" autocomplete="off" placeholder="Masukkan nomor NPWP" value="{{ $data ? ($data['identitas'] == 'npwp' ? $data['nomor_npwp'] : '' ) : '' }}">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group">
-                                        <label for="">Foto NPWP <span class="text-danger">*</span></label>
-                                        <input type="file" name="foto_npwp" id="foto_npwp" class="form-control" onchange="previewFileNpwp(this);" accept=".jpg, .png, .pdf, .jpeg" autocomplete="off">
-                                    </div>
+                                <div class="row">
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                        <div class="form-group mb-3">
+                                            <label for="">Apakah ada cabang <span class="text-danger">*</span></label>
+                                            <select name="status_cabang" id="status_cabang" class="form-control">
+                                                <option value="0">Tidak</option>
+                                                <option value="1">Ada</option>
+                                            </select>
+                                        </div>
     
-                                    <div id="preview_npwp" class="@if($data) @if($data['identitas'] != 'npwp') d-none @endif @else d-none @endif">
-                                        <img id="preview_foto_npwp" src="{{ $data ? asset('../../uploads/identitas_perusahaan/'.$data['foto_npwp']) : '' }}" alt="Preview" data-action="zoom">
-                                    </div>
-
-                                    <div class="form-group mb-3 mt-2">
-                                        <label for="">Status Pengusaha Kena Pajak (PKP) <span class="text-danger">*</span></label>
-                                        <select name="status_pkp" id="status_pkp" class="form-control">
-                                            <option value="non_pkp">Non PKP</option>
-                                            <option value="pkp">PKP</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group mt-3 @if($data) @if($data['status_pkp'] !=  'pkp') d-none @endif @else d-none @endif" id="sppkp-section">
-                                        <label for="">Foto SPPKP <span class="text-danger">*</span></label>
-                                        <input type="file" name="foto_sppkp" id="foto_sppkp" onchange="previewFileSppkp(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
+                                        <div class="form-group mb-3">
+                                            <label for="">NITKU <span class="text-danger">*</span></label>
+                                            <input type="text" name="nitku" id="nitku" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="22" class="form-control" readonly placeholder="Masukkan NITKU" autocomplete="off" value="{{ $data ? $data['nitku'] : '' }}">
+                                        </div>
     
-                                        <div id="preview_sppkp">
-                                            <img id="preview_foto_sppkp" src="{{ $data ? asset('../../uploads/identitas_perusahaan/'.$data['sppkp']) : '' }}" alt="Preview" data-action="zoom">
+                                        <div class="form-group">
+                                            <label for="">Alamat NPWP <span class="text-danger">*</span></label>
+                                            <textarea name="alamat_npwp" id="alamat_npwp" cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NPWP">{{ $data ? $data['alamat_npwp'] : '' }}</textarea>
+                                        </div>
+    
+                                        <div class="form-group mb-3 mt-3">
+                                            <label for="">Kota Sesuai NPWP <span class="text-danger">*</span></label>
+                                            <input type="text" name="kota_npwp" id="kota_npwp" class="form-control" placeholder="Masukkan kota" autocomplete="off" value="{{ $data ? $data['kota_npwp'] : '' }}">
+                                        </div>
+    
+                                        <div class="form-group mb-3">
+                                            <label for="">Email Khusus Untuk Faktur Pajak <span class="text-danger">*</span></label>
+                                            <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Contoh: faktur@gmail.com" value="{{ $data ? ($data['identitas'] == 'npwp' ? $data['email_khusus_faktur_pajak'] : '') : '' }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label for="">Foto NPWP <span class="text-danger">*</span></label>
+                                            <input type="file" name="foto_npwp" id="foto_npwp" class="form-control" onchange="previewFileNpwp(this);" accept=".jpg, .png, .pdf, .jpeg" autocomplete="off">
+                                        </div>
+        
+                                        <div id="preview_npwp" class="@if($data) @if($data['identitas'] != 'npwp') d-none @endif @else d-none @endif">
+                                            <img id="preview_foto_npwp" src="{{ $data ? asset('uploads/identitas_perusahaan/'.$data['foto_npwp']) : '' }}" alt="Preview" data-action="zoom">
+                                        </div>
+    
+                                        <div class="form-group mb-3 mt-2">
+                                            <label for="">Status Pengusaha Kena Pajak (PKP) <span class="text-danger">*</span></label>
+                                            <select name="status_pkp" id="status_pkp" class="form-control">
+                                                <option value="non_pkp">Non PKP</option>
+                                                <option value="pkp">PKP</option>
+                                            </select>
+                                        </div>
+    
+                                        <div class="form-group mt-3 @if($data) @if($data['status_pkp'] !=  'pkp') d-none @endif @else d-none @endif" id="sppkp-section">
+                                            <label for="">Foto SPPKP <span class="text-danger">*</span></label>
+                                            <input type="file" name="foto_sppkp" id="foto_sppkp" onchange="previewFileSppkp(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
+        
+                                            <div id="preview_sppkp">
+                                                <img id="preview_foto_sppkp" src="{{ $data ? asset('uploads/identitas_perusahaan/'.$data['sppkp']) : '' }}" alt="Preview" data-action="zoom">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -360,13 +360,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nomor Rekening <span class="text-danger">*</span></label>
-                                    <input type="text" name="nomor_rekening" id="nomor_rekening" oninput="this.value = this.value.replace(/\D+/g, '')" class="form-control" maxlength="15" autocomplete="off" required placeholder="Masukkan nomor rekening" value="{{ $data['informasi_bank']['nomor_rekening'] }}">
+                                    <input type="text" name="nomor_rekening" id="nomor_rekening" oninput="this.value = this.value.replace(/\D+/g, '')" class="form-control" maxlength="15" autocomplete="off" required placeholder="Masukkan nomor rekening" value="{{ $data ? $data['informasi_bank']['nomor_rekening'] : '' }}">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Rekening <span class="text-danger">*</span></label>
-                                    <input type="text" name="nama_rekening" id="nama_rekening" class="form-control" autocomplete="off" required placeholder="Masukkan nama rekening" value="{{ $data['informasi_bank']['nama_rekening'] }}">
+                                    <input type="text" name="nama_rekening" id="nama_rekening" class="form-control" autocomplete="off" required placeholder="Masukkan nama rekening" value="{{ $data ? $data['informasi_bank']['nama_rekening'] : '' }}">
                                 </div>
                             </div>
                         </div>
@@ -374,7 +374,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Bank <span class="text-danger">*</span></label>
-                                    <input type="text" name="nama_bank" id="nama_bank" class="form-control" autocomplete="off" required placeholder="Masukkan nama bank" value="{{ $data['informasi_bank']['nama_bank'] }}">
+                                    <input type="text" name="nama_bank" id="nama_bank" class="form-control" autocomplete="off" required placeholder="Masukkan nama bank" value="{{ $data ? $data['informasi_bank']['nama_bank'] : '' }}">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -399,13 +399,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Penanggung Jawab <span class="text-danger">*</span></label>
-                                    <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" class="form-control" autocomplete="off" placeholder="Masukkan nama penanggung jawab" value="{{ $data['data_identitas']['nama'] }}">
+                                    <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" class="form-control" autocomplete="off" placeholder="Masukkan nama penanggung jawab" value="{{ $data ? $data['data_identitas'] ? $data['data_identitas']['nama'] : '' : '' }}">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Jabatan <span class="text-danger">*</span></label>
-                                    <input type="text" name="jabatan" id="jabatan" class="form-control" autocomplete="off" placeholder="Masukkan jabatan" value="{{ $data['data_identitas']['jabatan'] }}">
+                                    <input type="text" name="jabatan" id="jabatan" class="form-control" autocomplete="off" placeholder="Masukkan jabatan" value="{{ $data ? $data['data_identitas'] ? $data['data_identitas']['jabatan'] : '' : '' }}">
                                 </div>
                             </div>
                         </div>
@@ -421,18 +421,18 @@
                                 </div>
     
                                 <div class="form-group mb-2">
-                                    <label for="">Foto <span class="text-danger">*</span></label>
+                                    <label for="">Foto KTP <span class="text-danger">*</span></label>
                                     <input type="file" name="foto_penanggung" id="foto_penanggung" onchange="previewFilePenanggung(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
     
                                     <div id="preview_penanggung">
-                                        <img id="preview_foto_penanggung" src="{{ asset('../../uploads/penanggung_jawab/'.$data['data_identitas']['foto']) }}" alt="Preview" data-action="zoom">
+                                        <img id="preview_foto_penanggung" src="{{ $data ? ($data['data_identitas'] ? asset('uploads/penanggung_jawab/'.$data['data_identitas']['foto']) : '') : '' }}" alt="Preview" data-action="zoom">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nomor Handphone <span class="text-danger">*</span></label>
-                                    <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" class="form-control" placeholder="Contoh: 0812345678910" maxlength="14" autocomplete="off" value="{{ $data['data_identitas']['no_hp'] }}">
+                                    <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" class="form-control" placeholder="Contoh: 0812345678910" maxlength="14" autocomplete="off" value="{{ $data ? $data['data_identitas'] ? $data['data_identitas']['no_hp'] : '' : '' }}">
                                 </div>
                             </div>
                         </div>
@@ -741,8 +741,11 @@
                     $("#preview_sppkp").removeClass('d-none');
 
                     $('#status_pkp').select2({
-                        placeholder: 'Pilih status PKP',
-                        allowClear: true
+                        placeholder: 'Pilih status PKP'
+                    });
+
+                    $('#status_cabang').select2({
+                        placeholder: 'Apakah ada cabang',
                     });
 
                     $('#nomor_ktp').val('');

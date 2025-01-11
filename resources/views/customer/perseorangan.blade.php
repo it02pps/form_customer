@@ -299,7 +299,7 @@
 
                                     <div class="form-group mb-3">
                                         <label for="">NITKU <span class="text-danger">*</span></label>
-                                        <input type="text" name="nitku" id="nitku" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="22" class="form-control" readonly placeholder="Masukkan NITKU" readonly autocomplete="off" value="{{ $data_perusahaan ? $data_perusahaan['nitku'] : '' }}">
+                                        <input type="text" name="nitku" id="nitku" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="22" class="form-control" readonly placeholder="Masukkan NITKU" autocomplete="off" value="{{ $data_perusahaan ? $data_perusahaan['nitku'] : '' }}">
                                     </div>
 
                                     <div class="form-group">

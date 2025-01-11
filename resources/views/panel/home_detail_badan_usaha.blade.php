@@ -36,18 +36,6 @@
         opacity: 1;
     }
 
-    #signature {
-        width: 100%;
-        height: 200px;
-        border: 1px solid #1C4A9C;
-        border-radius: 7px;
-    }
-
-    #signature canvas {
-        height: 198px !important;
-        border-radius: 7px;
-    }
-
     #preview_ktp img, #preview_npwp img, #preview_sppkp img, #preview_penanggung img {
         width: 100%;
         height: 180px;
@@ -58,6 +46,11 @@
     label {
         font-weight: bold;
         text-decoration: underline;
+    }
+
+    #preview_penanggung .zoom-img-wrap .zoom-img, #preview_ktp .zoom-img-wrap .zoom-img, #preview_npwp .zoom-img-wrap .zoom-img, #preview_sppkp .zoom-img-wrap .zoom-img {
+        width: 100%;
+        height: 100%;
     }
 
     @media only screen and (max-width: 500px) {
@@ -92,18 +85,6 @@
 
         .section3-body .row .col-xl-6:nth-of-type(1) {
             margin-bottom: 12px;
-        }
-
-        #signature {
-            width: 100%;
-            height: 200px;
-            border: 1px solid #1C4A9C;
-            border-radius: 7px;
-        }
-
-        #signature canvas {
-            border-radius: 7px;
-            height: 198px !important;
         }
     }
 </style>
@@ -158,7 +139,7 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Alamat Email Perusahaan</label>
-                                <p>{{ $data['alamat_email'] }}</p>
+                                <p>{{ $data['alamat_email'] ? $data['alamat_email'] : '-' }}</p>
                             </div>
                         </div>
                     </div>
@@ -289,7 +270,7 @@
                                         {{-- @else
                                         <img id="preview_foto_npwp" src="{{ route('showimage.view', ['category' => 'NPWP', 'filename' => $data['foto_npwp']]) }}" data-action="zoom">
                                         @endif --}}
-                                        <img src="{{ asset('../../uploads/identitas_perusahaan/'.$data['foto_npwp']) }}" alt="Foto NPWP" data-action="zoom">
+                                        <img src="{{ asset('uploads/identitas_perusahaan/'.$data['foto_npwp']) }}" alt="Foto NPWP" data-action="zoom">
                                     </div>
                                 </div>
                             </div>
@@ -306,7 +287,7 @@
                                         {{-- @else
                                             <img id="preview_foto_sppkp" src="{{ route('showimage.view', ['category' => 'SPPKP', 'filename' => $data['sppkp']]) }}" data-action="zoom">
                                         @endif --}}
-                                        <img src="{{ asset('../../uploads/identitas_perusahaan/'.$data['sppkp']) }}" alt="Foto SPPKP" data-action="zoom">
+                                        <img src="{{ asset('uploads/identitas_perusahaan/'.$data['sppkp']) }}" alt="Foto SPPKP" data-action="zoom">
                                     </div>
                                 </div>
                             </div>

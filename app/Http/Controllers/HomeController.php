@@ -113,7 +113,7 @@ class HomeController extends Controller
             'kota_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
             'nama_group' => ($data['status_kepemilikan'] == 'group') ? 'required' : '',
             'bidang_usaha_lain' => ($data['bidang_usaha'] == 'lainnya') ? 'required' : '',
-            'nitku' => $data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'npwp') ? 'required|max:22' : '' : 'required|max:22',
+            'nitku' => $data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'npwp' ? ($data['status_cabang'] == 'ada' ? 'required|max:22' : '') : '') : ($data['status_cabang'] == 'ada' ? 'required|max:22' : ''),
             'jenis_cust' => 'required',
 
             // Informasi Bank
