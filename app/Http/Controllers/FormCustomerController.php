@@ -78,7 +78,7 @@ class FormCustomerController extends Controller
             'kota_kabupaten' => 'required',
             'no_hp' => 'required',
             'bidang_usaha' => 'required',
-            'email_perusahaan' => $data['email_perusahaan'] != '' ? ($data['email_perusahaan'] != '-' ? 'email' : '') : '',
+            'alamat_email_perusahaan' => $data['alamat_email_perusahaan'] != '' ? ($data['alamat_email_perusahaan'] != '-' ? 'email' : '') : '',
             'status_kepemilikan' => 'required',
             'identitas_perusahaan' => $data['bentuk_usaha'] == 'perseorangan' ? 'required' : '',
             'nama_lengkap' => $data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'ktp' ? 'required' : '') : '',
@@ -94,9 +94,8 @@ class FormCustomerController extends Controller
             'kota_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
             'nama_group' => ($data['status_kepemilikan'] == 'group') ? 'required' : '',
             'bidang_usaha_lain' => ($data['bidang_usaha'] == 'lainnya') ? 'required' : '',
-            'nitku' => $data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'npwp' ? ($data['status_cabang'] == 'ada' ? 'required|max:22' : '') : '') : ($data['status_cabang'] == 'ada' ? 'required|max:22' : ''),
+            'nitku' => 'max:22',
             'jenis_cust' => 'required',
-            'status_cabang' => 'required',
 
             // Informasi Bank
             'nomor_rekening' => 'required|numeric|digits_between:10,16',
@@ -123,7 +122,7 @@ class FormCustomerController extends Controller
             'no_hp.numeric' => 'Nomor handphone harus berupa angka',
             'no_hp.digits_between' => 'Nomor Handphone harus diantara 10 - 13 digit',
             'bidang_usaha.required' => 'Bidang usaha harus diisi',
-            'email_perusahaan.email' => 'Email perusahaan harus valid',
+            'alamat_email_perusahaan.email' => 'Email perusahaan harus valid',
             'status_kepemilikan.required' => 'Status kepemilikan harus diisi',
             'identitas_perusahaan.required' => 'Identitas perusahaan harus diisi',
             'nama_lengkap.required' => 'Nama lengkap harus diisi',
@@ -149,10 +148,8 @@ class FormCustomerController extends Controller
             'kota_npwp.required' => 'Kota NPWP harus diisi',
             'nama_group.required' => 'Nama group harus diisi',
             'bidang_usaha_lain.required' => 'Bidang usaha harus diisi',
-            'nitku.required' => 'NITKU harus diisi',
             'nitku.max' => 'Nomor NPWP harus 22 digit',
             'jenis_cust.required' => 'Jenis customer harus diisi',
-            'status_cabang.required' => 'Status cabang harus diisi',
             
             // Informasi Bank
             'nomor_rekening.required' => 'Nomor rekening harus diisi',
@@ -212,7 +209,7 @@ class FormCustomerController extends Controller
 
             $identitas_perusahaan->tahun_berdiri = $request->tahun_berdiri;
             $identitas_perusahaan->lama_usaha = ($request->tahun_berdiri ? Str::replace(' tahun', '', $request->lama_usaha) : '');
-            $identitas_perusahaan->alamat_email = $request->email_perusahaan;
+            $identitas_perusahaan->alamat_email = $request->alamat_email_perusahaan;
             $identitas_perusahaan->nomor_handphone = $request->no_hp;
             $identitas_perusahaan->status_kepemilikan = $request->status_kepemilikan;
             if($request->status_kepemilikan == 'group') {
@@ -265,13 +262,11 @@ class FormCustomerController extends Controller
                 $identitas_perusahaan->status_pkp = 'non_pkp';
                 $identitas_perusahaan->sppkp = null;
                 $identitas_perusahaan->nitku = null;
-                $identitas_perusahaan->status_cabang = '0';
             } else if (($request->identitas_perusahaan == 'npwp' && $request->bentuk_usaha == 'perseorangan') || $request->bentuk_usaha == 'badan_usaha') {
                 $identitas_perusahaan->badan_usaha = $request->badan_usaha;
                 $identitas_perusahaan->nama_npwp = $request->nama_npwp;
                 $identitas_perusahaan->nomor_npwp = $request->nomor_npwp;
                 $identitas_perusahaan->nitku = $request->nitku;
-                $identitas_perusahaan->status_cabang = $request->status_cabang;
                 if ($request->hasFile('foto_npwp')) {
                     if (File::exists('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_npwp)) {
                         File::delete('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_npwp);
@@ -370,7 +365,7 @@ class FormCustomerController extends Controller
                     $rawData = $JSignatureTools->base64ToNative($request->hasil_ttd);
     
                     // Membuat canvas gambar
-                    $img = imagecreatetruecolor(367.2, 198);
+                    $img = imagecreatetruecolor(592, 271);
                     $white = imagecolorallocate($img, 255, 255, 255);
                     $black = imagecolorallocate($img, 0, 0, 0);
                     imagefill($img, 0, 0, $white);
@@ -490,7 +485,8 @@ class FormCustomerController extends Controller
             $bank->save();
 
             $link = route('form_customer.detail', ['menu' => str_replace('_', '-', $request->bentuk_usaha), 'id' => Crypt::encryptString($identitas_perusahaan->id)]);
-            return ['status' => true, 'link' => $link];
+            $link_test = route('form_customer.detailView', ['menu' => str_replace('_', '-', $request->bentuk_usaha), 'id' => Crypt::encryptString($identitas_perusahaan->id)]);
+            return ['status' => true, 'link' => $link, 'link_test' => $link_test];
         } catch (\Exception $e) {
             dd($e);
             return ['status' => false, 'error' => 'Terjadi kesalahan'];
@@ -596,17 +592,73 @@ class FormCustomerController extends Controller
             ]);
             $pdf->setPaper('A4', 'portrait');
             $pdf->render();
-            // return $pdf->stream();
-            return $pdf->download($data['nama_perusahaan'] . '.pdf');
+            return $pdf->stream();
+            // return $pdf->download($data['nama_perusahaan'] . '.pdf');
         }
     }
 
     public function menuFix() {
-        return view('customer.fix_menu_duplicate');
+        return view('customer.fix_menu');
     }
 
-    public function indexBadanUsaha() {
-        return view('customer.fix_badan_usaha_duplicate');
+    public function indexBadanUsaha($menu, Request $request) {
+        if ($request->enkripsi) {
+            $data = Crypt::decryptString($request->enkripsi);
+            $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas')->where('bentuk_usaha', str_replace('-', '_', $menu))->where('id', $data)->first();
+            $url = route('form_customer.detail', ['menu' => $menu, 'id' => $request->enkripsi]);
+            $url_test = route('form_customer.detailView', ['menu' => $menu, 'id' => $request->enkripsi]);
+            $enkripsi = $request->enkripsi;
+        } else {
+            $data = null;
+            $url = null;
+            $url_test = null;
+            $enkripsi = null;
+        }
+
+        $bidang_usaha = [
+            'toko_retail',
+            'bumn',
+            'reseller',
+            'pabrik',
+            'kontraktor',
+            'toko_online',
+            'dock_kapal',
+            'end_user',
+            'ekspedisi',
+            'lainnya'
+        ];
+
+        if ($menu === 'perseorangan') {
+            return view('customer.fix_perseorangan', compact('data', 'url', 'enkripsi', 'menu', 'bidang_usaha', 'url_test'));
+        } else {
+            return view('customer.fix_badan_usaha', compact('data', 'url', 'enkripsi', 'menu', 'bidang_usaha', 'url_test'));
+        }
+    }
+
+    public function indexDetailView($menu, Request $request) {
+        // dd($request->all());
+        // Mendekripsikan id
+        $dekripsi = Crypt::decryptString($request->id);
+
+        // Memanggil data berdasarkan id identitas perusahaan
+        $data_perusahaan = IdentitasPerusahaan::with('data_identitas', 'informasi_bank')->where('id', $dekripsi)->first();
+
+        if ($menu == 'badan-usaha' || $menu == 'badan_usaha') {
+            $menu = str_replace('_', '-', $menu);
+            return view('customer.fix_badan_usaha_detail', [
+                'enkripsi' => $request->id,
+                'perusahaan' => $data_perusahaan,
+                'menu' => $menu,
+                'url' => route('form_customer.indexBadanUsaha', ['menu' => $menu, 'enkripsi' => $request->id])
+            ]);
+        } else {
+            return view('customer.fix_perseorangan_detail', [
+                'enkripsi' => $request->id,
+                'perusahaan' => $data_perusahaan,
+                'menu' => $menu,
+                'url' => route('form_customer.indexBadanUsaha', ['menu' => $menu, 'enkripsi' => $request->id])
+            ]);
+        }
     }
 
     // public function indexPerseorangan() {

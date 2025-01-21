@@ -139,13 +139,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Perusahaan <span class="text-danger">*</span></label>
-                                    <input type="text" name="nama_perusahaan" id="nama_perusahaan" class="form-control" placeholder="Masukkan nama perusahaan" autocomplete="off" required value="<?php echo e($data['nama_perusahaan']); ?>">
+                                    <input type="text" name="nama_perusahaan" id="nama_perusahaan" class="form-control" placeholder="Masukkan nama perusahaan" autocomplete="off" required value="<?php echo e($data ? $data['nama_perusahaan'] : ''); ?>">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Group Perusahaan <span class="text-danger">*</span></label>
-                                    <input type="text" name="nama_group_perusahaan" id="nama_group_perusahaan" class="form-control" placeholder="Masukkan nama group perusahaan" autocomplete="off" required value="<?php echo e($data['nama_group_perusahaan']); ?>">
+                                    <input type="text" name="nama_group_perusahaan" id="nama_group_perusahaan" class="form-control" placeholder="Masukkan nama group perusahaan" autocomplete="off" required value="<?php echo e($data ? $data['nama_group_perusahaan'] : ''); ?>">
                                     <span class="text-danger">*Jika tidak ada, maka diisi dengan nama perusahaan</span>
                                 </div>
                             </div>
@@ -154,13 +154,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Alamat Lengkap Perusahaan<span class="text-danger">*</span></label>
-                                    <textarea name="alamat_lengkap" id="alamat_lengkap" cols="30" rows="5" class="form-control" required autocomplete="off" placeholder="Masukkan alamat lengkap perusahaan"><?php echo e($data['alamat_lengkap']); ?></textarea>
+                                    <textarea name="alamat_lengkap" id="alamat_lengkap" cols="30" rows="5" class="form-control" required autocomplete="off" placeholder="Masukkan alamat lengkap perusahaan"><?php echo e($data ? $data['alamat_lengkap'] : ''); ?></textarea>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group mb-2">
                                     <label for="">Kota / Kabupaten <span class="text-danger">*</span></label>
-                                    <input type="text" name="kota_kabupaten" id="kota_kabupaten" class="form-control" placeholder="Masukkan kota / kabupaten" autocomplete="off" required value="<?php echo e($data['kota_kabupaten']); ?>">
+                                    <input type="text" name="kota_kabupaten" id="kota_kabupaten" class="form-control" placeholder="Masukkan kota / kabupaten" autocomplete="off" required value="<?php echo e($data ? $data['kota_kabupaten'] : ''); ?>">
                                 </div>
                                 <div class="form-group">
                                     <label for="">Alamat Email Perusahaan</label>
@@ -173,7 +173,7 @@
                                 <div class="form-group">
                                     <label for="">Nomor Handphone Contact Person <span class="text-danger">*</span></label>
                                     
-                                    <input type="text" name="no_hp" id="no_hp" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" maxlength="14" class="form-control" placeholder="Masukkan nomor handphone" required autocomplete="off" value="<?php echo e($data['nomor_handphone']); ?>">
+                                    <input type="text" name="no_hp" id="no_hp" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" maxlength="14" class="form-control" placeholder="Masukkan nomor handphone" required autocomplete="off" value="<?php echo e($data ? $data['nomor_handphone'] : ''); ?>">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -198,9 +198,7 @@
                                             <option value="<?php echo e($loop_bidang_usaha); ?>"><?php echo e(str_replace('_', ' ', strtoupper($loop_bidang_usaha))); ?></option>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
-                                    <?php if($data['bidang_usaha'] == 'lainnya'): ?>
-                                        <input type="text" class="form-control" placeholder="Masukkan bidang usaha lain" id="bidang_usaha_lain" name="bidang_usaha_lain" autocomplete="off" value="<?php echo e($data ? $data['bidang_usaha'] ? $data['bidang_usaha_lain'] : '' : ''); ?>">
-                                    <?php endif; ?>
+                                    <input type="text" class="form-control" placeholder="Masukkan bidang usaha lain" id="bidang_usaha_lain" name="bidang_usaha_lain" autocomplete="off" value="<?php echo e($data ? $data['bidang_usaha'] ? $data['bidang_usaha_lain'] : '' : ''); ?>">
                                 </div>
                             </div>
                         </div>
@@ -212,14 +210,12 @@
                                     <option value="sewa">Sewa</option>
                                     <option value="group">Group</option>
                                 </select>
-                                <?php if($data['status_kepemilikan'] == 'lainnya'): ?>
-                                    <input type="text" class="form-control" autocomplete="off" placeholder="Masukkan nama group" id="nama_group" name="nama_group" value="<?php echo e($data ? $data['status_kepemilikan'] ? $data['nama_group'] : '' : ''); ?>">
-                                <?php endif; ?>
+                                <input type="text" class="form-control" autocomplete="off" placeholder="Masukkan nama group" id="nama_group" name="nama_group" value="<?php echo e($data ? $data['status_kepemilikan'] ? $data['nama_group'] : '' : ''); ?>">
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group mb-3">
                                     <label for="">Jenis Badan Usaha <span class="text-danger">*</span></label>
-                                    <select name="badan_usaha" id="badan_usaha" class="form-control">
+                                    <select name="badan_usaha" id="badan_usaha" class="form-control" required>
                                         <option value="pt">PT</option>
                                         <option value="cv">CV</option>
                                         <option value="pd">PD</option>
@@ -232,13 +228,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group mb-3">
                                     <label for="">Nama NPWP <span class="text-danger">*</span></label>
-                                    <input type="text" name="nama_npwp" id="nama_npwp" class="form-control" autocomplete="off" placeholder="Masukkan nama NPWP" value="<?php echo e($data['nama_npwp']); ?>">
+                                    <input type="text" name="nama_npwp" id="nama_npwp" class="form-control" autocomplete="off" placeholder="Masukkan nama NPWP" value="<?php echo e($data ? ($data['identitas'] == 'npwp' ? $data['nama_npwp'] : '') : ''); ?>">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group mb-3">
                                     <label for="">Nomor NPWP <span class="text-danger">*</span></label>
-                                    <input type="text" name="nomor_npwp" id="nomor_npwp" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="20" class="form-control" autocomplete="off" placeholder="Masukkan nomor NPWP" value="<?php echo e($data['nomor_npwp']); ?>">
+                                    <input type="text" name="nomor_npwp" id="nomor_npwp" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="20" class="form-control" autocomplete="off" placeholder="Masukkan nomor NPWP" value="<?php echo e($data ? ($data['identitas'] == 'npwp' ? $data['nomor_npwp'] : '' ) : ''); ?>">
                                 </div>
                             </div>
                         </div>
@@ -258,7 +254,7 @@
                                 </div>
 
                                 <div id="preview_npwp" class="<?php if($data): ?> <?php if($data['identitas'] != 'npwp'): ?> d-none <?php endif; ?> <?php else: ?> d-none <?php endif; ?>">
-                                    <img id="preview_foto_npwp" src="<?php echo e($data ? asset('../../uploads/identitas_perusahaan/'.$data['foto_npwp']) : ''); ?>" alt="Preview" data-action="zoom">
+                                    <img id="preview_foto_npwp" src="<?php echo e($data ? asset('uploads/identitas_perusahaan/'.$data['foto_npwp']) : ''); ?>" alt="Preview" data-action="zoom">
                                 </div>
 
                                 
@@ -299,7 +295,7 @@
                                     <input type="file" name="foto_sppkp" id="foto_sppkp" onchange="previewFileSppkp(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
 
                                     <div id="preview_sppkp">
-                                        <img id="preview_foto_sppkp" src="<?php echo e($data ? asset('../../uploads/identitas_perusahaan/'.$data['sppkp']) : ''); ?>" alt="Preview" data-action="zoom">
+                                        <img id="preview_foto_sppkp" src="<?php echo e($data ? asset('uploads/identitas_perusahaan/'.$data['sppkp']) : ''); ?>" alt="Preview" data-action="zoom">
                                     </div>
                                 </div>
                             </div>
@@ -315,13 +311,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nomor Rekening <span class="text-danger">*</span></label>
-                                    <input type="text" name="nomor_rekening" oninput="this.value = this.value.replace(/\D+/g, '')" id="nomor_rekening" maxlength="15" class="form-control" autocomplete="off" required placeholder="Masukkan nomor rekening" value="<?php echo e($data['informasi_bank']['nomor_rekening']); ?>">
+                                    <input type="text" name="nomor_rekening" oninput="this.value = this.value.replace(/\D+/g, '')" id="nomor_rekening" maxlength="15" class="form-control" autocomplete="off" required placeholder="Masukkan nomor rekening" value="<?php echo e($data ? $data['informasi_bank']['nomor_rekening'] : ''); ?>">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Rekening <span class="text-danger">*</span></label>
-                                    <input type="text" name="nama_rekening" id="nama_rekening" class="form-control" autocomplete="off" required placeholder="Masukkan nama rekening" value="<?php echo e($data['informasi_bank']['nama_rekening']); ?>">
+                                    <input type="text" name="nama_rekening" id="nama_rekening" class="form-control" autocomplete="off" required placeholder="Masukkan nama rekening" value="<?php echo e($data ? $data['informasi_bank']['nama_rekening'] : ''); ?>">
                                 </div>
                             </div>
                         </div>
@@ -329,7 +325,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Bank <span class="text-danger">*</span></label>
-                                    <input type="text" name="nama_bank" id="nama_bank" class="form-control" autocomplete="off" required placeholder="Masukkan nama bank" value="<?php echo e($data['informasi_bank']['nama_bank']); ?>">
+                                    <input type="text" name="nama_bank" id="nama_bank" class="form-control" autocomplete="off" required placeholder="Masukkan nama bank" value="<?php echo e($data ? $data['informasi_bank']['nama_bank'] : ''); ?>">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -339,9 +335,7 @@
                                         <option value="rekening_perusahaan">Rekening Perusahaan</option>
                                         <option value="lainnya">Lainnya</option>
                                     </select>
-                                    <?php if($data['informasi_bank']['status'] == 'lainnya'): ?>
-                                        <input type="text" class="form-control" id="rekening_lain" name="rekening_lain" placeholder="Masukkan pemilik rekening" autocomplete="off" value="<?php echo e($data ? $data['informasi_bank'] ? $data['informasi_bank']['status'] == 'lainnya' ? $data['informasi_bank']['rekening_lain'] : '' : '' : ''); ?>">
-                                    <?php endif; ?>
+                                    <input type="text" class="form-control" id="rekening_lain" name="rekening_lain" placeholder="Masukkan pemilik rekening" autocomplete="off" value="<?php echo e($data ? $data['informasi_bank'] ? $data['informasi_bank']['status'] == 'lainnya' ? $data['informasi_bank']['rekening_lain'] : '' : '' : ''); ?>">
                                 </div>
                             </div>
                         </div>
@@ -355,13 +349,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Penanggung Jawab <span class="text-danger">*</span></label>
-                                    <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" class="form-control" autocomplete="off" placeholder="Masukkan nama penanggung jawab" value="<?php echo e($data['data_identitas']['nama']); ?>">
+                                    <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" class="form-control" autocomplete="off" placeholder="Masukkan nama penanggung jawab" value="<?php echo e($data ? $data['data_identitas'] ? $data['data_identitas']['nama'] : '' : ''); ?>">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Jabatan <span class="text-danger">*</span></label>
-                                    <input type="text" name="jabatan" id="jabatan" class="form-control" autocomplete="off" placeholder="Masukkan jabatan" value="<?php echo e($data['data_identitas']['jabatan']); ?>">
+                                    <input type="text" name="jabatan" id="jabatan" class="form-control" autocomplete="off" placeholder="Masukkan jabatan" value="<?php echo e($data ? $data['data_identitas'] ? $data['data_identitas']['jabatan'] : '' : ''); ?>">
                                 </div>
                             </div>
                         </div>
@@ -381,7 +375,7 @@
                                     <input type="file" name="foto_penanggung" id="foto_penanggung" onchange="previewFilePenanggung(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
     
                                     <div id="preview_penanggung">
-                                        <img id="preview_foto_penanggung" src="<?php echo e(asset('../../uploads/penanggung_jawab/'.$data['data_identitas']['foto'])); ?>" alt="Preview" data-action="zoom">
+                                        <img id="preview_foto_penanggung" src="<?php echo e($data ? ($data['data_identitas'] ? asset('uploads/penanggung_jawab/'.$data['data_identitas']['foto']) : '') : ''); ?>" alt="Preview" data-action="zoom">
                                     </div>
                                 </div>
                             </div>
@@ -389,7 +383,7 @@
                                 <div class="form-group">
                                     <label for="">Nomor Handphone <span class="text-danger">*</span></label>
                                     
-                                    <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" class="form-control" autocomplete="off" maxlength="14" placeholder="Masukkan no hp penanggung jawab" value="<?php echo e($data['data_identitas']['no_hp']); ?>">
+                                    <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" class="form-control" autocomplete="off" maxlength="14" placeholder="Masukkan no hp penanggung jawab" value="<?php echo e($data ? ($data['data_identitas'] ? $data['data_identitas']['no_hp'] : '') : ''); ?>">
                                 </div>
                             </div>
                         </div>

@@ -262,7 +262,7 @@
                                     <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg" autocomplete="off" <?php echo e($data_perusahaan ? ($data_perusahaan['identitas'] == 'ktp' ? $data_perusahaan['foto_ktp'] : '') : ''); ?>>
     
                                     <div id="preview_ktp" class="<?php if($data_perusahaan): ?> <?php if($data_perusahaan['identitas'] != 'ktp'): ?> d-none <?php endif; ?> <?php else: ?> d-none <?php endif; ?>">
-                                        <img id="preview_foto_ktp" src="<?php echo e($data_perusahaan ? asset('../../uploads/identitas_perusahaan/'.$data_perusahaan['foto_ktp']) : ''); ?>" alt="Preview" data-action="zoom">
+                                        <img id="preview_foto_ktp" src="<?php echo e($data_perusahaan ? asset('uploads/identitas_perusahaan/'.$data_perusahaan['foto_ktp']) : ''); ?>" alt="Preview" data-action="zoom">
                                     </div>
                                 </div>
                             </div>
@@ -296,7 +296,7 @@
 
                                     <div class="form-group mb-3">
                                         <label for="">NITKU <span class="text-danger">*</span></label>
-                                        <input type="text" name="nitku" id="nitku" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="22" class="form-control" readonly placeholder="Masukkan NITKU" readonly autocomplete="off" value="<?php echo e($data_perusahaan ? $data_perusahaan['nitku'] : ''); ?>">
+                                        <input type="text" name="nitku" id="nitku" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="22" class="form-control" readonly placeholder="Masukkan NITKU" autocomplete="off" value="<?php echo e($data_perusahaan ? $data_perusahaan['nitku'] : ''); ?>">
                                     </div>
 
                                     <div class="form-group">
@@ -321,7 +321,7 @@
                                     </div>
     
                                     <div id="preview_npwp" class="<?php if($data_perusahaan): ?> <?php if($data_perusahaan['identitas'] != 'npwp'): ?> d-none <?php endif; ?> <?php else: ?> d-none <?php endif; ?>">
-                                        <img id="preview_foto_npwp" src="<?php echo e($data_perusahaan ? asset('../../uploads/identitas_perusahaan/'.$data_perusahaan['foto_npwp']) : ''); ?>" alt="Preview" data-action="zoom">
+                                        <img id="preview_foto_npwp" src="<?php echo e($data_perusahaan ? asset('uploads/identitas_perusahaan/'.$data_perusahaan['foto_npwp']) : ''); ?>" alt="Preview" data-action="zoom">
                                     </div>
 
                                     <div class="form-group mb-3 mt-2">
@@ -337,7 +337,7 @@
                                         <input type="file" name="foto_sppkp" id="foto_sppkp" onchange="previewFileSppkp(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
     
                                         <div id="preview_sppkp">
-                                            <img id="preview_foto_sppkp" src="<?php echo e($data_perusahaan ? asset('../../uploads/identitas_perusahaan/'.$data_perusahaan['sppkp']) : ''); ?>" alt="Preview" data-action="zoom">
+                                            <img id="preview_foto_sppkp" src="<?php echo e($data_perusahaan ? asset('uploads/identitas_perusahaan/'.$data_perusahaan['sppkp']) : ''); ?>" alt="Preview" data-action="zoom">
                                         </div>
                                     </div>
                                 </div>
@@ -418,7 +418,7 @@
                                     <input type="file" name="foto_penanggung" id="foto_penanggung" onchange="previewFilePenanggung(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
     
                                     <div id="preview_penanggung">
-                                        <img id="preview_foto_penanggung" src="<?php echo e($data_perusahaan ? ($data_perusahaan['data_identitas'] ? asset('../../uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '') : ''); ?>" alt="Preview" data-action="zoom">
+                                        <img id="preview_foto_penanggung" src="<?php echo e($data_perusahaan ? ($data_perusahaan['data_identitas'] ? asset('uploads/penanggung_jawab/'.$data_perusahaan['data_identitas']['foto']) : '') : ''); ?>" alt="Preview" data-action="zoom">
                                     </div>
                                 </div>
                             </div>

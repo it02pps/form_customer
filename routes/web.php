@@ -45,11 +45,18 @@ Route::middleware('web')->group(function () {
 
     // Update profil
     Route::post('/internal/panel/update-profil', [HomeController::class, 'update_profil'])->name('home.update_profil');
+
+    // Fix ui
+    Route::get('/internal/panel/fix', [HomeController::class, 'fixIndex'])->name('fixHome');
+    Route::get('/internal/panel/fix/table', [HomeController::class, 'datatable'])->name('fixHome.datatable');
+    Route::get('/internal/panel/fix/detail/{id}', [HomeController::class, 'fixDetail'])->name('fixHome.detail');
+    Route::get('/internal/panel/fix/edit/testing/{id}', [HomeController::class, 'fixEdit'])->name('fixHome.edit');
 });
 
 // Fix view form customer
 Route::get('/fix-form-customer/testing/menu', [FormCustomer::class, 'menuFix'])->name('form_customer.menuFix');
-Route::get('/fix-form-customer/badan-usaha', [FormCustomer::class, 'indexBadanUsaha'])->name('form_customer.indexBadanUsaha');
+Route::get('/fix-form-customer/{menu}', [FormCustomer::class, 'indexBadanUsaha'])->name('form_customer.indexBadanUsaha');
+Route::get('/fix-form-customer/{menu}/detail', [FormCustomer::class, 'indexDetailView'])->name('form_customer.detailView');
 Route::get('/login/fix', [LoginController::class, 'loginFix'])->name('form_customer.loginFix');
 Route::get('/lupa-password/fix/1', [LoginController::class, 'lupa_password'])->name('form_customer.lupa_password');
 // Route::get('/fix-form-customer/perseorangan', [FormCustomer::class, 'indexPerseorangan'])->name('form_customer.indexPerseorangan');

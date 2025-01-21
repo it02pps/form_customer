@@ -71,52 +71,56 @@
             <h3>IDENTITAS PERUSAHAAN</h3>
             <div class="row" style="margin-bottom: 20px;">
                 <div class="column">
-                    <p class="label">Nama Perusahaan</p>
-                    <p><?php echo e($data['nama_perusahaan']); ?></p>
+                    <p class="label">Jenis Customer</p>
+                    <?php if($data['status_cust'] == 'lama'): ?>
+                        <p>Customer Lama</p>
+                    <?php else: ?>
+                        <p>Customer Baru</p>
+                    <?php endif; ?>
+
+                    <p class="label">Nama Group Perusahaan</p>
+                    <p><?php echo e($data['nama_group_perusahaan']); ?></p>
 
                     <p class="label">Alamat Lengkap Perusahaan</p>
                     <p><?php echo e($data['alamat_lengkap']); ?></p>
 
-                    <p class="label">Alamat Email Perusahaan</p>
-                    <p><?php echo e($data['alamat_email']); ?></p>
+                    <p class="label">Tahun Berdiri</p>
+                    <p><?php echo e($data['tahun_berdiri'] ? ($data['tahun_berdiri'] ? \Carbon\Carbon::parse($data['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') : '-') : '-'); ?></p>
 
-                    <p class="label">Lama Usaha (Tahun)</p>
-                    <p><?php echo e($data['lama_usaha'] ? $data['lama_usaha'].' tahun' : '-'); ?></p>
+                    <p class="label">Alamat Email Perusahaan</p>
+                    <p><?php echo e($data['alamat_email'] ? $data['alamat_email'] : '-'); ?></p>
 
                     <p class="label">Bidang Usaha</p>
                     <?php if($data['bidang_usaha'] == 'lainnya'): ?>
                         <p><?php echo e(ucfirst($data['bidang_usaha_lain'])); ?></p>
                     <?php else: ?>
-                        <p><?php echo e(ucfirst(str_replace('_', ' ', $data['bidang_usaha']))); ?></p>
+                        <p><?php echo e(strtoupper(str_replace('_', ' ', $data['bidang_usaha']))); ?></p>
                     <?php endif; ?>
 
-                    <p class="label">Identitas Pemilik Usaha</p>
-                    <p><?php echo e(strtoupper($data['identitas'])); ?></p>
-                    
-                    <p class="label">Jenis Badan Usaha</p>
-                    <p><?php echo e(strtoupper($data['badan_usaha'])); ?></p>
+                    <p class="label">Nomor NPWP</p>
+                    <p><?php echo e($data['nomor_npwp']); ?></p>
 
-                    <p class="label">Nama NPWP</p>
-                    <p><?php echo e($data['nama_npwp']); ?></p>
+                    <p class="label">NITKU untuk penerbitan Faktur Pajak</p>
+                    <p><?php echo e($data['nitku'] ? $data['nitku'] : '-'); ?></p>
 
-                    <p class="label">Kota Sesuai NPWP</p>
-                    <p><?php echo e($data['kota_npwp']); ?></p>
+                    <p class="label">Alamat NPWP</p>
+                    <p><?php echo e($data['alamat_npwp']); ?></p>
                     
                     <p class="label">Email Khusus Untuk Faktur Pajak</p>
                     <p><?php echo e($data['email_khusus_faktur_pajak']); ?></p>
                 </div>
                 <div class="column">
-                    <p class="label">Nama Group Perusahaan</p>
-                    <p><?php echo e($data['nama_group_perusahaan']); ?></p>
+                    <p class="label">Nama Perusahaan</p>
+                    <p><?php echo e($data['nama_perusahaan']); ?></p>
+
+                    <p class="label">Nomor Handphone Contact Person</p>
+                    <p><?php echo e($data['nomor_handphone']); ?></p>
 
                     <p class="label">Kota / Kabupaten</p>
                     <p><?php echo e($data['kota_kabupaten']); ?></p>
-
-                    <p class="label">Tahun Berdiri</p>
-                    <p><?php echo e($data['tahun_berdiri'] ? ($data['tahun_berdiri'] ? \Carbon\Carbon::parse($data['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') : '-') : '-'); ?></p>
                     
-                    <p class="label">Nomor Handphone Contact Person</p>
-                    <p><?php echo e($data['nomor_handphone']); ?></p>
+                    <p class="label">Lama Usaha (Tahun)</p>
+                    <p><?php echo e($data['lama_usaha'] ? $data['lama_usaha'].' tahun' : '-'); ?></p>
 
                     <p class="label">Status Kepemilikan Tempat Usaha</p>
                     <?php if($data['status_kepemilikan'] == 'group'): ?>
@@ -125,11 +129,11 @@
                         <p><?php echo e(str_replace("_", ' ', ucfirst($data['status_kepemilikan']))); ?></p>
                     <?php endif; ?>
 
-                    <p class="label">Nomor NPWP</p>
-                    <p><?php echo e($data['nomor_npwp']); ?></p>
+                    <p class="label">Jenis Badan Usaha</p>
+                    <p><?php echo e(strtoupper($data['badan_usaha'])); ?></p>
 
-                    <p class="label">Alamat NPWP</p>
-                    <p><?php echo e($data['alamat_npwp']); ?></p>
+                    <p class="label">Nama NPWP</p>
+                    <p><?php echo e($data['nama_npwp']); ?></p>
 
                     <p class="label">Foto NPWP</p>
                     <?php if(!$data['foto_npwp']): ?>
@@ -137,6 +141,9 @@
                     <?php else: ?>
                         <p>Lampiran NPWP</p>
                     <?php endif; ?>
+
+                    <p class="label">Kota Sesuai NPWP</p>
+                    <p><?php echo e($data['kota_npwp']); ?></p>
 
                     <p class="label">Status Pengusaha Kena Pajak (PKP)</p>
                     <p><?php echo e(str_replace("_", " ", strtoupper($data['status_pkp']))); ?></p>

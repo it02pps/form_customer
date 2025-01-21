@@ -61,6 +61,11 @@
         text-decoration: underline;
     }
 
+    #preview_penanggung .zoom-img-wrap .zoom-img, #preview_ktp .zoom-img-wrap .zoom-img, #preview_npwp .zoom-img-wrap .zoom-img, #preview_sppkp .zoom-img-wrap .zoom-img {
+        width: 100%;
+        height: 100%;
+    }
+
     @media only screen and (max-width: 500px) {
         .content-header h2 {
             font-size: 22px;
@@ -161,7 +166,7 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Alamat Email Usaha</label>
-                                <p><?php echo e($perusahaan['alamat_email']); ?></p>
+                                <p><?php echo e($perusahaan['alamat_email'] ? $perusahaan['alamat_email'] : ''); ?></p>
                             </div>
                         </div>
                     </div>
@@ -235,7 +240,7 @@
                                             
                                             
                                             
-                                            <img src="<?php echo e(asset('../../uploads/identitas_perusahaan/'.$perusahaan['foto_ktp'])); ?>" alt="Foto KTP" data-action="zoom">
+                                            <img src="<?php echo e(asset('uploads/identitas_perusahaan/'.$perusahaan['foto_ktp'])); ?>" alt="Foto KTP" data-action="zoom">
                                         </div>
                                     </div>
                                 </div>
@@ -303,7 +308,7 @@
     
                                         <div id="preview_sppkp">
                                             
-                                            <img src="<?php echo e(asset('../../uploads/idetitas_perusahaan/'.$perusahaan['sppkp'])); ?>" alt="SPPKP" data-action="zoom">
+                                            <img src="<?php echo e(asset('uploads/identitas_perusahaan/'.$perusahaan['sppkp'])); ?>" alt="SPPKP" data-action="zoom">
                                         </div>
                                     </div>
                                 </div>
@@ -319,7 +324,7 @@
     
                                     <div id="preview_npwp" class="<?php if($perusahaan['identitas'] != 'npwp'): ?> d-none <?php endif; ?>">
                                         
-                                        <img src="<?php echo e(asset('../../uploads/identitas_perusahaan/'.$perusahaan['foto_npwp'])); ?>" alt="Foto NPWP" data-action="zoom">
+                                        <img src="<?php echo e(asset('uploads/identitas_perusahaan/'.$perusahaan['foto_npwp'])); ?>" alt="Foto NPWP" data-action="zoom">
                                     </div>
                                 </div>
                             </div>
@@ -394,7 +399,7 @@
                             <div class="form-group mb-2">
                                 <label for="">Foto</label>
                                 <div id="preview_penanggung">
-                                    <img src="<?php echo e(asset('../../uploads/penanggung_jawab/' . $perusahaan['data_identitas']['foto'])); ?>" alt="Foto" data-action="zoom">
+                                    <img src="<?php echo e(asset('uploads/penanggung_jawab/' . $perusahaan['data_identitas']['foto'])); ?>" alt="Foto" data-action="zoom">
                                 </div>
                             </div>
 
@@ -402,7 +407,7 @@
                             <div class="">
                                 <label for="">Tanda Tangan</label>
                                 <div id="signature">
-                                    <img src="<?php echo e(asset('../../uploads/ttd/'.$perusahaan['data_identitas']['ttd'])); ?>" style="width: 90%;" data-action="zoom">
+                                    <img src="<?php echo e(asset('uploads/ttd/'.$perusahaan['data_identitas']['ttd'])); ?>" style="width: 100%; height: 100%;" data-action="zoom">
                                 </div>
                             </div>
                         </div>

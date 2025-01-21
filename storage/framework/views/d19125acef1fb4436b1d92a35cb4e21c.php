@@ -9,6 +9,11 @@
     <title>PDF | PT Papasari</title>
 
     <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+            color: #021526;
+        }
+        
         h2, h3 {
             text-align: center;
         }
@@ -71,76 +76,102 @@
             <h3>IDENTITAS PERUSAHAAN</h3>
             <div class="row" style="margin-bottom: 20px;">
                 <div class="column">
-                    <p class="label">Nama Perusahaan</p>
-                    <p><?php echo e($data['nama_perusahaan']); ?></p>
+                    <p class="label">Jenis Customer</p>
+                    <?php if($data['status_cust'] == 'lama'): ?>
+                        <p>Customer Lama</p>
+                    <?php else: ?>
+                        <p>Customer Baru</p>
+                    <?php endif; ?>
 
-                    <p class="label">Alamat Lengkap</p>
+                    <p class="label">Nama Group Perusahaan</p>
+                    <p><?php echo e($data['nama_group_perusahaan']); ?></p>
+
+                    <p class="label">Alamat Lengkap Perusahaan</p>
                     <p><?php echo e($data['alamat_lengkap']); ?></p>
-
-                    <p class="label">Alamat Email Koresponden</p>
-                    <p><?php echo e($data['alamat_email']); ?></p>
 
                     <p class="label">Tahun Berdiri</p>
                     <p><?php echo e($data['tahun_berdiri'] ? ($data['tahun_berdiri'] ? \Carbon\Carbon::parse($data['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') : '-') : '-'); ?></p>
 
+                    <p class="label">Alamat Email Perusahaan</p>
+                    <p><?php echo e($data['alamat_email'] ? $data['alamat_email'] : '-'); ?></p>
+
                     <p class="label">Bidang Usaha</p>
-                    <p><?php echo e(strtoupper(str_replace('_', ' ', $data['bidang_usaha']))); ?></p>
+                    <?php if($data['bidang_usaha'] == 'lainnya'): ?>
+                        <p><?php echo e(ucfirst($data['bidang_usaha_lain'])); ?></p>
+                    <?php else: ?>
+                        <p><?php echo e(strtoupper(str_replace('_', ' ', $data['bidang_usaha']))); ?></p>
+                    <?php endif; ?>
 
-                    <p class="label">Identitas Pemilik Usaha</p>
-                    <p><?php echo e(strtoupper($data['identitas'])); ?></p>
-                    
                     <?php if($data['identitas'] == 'ktp'): ?>
-                        <p class="label">Nomor KTP</p>
-                        <p><?php echo e($data['nomor_ktp']); ?></p>
-
                         <p class="label">Foto KTP</p>
                         <p>Lampiran KTP</p>
-                    <?php else: ?>
-                        <p class="label">Jenis Badan Usaha</p>
-                        <p><?php echo e(strtoupper($data['badan_usaha'])); ?></p>
-
-                        <p class="label">Nama NPWP</p>
-                        <p><?php echo e($data['nama_npwp']); ?></p>
-
-                        <p class="label">Email Khusus Untuk Faktur Pajak</p>
-                        <p><?php echo e($data['email_khusus_faktur_pajak']); ?></p>
-
-                        <p class="label">Kota Sesuai NPWP</p>
-                        <p><?php echo e($data['kota_npwp']); ?></p>
-                    <?php endif; ?>
-                </div>
-                <div class="column">
-                    <p class="label">Nama Group Perusahaan</p>
-                    <p><?php echo e($data['nama_group_perusahaan']); ?></p>
-
-                    <p class="label">Kota / Kabupaten</p>
-                    <p><?php echo e($data['kota_kabupaten']); ?></p>
-
-                    <p class="label">Lama Usaha (Tahun)</p>
-                    <p><?php echo e($data['lama_usaha'] ? $data['lama_usaha'].' tahun' : '-'); ?></p>
-                    
-                    <p class="label">Nomor Handphone Contact Person</p>
-                    <p><?php echo e($data['nomor_handphone']); ?></p>
-
-                    <p class="label">Status Kepemilikan Tempat Usaha</p>
-                    <p><?php echo e(str_replace("_", ' ', ucwords($data['status_kepemilikan']))); ?></p>
-
-                    <?php if($data['identitas'] == 'ktp'): ?>
-                        <p class="label">Nama Lengkap</p>
-                        <p><?php echo e($data['nama_lengkap']); ?></p>
                     <?php else: ?>
                         <p class="label">Nomor NPWP</p>
                         <p><?php echo e($data['nomor_npwp']); ?></p>
 
+                        <p class="label">NITKU untuk penerbitan Faktur Pajak</p>
+                        <p><?php echo e($data['nitku'] ? $data['nitku'] : '-'); ?></p>
+    
                         <p class="label">Alamat NPWP</p>
                         <p><?php echo e($data['alamat_npwp']); ?></p>
+                        
+                        <p class="label">Email Khusus Untuk Faktur Pajak</p>
+                        <p><?php echo e($data['email_khusus_faktur_pajak']); ?></p>
+                    <?php endif; ?>
+                </div>
+                <div class="column">
+                    <p class="label">Nama Perusahaan</p>
+                    <p><?php echo e($data['nama_perusahaan']); ?></p>
 
-                        <p class="label">Foto NPWP</p>
-                        <p>Lampiran NPWP</p>
+                    <p class="label">Nomor Handphone Contact Person</p>
+                    <p><?php echo e($data['nomor_handphone']); ?></p>
+
+                    <p class="label">Kota / Kabupaten</p>
+                    <p><?php echo e($data['kota_kabupaten']); ?></p>
+                    
+                    <p class="label">Lama Usaha (Tahun)</p>
+                    <p><?php echo e($data['lama_usaha'] ? $data['lama_usaha'].' tahun' : '-'); ?></p>
+
+                    <p class="label">Status Kepemilikan Tempat Usaha</p>
+                    <?php if($data['status_kepemilikan'] == 'group'): ?>
+                        <p><?php echo e(ucfirst($data['nama_group'])); ?></p>
+                    <?php else: ?>
+                        <p><?php echo e(str_replace("_", ' ', ucfirst($data['status_kepemilikan']))); ?></p>
                     <?php endif; ?>
 
-                    <p class="label">Status Pengusaha Kena Pajak (PKP)</p>
-                    <p><?php echo e(str_replace("_", " ", strtoupper($data['status_pkp']))); ?></p>
+                    <?php if($data['identitas'] == 'ktp'): ?>
+                        <p class="label">Nomor KTP</p>
+                        <p><?php echo e($data['nomor_ktp']); ?></p>
+
+                        <p class="label">Nama Lengkap Sesuai Identitas</p>
+                        <p><?php echo e($data['nama_lengkap']); ?></p>
+                    <?php else: ?>
+                        <p class="label">Nama NPWP</p>
+                        <p><?php echo e($data['nama_npwp']); ?></p>
+
+                        <p class="label">Foto NPWP</p>
+                        <?php if(!$data['foto_npwp']): ?>
+                            <p>-</p>
+                        <?php else: ?>
+                            <p>Lampiran NPWP</p>
+                        <?php endif; ?>
+
+                        <p class="label">Kota Sesuai NPWP</p>
+                        <p><?php echo e($data['kota_npwp']); ?></p>
+
+                        <p class="label">Status Pengusaha Kena Pajak (PKP)</p>
+                        <p><?php echo e(str_replace("_", " ", strtoupper($data['status_pkp']))); ?></p>
+
+                        <?php if($data['status_pkp'] == 'pkp'): ?>
+                            <p class="label">Foto SPPKP</p>
+                            <?php if(!$data['sppkp']): ?>
+                                <p>-</p>
+                            <?php else: ?>
+                                <p>Lampiran SPPKP</p>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    <?php endif; ?>
+
                 </div>
             </div>
 
@@ -198,10 +229,10 @@
                     <?php endif; ?>
 
                     
-                    
                     <div class="content-ttd">
                         <p>Penanggung Jawab</p>
-                        <br><br><br><br>
+                        
+                        <img src="uploads/ttd/<?php echo e($data['data_identitas']['ttd']); ?>" alt="" style="width: 70%;">
                         <p>______________________</p>
                     </div>
                 </div>

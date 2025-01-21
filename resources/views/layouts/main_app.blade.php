@@ -36,11 +36,10 @@
         }
 
         main {
-            display: flex;
-            align-items: center;
-            max-width: 100vw;
-            max-height: auto;
-            padding: 120px 0 0 0 ;
+            /* display: flex;
+            align-items: center; */
+            width: 100vw;
+            height: 100vh;
         }
 
         p {
@@ -71,6 +70,43 @@
 
         h6 {
             font-size: 18px;
+        }
+
+        @media screen and (max-width: 475px) {
+            main {
+                width: 100vw;
+                height: 100vh;
+            }
+
+            p {
+                font-size: 18px;
+            }
+        
+            h1 {
+                font-size: 36px;
+                font-weight: 700;
+            }
+
+            h2 {
+                font-size: 28px;
+            }
+
+            h3 {
+                font-size: 23px;
+            }
+
+            h4 {
+                font-size: 18px;
+            }
+
+            h5 {
+                font-size: 16px;
+                font-weight: 400;
+            }
+
+            h6 {
+                font-size: 12px;
+            }
         }
     </style>
 
