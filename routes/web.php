@@ -51,6 +51,7 @@ Route::middleware('web')->group(function () {
     Route::get('/internal/panel/fix/table', [HomeController::class, 'datatable'])->name('fixHome.datatable');
     Route::get('/internal/panel/fix/detail/{id}', [HomeController::class, 'fixDetail'])->name('fixHome.detail');
     Route::get('/internal/panel/fix/edit/testing/{id}', [HomeController::class, 'fixEdit'])->name('fixHome.edit');
+    Route::get('/internal/panel/fix/get-pdf/{id}', [HomeController::class, 'getPdf'])->name('fixHome.getPdf');
 });
 
 // Fix view form customer
@@ -59,4 +60,5 @@ Route::get('/fix-form-customer/{menu}', [FormCustomer::class, 'indexBadanUsaha']
 Route::get('/fix-form-customer/{menu}/detail', [FormCustomer::class, 'indexDetailView'])->name('form_customer.detailView');
 Route::get('/login/fix', [LoginController::class, 'loginFix'])->name('form_customer.loginFix');
 Route::get('/lupa-password/fix/1', [LoginController::class, 'lupa_password'])->name('form_customer.lupa_password');
+Route::post('/fix-form-customer/{menu}/detail/upload/{id}', [FormCustomer::class, 'upload_pdf'])->name('form_customer.upload_pdf');
 // Route::get('/fix-form-customer/perseorangan', [FormCustomer::class, 'indexPerseorangan'])->name('form_customer.indexPerseorangan');

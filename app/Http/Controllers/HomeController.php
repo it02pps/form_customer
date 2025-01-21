@@ -16,10 +16,12 @@ use App\Helper\ApiStorage;
 use App\Helper\base30ToImage;
 use App\Models\TipeCustomer;
 use App\Models\User;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\Visibility;
 use Illuminate\Support\Facades\Http;
+use PHPUnit\Framework\MockObject\Builder\Identity;
 use Yajra\DataTables\Facades\DataTables;
 
 class HomeController extends Controller
@@ -652,5 +654,15 @@ class HomeController extends Controller
         } else {
             return view('panel.fix_home_edit_badan_usaha', compact('data', 'enkripsi', 'bidang_usaha', 'url'));
         }
+    }
+
+    public function getPdf($id) {
+        $data = IdentitasPerusahaan::find(Crypt::decryptString($id));
+        $path = public_path() . '/uploads/identitas_perusahaan/' . $data->file_customer_external;
+        $headers = array(
+            'Content-Type: application/pdf',
+        );
+
+        return Response::download($path, $data->file_customer_external, $headers);
     }
 }

@@ -661,7 +661,23 @@ class FormCustomerController extends Controller
         }
     }
 
-    // public function indexPerseorangan() {
-    //     return view('customer.fix_perseorangan');
-    // }
+    public function upload_pdf(Request $request, $menu, $id) {
+        try {
+            $data = IdentitasPerusahaan::find(Crypt::decryptString($id));
+    
+            if($request->hasFile('file_pdf')) {
+                $file = $request->file('file_pdf');
+                $ext = $file->getClientOriginalExtension();
+                $filename = uniqid() . '-' . $data->nama_perusahaan . '.' . $ext;
+                $file->move('uploads/identitas_perusahaan/', $filename);
+    
+                $data->file_customer_external = $filename;
+            }
+            $data->save();
+    
+            return ['status' => true, 'url' => 'https://papasari.com'];
+        } catch(\Exception $e) {
+            return ['status' => false, 'error' => 'Terjadi Kesalahan'];
+        }
+    }
 }

@@ -104,6 +104,24 @@
         color: #fff;
     }
 
+    .btnUploadFile {
+        padding: 0 24px;
+        height: 48px;
+        border-radius: 8px;
+        background-color: #0063ee;
+        border: none;
+        color: #fff;
+    }
+
+    .btnUpload {
+        padding: 0 24px;
+        height: 48px;
+        border-radius: 8px;
+        background-color: #0063ee;
+        border: none;
+        color: #fff;
+    }
+
     .btnDownloadPdf {
         padding: 12px 24px;
         height: 48px;
@@ -120,6 +138,15 @@
     }
 
     .btnDataBaru {
+        padding: 0 24px;
+        height: 48px;
+        border-radius: 8px;
+        background-color: #E7E6EB;
+        border: none;
+        color: #000;
+    }
+
+    .btnKembali {
         padding: 0 24px;
         height: 48px;
         border-radius: 8px;
@@ -483,90 +510,49 @@
                         <button type="button" class="btnDataBaru" title="Data Baru" data-menu="{{ $menu }}">Data Baru</button>
                     </div>
                     <div class="button2">
-                        <button type="submit" class="btnEditData" title="Edit Data" data-url="{{ $url }}">Edit Data</button>
+                        <button type="button" class="btnEditData" title="Edit Data" data-url="{{ $url }}">Edit Data</button>
                     </div>
                     <div class="button3">
                         <a type="button" href="{{ route('form_customer.pdf', ['menu' => str_replace('_', '-', $perusahaan['bentuk_usaha']), 'id' => $enkripsi]) }}" target="_blank" class="btnDownloadPdf" title="Download PDF">Download PDF</a>
+                    </div>
+                    <div class="button4">
+                        <button type="button" class="btnUploadFile" title="Upload File" data-bs-toggle="modal" data-bs-target="#modalUpload">Upload File</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    {{-- START: Modal upload file --}}
+    <div class="modal fade" id="modalUpload" tabindex="-1" aria-labelledby="modalUpload" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Upload PDF</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formUploadPdf" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="menu" id="menu" value="{{ str_replace('_', '-', $perusahaan['bentuk_usaha']) }}">
+                        <input type="hidden" name="data" id="data" value="{{ $enkripsi }}">
+                        <label for="">Upload PDF <span class="text-danger">*</span></label>
+                        <input type="file" name="file_pdf" id="file_pdf" accept=".pdf" class="form-control" required>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btnKembali" data-bs-dismiss="modal" title="Batal">Batal</button>
+                            <button type="submit" class="btnUpload">Upload File</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- END: Modal upload file --}}
 @endsection
 
 @section('js')
     <script>
-        // START: Preview foto
-        function previewFileNpwp(input) {
-            var file = $("#foto_npwp").prop('files');
-            if(file){
-                let ext = file[0].type.split('/')[1];
-                var reader = new FileReader();
-                $("#preview_npwp").removeClass('d-none');
-                if(ext == 'pdf') {
-                    $('#preview_foto_npwp').find('img').remove();
-                    reader.onload = function() {
-                        let filename = reader.result.split(',')[1];
-                        $('#preview_npwp').html('<iframe src="'+reader.result+'" style="width: 100%; height: 180px;" target="_blank">'+file[0].name+'</iframe>');
-                    }
-                } else {
-                    $("#preview_npwp").css('height', '197px');
-                    $('#preview_npwp').html('<img id="preview_foto_npwp" src="" alt="Preview" data-action="zoom">');
-                    reader.onload = function() {
-                        $("#preview_foto_npwp").attr("src", reader.result);
-                    }
-                }
-                reader.readAsDataURL(file[0]);
-            }
-        }
-
-        function previewFileSppkp(input) {
-            var file = $("#foto_sppkp").prop('files');
-            if(file){
-                let ext = file[0].type.split('/')[1];
-                var reader = new FileReader();
-                $("#preview_sppkp").removeClass('d-none');
-                if(ext == 'pdf') {
-                    $('#preview_foto_sppkp').find('img').remove();
-                    reader.onload = function() {
-                        let filename = reader.result.split(',')[1];
-                        $('#preview_sppkp').html('<iframe src="'+reader.result+'" style="width: 100%; height: 197px;" target="_blank">'+file[0].name+'</iframe>');
-                    }
-                } else {
-                    $("#preview_sppkp").css('height', '197px');
-                    $('#preview_sppkp').html('<img id="preview_foto_sppkp" src="" alt="Preview" data-action="zoom">');
-                    reader.onload = function() {
-                        $("#preview_foto_sppkp").attr("src", reader.result);
-                    }
-                }
-                reader.readAsDataURL(file[0]);
-            }
-        }
-
-        function previewFilePenanggung(input) {
-            var file = $("#foto_penanggung").prop('files');
-            if(file){
-                let ext = file[0].type.split('/')[1];
-                var reader = new FileReader();
-                $("#preview_penanggung").removeClass('d-none');
-                if(ext == 'pdf') {
-                    $('#preview_penanggung').find('img').remove();
-                    reader.onload = function() {
-                        let filename = reader.result.split(',')[1];
-                        $('#preview_foto_penanggung').html('<iframe src="'+reader.result+'" style="width: 100%; height: 197px;" target="_blank">'+file[0].name+'</iframe>');
-                    }
-                } else {
-                    $("#preview_penanggung").css('height', '197px');
-                    $('#preview_penanggung').html('<img id="preview_foto_penanggung" src="" alt="Preview" data-action="zoom">');
-                    reader.onload = function() {
-                        $("#preview_foto_penanggung").attr("src", reader.result);
-                    }
-                }
-                reader.readAsDataURL(file[0]);
-            }
-        }
-        // END: Preview foto
-
         // START: Direct login page
         function login() {
             window.location.href = '/login/fix';
@@ -585,6 +571,47 @@
                 window.location.href = '/fix-form-customer/' + menu;
             });
             // END: Footer button
+
+            // START: Form upload PDF
+            $(document).on('submit', '#formUploadPdf', function(e) {
+                e.preventDefault();
+                let menu = $('#menu').val();
+                let id = $('#data').val();
+                $.ajax({
+                    url: '/fix-form-customer/'+ menu +'/detail/upload/' + id,
+                    type: 'POST',
+                    data: new FormData(this),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: () => {
+                        Swal.fire({
+                            title: 'Loading...',
+                            text: 'Harap Menunggu',
+                            icon: 'info',
+                            showConfirmButton: false,
+                            allowOutsideClick: false
+                        });
+                    },
+                    success: res => {
+                        if(res.status == true) {
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: 'PDF berhasil diupload',
+                                icon: 'success'
+                            });
+                            window.location.href = res.url;
+                        } else {
+                            Swal.fire({
+                                title: 'Gagal!',
+                                text: res.error,
+                                icon: 'error'
+                            });
+                        }
+                    }
+                });
+            });
+            // END: Form upload PDF
         });
     </script>
 @endsection

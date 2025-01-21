@@ -9,6 +9,11 @@
     <title>PDF | PT Papasari</title>
 
     <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+            color: #021526;
+        }
+        
         h2, h3 {
             text-align: center;
         }

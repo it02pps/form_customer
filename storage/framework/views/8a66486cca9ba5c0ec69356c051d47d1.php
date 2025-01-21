@@ -102,6 +102,33 @@
         color: #000;
     }
 
+    .btnBatal {
+        width: 144px;
+        height: 48px;
+        border-radius: 8px;
+        background-color: #E7E6EB;
+        border: none;
+        color: #000;
+    }
+
+    .btnUploadFile {
+        padding: 0 24px;
+        height: 48px;
+        border-radius: 8px;
+        background-color: #0063ee;
+        border: none;
+        color: #fff;
+    }
+
+    .btnUpload {
+        padding: 0 24px;
+        height: 48px;
+        border-radius: 8px;
+        background-color: #0063ee;
+        border: none;
+        color: #fff;
+    }
+
     .profile {
         display: flex;
         flex-wrap: wrap;
@@ -135,6 +162,21 @@
 
     label {
         font-weight: 500;
+    }
+
+    .btnDownloadPdf {
+        padding: 12px 24px;
+        height: 48px;
+        border-radius: 8px;
+        background-color: #ffc107;
+        border: none;
+        color: #000;
+        text-decoration: none;
+    }
+
+    .btnDownloadPdf:hover {
+        color: #000;
+        text-decoration: none;
     }
 
     @media screen and (max-width: 475px) {
@@ -528,10 +570,45 @@
                     <div class="button2">
                         <button type="button" class="btnEditData" title="Edit Data Customer" data-url="<?php echo e($url); ?>">Edit Data Customer</button>
                     </div>
+                    <div class="button3">
+                        <button type="button" class="btnUploadFile" title="Upload File" data-bs-toggle="modal" data-bs-target="#modalUpload">Upload File</button>
+                    </div>
+                    <?php if($data['file_customer_external'] != ''): ?>
+                        <div class="button4">
+                            <a type="button" href="<?php echo e(route('fixHome.getPdf', ['id' => $enkripsi])); ?>" target="_blank" class="btnDownloadPdf" title="Download PDF">Download PDF</a>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </div>
+
+    
+    <div class="modal fade" id="modalUpload" tabindex="-1" aria-labelledby="modalUpload" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Upload PDF</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formUploadPdf" enctype="multipart/form-data">
+                        <?php echo csrf_field(); ?>
+                        <input type="hidden" name="menu" id="menu" value="<?php echo e(str_replace('_', '-', $data['bentuk_usaha'])); ?>">
+                        <input type="hidden" name="data" id="data" value="<?php echo e($enkripsi); ?>">
+                        <label for="">Upload PDF <span class="text-danger">*</span></label>
+                        <input type="file" name="file_pdf" id="file_pdf" accept=".pdf" class="form-control" required>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btnBatal" data-bs-dismiss="modal" title="Batal">Batal</button>
+                            <button type="submit" class="btnUpload">Upload File</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('js'); ?>
@@ -555,6 +632,47 @@
                 window.location.href = '/internal/panel/fix';
             });
             // END: Footer button
+
+            // START: Form upload PDF
+            $(document).on('submit', '#formUploadPdf', function(e) {
+                e.preventDefault();
+                let menu = $('#menu').val();
+                let id = $('#data').val();
+                $.ajax({
+                    url: '/fix-form-customer/'+ menu +'/detail/upload/' + id,
+                    type: 'POST',
+                    data: new FormData(this),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: () => {
+                        Swal.fire({
+                            title: 'Loading...',
+                            text: 'Harap Menunggu',
+                            icon: 'info',
+                            showConfirmButton: false,
+                            allowOutsideClick: false
+                        });
+                        $('#modalUpload').modal('hide');
+                    },
+                    success: res => {
+                        if(res.status == true) {
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: 'PDF berhasil diupload',
+                                icon: 'success'
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Gagal!',
+                                text: res.error,
+                                icon: 'error'
+                            });
+                        }
+                    }
+                });
+            });
+            // END: Form upload PDF
         });
     </script>
 <?php $__env->stopSection(); ?>

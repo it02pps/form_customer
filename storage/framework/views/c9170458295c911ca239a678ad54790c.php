@@ -140,6 +140,15 @@
         padding: 16px;
     }
 
+    .btnUploadFile {
+        padding: 0 24px;
+        height: 48px;
+        border-radius: 8px;
+        background-color: #0063ee;
+        border: none;
+        color: #fff;
+    }
+
     @media screen and (max-width: 475px) {
         .container {
             padding: 0;
@@ -166,11 +175,6 @@
         }
 
         .form-group input {
-            width: 100%;
-            padding: 16px;
-        }
-
-        .form-group select {
             width: 100%;
             padding: 16px;
         }
@@ -565,6 +569,9 @@
                     </div>
                     <div class="button2">
                         <button type="submit" class="btnEditData" title="Edit Data Customer" data-url="<?php echo e($url); ?>">Edit Data Customer</button>
+                    </div>
+                    <div class="button3">
+                        <button type="button" class="btnUploadFile" title="Upload File" data-bs-toggle="modal" data-bs-target="#modalUpload">Upload File</button>
                     </div>
                 </div>
             </div>
