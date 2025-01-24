@@ -555,7 +555,7 @@
     <script>
         // START: Direct login page
         function login() {
-            window.location.href = '/login/fix';
+            window.location.href = '/login';
         }
         // END: Direct login page
 
@@ -568,7 +568,7 @@
 
             $(document).on('click', '.btnDataBaru', function() {
                 let menu = $(this).data('menu');
-                window.location.href = '/fix-form-customer/' + menu;
+                window.location.href = '/form-customer/' + menu;
             });
             // END: Footer button
 
@@ -578,7 +578,7 @@
                 let menu = $('#menu').val();
                 let id = $('#data').val();
                 $.ajax({
-                    url: '/fix-form-customer/'+ menu +'/detail/upload/' + id,
+                    url: '/form-customer/'+ menu +'/detail/upload/' + id,
                     type: 'POST',
                     data: new FormData(this),
                     cache: false,

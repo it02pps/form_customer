@@ -594,7 +594,7 @@
             });
 
             $(document).on('click', '.btnKembali', function() {
-                window.location.href = '/internal/panel/fix';
+                window.location.href = '/internal/panel';
             });
             // END: Footer button
         });

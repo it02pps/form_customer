@@ -414,7 +414,7 @@
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="form-group">
                                             <label for="">Nomor NPWP <span class="text-danger">*</span></label>
-                                            <input type="text" name="nomor_npwp" id="nomor_npwp" class="form-control" autocomplete="off" placeholder="Masukkan Nomor NPWP" value="<?php echo e($data ? $data['nomor_npwp'] : ''); ?>">
+                                            <input type="text" name="nomor_npwp" id="nomor_npwp" class="form-control" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="16" autocomplete="off" placeholder="Masukkan Nomor NPWP" value="<?php echo e($data ? $data['nomor_npwp'] : ''); ?>">
                                         </div>
                                     </div>
                                 </div>
@@ -422,8 +422,8 @@
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="group-column">
                                             <div class="form-group">
-                                                <label for="">NITKU untuk penerbitan Faktur Pajak (22 digit)</label>
-                                                <input type="text" name="nitku" id="nitku" class="form-control" autocomplete="off" placeholder="Masukkan NITKU untuk penerbitan Faktur Pajak" value="<?php echo e($data ? $data['nitku'] : ''); ?>">
+                                                <label for="">NITKU untuk penerbitan Faktur Pajak (22 digit) <span class="text-danger">*</span></label>
+                                                <input type="text" name="nitku" id="nitku" class="form-control" autocomplete="off" placeholder="Masukkan NITKU untuk penerbitan Faktur Pajak" required value="<?php echo e($data ? $data['nitku'] : ''); ?>">
                                             </div>
     
                                             <div class="form-group">
@@ -698,36 +698,36 @@
         // END: Preview foto
 
         // START: Auto format NPWP
-        const npwp = document.getElementById('nomor_npwp');
-        npwp.oninput = (e) => {
-            e.target.value = autoFormatNPWP(e.target.value);
-        }
-        function autoFormatNPWP(NPWPString) {
-            try {
-                var cleaned = ("" + NPWPString).replace(/\D/g, "");
-                var match = cleaned.match(/(\d{0,2})?(\d{0,3})?(\d{0,3})?(\d{0,1})?(\d{0,3})?(\d{0,3})$/);
-                return [      
-                        match[1], 
-                        match[2] ? ".": "",
-                        match[2], 
-                        match[3] ? ".": "",
-                        match[3],
-                        match[4] ? ".": "",
-                        match[4],
-                        match[5] ? "-": "",
-                        match[5],
-                        match[6] ? ".": "",
-                        match[6]].join("")
+        // const npwp = document.getElementById('nomor_npwp');
+        // npwp.oninput = (e) => {
+        //     e.target.value = autoFormatNPWP(e.target.value);
+        // }
+        // function autoFormatNPWP(NPWPString) {
+        //     try {
+        //         var cleaned = ("" + NPWPString).replace(/\D/g, "");
+        //         var match = cleaned.match(/(\d{0,2})?(\d{0,3})?(\d{0,3})?(\d{0,1})?(\d{0,3})?(\d{0,3})$/);
+        //         return [      
+        //                 match[1], 
+        //                 match[2] ? ".": "",
+        //                 match[2], 
+        //                 match[3] ? ".": "",
+        //                 match[3],
+        //                 match[4] ? ".": "",
+        //                 match[4],
+        //                 match[5] ? "-": "",
+        //                 match[5],
+        //                 match[6] ? ".": "",
+        //                 match[6]].join("")
                 
-            } catch(err) {
-                return "";
-            }
-        }
+        //     } catch(err) {
+        //         return "";
+        //     }
+        // }
         // END: Auto format NPWP
 
         // START: Direct login page
         function login() {
-            window.location.href = '/login/fix';
+            window.location.href = '/login';
         }
         // END: Direct login page
 
@@ -742,7 +742,7 @@
 
             // START: Tombol Kembali
             $('.btnKembali').on('click', function() {
-                window.location.href = '/fix-form-customer/testing/menu';
+                window.location.href = '/form-customer';
             });
             // END: Tombol Kembali
 
@@ -825,7 +825,7 @@
                 $('#hasil_ttd').val(data[1]);
                 const badan_usaha = $('#bentuk_usaha').val();
                 $.ajax({
-                    url: '/'+badan_usaha+'/store',
+                    url: '/form-customer/'+badan_usaha+'/store',
                     type: 'POST',
                     data: new FormData(this),
                     cache: false,

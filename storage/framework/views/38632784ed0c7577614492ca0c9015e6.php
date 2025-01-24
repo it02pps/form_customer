@@ -146,7 +146,7 @@
                     </div>
                 </div>
                 <div class="content-body">
-                    <div class="row">
+                    <div class="row"> 
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 badan_usaha" onclick="form_customer('badan-usaha')">
                             <img src="<?php echo e(asset('../../../images/enterprise 1.svg')); ?>" alt="Logo">
                             <p style="font-weight: 700;">Badan Usaha</p>
@@ -165,7 +165,7 @@
 <?php $__env->startSection('js'); ?>
     <script>
         function form_customer(value) {
-            window.location.href = '/fix-form-customer/'+value;
+            window.location.href = '/form-customer/'+value;
         }
     </script>
 <?php $__env->stopSection(); ?>

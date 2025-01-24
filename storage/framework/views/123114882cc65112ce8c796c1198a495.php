@@ -50,6 +50,22 @@
         color: #fff;
     }
 
+    .btnSimpan {
+        padding: 8px 80px;
+        border-radius: 5px;
+        background-color: #0063ee;
+        border: none;
+        color: #fff;
+    }
+
+    .btnBatal {
+        padding: 8px 80px;
+        border-radius: 5px;
+        background-color: #fff;
+        border: 1px solid #0063ee;
+        color: #0063ee;
+    }
+
     #editCustomer {
         width: 100px;
         height: 35px;
@@ -120,6 +136,15 @@
         height: 16px;
     }
 
+    .modal-content {
+        padding: 16px;
+    }
+
+    .forgot_password {
+        display: flex;
+        justify-content: end;
+    }
+
     @media screen and (max-width: 475px) {
         .container {
             padding: 0;
@@ -162,7 +187,7 @@
                         <img src="<?php echo e(asset('../../../images/PNG 4125 x 913.png')); ?>" alt="Logo">
                     </div>
                     <div class="profile">
-                        <img id="Edit Profile" src="<?php echo e(asset('../../../images/Profile.svg')); ?>" title="Edit Profile" alt="Profile">
+                        <img id="Edit Profile" data-bs-toggle="modal" data-bs-target="#modalEditProfil" src="<?php echo e(asset('../../../images/Profile.svg')); ?>" title="Edit Profile" alt="Profile">
                         <img id="logoutBtn" src="<?php echo e(asset('../../../images/Log Out.png')); ?>" title="Logout" alt="Logout">
                         <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" class="d-none">
                             <?php echo csrf_field(); ?>
@@ -199,6 +224,71 @@
             </div>
         </div>
     </div>
+
+    
+    <div class="modal fade" id="modalEditProfil" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Profil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="formProfil">
+                    <?php echo csrf_field(); ?>
+                    <div class="modal-body">
+                        <div class="form-group mb-2">
+                            <label for="">Nama</label>
+                            <input type="text" name="nama" id="nama" class="form-control" placeholder="Masukkan nama" value="<?php echo e(Auth::user()->name); ?>">
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="">Username</label>
+                            <input type="text" name="username" id="username" class="form-control" placeholder="Masukkan username" value="<?php echo e(Auth::user()->username); ?>">
+                        </div>
+                        <div class="forgot_password">
+                            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#modalUbahPassword" style="text-decoration: none; color: #021526;">Lupa Password?</a>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btnBatal" data-bs-dismiss="modal" title="Batal">Batal</button>
+                        <button type="submit" class="btnSimpan" title="Simpan">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalUbahPassword" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ganti Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="formUbahPassword">
+                    <?php echo csrf_field(); ?>
+                    <div class="modal-body">
+                        <div class="form-group mb-2">
+                            <label for="">Username <span class="text-danger">*</span></label>
+                            <input type="text" name="username" id="username_pass" class="form-control" placeholder="Masukkan username">
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="">Password Baru <span class="text-danger">*</span></label>
+                            <input type="password" name="password" id="password" class="form-control" placeholder="Masukkan password baru">
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="">Konfirmasi Password <span class="text-danger">*</span></label>
+                            <input type="password" name="password_confirmation" id="konfirmasi_password" class="form-control" placeholder="Konfirmasi password baru">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btnBatal" data-bs-dismiss="modal" title="Batal">Batal</button>
+                        <button type="submit" class="btnSimpan" title="Simpan">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('js'); ?>
@@ -275,6 +365,84 @@
                 window.location.href = '/internal/panel/fix/edit/testing/' + id;
             });
             // END: Button edit
+
+            // START: Form profil
+            $(document).on('submit', '#formProfil', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '<?php echo e(route("home.update_profil")); ?>',
+                    type: 'POST',
+                    data: new FormData(this),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: () => {
+                        Swal.fire({
+                            title: 'Loading...',
+                            text: 'Harap Menunggu',
+                            icon: 'info',
+                            showConfirmButton: false,
+                            allowOutsideClick: false
+                        });
+                    },
+                    success: res => {
+                        if(res.status == true) {
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: 'Profil berhasil diubah',
+                                icon: 'success'
+                            });
+                            location.reload();
+                        } else {
+                            Swal.fire({
+                                title: 'Gagal!',
+                                text: res.error,
+                                icon: 'error'
+                            });
+                        }
+                    }
+                });
+            })
+            // END: Form profil
+
+            // START: Form password
+            $(document).on('submit', '#formUbahPassword', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '<?php echo e(route("home.forgot_password")); ?>',
+                    type: 'POST',
+                    data: new FormData(this),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: () => {
+                        Swal.fire({
+                            title: 'Loading...',
+                            text: 'Harap Menunggu',
+                            icon: 'info',
+                            showConfirmButton: false,
+                            allowOutsideClick: false
+                        });
+                    },
+                    success: res => {
+                        if(res.status == true) {
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: 'Password berhasil diubah',
+                                icon: 'success'
+                            });
+                            location.reload();
+                        } else {
+                            Swal.fire({
+                                title: 'Gagal!',
+                                text: res.error,
+                                icon: 'error'
+                            });
+                        }
+                    }
+                });
+            })
+            // END: Form password
         });
     </script>
 <?php $__env->stopSection(); ?>

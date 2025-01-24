@@ -16,6 +16,7 @@ use App\Helper\ApiStorage;
 use App\Helper\base30ToImage;
 use App\Models\TipeCustomer;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -45,27 +46,45 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
+    public function index() {
         $data = IdentitasPerusahaan::orderBy('created_at', 'DESC')->get();
-        return view('panel.home', compact('data'));
+        return view('panel.fix_home', compact('data'));
     }
 
-    public function detail(Request $request)
-    {
-        $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank', 'tipe_customer')->where('id', Crypt::decryptString($request->id))->first();
+    public function datatable() {
+        $data = IdentitasPerusahaan::orderBy('created_at', 'DESC')->get();
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->editColumn('bentuk_usaha', function($e) {
+                return ucwords(str_replace('_', ' ', $e->bentuk_usaha));
+            })
+            ->editColumn('alamat_lengkap', function($e) {
+                return $e->alamat_lengkap . ', ' . $e->kota_kabupaten;
+            })
+            ->addColumn('aksi', function($e) {
+                $edit = '<button type="button" id="editCustomer" title="Edit Data Customer" data-id="'.Crypt::encryptString($e->id).'">Edit</button>';
+                $detail = '<button type="button" id="detailCustomer" title="Detail Data Customer" data-id="'.Crypt::encryptString($e->id).'">Detail</button>';
+                $aksi = $edit . ' ' . $detail;
+                return $aksi;
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
+
+    public function detail($id) {
+        $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank', 'tipe_customer')->where('id', Crypt::decryptString($id))->first();
         // dd($data);
-        $enkripsi = $request->id;
+        $enkripsi = $id;
+        $url = route('home.edit', ['id' => $enkripsi]);
 
         if ($data->bentuk_usaha == 'perseorangan') {
-            return view('panel.home_detail_perseorangan', compact('data', 'enkripsi'));
+            return view('panel.fix_home_detail_perseorangan', compact('data', 'enkripsi', 'url'));
         } else {
-            return view('panel.home_detail_badan_usaha', compact('data', 'enkripsi'));
+            return view('panel.fix_home_detail_badan_usaha', compact('data', 'enkripsi', 'url'));
         }
     }
 
-    public function edit($id)
-    {
+    public function edit($id) {
         $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank', 'tipe_customer')->where('id', Crypt::decryptString($id))->first();
         $enkripsi = $id;
 
@@ -84,9 +103,9 @@ class HomeController extends Controller
 
         $url = route('home');
         if ($data->bentuk_usaha == 'perseorangan') {
-            return view('panel.home_edit_perseorangan', compact('data', 'enkripsi', 'bidang_usaha', 'url'));
+            return view('panel.fix_home_edit_perseorangan', compact('data', 'enkripsi', 'bidang_usaha', 'url'));
         } else {
-            return view('panel.home_edit_badan_usaha', compact('data', 'enkripsi', 'bidang_usaha', 'url'));
+            return view('panel.fix_home_edit_badan_usaha', compact('data', 'enkripsi', 'bidang_usaha', 'url'));
         }
     }
 
@@ -116,7 +135,7 @@ class HomeController extends Controller
             'kota_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
             'nama_group' => ($data['status_kepemilikan'] == 'group') ? 'required' : '',
             'bidang_usaha_lain' => ($data['bidang_usaha'] == 'lainnya') ? 'required' : '',
-            'nitku' => 'max:22',
+            'nitku' => 'required|max:22',
             'jenis_cust' => 'required',
 
             // Informasi Bank
@@ -170,6 +189,7 @@ class HomeController extends Controller
             'kota_npwp.required' => 'Kota NPWP harus diisi',
             'nama_group.required' => 'Nama group harus diisi',
             'bidang_usaha_lain.required' => 'Bidang usaha harus diisi',
+            'nitku.required' => 'NITKU harus diisi',
             'nitku.max' => 'Nomor NPWP harus 22 digit',
             'jenis_cust.required' => 'Jenis customer harus diisi',
             
@@ -519,10 +539,9 @@ class HomeController extends Controller
             $tipe_customer->keterangan = $request->keterangan;
             $tipe_customer->save();
 
-            $link = route('fixHome.detail', ['id' => Crypt::encryptString($identitas_perusahaan->id)]);
+            $link = route('home.detail', ['id' => Crypt::encryptString($identitas_perusahaan->id)]);
             return ['status' => true, 'link' => $link];
         } catch (\Exception $e) {
-            dd($e);
             return ['status' => false, 'error' => 'Terjadi kesalahan'];
         }
     }
@@ -541,20 +560,13 @@ class HomeController extends Controller
 
     protected function validasi_profil($data) {
         $rules = [
-            'id' => 'required',
-            'nama' => ($data['jenis'] == 'identitas') ? 'required' : '',
-            'username' => ($data['jenis'] == 'identitas') ? 'required' : '',
-            'password_lama' => ($data['jenis'] == 'password') ? 'required' : '',
-            'password_baru' => ($data['jenis'] == 'password') ? 'required|confirmed' : ''
+            'nama' => 'required',
+            'username' => 'required',
         ];
 
         $message = [
-            'id.required' => 'ID tidak boleh kosong',
             'nama.required' => 'Nama harus diisi',
             'username.required' => 'Username harus diisi',
-            'password_lama.required' => 'Password lama harus diisi',
-            'password_baru.required' => 'Password baru harus diisi',
-            'password_baru.confirmed' => 'Konfirmasi password tidak sesuai'
         ];
 
         return Validator::make($data, $rules, $message);
@@ -562,97 +574,53 @@ class HomeController extends Controller
 
     public function update_profil(Request $request) {
         try {
-            $decrypt = Crypt::decryptString($request->id);
-
             $validation = $this->validasi_profil($request->all());
             if ($validation->fails()) {
                 return ['status' => false, 'error' => $validation->errors()->all()];
             }
 
-            $profil = User::find($decrypt);
-            if($request->jenis == 'identitas') {
-                $profil->name = $request->nama;
-                $profil->username = $request->username;
-            } else {
-                if(Hash::check($request->password_lama, $profil->password)) {
-                    if(Hash::check($request->password_baru, $profil->password)) {
-                        return ['status' => false, 'error' => 'Password baru tidak boleh sama dengan password lama'];
-                    } else {
-                        $profil->password = Hash::make($request->password_baru);
-                    }
-                } else {
-                    return ['status' => false, 'error' => 'Password lama tidak sesuai'];
-                }
-            }
+            $profil = User::find(Auth::user()->id);
+            $profil->name = $request->nama;
+            $profil->username = $request->username;
             $profil->save();
 
-            return ['status' => true, 'pesan' => 'Profil berhasil diubah'];
+            return ['status' => true];
         } catch(\Exception $e) {
-            dd($e);
-            return ['status' => false, 'error' => 'Terjadi Kesalahan Pada Sistem'];
+            return ['status' => false, 'error' => 'Terjadi Kesalahan'];
         }
     }
 
-    public function fixIndex() {
-        $data = IdentitasPerusahaan::orderBy('created_at', 'DESC')->get();
-        return view('panel.fix_home', compact('data'));
-    }
-
-    public function datatable() {
-        $data = IdentitasPerusahaan::orderBy('created_at', 'DESC')->get();
-        return DataTables::of($data)
-            ->addIndexColumn()
-            ->editColumn('bentuk_usaha', function($e) {
-                return ucwords(str_replace('_', ' ', $e->bentuk_usaha));
-            })
-            ->editColumn('alamat_lengkap', function($e) {
-                return $e->alamat_lengkap . ', ' . $e->kota_kabupaten;
-            })
-            ->addColumn('aksi', function($e) {
-                $edit = '<button type="button" id="editCustomer" title="Edit Data Customer" data-id="'.Crypt::encryptString($e->id).'">Edit</button>';
-                $detail = '<button type="button" id="detailCustomer" title="Detail Data Customer" data-id="'.Crypt::encryptString($e->id).'">Detail</button>';
-                $aksi = $edit . ' ' . $detail;
-                return $aksi;
-            })
-            ->rawColumns(['aksi'])
-            ->make(true);
-    }
-
-    public function fixDetail($id) {
-        $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank', 'tipe_customer')->where('id', Crypt::decryptString($id))->first();
-        // dd($data);
-        $enkripsi = $id;
-        $url = route('fixHome.edit', ['id' => $enkripsi]);
-
-        if ($data->bentuk_usaha == 'perseorangan') {
-            return view('panel.fix_home_detail_perseorangan', compact('data', 'enkripsi', 'url'));
-        } else {
-            return view('panel.fix_home_detail_badan_usaha', compact('data', 'enkripsi', 'url'));
-        }
-    }
-
-    public function fixEdit($id) {
-        $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank', 'tipe_customer')->where('id', Crypt::decryptString($id))->first();
-        $enkripsi = $id;
-
-        $bidang_usaha = [
-            'toko_retail',
-            'bumn',
-            'reseller',
-            'pabrik',
-            'kontraktor',
-            'toko_online',
-            'dock_kapal',
-            'end_user',
-            'ekspedisi',
-            'lainnya'
+    protected function validasi_password($data) {
+        $rules = [
+            'password' => 'required|confirmed',
         ];
 
-        $url = route('fixHome');
-        if ($data->bentuk_usaha == 'perseorangan') {
-            return view('panel.fix_home_edit_perseorangan', compact('data', 'enkripsi', 'bidang_usaha', 'url'));
-        } else {
-            return view('panel.fix_home_edit_badan_usaha', compact('data', 'enkripsi', 'bidang_usaha', 'url'));
+        $message = [
+            'password.required' => 'Password harus diisi',
+            'password.confirm' => 'Konfirmasi password tidak sesuai'
+        ];
+
+        return Validator::make($data, $rules, $message);
+    }
+
+    public function forgot_password(Request $request) {
+        try {
+            $validation = $this->validasi_password($request->all());
+            if ($validation->fails()) {
+                return ['status' => false, 'error' => $validation->errors()->all()];
+            }
+
+            if($request->username != Auth::user()->username) {
+                return ['status' => false, 'error' => 'Username yang anda masukan tidak sesuai!'];
+            }
+
+            $data = User::find(Auth::user()->id);
+            $data->password = Hash::make($request->password);
+            $data->save();
+
+            return ['status' => true];
+        } catch(\Exception $e) {
+            return ['status' => false, 'error' => 'Terjadi Kesalahan'];
         }
     }
 

@@ -575,7 +575,7 @@
                     </div>
                     @if($data['file_customer_external'] != '')
                         <div class="button4">
-                            <a type="button" href="{{ route('fixHome.getPdf', ['id' => $enkripsi]) }}" target="_blank" class="btnDownloadPdf" title="Download PDF">Download PDF</a>
+                            <a type="button" href="{{ route('home.getPdf', ['id' => $enkripsi]) }}" target="_blank" class="btnDownloadPdf" title="Download PDF">Download PDF</a>
                         </div>
                     @endif
                 </div>
@@ -629,7 +629,7 @@
             });
 
             $(document).on('click', '.btnKembali', function() {
-                window.location.href = '/internal/panel/fix';
+                window.location.href = '/internal/panel';
             });
             // END: Footer button
 
@@ -639,7 +639,7 @@
                 let menu = $('#menu').val();
                 let id = $('#data').val();
                 $.ajax({
-                    url: '/fix-form-customer/'+ menu +'/detail/upload/' + id,
+                    url: '/form-customer/'+ menu +'/detail/upload/' + id,
                     type: 'POST',
                     data: new FormData(this),
                     cache: false,

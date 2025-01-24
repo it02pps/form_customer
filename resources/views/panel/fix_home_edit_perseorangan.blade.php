@@ -385,7 +385,7 @@
                                         <div class="group-column">
                                             <div class="form-group">
                                                 <label for="">NITKU untuk penerbitan Faktur Pajak (22 digit)</label>
-                                                <input type="text" name="nitku" id="nitku" class="form-control" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="22" autocomplete="off" placeholder="Masukkan NITKU untuk penerbitan Faktur Pajak" value="{{ $data['nitku'] ? $data['nitku'] : '' }}">
+                                                <input type="text" name="nitku" id="nitku" class="form-control" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="16" required autocomplete="off" placeholder="Masukkan NITKU untuk penerbitan Faktur Pajak" value="{{ $data['nitku'] ? $data['nitku'] : '' }}">
                                             </div>
     
                                             <div class="form-group">
@@ -724,31 +724,31 @@
         // END: Preview foto
 
         // START: Auto format NPWP
-        const npwp = document.getElementById('nomor_npwp');
-        npwp.oninput = (e) => {
-            e.target.value = autoFormatNPWP(e.target.value);
-        }
-        function autoFormatNPWP(NPWPString) {
-            try {
-                var cleaned = ("" + NPWPString).replace(/\D/g, "");
-                var match = cleaned.match(/(\d{0,2})?(\d{0,3})?(\d{0,3})?(\d{0,1})?(\d{0,3})?(\d{0,3})$/);
-                return [      
-                        match[1], 
-                        match[2] ? ".": "",
-                        match[2], 
-                        match[3] ? ".": "",
-                        match[3],
-                        match[4] ? ".": "",
-                        match[4],
-                        match[5] ? "-": "",
-                        match[5],
-                        match[6] ? ".": "",
-                        match[6]].join("")
+        // const npwp = document.getElementById('nomor_npwp');
+        // npwp.oninput = (e) => {
+        //     e.target.value = autoFormatNPWP(e.target.value);
+        // }
+        // function autoFormatNPWP(NPWPString) {
+        //     try {
+        //         var cleaned = ("" + NPWPString).replace(/\D/g, "");
+        //         var match = cleaned.match(/(\d{0,2})?(\d{0,3})?(\d{0,3})?(\d{0,1})?(\d{0,3})?(\d{0,3})$/);
+        //         return [      
+        //                 match[1], 
+        //                 match[2] ? ".": "",
+        //                 match[2], 
+        //                 match[3] ? ".": "",
+        //                 match[3],
+        //                 match[4] ? ".": "",
+        //                 match[4],
+        //                 match[5] ? "-": "",
+        //                 match[5],
+        //                 match[6] ? ".": "",
+        //                 match[6]].join("")
                 
-            } catch(err) {
-                return "";
-            }
-        }
+        //     } catch(err) {
+        //         return "";
+        //     }
+        // }
         // END: Auto format NPWP
 
         // START: Format rupiah
@@ -780,7 +780,7 @@
         $(document).ready(function() {
             // START: Tombol Kembali
             $('.btnKembali').on('click', function() {
-                window.location.href = '/internal/panel/fix';
+                window.location.href = '/internal/panel';
             });
             // END: Tombol Kembali
 

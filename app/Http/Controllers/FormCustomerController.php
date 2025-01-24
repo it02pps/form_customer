@@ -30,20 +30,18 @@ class FormCustomerController extends Controller
         $this->path = 'penanggung_jawab/';
     }
 
-    public function index()
-    {
-        return view('menu');
+    public function menu() {
+        return view('customer.fix_menu');
     }
 
-    public function view($menu, Request $request)
-    {
+    public function index($menu, Request $request) {
         if ($request->enkripsi) {
             $data = Crypt::decryptString($request->enkripsi);
-            $data_perusahaan = IdentitasPerusahaan::with('informasi_bank', 'data_identitas')->where('bentuk_usaha', str_replace('-', '_', $menu))->where('id', $data)->first();
+            $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas')->where('bentuk_usaha', str_replace('-', '_', $menu))->where('id', $data)->first();
             $url = route('form_customer.detail', ['menu' => $menu, 'id' => $request->enkripsi]);
             $enkripsi = $request->enkripsi;
         } else {
-            $data_perusahaan = null;
+            $data = null;
             $url = null;
             $enkripsi = null;
         }
@@ -62,9 +60,9 @@ class FormCustomerController extends Controller
         ];
 
         if ($menu === 'perseorangan') {
-            return view('customer.perseorangan', compact('data_perusahaan', 'url', 'enkripsi', 'menu', 'bidang_usaha'));
+            return view('customer.fix_perseorangan', compact('data', 'url', 'enkripsi', 'menu', 'bidang_usaha'));
         } else {
-            return view('customer.badan_usaha', compact('data_perusahaan', 'url', 'enkripsi', 'menu', 'bidang_usaha'));
+            return view('customer.fix_badan_usaha', compact('data', 'url', 'enkripsi', 'menu', 'bidang_usaha'));
         }
     }
 
@@ -94,7 +92,7 @@ class FormCustomerController extends Controller
             'kota_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
             'nama_group' => ($data['status_kepemilikan'] == 'group') ? 'required' : '',
             'bidang_usaha_lain' => ($data['bidang_usaha'] == 'lainnya') ? 'required' : '',
-            'nitku' => 'max:22',
+            'nitku' => 'required|max:22',
             'jenis_cust' => 'required',
 
             // Informasi Bank
@@ -148,6 +146,7 @@ class FormCustomerController extends Controller
             'kota_npwp.required' => 'Kota NPWP harus diisi',
             'nama_group.required' => 'Nama group harus diisi',
             'bidang_usaha_lain.required' => 'Bidang usaha harus diisi',
+            'nitku.required' => 'NITKU harus diisi',
             'nitku.max' => 'Nomor NPWP harus 22 digit',
             'jenis_cust.required' => 'Jenis customer harus diisi',
             
@@ -485,16 +484,14 @@ class FormCustomerController extends Controller
             $bank->save();
 
             $link = route('form_customer.detail', ['menu' => str_replace('_', '-', $request->bentuk_usaha), 'id' => Crypt::encryptString($identitas_perusahaan->id)]);
-            $link_test = route('form_customer.detailView', ['menu' => str_replace('_', '-', $request->bentuk_usaha), 'id' => Crypt::encryptString($identitas_perusahaan->id)]);
-            return ['status' => true, 'link' => $link, 'link_test' => $link_test];
+            return ['status' => true, 'link' => $link];
         } catch (\Exception $e) {
-            dd($e);
             return ['status' => false, 'error' => 'Terjadi kesalahan'];
         }
     }
 
-    public function detail($menu, Request $request)
-    {
+    public function detail($menu, Request $request) {
+        // dd($request->all());
         // Mendekripsikan id
         $dekripsi = Crypt::decryptString($request->id);
 
@@ -503,16 +500,18 @@ class FormCustomerController extends Controller
 
         if ($menu == 'badan-usaha' || $menu == 'badan_usaha') {
             $menu = str_replace('_', '-', $menu);
-            return view('customer.badan_usaha_detail', [
+            return view('customer.fix_badan_usaha_detail', [
                 'enkripsi' => $request->id,
                 'perusahaan' => $data_perusahaan,
-                'url' => route('form_customer.view', ['menu' => $menu, 'enkripsi' => $request->id])
+                'menu' => $menu,
+                'url' => route('form_customer.index', ['menu' => $menu, 'enkripsi' => $request->id])
             ]);
         } else {
-            return view('customer.perseorangan_detail', [
+            return view('customer.fix_perseorangan_detail', [
                 'enkripsi' => $request->id,
                 'perusahaan' => $data_perusahaan,
-                'url' => route('form_customer.view', ['menu' => $menu, 'enkripsi' => $request->id])
+                'menu' => $menu,
+                'url' => route('form_customer.index', ['menu' => $menu, 'enkripsi' => $request->id])
             ]);
         }
     }
@@ -525,49 +524,6 @@ class FormCustomerController extends Controller
 
             return ['status' => true, 'data' => $data];
         } else {
-            return ['status' => false];
-        }
-    }
-
-    public function confirmation($menu, Request $request)
-    {
-        // dd($request->all());
-        try {
-            $dekripsi = Crypt::decryptString($request->encrypt);
-            $confirmation = IdentitasPerusahaan::find($dekripsi);
-            if ($request->hasFile('upload')) {
-                $file = $request->file('upload');
-                $ext = $file->getClientOriginalExtension();
-                $filename = uniqid() . '-upload-customer.' . $ext;
-                $file->move('uploads/identitas_perusahaan/final/' . $filename);
-                $confirmation->file_customer_external = $filename;
-
-
-                // $upload = fopen($request->file('upload')->getPathname(), 'r');
-                // $response = Http::withHeaders([
-                //     'x-api-key' => $this->apiKey,
-                // ])->attach(
-                //     'file',
-                //     $upload,
-                //     $request->file('upload')->getClientOriginalName()
-                // )->post($this->apiUrl, [
-                //     'category' => 'final_result',
-                //     'filename' => $filename,
-                // ]);
-
-                // fclose($upload);
-
-                // if ($response->successful()) {
-                //     $filename = $response->json('filename');
-                //     $filepath = $response->json('filepath');
-                //     $confirmation->file_customer_external = $filename;
-                // }
-            }
-            $confirmation->save();
-
-            return ['status' => true];
-        } catch (\Exception $e) {
-            // dd($e->getMessage());
             return ['status' => false];
         }
     }
@@ -594,70 +550,6 @@ class FormCustomerController extends Controller
             $pdf->render();
             return $pdf->stream();
             // return $pdf->download($data['nama_perusahaan'] . '.pdf');
-        }
-    }
-
-    public function menuFix() {
-        return view('customer.fix_menu');
-    }
-
-    public function indexBadanUsaha($menu, Request $request) {
-        if ($request->enkripsi) {
-            $data = Crypt::decryptString($request->enkripsi);
-            $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas')->where('bentuk_usaha', str_replace('-', '_', $menu))->where('id', $data)->first();
-            $url = route('form_customer.detail', ['menu' => $menu, 'id' => $request->enkripsi]);
-            $url_test = route('form_customer.detailView', ['menu' => $menu, 'id' => $request->enkripsi]);
-            $enkripsi = $request->enkripsi;
-        } else {
-            $data = null;
-            $url = null;
-            $url_test = null;
-            $enkripsi = null;
-        }
-
-        $bidang_usaha = [
-            'toko_retail',
-            'bumn',
-            'reseller',
-            'pabrik',
-            'kontraktor',
-            'toko_online',
-            'dock_kapal',
-            'end_user',
-            'ekspedisi',
-            'lainnya'
-        ];
-
-        if ($menu === 'perseorangan') {
-            return view('customer.fix_perseorangan', compact('data', 'url', 'enkripsi', 'menu', 'bidang_usaha', 'url_test'));
-        } else {
-            return view('customer.fix_badan_usaha', compact('data', 'url', 'enkripsi', 'menu', 'bidang_usaha', 'url_test'));
-        }
-    }
-
-    public function indexDetailView($menu, Request $request) {
-        // dd($request->all());
-        // Mendekripsikan id
-        $dekripsi = Crypt::decryptString($request->id);
-
-        // Memanggil data berdasarkan id identitas perusahaan
-        $data_perusahaan = IdentitasPerusahaan::with('data_identitas', 'informasi_bank')->where('id', $dekripsi)->first();
-
-        if ($menu == 'badan-usaha' || $menu == 'badan_usaha') {
-            $menu = str_replace('_', '-', $menu);
-            return view('customer.fix_badan_usaha_detail', [
-                'enkripsi' => $request->id,
-                'perusahaan' => $data_perusahaan,
-                'menu' => $menu,
-                'url' => route('form_customer.indexBadanUsaha', ['menu' => $menu, 'enkripsi' => $request->id])
-            ]);
-        } else {
-            return view('customer.fix_perseorangan_detail', [
-                'enkripsi' => $request->id,
-                'perusahaan' => $data_perusahaan,
-                'menu' => $menu,
-                'url' => route('form_customer.indexBadanUsaha', ['menu' => $menu, 'enkripsi' => $request->id])
-            ]);
         }
     }
 
