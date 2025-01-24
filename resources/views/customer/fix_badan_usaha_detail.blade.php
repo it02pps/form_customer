@@ -1,7 +1,7 @@
 @extends('layouts.main_app')
 
 @section('title')
-    <title>Badan Usaha Detail | PT. PAPASARI</title>
+    <title>Badan Usaha Detail sa| PT. PAPASARI</title>
 @endsection
 
 @section('css')
