@@ -750,7 +750,7 @@
                     $('#preview_foto_sppkp').find('img').remove();
                     reader.onload = function() {
                         let filename = reader.result.split(',')[1];
-                        $('#preview_npwp').html('File PDF telah ditambahkan!').css({
+                        $('#preview_sppkp').html('File PDF telah ditambahkan!').css({
                             'height': '50px',
                             'padding': '16px',
                             'font-weight': 'bold'
@@ -777,7 +777,7 @@
                     $('#preview_penanggung').find('img').remove();
                     reader.onload = function() {
                         let filename = reader.result.split(',')[1];
-                        $('#preview_npwp').html('File PDF telah ditambahkan!').css({
+                        $('#preview_penanggung').html('File PDF telah ditambahkan!').css({
                             'height': '50px',
                             'padding': '16px',
                             'font-weight': 'bold'

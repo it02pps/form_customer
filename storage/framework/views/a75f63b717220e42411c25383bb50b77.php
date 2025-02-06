@@ -9,25 +9,19 @@
     }
 
     .container {
-        display: flex;
-        align-items: center;
-        width: 40%;
-        height: 100%;
+        padding: 64px 350px;
     }
 
     .container-fluid {
-        display: flex;
         background-color: #fff;
         border-radius: 16px;
         box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.25);
-        padding: 0;
     }
 
     .content {
         display: flex;
         flex-direction: row;
         justify-content: center;
-        width: 100%;
         padding: 64px;
     }
 
@@ -87,6 +81,31 @@
     }
 
     @media screen and (max-width: 475px) {
+        .container {
+            padding: 0;
+        }
+
+        .container-fluid {
+            background-color: #fff;
+            border-radius: 0;
+            box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.25);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content {
+            padding: 8px;
+        }
+
+        .content .content-left {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
         .content-footer {
             display: flex;
             align-items: center;
@@ -135,7 +154,7 @@
 <?php $__env->startSection('js'); ?>
 <script>
     function kembali() {
-        window.location.href = '/fix-form-customer/testing/menu';
+        window.location.href = '/form-customer';
     }
     
     $(document).ready(function() {

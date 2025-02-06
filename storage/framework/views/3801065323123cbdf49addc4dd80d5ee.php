@@ -5,7 +5,7 @@
 <?php $__env->startSection('css'); ?>
 <style>
     body {
-        overflow: hidden;
+        overflow-x: hidden;
     }
 
     .container {
@@ -70,19 +70,26 @@
 
     @media screen and (max-width: 475px) {
         body {
-            overflow-x: hidden;
-            overflow-y: visible;
+            overflow: hidden;
         }
         
         .container {
             padding: 0;
             height: 100vh;
         }
+
+        .title h1 {
+            font-size: 32px;
+        }
+
+        .title p {
+            font-size: 16px;
+        }
         
         .container-fluid {
             background-color: #fff;
             border-radius: 0;
-            box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.25);
+            height: 100vh;
         }
 
         .content-menu {
@@ -90,25 +97,25 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 64px;
+            padding: 80px 64px 32px 64px;
         }
 
         .content-menu .content-header .logo {
-            padding-bottom: 2rem;
+            padding-bottom: 1.5rem;
         }
 
         .content-menu .content-header .logo img {
-            width: 295px;
-            height: 64px;
+            width: 256px;
+            height: 60px;
         }
 
         .content-header {
             text-align: center;
-            padding-bottom: 32px;
+            padding-bottom: 16px;
         }
 
         .row {
-            gap: 32px;
+            gap: 24px;
             flex-wrap: wrap;
         }
 
@@ -118,13 +125,12 @@
             flex-direction: column;
             border: 1px solid #D2D0D8;
             border-radius: 8px;
-            padding: 32px 64px;
+            padding: 24px 40px;
         }
 
         .row div img {
-            width: 152px;
-            height: 152px;
-            padding-bottom: 16px;
+            height: 100px;
+            padding-bottom: 4px;
         }
     }
 </style>
