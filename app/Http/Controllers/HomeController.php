@@ -239,6 +239,15 @@ class HomeController extends Controller
             $identitas_perusahaan->kota_kabupaten = $request->kota_kabupaten;
             $identitas_perusahaan->bidang_usaha = $request->bidang_usaha;
             $identitas_perusahaan->status_cust = $request->jenis_cust;
+
+            // Buat kode customer
+            $lastest_cust = IdentitasPerusahaan::latest('id')->first();
+            $lastSerialNumber = $lastest_cust ? $lastest_cust->kode_customer : 'K-00001';
+            $serial_number = (int) substr($lastSerialNumber, 2);
+            $number = str_pad($serial_number + 1, 5, '0', STR_PAD_LEFT);
+            $kode_cust = 'K-' . $number;
+            $identitas_perusahaan->kode_customer = $kode_cust;
+
             if($request->bidang_usaha == 'lainnya') {
                 $identitas_perusahaan->bidang_usaha_lain = $request->bidang_usaha_lain;
             }
