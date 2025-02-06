@@ -7,7 +7,8 @@
 @section('css')
 <style>
     .container {
-        padding: 64px 0;
+        padding: 64px 32px;
+        overflow-x: hidden;
     }
     
     .container-fluid {
@@ -44,17 +45,15 @@
     }
 
     .form-group input {
-        width: 592px;
         padding: 16px;
     }
 
     .form-group textarea {
-        width: 592px;
         padding: 16px;
+        height: 164px;
     }
 
     .form-group select {
-        width: 592px;
         padding: 16px;
     }
 
@@ -72,6 +71,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: 16px;
+        width: 100%;
     }
 
     /* input::placeholder {
@@ -82,6 +82,7 @@
         border: 1px solid #D2D0D8;
         border-radius: 5px;
         height: 233px;
+        width: 100%;
     }
 
     #preview_ktp img, #preview_npwp img, #preview_sppkp img, #preview_penanggung img {
@@ -95,7 +96,7 @@
     }
     
     .section2, .section3, .section4 {
-        padding: 16px 0 0 0;
+        padding: 16px 0;
     }
 
     .footer {
@@ -124,6 +125,31 @@
         color: #000;
     }
 
+    .btnCabang {
+        padding: 0 24px;
+        height: 48px;
+        border-radius: 8px;
+        background-color: #0063ee;
+        border: none;
+        color: #fff;
+    }
+
+    #addRow {
+        padding: 0 24px;
+        height: 48px;
+        border-radius: 8px;
+        background-color: #0063ee;
+        border: none;
+    }
+
+    #delRow {
+        padding: 0 24px;
+        height: 48px;
+        border-radius: 8px;
+        background-color: #FF0000;
+        border: none;
+    }
+
     #select {
         position: relative;
     }
@@ -142,6 +168,58 @@
         width: 100%;
         height: 100%;
         transition: 1s;
+    }
+
+    .form-group {
+        width: 100%;
+    }
+
+    .row {
+        width: 100vw;
+    }
+
+    .row div:first-child {
+        padding: 0;
+    }
+
+    .row div:last-child {
+        padding-left: 16px;
+    }
+
+    .row div .group-column .form-group:last-child {
+        padding-top: 16px;
+        padding-left: 0;
+    }
+
+    .row div .group-column .form-group:first-child {
+        padding: 0;
+    }
+
+    .form-group-modal input {
+        padding: 16px;
+    }
+
+    .form-group-modal textarea {
+        padding: 16px;
+    }
+
+    .form-group-modal {
+        padding: 0 !important;
+    }
+
+    .dynamic-row .row {
+        width: 100% !important;
+    }
+
+    .group-column-modal {
+        display: flex;
+        flex-direction: column;
+        padding: 0 !important;
+        gap: 16px;
+    }
+
+    .modal-content {
+        padding: 16px;
     }
 
     @media screen and (max-width: 475px) {
@@ -187,6 +265,10 @@
 
         .row {
             gap: 16px;
+        }
+
+        .row div {
+            padding: 0 !important;
         }
 
         .footer {
@@ -382,33 +464,28 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label for="">Alamat NPWP <span class="text-danger">*</span></label>
+                                            <textarea name="alamat_npwp" id="alamat_npwp" cols="70" rows="6" autocomplete="off" class="form-control" placeholder="Masukkan alamat sesuai NPWP">{{ $data['alamat_npwp'] ? $data['alamat_npwp'] : '' }}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="group-column">
-                                            <div class="form-group">
-                                                <label for="">NITKU untuk penerbitan Faktur Pajak (22 digit)</label>
-                                                <input type="text" name="nitku" id="nitku" class="form-control" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="16" required autocomplete="off" placeholder="Masukkan NITKU untuk penerbitan Faktur Pajak" value="{{ $data['nitku'] ? $data['nitku'] : '' }}">
-                                            </div>
-    
                                             <div class="form-group">
                                                 <label for="">Kota Sesuai NPWP <span class="text-danger">*</span></label>
                                                 <input type="text" name="kota_npwp" id="kota_npwp" class="form-control" autocomplete="off" placeholder="Masukkan kota sesuai NPWP" value="{{ $data['kota_npwp'] ? $data['kota_npwp'] : '' }}">
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="form-group">
-                                            <label for="">Alamat NPWP <span class="text-danger">*</span></label>
-                                            <textarea name="alamat_npwp" id="alamat_npwp" cols="70" rows="10" autocomplete="off" class="form-control" placeholder="Masukkan alamat sesuai NPWP">{{ $data['alamat_npwp'] ? $data['alamat_npwp'] : '' }}</textarea>
+
+                                            <div class="form-group">
+                                                <label for="">Email Khusus Untuk Faktur Pajak <span class="text-danger">*</span></label>
+                                                <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Contoh: faktur@gmail.com" value="{{ $data['email_khusus_faktur_pajak'] ? $data['email_khusus_faktur_pajak'] : '' }}">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="group-column">
-                                            <div class="form-group">
-                                                <label for="">Email Khusus Untuk Faktur Pajak <span class="text-danger">*</span></label>
-                                                <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Contoh: faktur@gmail.com" value="{{ $data['email_khusus_faktur_pajak'] ? $data['email_khusus_faktur_pajak'] : '' }}">
-                                            </div>
-    
                                             <div class="form-group" id="select">
                                                 <label for="">Status Pengusaha Kena Pajak (PKP) <span class="text-danger">*</span></label>
                                                 <select name="status_pkp" id="status_pkp" class="form-control">
@@ -418,12 +495,12 @@
                                                 <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                             </div>
             
-                                            <div class="pkp d-none">
+                                            <div class="pkp d-none p-0">
                                                 <div class="form-group">
                                                     <input type="file" name="sppkp" id="sppkp" class="form-control" onchange="previewFileSppkp(this);" accept=".jpg, .png, .pdf, .jpeg">
                                                 </div>
                     
-                                                <div id="preview_sppkp" class="form-group">
+                                                <div id="preview_sppkp p-0" class="form-group">
                                                     <img id="preview_foto_sppkp" src="{{ $data['sppkp'] ? asset('../../../uploads/identitas_perusahaan/' . $data['sppkp']) : '' }}" alt="Preview" data-action="zoom">
                                                 </div>
                                             </div>
@@ -437,6 +514,10 @@
                 
                                         <div class="form-group" id="preview_npwp">
                                             <img id="preview_foto_npwp" src="{{ $data['foto_npwp'] ? asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp']) : '' }}" alt="Preview" data-action="zoom">
+                                        </div>
+
+                                        <div class="branch-section mt-3">
+                                            <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>
                                         </div>
                                     </div>
                                 </div>
@@ -522,7 +603,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Foto Identitas <span class="text-danger">*</span></label>
                                         <input type="file" name="foto_penanggung" id="foto_penanggung" class="form-control" onchange="previewFilePenanggung(this);" accept=".jpg, .png, .pdf, .jpeg">
@@ -613,6 +694,84 @@
                             <button type="submit" class="btnSubmit" title="Submit">Submit</button>
                         </div>
                     </div>
+
+                    {{-- START: Branch modal --}}
+                    <div class="modal fade" id="modalCabang" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Cabang</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="delRow-section">
+                                        <button type="button" id="addRow"><i class="fa-solid fa-plus text-light"></i></button>
+                                    </div>
+                                    <div class="dynamic-row">
+                                        @if($data)
+                                            @if($data['cabang'])
+                                                @foreach($data['cabang'] as $key => $value)
+                                                    <hr class="line-{{ $key + 1 }}">
+                                                    <div class="row align-items-center counter-{{ $key + 1 }}">
+                                                        <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
+                                                            <button type="button" id="delRow" class="delRow" data-id="{{ $key + 1 }}"><i class="fa-solid fa-minus text-light"></i></button>
+                                                        </div>
+                                                        <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
+                                                            <div class="group-column-modal">
+                                                                <div class="form-group-modal">
+                                                                    <label for="">Nomor NITKU</label>
+                                                                    <input type="text" class="form-control" name="nitku_cabang[]" id="nitku_cabang" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" autocomplete="off" placeholder="Masukkan nomor NITKU" value="{{ $value['nitku'] }}">
+                                                                </div>
+                                                                <div class="form-group-modal">
+                                                                    <label for="">Nama Cabang</label>
+                                                                    <input type="text" class="form-control" name="nama_cabang[]" id="nama_cabang" autocomplete="off" placeholder="Masukkan nama cabang" value="{{ $value['nama'] }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                                            <div class="form-group-modal">
+                                                                <label for="">Alamat NITKU</label>
+                                                                <textarea name="alamat_nitku[]" id="alamat_nitku" cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NITKU">{{ $value['alamat'] }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            @endif
+                                            @else
+                                            <hr class="line-1">
+                                            <div class="row align-items-center counter-1">
+                                                <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
+                                                    <button type="button" id="delRow" class="delRow" data-id="1"><i class="fa-solid fa-minus text-light"></i></button>
+                                                </div>
+                                                <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
+                                                    <div class="group-column-modal">
+                                                        <div class="form-group-modal">
+                                                            <label for="">Nomor NITKU</label>
+                                                            <input type="text" class="form-control" name="nitku_cabang[]" id="nitku_cabang" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" autocomplete="off" placeholder="Masukkan nomor NITKU">
+                                                        </div>
+                                                        <div class="form-group-modal">
+                                                            <label for="">Nama Cabang</label>
+                                                            <input type="text" class="form-control" name="nama_cabang[]" id="nama_cabang" autocomplete="off" placeholder="Masukkan nama cabang">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                                    <div class="form-group-modal">
+                                                        <label for="">Alamat NITKU</label>
+                                                        <textarea name="alamat_nitku[]" id="alamat_nitku" cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NITKU"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- END: Branch Modal --}}
                 </form>
             </div>
         </div>
@@ -640,7 +799,11 @@
                     $('#preview_foto_ktp').find('img').remove();
                     reader.onload = function() {
                         let filename = reader.result.split(',')[1];
-                        $('#preview_ktp').html('<iframe src="'+reader.result+'" style="width: 100%; height: 180px;" target="_blank">'+file[0].name+'</iframe>');
+                        $('#preview_ktp').html('File PDF telah ditambahkan!').css({
+                            'height': '50px',
+                            'padding': '16px',
+                            'font-weight': 'bold'
+                        });
                     }
                 } else {
                     $("#preview_ktp").css('height', '197px');
@@ -663,7 +826,11 @@
                     $('#preview_foto_npwp').find('img').remove();
                     reader.onload = function() {
                         let filename = reader.result.split(',')[1];
-                        $('#preview_npwp').html('<iframe src="'+reader.result+'" style="width: 100%; height: 180px;" target="_blank">'+file[0].name+'</iframe>');
+                        $('#preview_npwp').html('File PDF telah ditambahkan!').css({
+                            'height': '50px',
+                            'padding': '16px',
+                            'font-weight': 'bold'
+                        });
                     }
                 } else {
                     $("#preview_npwp").css('height', '197px');
@@ -686,7 +853,11 @@
                     $('#preview_foto_sppkp').find('img').remove();
                     reader.onload = function() {
                         let filename = reader.result.split(',')[1];
-                        $('#preview_sppkp').html('<iframe src="'+reader.result+'" style="width: 100%; height: 197px;" target="_blank">'+file[0].name+'</iframe>');
+                        $('#preview_sppkp').html('File PDF telah ditambahkan!').css({
+                            'height': '50px',
+                            'padding': '16px',
+                            'font-weight': 'bold'
+                        });
                     }
                 } else {
                     $("#preview_sppkp").css('height', '197px');
@@ -709,7 +880,11 @@
                     $('#preview_penanggung').find('img').remove();
                     reader.onload = function() {
                         let filename = reader.result.split(',')[1];
-                        $('#preview_foto_penanggung').html('<iframe src="'+reader.result+'" style="width: 100%; height: 197px;" target="_blank">'+file[0].name+'</iframe>');
+                        $('#preview_foto_penanggung').html('File PDF telah ditambahkan!').css({
+                            'height': '50px',
+                            'padding': '16px',
+                            'font-weight': 'bold'
+                        });
                     }
                 } else {
                     $("#preview_penanggung").css('height', '197px');
@@ -966,6 +1141,49 @@
                 }
             });
             // END: Get data untuk select
+
+            // START: Dynamic row
+            let counter = 1;
+            $('#addRow').on('click', function() {
+                counter++;
+                $('#counter').val(counter);
+                $('.dynamic-row').append(`
+                    <hr class="line-`+counter+`">
+                    <div class="row align-items-center counter-`+counter+`">
+                        <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
+                            <button type="button" id="delRow" data-id="`+counter+`"><i class="fa-solid fa-minus text-light"></i></button>
+                        </div>
+                        <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
+                            <div class="group-column-modal">
+                                <div class="form-group-modal">
+                                    <label for="">Nomor NITKU</label>
+                                    <input type="text" class="form-control" name="nitku_cabang[]" id="nitku_cabang" placeholder="Masukkan nomor NITKU" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22">
+                                </div>
+                                <div class="form-group-modal">
+                                    <label for="">Nama Cabang</label>
+                                    <input type="text" class="form-control" name="nama_cabang[]" id="nama_cabang" placeholder="Masukkan nama cabang" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group-modal">
+                                <label for="">Alamat NITKU</label>
+                                <textarea name="alamat_nitku[]" id="alamat_nitku" cols="30" rows="5" class="form-control" placeholder="Masukkan alamat NITKU" autocomplete="off"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                `);
+            });
+
+            $(document).on('click', '#delRow', function() {
+                let id = $(this).data('id');
+
+                $('.dynamic-row').find('.line-'+id).remove();
+                $('.dynamic-row').find('.counter-'+id).remove();
+                counter--;
+                $('#counter').val(counter);
+            });
+            // END: Dynamic row
         });
     </script>
 @endsection

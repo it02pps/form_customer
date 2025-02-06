@@ -18,18 +18,12 @@ class UserSeeder extends Seeder
         $user = [
             [
                 'name' => 'User 1',
+                'username' => 'admin',
                 'email' => 'user1@gmail.com',
                 'password' => Hash::make('12345678'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
-            [
-                'name' => 'User 2',
-                'email' => 'user2@gmail.com',
-                'password' => Hash::make('12345678'),
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ]
         ];
         DB::table('users')->insert($user);
     }

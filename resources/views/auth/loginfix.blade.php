@@ -110,7 +110,7 @@
                     </div>
                     <h6 style="font-weight: 400;">Silahkan masukkan identitas anda.</h6>
                 </div>
-                <form method="POST" action="{{ route('login.store') }}">
+                <form method="POST" action="{{ route('form_customer.login.store') }}">
                     @csrf
                     <div class="content-body">
                         <div class="form-group">

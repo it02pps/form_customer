@@ -22,4 +22,8 @@ class IdentitasPerusahaan extends Model
     public function tipe_customer() {
         return $this->hasOne(TipeCustomer::class, 'identitas_perusahaan_id', 'id');
     }
+
+    public function cabang() {
+        return $this->hasMany(Cabang::class, 'identitas_perusahaan_id', 'id');
+    }
 }

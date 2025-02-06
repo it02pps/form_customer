@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\File;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Helper\ApiStorage;
 use App\Helper\base30ToImage;
+use App\Models\Cabang;
 use App\Models\TipeCustomer;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +25,8 @@ use League\Flysystem\Visibility;
 use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\MockObject\Builder\Identity;
 use Yajra\DataTables\Facades\DataTables;
+
+use function PHPUnit\Framework\isEmpty;
 
 class HomeController extends Controller
 {
@@ -124,18 +127,17 @@ class HomeController extends Controller
             'identitas_perusahaan' => $data['bentuk_usaha'] == 'perseorangan' ? 'required' : '',
             'nama_lengkap' => $data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'ktp' ? 'required' : '') : '',
             'nomor_ktp' => $data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'ktp' ? 'required|numeric|digits:16' : '') : '',
-            'foto_ktp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf|max:2048' : ($data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'ktp' ? 'required|mimes:jpg,jpeg,pdf|max:2048' : '') : ''),
+            'foto_ktp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : ($data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'ktp' ? 'required|mimes:jpg,jpeg,pdf' : '') : ''),
             'nomor_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
             'nama_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
             'badan_usaha' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'email_faktur' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required|email' : ($data['identitas_perusahaan'] == 'npwp' ? 'required|email' : ''),
-            'foto_npwp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf|max:2048' : ($data['bentuk_usaha'] == 'badan_usaha' ? 'required|mimes:jpg,jpeg,pdf|max:2048' : ($data['identitas_perusahaan'] == 'npwp' ? 'required|mimes:jpg,jpeg,pdf|max:2048' : '')),
-            'foto_sppkp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf|max:2048' : ($data['bentuk_usaha'] == 'badan_usaha' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,jpeg,pdf|max:2048' : '') : ($data['identitas_perusahaan'] == 'npwp' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,jpeg,pdf|max:2048' : '') : '')),
+            'foto_npwp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : ($data['bentuk_usaha'] == 'badan_usaha' ? 'required|mimes:jpg,jpeg,pdf' : ($data['identitas_perusahaan'] == 'npwp' ? 'required|mimes:jpg,jpeg,pdf' : '')),
+            'foto_sppkp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : ($data['bentuk_usaha'] == 'badan_usaha' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,jpeg,pdf' : '') : ($data['identitas_perusahaan'] == 'npwp' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,jpeg,pdf' : '') : '')),
             'alamat_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
             'kota_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
             'nama_group' => ($data['status_kepemilikan'] == 'group') ? 'required' : '',
             'bidang_usaha_lain' => ($data['bidang_usaha'] == 'lainnya') ? 'required' : '',
-            'nitku' => 'required|max:22',
             'jenis_cust' => 'required',
 
             // Informasi Bank
@@ -146,11 +148,14 @@ class HomeController extends Controller
             'rekening_lain' => ($data['status_rekening'] == 'lainnya') ? 'required' : '',
 
             // Identitas Penanggung Jawab
-            'foto_penanggung' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf|max:2048' : 'required|mimes:jpg,jpeg,pdf|max:2048',
+            'foto_penanggung' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : 'required|mimes:jpg,jpeg,pdf',
             'nama_penanggung_jawab' => 'required',
             'jabatan' => 'required',
             'identitas_penanggung_jawab' => 'required',
-            'nomor_hp_penanggung_jawab' => 'required'
+            'nomor_hp_penanggung_jawab' => 'required',
+
+            // Cabang
+            'nitku_cabang.*' => (isEmpty($data['nitku_cabang']) ? '' : 'digits:22')
         ];
 
         $message = [
@@ -171,8 +176,7 @@ class HomeController extends Controller
             'nomor_ktp.numeric' => 'Nomor KTP harus berupa angka',
             'nomor_ktp.digits' => 'Nomor KTP harus 16 digit',
             'foto_ktp.required' => 'Foto KTP harus diisi',
-            'foto_ktp.mimes' => 'Format file harus berupa JPG, PNG, JPEG, atau PDF',
-            'foto_ktp.max' => 'Maksimal ukuran file 2MB',
+            'foto_ktp.mimes' => 'Format file harus berupa JPG, JPEG, atau PDF',
             'nomor_npwp.required' => 'Nomor NPWP harus diisi',
             'nomor_npwp.digits_between' => 'Nomor NPWP harus diantara 15 - 16 digit',
             'nama_npwp.required' => 'Nama NPWP harus diisi',
@@ -180,17 +184,13 @@ class HomeController extends Controller
             'email_faktur.required' => 'Email faktur harus diisi',
             'email_faktur.email' => 'Format email harus valid',
             'foto_npwp.required' => 'Foto NPWP harus diisi',
-            'foto_npwp.mimes' => 'Format file harus berupa JPG, PNG, JPEG, atau PDF',
-            'foto_npwp.max' => 'Maksimal ukuran file 2MB',
+            'foto_npwp.mimes' => 'Format file harus berupa JPG, JPEG, atau PDF',
             'foto_sppkp.required' => 'Foto SPPKP harus diisi',
-            'foto_sppkp.mimes' => 'Format file harus berupa JPG, PNG, JPEG, atau PDF',
-            'foto_sppkp.max' => 'Maksimal ukuran file 2MB',
+            'foto_sppkp.mimes' => 'Format file harus berupa JPG, JPEG, atau PDF',
             'alamat_npwp.required' => 'Alamat NPWP harus diisi',
             'kota_npwp.required' => 'Kota NPWP harus diisi',
             'nama_group.required' => 'Nama group harus diisi',
             'bidang_usaha_lain.required' => 'Bidang usaha harus diisi',
-            'nitku.required' => 'NITKU harus diisi',
-            'nitku.max' => 'Nomor NPWP harus 22 digit',
             'jenis_cust.required' => 'Jenis customer harus diisi',
             
             // Informasi Bank
@@ -206,15 +206,14 @@ class HomeController extends Controller
             'nama_penanggung_jawab.required' => 'Nama penanggung jawab harus diisi',
             'jabatan.required' => 'Jabatan harus diisi',
             'identitas_penanggung_jawab.required' => 'Identitas penanggung jawab harus diisi',
-            'foto_ktp_penanggung.required' => 'Foto KTP penanggung jawab harus diisi',
-            'foto_ktp_penanggung.mimes' => 'Format file harus berupa JPG, PNG, JPEG, atau PDF',
-            'foto_ktp_penanggung.max' => 'Maksimal ukuran file 2MB',
-            'foto_npwp_penanggung.required' => 'Foto NPWP penanggung jawab harus diisi',
-            'foto_npwp_penanggung.mimes' => 'Format file harus berupa JPG, PNG, JPEG, atau PDF',
-            'foto_npwp_penanggung.max' => 'Maksimal ukuran file 2MB',
+            'foto_penanggung.required' => 'Foto identitas penanggung jawab harus diisi',
+            'foto_penanggung.mimes' => 'Format file identitas penanggung jawab harus berupa JPG, JPEG, atau PDF',
             'nomor_hp_penanggung_jawab.required' => 'Nomor HP penanggung jawab harus diisi',
             'nomor_hp_penanggung_jawab.numeric' => 'Nomor HP penanggung jawab harus berupa angka',
             'nomor_hp_penanggung_jawab.digits_between' => 'Nomor HP penanggung jawab harus diantara 10 - 13 digit',
+
+            // Cabang
+            'nitku_cabang.*.digits' => 'NITKU harus 22 digit'
         ];
 
         return Validator::make($data, $rules, $message);
@@ -512,6 +511,29 @@ class HomeController extends Controller
             }
             $identitas_penanggung_jawab->save();
 
+            // Cabang
+            $cabang = Cabang::where('identitas_perusahaan_id', $dekripsi);
+            if($cabang->count() > 0) {
+                $cabang->delete();
+                for($i = 0; $i < count($request->nitku_cabang); $i++) {
+                    Cabang::insert([
+                        'identitas_perusahaan_id' => $identitas_perusahaan->id,
+                        'nitku' => $request->nitku_cabang[$i],
+                        'nama' => $request->nama_cabang[$i],
+                        'alamat' => $request->alamat_nitku[$i],
+                    ]);
+                }
+            } else {
+                for($i = 0; $i < count($request->nitku_cabang); $i++) {
+                    Cabang::insert([
+                        'identitas_perusahaan_id' => $identitas_perusahaan->id,
+                        'nitku' => $request->nitku_cabang[$i],
+                        'nama' => $request->nama_cabang[$i],
+                        'alamat' => $request->alamat_nitku[$i],
+                    ]);
+                }
+            }
+
             // Informasi Bank
             $bank = InformasiBank::firstOrNew([
                 'identitas_perusahaan_id' => $dekripsi
@@ -626,7 +648,7 @@ class HomeController extends Controller
 
     public function getPdf($id) {
         $data = IdentitasPerusahaan::find(Crypt::decryptString($id));
-        $path = public_path() . '/uploads/identitas_perusahaan/' . $data->file_customer_external;
+        $path = public_path() . '/uploads/identitas_perusahaan/final/' . $data->file_customer_external;
         $headers = array(
             'Content-Type: application/pdf',
         );

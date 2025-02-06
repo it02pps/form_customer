@@ -39,10 +39,6 @@ class LoginController extends Controller
         $this->middleware('web');
     }
 
-    public function index() {
-        return view('auth.login');
-    }
-
     public function login(Request $request) {
         // dd($request->all());
         try {
@@ -58,7 +54,7 @@ class LoginController extends Controller
         }
     }
 
-    public function loginFix() {
+    public function index() {
         return view('auth.loginfix');
     }
 

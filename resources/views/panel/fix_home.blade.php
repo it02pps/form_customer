@@ -203,16 +203,17 @@
                         <div id="search">
                             <input type="text" name="searchInput" id="searchInput" placeholder="Search" autocomplete="off">
                         </div>
-                        <div class="table mt-3">
-                            <table id="datatable" style="border: 1px solid #cfcfd1;">
+                        <div class="mt-3">
+                            <table id="datatable" class="table" style="border: 1px solid #cfcfd1;">
                                 <thead style="background-color: #E7E6EB;">
                                     <tr>
                                         <th width="5%" class="text-center">No</th>
-                                        <th width="15%">Bentuk Usaha</th>
-                                        <th width="15%">Nama Perusahaan</th>
-                                        <th width="30%">Alamat Lengkap</th>
-                                        <th width="10%">Nomor HP</th>
-                                        <th width="18%">Aksi</th>
+                                        <th>Kode Customer</th>
+                                        <th>Bentuk Usaha</th>
+                                        <th>Nama Perusahaan</th>
+                                        <th>Alamat Lengkap</th>
+                                        <th>Nomor HP</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -310,6 +311,7 @@
                 ajax: '{{ route('home.datatable') }}',
                 columns: [
                     { data: 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, orderable: false },
+                    { data: 'kode_customer', name: 'kode_customer' },
                     { data: 'bentuk_usaha', name: 'bentuk_usaha' },
                     { data: 'nama_perusahaan', name: 'nama_perusahaan' },
                     { data: 'alamat_lengkap', name: 'alamat_lengkap' },
@@ -324,7 +326,7 @@
                         }
                     },
                     {
-                        'targets': 4,
+                        'targets': 5,
                         createdCell: function(td) {
                             $(td).css('text-align', 'left');
                         },

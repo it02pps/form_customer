@@ -11,9 +11,7 @@
     }
 
     .container {
-        display: flex;
-        align-items: center;
-        height: 100%;
+        padding: 64px 0;
     }
     
     .container-fluid {
@@ -74,16 +72,18 @@
 
     @media screen and (max-width: 475px) {
         body {
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: visible;
         }
         
         .container {
             padding: 0;
+            height: 100vh;
         }
         
         .container-fluid {
             background-color: #fff;
-            border-radius: 16px;
+            border-radius: 0;
             box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.25);
         }
 
