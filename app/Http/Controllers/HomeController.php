@@ -389,6 +389,29 @@ class HomeController extends Controller
             }
             $identitas_perusahaan->save();
 
+            // Cabang
+            $cabang = Cabang::where('identitas_perusahaan_id', $dekripsi);
+            if($cabang->count() > 0) {
+                $cabang->delete();
+                for($i = 0; $i < count($request->nitku_cabang); $i++) {
+                    Cabang::insert([
+                        'identitas_perusahaan_id' => $identitas_perusahaan->id,
+                        'nitku' => $request->nitku_cabang[$i],
+                        'nama' => $request->nama_cabang[$i],
+                        'alamat' => $request->alamat_nitku[$i],
+                    ]);
+                }
+            } else {
+                for($i = 0; $i < count($request->nitku_cabang); $i++) {
+                    Cabang::insert([
+                        'identitas_perusahaan_id' => $identitas_perusahaan->id,
+                        'nitku' => $request->nitku_cabang[$i],
+                        'nama' => $request->nama_cabang[$i],
+                        'alamat' => $request->alamat_nitku[$i],
+                    ]);
+                }
+            }
+
             // Identitas penanggung jawab
             $identitas_penanggung_jawab = DataIdentitas::firstOrNew([
                 'identitas_perusahaan_id' => $dekripsi
