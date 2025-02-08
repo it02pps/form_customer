@@ -171,9 +171,40 @@
                             @endif
                         @endif
                     @endif
-
                 </div>
             </div>
+
+            @if($data['cabang'])
+                <hr>
+                <h3>Cabang</h3>
+                <div class="row" style="margin-bottom: 20px;">
+                    @forelse($data['cabang'] as $key => $value)
+                        <div class="column">
+                            <p class="label">NITKU</p>
+                            <p>{{ $value['nitku'] ? $value['nitku'] : '-' }}</p>
+
+                            <p class="label">Nama Cabang</p>
+                            <p>{{ $value['nama'] ? $value['nama'] : '-' }}</p>
+                        </div>
+                        <div class="column">
+                            <p class="label">Alamat NITKU</p>
+                            <p>{{ $value['alamat'] ? $value['alamat'] : '-' }}</p>
+                        </div>
+                    @empty
+                        <div class="column">
+                            <p class="label">NITKU</p>
+                            <p>-</p>
+
+                            <p class="label">Nama Cabang</p>
+                            <p>-</p>
+                        </div>
+                        <div class="column">
+                            <p class="label">Alamat NITKU</p>
+                            <p>-</p>
+                        </div>
+                    @endforelse
+                </div>
+            @endif
 
             <hr>
 
@@ -239,7 +270,7 @@
             </div>
         </div>
     </div>
-    <div class="break"></div>
+    {{-- <div class="break"></div>
     <div class="lampiran container">
         <div class="content-header">
             <h2>Lampiran</h2>
@@ -275,6 +306,6 @@
                 @endif
             @endif
         </div>
-    </div>
+    </div> --}}
 </body>
 </html>

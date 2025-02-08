@@ -128,8 +128,7 @@
     }
 
     .btnDetailCabang {
-        padding: 0 24px;
-        height: 48px;
+        padding: 8px 16px;
         border-radius: 8px;
         background-color: #424242;
         border: none;
@@ -137,7 +136,7 @@
     }
 
     #previewPDF {
-        padding: 16px 32px;
+        padding: 8px 16px;
         border-radius: 8px;
         background-color: #424242;
         border: none;
@@ -441,7 +440,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="group-column">
                                     <div class="form-group">
-                                        <label for="">Nomor NPWP</label>
+                                        <label for="">Nomor NPWP (16 digit)</label>
                                         <input type="text" name="nomor_npwp" id="nomor_npwp" readonly class="form-control" autocomplete="off" value="<?php echo e($data['nomor_npwp']); ?>">
                                     </div>
 
@@ -452,15 +451,21 @@
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Foto NPWP</label>
-                                    
-                                    <div id="preview_npwp" class="form-group d-flex justify-content-center align-items-center">
-                                        <?php if(File::extension($data['foto_npwp']) == 'pdf'): ?>
-                                            <a href="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
-                                        <?php else: ?>
-                                            <img id="preview_foto_npwp" src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp'])); ?>" alt="Preview" data-action="zoom">
-                                        <?php endif; ?>
+                                <div class="group-column">
+                                    <div class="form-group">
+                                        <label for="">Kota Sesuai NPWP</label>
+                                        <input type="text" name="kota_npwp" id="kota_npwp" class="form-control" autocomplete="off" readonly value="<?php echo e($data['kota_npwp']); ?>">
+                                    </div>
+
+                                    <div class="form-group pt-3">
+                                        <label for="">Email Khusus Untuk Faktur Pajak</label>
+                                        <input type="text" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" readonly value="<?php echo e($data['email_khusus_faktur_pajak']); ?>">
+                                    </div>
+
+                                    <div class="form-group p-0" id="cabang">
+                                        <label for="">Cabang</label>
+                                        <input type="text" class="form-control" autocomplete="off" readonly placeholder="<?php echo e(App\Models\Cabang::where('identitas_perusahaan_id', $data['id'])->count()); ?> Cabang">
+                                        <button type="button" class="btnDetailCabang" title="Detail Cabang" data-bs-target="#modalCabang" data-bs-toggle="modal">Detail Cabang</button>
                                     </div>
                                 </div>
                             </div>
@@ -468,18 +473,20 @@
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Kota Sesuai NPWP</label>
-                                    <input type="text" name="kota_npwp" id="kota_npwp" class="form-control" autocomplete="off" readonly value="<?php echo e($data['kota_npwp']); ?>">
+                                    <label for="">Foto NPWP</label>
+                                    
+                                    <?php if(File::extension($data['foto_npwp']) == 'pdf'): ?>
+                                        <div id="preview_npwp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                            <p style="font-size: 18px;">Preview file NPWP</p>
+                                            <a href="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                        </div>
+                                    <?php else: ?>
+                                        <div id="preview_npwp" class="form-group">
+                                            <img id="preview_foto_npwp" src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp'])); ?>" alt="Preview" data-action="zoom">
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Email Khusus Untuk Faktur Pajak</label>
-                                    <input type="text" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" readonly value="<?php echo e($data['email_khusus_faktur_pajak']); ?>">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group" style="padding-left: 16px;">
                                     <label for="">Status Pengusaha Kena Pajak (PKP)</label>
@@ -488,21 +495,17 @@
     
                                 <div class="pkp p-0 <?php if($data['status_pkp'] != 'pkp'): ?> d-none <?php endif; ?>">
                                     <div class="form-group">
-                                        <div id="preview_sppkp" class="form-group">
-                                            <?php if(File::extension($data['sppkp']) == 'pdf'): ?>
+                                        <?php if(File::extension($data['sppkp']) == 'pdf'): ?>
+                                            <div id="preview_sppkp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                                <p style="font-size: 18px;">Preview file SPPKP</p>
                                                 <a href="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['sppkp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
-                                            <?php else: ?>
+                                            </div>
+                                        <?php else: ?>
+                                            <div id="preview_sppkp" class="form-group">
                                                 <img id="preview_foto_sppkp" src="<?php echo e($data['sppkp'] ? asset('../../../uploads/identitas_perusahaan/' . $data['sppkp']) : ''); ?>" alt="Preview" data-action="zoom">
-                                            <?php endif; ?>
-                                        </div>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group" id="cabang">
-                                    <label for="">Cabang</label>
-                                    <input type="text" class="form-control" autocomplete="off" readonly placeholder="<?php echo e(App\Models\Cabang::where('identitas_perusahaan_id', $data['id'])->count()); ?> Cabang">
-                                    <button type="button" class="btnDetailCabang" title="Detail Cabang" data-bs-target="#modalCabang" data-bs-toggle="modal">Detail Cabang</button>
                                 </div>
                             </div>
                         </div>
@@ -579,13 +582,16 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group p-0">
                                     <label for="">Foto Identitas</label>
-                                    <div id="preview_penanggung" class="form-group d-flex justify-content-center align-items-center">
-                                        <?php if(File::extension($data['data_identitas']['foto']) == 'pdf'): ?>
+                                    <?php if(File::extension($data['data_identitas']['foto']) == 'pdf'): ?>
+                                        <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                            <p style="font-size: 18px;">Preview file identitas</p>
                                             <a href="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
-                                        <?php else: ?>
+                                        </div>
+                                    <?php else: ?>
+                                        <div id="preview_penanggung" class="form-group">
                                             <img id="preview_foto_penanggung" src="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $data['data_identitas']['foto'])); ?>" alt="Preview" data-action="zoom">
-                                        <?php endif; ?>
-                                    </div>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -714,7 +720,7 @@
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="group-column-modal">
                                             <div class="form-group-modal">
-                                                <label for="">Nomor NITKU</label>
+                                                <label for="">Nomor NITKU (22 digit)</label>
                                                 <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" autocomplete="off" readonly placeholder="Masukkan nomor NITKU" value="<?php echo e($value['nitku']); ?>">
                                             </div>
                                             <div class="form-group-modal">

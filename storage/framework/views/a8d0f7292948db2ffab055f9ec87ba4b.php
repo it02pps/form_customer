@@ -105,9 +105,6 @@
                     <p class="label">Nomor NPWP</p>
                     <p><?php echo e($data['nomor_npwp']); ?></p>
 
-                    <p class="label">NITKU untuk penerbitan Faktur Pajak</p>
-                    <p><?php echo e($data['nitku'] ? $data['nitku'] : '-'); ?></p>
-
                     <p class="label">Alamat NPWP</p>
                     <p><?php echo e($data['alamat_npwp']); ?></p>
                     
@@ -166,6 +163,39 @@
 
             <hr>
 
+            <h3>Cabang</h3>
+            <div class="row" style="margin-bottom: 20px;">
+                <?php if($data['cabang']): ?>
+                    <?php $__empty_1 = true; $__currentLoopData = $data['cabang']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                        <div class="column">
+                            <p class="label">NITKU</p>
+                            <p><?php echo e($value['nitku'] ? $value['nitku'] : '-'); ?></p>
+
+                            <p class="label">Nama Cabang</p>
+                            <p><?php echo e($value['nama'] ? $value['nama'] : '-'); ?></p>
+                        </div>
+                        <div class="column">
+                            <p class="label">Alamat NITKU</p>
+                            <p><?php echo e($value['alamat'] ? $value['alamat'] : '-'); ?></p>
+                        </div>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                        <div class="column">
+                            <p class="label">NITKU</p>
+                            <p>-</p>
+
+                            <p class="label">Nama Cabang</p>
+                            <p>-</p>
+                        </div>
+                        <div class="column">
+                            <p class="label">Alamat NITKU</p>
+                            <p>-</p>
+                        </div>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </div>
+
+            <hr>
+
             <h3>INFORMASI BANK</h3>
             <div class="row" style="margin-bottom: 20px;">
                 <div class="column">
@@ -191,28 +221,18 @@
             <div class="row">
                 <div class="column">
                     <p class="label">Nama Penanggung Jawab</p>
-                    <p><?php echo e($data['data_identitas'] ? ($data['data_identitas']['nama'] ? $data['data_identitas']['nama'] : '-') : '-'); ?></p>
+                    <p><?php echo e($data['data_identitas'] ? $data['data_identitas']['nama'] : '-'); ?></p>
 
                     <p class="label">Identitas Penanggung Jawab</p>
-                    <p><?php echo e($data['data_identitas'] ? ($data['data_identitas']['identitas'] ? strtoupper($data['data_identitas']['identitas']) : '-') : '-'); ?></p>
+                    <p><?php echo e($data['data_identitas'] ? strtoupper($data['data_identitas']['identitas']) : '-'); ?></p>
                 </div>
                 <div class="column">
                     <p class="label">Jabatan</p>
-                    <p><?php echo e($data['data_identitas'] ? ($data['data_identitas']['jabatan'] ? $data['data_identitas']['jabatan'] : '-') : '-'); ?></p>
+                    <p><?php echo e($data['data_identitas'] ? $data['data_identitas']['jabatan'] : '-'); ?></p>
 
                     <?php if($data['data_identitas']): ?>
-                        <?php if($data['data_identitas']['identitas'] == 'ktp'): ?>
-                            <p class="label">Foto KTP</p>
-                        <?php else: ?>
-                            <p class="label">Foto NPWP</p>
-                        <?php endif; ?>
-
-                        <?php if($data['data_identitas']['foto'] != null): ?>
-                            <p>Lampiran Penanggung Jawab</p>
-                            
-                        <?php else: ?>
-                            <p>-</p>
-                        <?php endif; ?>
+                        <p class="label">Foto Identitas</p>
+                        <p>Lampiran Penanggung Jawab</p>
                     <?php else: ?>
                         <p class="label">Foto</p>
                         <p>-</p>
@@ -229,33 +249,6 @@
             </div>
         </div>
     </div>
-    <div class="break"></div>
-    <div class="lampiran container">
-        <div class="content-header">
-            <h2>Lampiran</h2>
-        </div>
-        <div class="content-body">
-            <div class="lampiranNpwp">
-                <h3>Lampiran NPWP</h3>
-                <img src="uploads/identitas_perusahaan/<?php echo e($data['foto_npwp']); ?>" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
-            </div>
-
-            <?php if($data['status_pkp'] == 'pkp'): ?>
-                <div class="lampiranSppkp">
-                    <h3>Lampiran SPPKP</h3>
-                    <img id="preview_foto_sppkp" src="uploads/identitas_perusahaan/<?php echo e($data['sppkp']); ?>" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
-                </div>
-            <?php endif; ?>
-            
-            <?php if($data['data_identitas']): ?>
-                <?php if($data['data_identitas']->foto): ?>
-                    <div class="lampiranPenanggungJawab">
-                        <h3>Lampiran Penanggung Jawab</h3>
-                        <img src="uploads/penanggung_jawab/<?php echo e($data['data_identitas']['foto']); ?>" alt="" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
-                    </div>
-                <?php endif; ?>
-            <?php endif; ?>
-        </div>
-    </div>
+    
 </body>
 </html><?php /**PATH D:\laragon\www\form_customer\resources\views/pdf/badan_usaha_pdf.blade.php ENDPATH**/ ?>

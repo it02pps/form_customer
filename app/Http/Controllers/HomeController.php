@@ -402,22 +402,30 @@ class HomeController extends Controller
             $cabang = Cabang::where('identitas_perusahaan_id', $dekripsi);
             if($cabang->count() > 0) {
                 $cabang->delete();
-                for($i = 0; $i < count($request->nitku_cabang); $i++) {
-                    Cabang::insert([
-                        'identitas_perusahaan_id' => $identitas_perusahaan->id,
-                        'nitku' => $request->nitku_cabang[$i],
-                        'nama' => $request->nama_cabang[$i],
-                        'alamat' => $request->alamat_nitku[$i],
-                    ]);
+                if(!isEmpty($request->nitku_cabang)) {
+                    for($i = 0; $i < count($request->nitku_cabang); $i++) {
+                        Cabang::insert([
+                            'identitas_perusahaan_id' => $identitas_perusahaan->id,
+                            'nitku' => $request->nitku_cabang[$i],
+                            'nama' => $request->nama_cabang[$i],
+                            'alamat' => $request->alamat_nitku[$i],
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now(),
+                        ]);
+                    }
                 }
             } else {
-                for($i = 0; $i < count($request->nitku_cabang); $i++) {
-                    Cabang::insert([
-                        'identitas_perusahaan_id' => $identitas_perusahaan->id,
-                        'nitku' => $request->nitku_cabang[$i],
-                        'nama' => $request->nama_cabang[$i],
-                        'alamat' => $request->alamat_nitku[$i],
-                    ]);
+                if(!isEmpty($request->nitku_cabang)) {
+                    for($i = 0; $i < count($request->nitku_cabang); $i++) {
+                        Cabang::insert([
+                            'identitas_perusahaan_id' => $identitas_perusahaan->id,
+                            'nitku' => $request->nitku_cabang[$i],
+                            'nama' => $request->nama_cabang[$i],
+                            'alamat' => $request->alamat_nitku[$i],
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now(),
+                        ]);
+                    }
                 }
             }
 

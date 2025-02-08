@@ -62,6 +62,8 @@ class FormCustomerController extends Controller
             'lainnya'
         ];
 
+        // dd($data);
+
         if ($menu === 'perseorangan') {
             return view('customer.fix_perseorangan', compact('data', 'url', 'enkripsi', 'menu', 'bidang_usaha'));
         } else {
@@ -361,26 +363,30 @@ class FormCustomerController extends Controller
             $cabang = Cabang::where('identitas_perusahaan_id', $dekripsi);
             if($cabang->count() > 0) {
                 $cabang->delete();
-                for($i = 0; $i < count($request->nitku_cabang); $i++) {
-                    Cabang::insert([
-                        'identitas_perusahaan_id' => $identitas_perusahaan->id,
-                        'nitku' => $request->nitku_cabang[$i],
-                        'nama' => $request->nama_cabang[$i],
-                        'alamat' => $request->alamat_nitku[$i],
-                        'created_at' => Carbon::now(),
-                        'updated_at' => Carbon::now(),
-                    ]);
+                if(!isEmpty($request->nitku_cabang)) {
+                    for($i = 0; $i < count($request->nitku_cabang); $i++) {
+                        Cabang::insert([
+                            'identitas_perusahaan_id' => $identitas_perusahaan->id,
+                            'nitku' => $request->nitku_cabang[$i],
+                            'nama' => $request->nama_cabang[$i],
+                            'alamat' => $request->alamat_nitku[$i],
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now(),
+                        ]);
+                    }
                 }
             } else {
-                for($i = 0; $i < count($request->nitku_cabang); $i++) {
-                    Cabang::insert([
-                        'identitas_perusahaan_id' => $identitas_perusahaan->id,
-                        'nitku' => $request->nitku_cabang[$i],
-                        'nama' => $request->nama_cabang[$i],
-                        'alamat' => $request->alamat_nitku[$i],
-                        'created_at' => Carbon::now(),
-                        'updated_at' => Carbon::now(),
-                    ]);
+                if(!isEmpty($request->nitku_cabang)) {
+                    for($i = 0; $i < count($request->nitku_cabang); $i++) {
+                        Cabang::insert([
+                            'identitas_perusahaan_id' => $identitas_perusahaan->id,
+                            'nitku' => $request->nitku_cabang[$i],
+                            'nama' => $request->nama_cabang[$i],
+                            'alamat' => $request->alamat_nitku[$i],
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now(),
+                        ]);
+                    }
                 }
             }
 
@@ -578,8 +584,8 @@ class FormCustomerController extends Controller
             ]);
             $pdf->setPaper('A4', 'portrait');
             $pdf->render();
-            // return $pdf->stream();
-            return $pdf->download($data['nama_perusahaan'] . '.pdf');
+            return $pdf->stream();
+            // return $pdf->download($data['nama_perusahaan'] . '.pdf');
         } else {
             $pdf = Pdf::loadView('pdf.perseorangan_pdf', [
                 'data' => $data

@@ -84,7 +84,7 @@
     }
     
     .section2, .section3 {
-        padding: 16px 0 16px 0;
+        padding: 16px 0;
     }
 
     .footer {
@@ -123,8 +123,7 @@
     }
 
     .btnDetailCabang {
-        padding: 0 24px;
-        height: 48px;
+        padding: 8px 16px;
         border-radius: 8px;
         background-color: #424242;
         border: none;
@@ -132,7 +131,7 @@
     }
 
     #previewPDF {
-        padding: 16px 32px;
+        padding: 8px 16px;
         border-radius: 8px;
         background-color: #424242;
         border: none;
@@ -455,7 +454,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="group-column">
                                     <div class="form-group">
-                                        <label for="">Nomor NPWP</label>
+                                        <label for="">Nomor NPWP (16 digit)</label>
                                         <input type="text" name="nomor_npwp" id="nomor_npwp" readonly class="form-control" autocomplete="off" value="<?php echo e($perusahaan['nomor_npwp']); ?>">
                                     </div>
 
@@ -466,15 +465,21 @@
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Foto NPWP</label>
-                                    
-                                    <div id="preview_npwp" class="form-group d-flex justify-content-center align-items-center">
-                                        <?php if(File::extension($perusahaan['foto_npwp']) == 'pdf'): ?>
-                                            <a href="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
-                                        <?php else: ?>
-                                            <img id="preview_foto_npwp" src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_npwp'])); ?>" alt="Preview" data-action="zoom">
-                                        <?php endif; ?>
+                                <div class="group-column">
+                                    <div class="form-group">
+                                        <label for="">Kota Sesuai NPWP</label>
+                                        <input type="text" name="kota_npwp" id="kota_npwp" class="form-control" autocomplete="off" readonly value="<?php echo e($perusahaan['kota_npwp']); ?>">
+                                    </div>
+
+                                    <div class="form-group pt-3">
+                                        <label for="">Email Khusus Untuk Faktur Pajak</label>
+                                        <input type="text" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" readonly value="<?php echo e($perusahaan['email_khusus_faktur_pajak']); ?>">
+                                    </div>
+
+                                    <div class="form-group p-0" id="cabang">
+                                        <label for="">Cabang</label>
+                                        <input type="text" class="form-control" autocomplete="off" readonly placeholder="<?php echo e(App\Models\Cabang::where('identitas_perusahaan_id', $perusahaan['id'])->count()); ?> Cabang">
+                                        <button type="button" class="btnDetailCabang" title="Detail Cabang" data-bs-target="#modalCabang" data-bs-toggle="modal">Detail Cabang</button>
                                     </div>
                                 </div>
                             </div>
@@ -482,18 +487,20 @@
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Kota Sesuai NPWP</label>
-                                    <input type="text" name="kota_npwp" id="kota_npwp" class="form-control" autocomplete="off" readonly value="<?php echo e($perusahaan['kota_npwp']); ?>">
+                                    <label for="">Foto NPWP</label>
+                                    
+                                    <?php if(File::extension($perusahaan['foto_npwp']) == 'pdf'): ?>
+                                        <div id="preview_npwp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                            <p style="font-size: 18px;">Preview file NPWP</p>
+                                            <a href="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                        </div>
+                                    <?php else: ?>
+                                        <div id="preview_npwp" class="form-group">
+                                            <img id="preview_foto_npwp" src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_npwp'])); ?>" alt="Preview" data-action="zoom">
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Email Khusus Untuk Faktur Pajak</label>
-                                    <input type="text" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" readonly value="<?php echo e($perusahaan['email_khusus_faktur_pajak']); ?>">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group" style="padding-left: 16px;">
                                     <label for="">Status Pengusaha Kena Pajak (PKP)</label>
@@ -502,21 +509,17 @@
     
                                 <div class="pkp p-0 <?php if($perusahaan['status_pkp'] != 'pkp'): ?> d-none <?php endif; ?>">
                                     <div class="form-group">
-                                        <div id="preview_sppkp" class="form-group">
-                                            <?php if(File::extension($perusahaan['sppkp']) == 'pdf'): ?>
+                                        <?php if(File::extension($perusahaan['sppkp']) == 'pdf'): ?>
+                                            <div id="preview_sppkp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                                <p style="font-size: 18px;">Preview file SPPKP</p>
                                                 <a href="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $perusahaan['sppkp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
-                                            <?php else: ?>
+                                            </div>
+                                        <?php else: ?>
+                                            <div id="preview_sppkp" class="form-group">
                                                 <img id="preview_foto_sppkp" src="<?php echo e($perusahaan['sppkp'] ? asset('../../../uploads/identitas_perusahaan/' . $perusahaan['sppkp']) : ''); ?>" alt="Preview" data-action="zoom">
-                                            <?php endif; ?>
-                                        </div>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group" id="cabang">
-                                    <label for="">Cabang</label>
-                                    <input type="text" class="form-control" autocomplete="off" readonly placeholder="<?php echo e(App\Models\Cabang::where('identitas_perusahaan_id', $perusahaan['id'])->count()); ?> Cabang">
-                                    <button type="button" class="btnDetailCabang" title="Detail Cabang" data-bs-target="#modalCabang" data-bs-toggle="modal">Detail Cabang</button>
                                 </div>
                             </div>
                         </div>
@@ -593,13 +596,16 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group p-0">
                                     <label for="">Foto Identitas</label>
-                                    <div id="preview_penanggung" class="form-group d-flex justify-content-center align-items-center">
-                                        <?php if(File::extension($perusahaan['data_identitas']['foto']) == 'pdf'): ?>
+                                    <?php if(File::extension($perusahaan['data_identitas']['foto']) == 'pdf'): ?>
+                                        <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                            <p style="font-size: 18px;">Preview file identitas</p>
                                             <a href="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $perusahaan['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
-                                        <?php else: ?>
+                                        </div>
+                                    <?php else: ?>
+                                        <div id="preview_penanggung" class="form-group">
                                             <img id="preview_foto_penanggung" src="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $perusahaan['data_identitas']['foto'])); ?>" alt="Preview" data-action="zoom">
-                                        <?php endif; ?>
-                                    </div>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -660,13 +666,13 @@
                 </div>
                 <div class="modal-body">
                     <div class="dynamic-row">
-                        <?php if($perusahaan['cabang']): ?>
+                        <?php if(count($perusahaan['cabang']) > 0): ?>
                             <?php $__currentLoopData = $perusahaan['cabang']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <div class="row align-items-center">
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="group-column-modal">
                                             <div class="form-group-modal">
-                                                <label for="">Nomor NITKU</label>
+                                                <label for="">Nomor NITKU (22 digit)</label>
                                                 <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" autocomplete="off" readonly placeholder="Masukkan nomor NITKU" value="<?php echo e($value['nitku']); ?>">
                                             </div>
                                             <div class="form-group-modal">
@@ -684,6 +690,8 @@
                                 </div>
                                 <hr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php else: ?>
+                            <h4>Tidak ada cabang</h4>
                         <?php endif; ?>
                     </div>
                 </div>

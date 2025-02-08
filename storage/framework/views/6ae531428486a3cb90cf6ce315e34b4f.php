@@ -219,6 +219,15 @@
         padding: 0;
     }
 
+    #previewPDF {
+        padding: 8px 16px;
+        border-radius: 8px;
+        background-color: #424242;
+        border: none;
+        color: #fff;
+        text-decoration: none;
+    }
+
     @media screen and (max-width: 475px) {
         .container {
             padding: 0;
@@ -450,7 +459,7 @@
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label for="">Nomor NPWP <span class="text-danger">*</span></label>
+                                        <label for="">Nomor NPWP (16 digit) <span class="text-danger">*</span></label>
                                         <input type="text" name="nomor_npwp" id="nomor_npwp" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="16" class="form-control" autocomplete="off" placeholder="Masukkan Nomor NPWP" required value="<?php echo e($data ? $data['nomor_npwp'] : ''); ?>">
                                     </div>
                                 </div>
@@ -494,9 +503,24 @@
                                                 <input type="file" name="foto_sppkp" id="foto_sppkp" onchange="previewFileSppkp(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
                                             </div>
                 
-                                            <div id="preview_sppkp" class="form-group">
-                                                <img id="preview_foto_sppkp" src="<?php echo e($data ? ($data['sppkp'] ? asset('../../../uploads/identitas_perusahaan/' . $data['sppkp']) : '') : ''); ?>" alt="Preview" data-action="zoom">
-                                            </div>
+                                            <?php if($data): ?>
+                                                <?php if($data['sppkp']): ?>
+                                                    <?php if(File::extension($data['sppkp']) == 'pdf'): ?>
+                                                        <div id="preview_sppkp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                                            <p style="font-size: 18px;">Preview file SPPKP</p>
+                                                            <a href="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['sppkp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                        </div>
+                                                    <?php else: ?>
+                                                        <div id="preview_sppkp" class="form-group">
+                                                            <img id="preview_foto_sppkp" src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['sppkp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                        </div>
+                                                    <?php endif; ?>
+                                                <?php else: ?>
+                                                    <div id="preview_sppkp" class="form-group">
+                                                        <img id="preview_foto_sppkp" src="" alt="Belum ada file" data-action="zoom">
+                                                    </div>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
@@ -507,9 +531,26 @@
                                             <input type="file" name="foto_npwp" id="foto_npwp" onchange="previewFileNpwp(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
                                         </div>
                 
-                                        <div id="preview_npwp" class="form-group">
-                                            <img id="preview_foto_npwp" src="<?php echo e($data ? asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp']) : ''); ?>" alt="Preview" data-action="zoom">
-                                        </div>
+                                        <?php if($data): ?>
+                                            <?php if($data['foto_npwp'] && File::extension($data['foto_npwp']) == 'pdf'): ?>
+                                                <div id="preview_npwp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                                    <p style="font-size: 18px;">Preview file NPWP</p>
+                                                    <a href="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                </div>
+                                            <?php elseif($data['foto_npwp'] && File::extension($data['foto_npwp']) == 'jpg'): ?>
+                                                <div id="preview_npwp" class="form-group">
+                                                    <img id="preview_foto_npwp" src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                </div>
+                                            <?php else: ?>
+                                                <div id="preview_npwp" class="form-group">
+                                                    <img id="preview_foto_npwp" src="" alt="Belum ada file" data-action="zoom">
+                                                </div>
+                                            <?php endif; ?>
+                                        <?php else: ?>
+                                            <div id="preview_npwp" class="form-group">
+                                                <img id="preview_foto_npwp" src="" alt="Belum ada file" data-action="zoom">
+                                            </div>
+                                        <?php endif; ?>
 
                                         <div class="branch-section mt-3">
                                             <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>
@@ -604,9 +645,24 @@
                                             <input type="file" name="foto_penanggung" id="foto_penanggung" class="form-control" onchange="previewFilePenanggung(this);" accept=".jpg, .png, .pdf, .jpeg">
                                         </div>
             
-                                        <div id="preview_penanggung" class="form-group">
-                                            <img id="preview_foto_penanggung" src="<?php echo e($data ? asset('../../../uploads/penanggung_jawab/' . $data['data_identitas']['foto']) : ''); ?>" alt="Preview" data-action="zoom">
-                                        </div>
+                                        <?php if($data): ?>
+                                            <?php if($data['data_identitas']['foto']): ?>
+                                                <?php if(File::extension($data['data_identitas']['foto']) == 'pdf'): ?>
+                                                    <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                                        <p style="font-size: 18px;">Preview file identitas</p>
+                                                        <a href="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    </div>
+                                                <?php else: ?>
+                                                    <div id="preview_penanggung" class="form-group">
+                                                        <img id="preview_foto_penanggung" src="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                    </div>
+                                                <?php endif; ?>
+                                            <?php else: ?>
+                                                <div id="preview_penanggung" class="form-group">
+                                                    <img id="preview_foto_penanggung" src="" alt="Belum ada file" data-action="zoom">
+                                                </div>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -639,7 +695,7 @@
                                     </div>
                                     <div class="dynamic-row">
                                         <?php if($data): ?>
-                                            <?php if($data['cabang']): ?>
+                                            <?php if(count($data['cabang']) > 0): ?>
                                                 <?php $__currentLoopData = $data['cabang']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <hr class="line-<?php echo e($key + 1); ?>">
                                                     <div class="row align-items-center counter-<?php echo e($key + 1); ?>">
@@ -649,7 +705,7 @@
                                                         <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
                                                             <div class="group-column-modal">
                                                                 <div class="form-group-modal">
-                                                                    <label for="">Nomor NITKU</label>
+                                                                    <label for="">Nomor NITKU (22 digit)</label>
                                                                     <input type="text" class="form-control" name="nitku_cabang[]" id="nitku_cabang" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" autocomplete="off" placeholder="Masukkan nomor NITKU" value="<?php echo e($value['nitku']); ?>">
                                                                 </div>
                                                                 <div class="form-group-modal">
@@ -666,8 +722,33 @@
                                                         </div>
                                                     </div>
                                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                            <?php endif; ?>
                                             <?php else: ?>
+                                                <hr class="line-1">
+                                                <div class="row align-items-center counter-1">
+                                                    <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
+                                                        <button type="button" id="delRow" class="delRow" data-id="1"><i class="fa-solid fa-minus text-light"></i></button>
+                                                    </div>
+                                                    <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
+                                                        <div class="group-column-modal">
+                                                            <div class="form-group-modal">
+                                                                <label for="">Nomor NITKU (22 digit)</label>
+                                                                <input type="text" class="form-control" name="nitku_cabang[]" id="nitku_cabang" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" autocomplete="off" placeholder="Masukkan nomor NITKU">
+                                                            </div>
+                                                            <div class="form-group-modal">
+                                                                <label for="">Nama Cabang</label>
+                                                                <input type="text" class="form-control" name="nama_cabang[]" id="nama_cabang" autocomplete="off" placeholder="Masukkan nama cabang">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                                        <div class="form-group-modal">
+                                                            <label for="">Alamat NITKU</label>
+                                                            <textarea name="alamat_nitku[]" id="alamat_nitku" cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NITKU"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php endif; ?>
+                                        <?php else: ?>
                                             <hr class="line-1">
                                             <div class="row align-items-center counter-1">
                                                 <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
@@ -676,7 +757,7 @@
                                                 <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
                                                     <div class="group-column-modal">
                                                         <div class="form-group-modal">
-                                                            <label for="">Nomor NITKU</label>
+                                                            <label for="">Nomor NITKU (22 digit)</label>
                                                             <input type="text" class="form-control" name="nitku_cabang[]" id="nitku_cabang" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" autocomplete="off" placeholder="Masukkan nomor NITKU">
                                                         </div>
                                                         <div class="form-group-modal">
@@ -748,7 +829,7 @@
                     $('#preview_foto_sppkp').find('img').remove();
                     reader.onload = function() {
                         let filename = reader.result.split(',')[1];
-                        $('#preview_npwp').html('File PDF telah ditambahkan!').css({
+                        $('#preview_sppkp').html('File PDF telah ditambahkan!').css({
                             'height': '50px',
                             'padding': '16px',
                             'font-weight': 'bold'
@@ -775,7 +856,7 @@
                     $('#preview_penanggung').find('img').remove();
                     reader.onload = function() {
                         let filename = reader.result.split(',')[1];
-                        $('#preview_npwp').html('File PDF telah ditambahkan!').css({
+                        $('#preview_penanggung').html('File PDF telah ditambahkan!').css({
                             'height': '50px',
                             'padding': '16px',
                             'font-weight': 'bold'

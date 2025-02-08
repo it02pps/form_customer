@@ -101,7 +101,7 @@
     }
 
     #previewPDF {
-        padding: 16px 32px;
+        padding: 8px 16px;
         border-radius: 8px;
         background-color: #424242;
         border: none;
@@ -241,8 +241,7 @@
     }
 
     .btnDetailCabang {
-        padding: 0 24px;
-        height: 48px;
+        padding: 8px 16px;
         border-radius: 8px;
         background-color: #424242;
         border: none;
@@ -466,13 +465,16 @@
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="form-group">
                                             <label for="">Foto KTP <span class="text-danger">*</span></label>
-                                            <div class="form-group d-flex justify-content-center align-items-center" id="preview_ktp">
-                                                @if(File::extension($perusahaan['foto_ktp']) == 'pdf')
+                                            @if(File::extension($perusahaan['foto_ktp']) == 'pdf')
+                                                <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
+                                                    <p style="font-size: 18px;">Preview file KTP</p>
                                                     <a href="{{ asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                @else
-                                                    <img id="preview_foto_ktp" src="{{ $perusahaan['foto_ktp'] ? asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_ktp']) : '-' }}" alt="Preview" data-action="zoom">
-                                                @endif
-                                            </div>
+                                                </div>
+                                            @else
+                                                <div id="preview_ktp" class="form-group">
+                                                    <img id="preview_foto_ktp" src="{{ $perusahaan['foto_ktp'] ? asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_ktp']) : '-' }}" alt="Belum ada file" data-action="zoom">
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -491,7 +493,7 @@
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="group-column">
                                             <div class="form-group">
-                                                <label for="">Nomor NPWP</label>
+                                                <label for="">Nomor NPWP (16 digit)</label>
                                                 <input type="text" name="nomor_npwp" id="nomor_npwp" class="form-control" autocomplete="off" readonly value="{{ $perusahaan['nomor_npwp'] ? $perusahaan['nomor_npwp'] : '-' }}">
                                             </div>
     
@@ -526,26 +528,32 @@
                                             </div>
             
                                             <div class="pkp @if($perusahaan['status_pkp'] != 'pkp') d-none @endif">
-                                                <div id="preview_sppkp" class="form-group d-flex justify-content-center align-items-center">
-                                                    @if(File::extension($perusahaan['sppkp']) == 'pdf')
+                                                @if(File::extension($perusahaan['sppkp']) == 'pdf')
+                                                    <div id="preview_sppkp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                                        <p style="font-size: 18px;">Preview file SPPKP</p>
                                                         <a href="{{ asset('../../../uploads/identitas_perusahaan/' . $perusahaan['sppkp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                    @else
-                                                        <img id="preview_foto_sppkp" src="{{ $perusahaan['sppkp'] ? asset('../../../uploads/identitas_perusahaan/' . $perusahaan['sppkp']) : '-' }}" alt="Preview" data-action="zoom">
-                                                    @endif
-                                                </div>
+                                                    </div>
+                                                @else
+                                                    <div id="preview_sppkp" class="form-group">
+                                                        <img id="preview_foto_sppkp" src="{{ $perusahaan['sppkp'] ? asset('../../../uploads/identitas_perusahaan/' . $perusahaan['sppkp']) : '-' }}" alt="Belum ada file" data-action="zoom">
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="form-group">
                                             <label for="">Foto NPWP</label>
-                                            <div class="form-group d-flex justify-content-center align-items-center" id="preview_npwp">
-                                                @if(File::extension($perusahaan['foto_npwp']) == 'pdf')
+                                            @if(File::extension($perusahaan['foto_npwp']) == 'pdf')
+                                                <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_npwp">
+                                                    <p style="font-size: 18px;">Preview file NPWP</p>
                                                     <a href="{{ asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_npwp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                @else
-                                                    <img id="preview_foto_npwp" src="{{ $perusahaan['foto_npwp'] ? asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_npwp']) : '-' }}" alt="Preview" data-action="zoom">
-                                                @endif
-                                            </div>
+                                                </div>
+                                            @else
+                                                <div id="preview_npwp" class="form-group">
+                                                    <img id="preview_foto_npwp" src="{{ $perusahaan['foto_npwp'] ? asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_npwp']) : '-' }}" alt="Belum ada file" data-action="zoom">
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -623,13 +631,16 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Foto Identitas</label>
-                                    <div id="preview_penanggung" class="form-group d-flex justify-content-center align-items-center">
-                                        @if(File::extension($perusahaan['data_identitas']['foto']) == 'pdf')
+                                    @if(File::extension($perusahaan['data_identitas']['foto']) == 'pdf')
+                                        <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                            <p style="font-size: 18px;">Preview file identitas</p>
                                             <a href="{{ asset('../../../uploads/penanggung_jawab/' . $perusahaan['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                        @else
+                                        </div>
+                                    @else
+                                        <div id="preview_penanggung" class="form-group">
                                             <img id="preview_foto_penanggung" src="{{ $perusahaan['data_identitas']['foto'] ? asset('../../../uploads/penanggung_jawab/' . $perusahaan['data_identitas']['foto']) : '-' }}" alt="Preview" data-action="zoom">
-                                        @endif
-                                    </div>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -669,13 +680,13 @@
                 </div>
                 <div class="modal-body">
                     <div class="dynamic-row">
-                        @if($perusahaan['cabang'])
+                        @if(count($perusahaan['cabang']) > 0)
                             @foreach($perusahaan['cabang'] as $key => $value)
                                 <div class="row align-items-center">
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="group-column-modal">
                                             <div class="form-group-modal">
-                                                <label for="">Nomor NITKU</label>
+                                                <label for="">Nomor NITKU (22 digit)</label>
                                                 <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" readonly autocomplete="off" placeholder="Masukkan nomor NITKU" value="{{ $value['nitku'] }}">
                                             </div>
                                             <div class="form-group-modal">
@@ -693,6 +704,8 @@
                                 </div>
                                 <hr>
                             @endforeach
+                        @else
+                            <h4>Tidak ada cabang</h4>
                         @endif
                     </div>
                 </div>

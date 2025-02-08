@@ -105,9 +105,6 @@
                     <p class="label">Nomor NPWP</p>
                     <p>{{ $data['nomor_npwp'] }}</p>
 
-                    <p class="label">NITKU untuk penerbitan Faktur Pajak</p>
-                    <p>{{ $data['nitku'] ? $data['nitku'] : '-' }}</p>
-
                     <p class="label">Alamat NPWP</p>
                     <p>{{ $data['alamat_npwp'] }}</p>
                     
@@ -164,6 +161,38 @@
                 </div>
             </div>
 
+            @if($data['cabang'])
+                <hr>
+                <h3>Cabang</h3>
+                <div class="row" style="margin-bottom: 20px;">
+                    @forelse($data['cabang'] as $key => $value)
+                        <div class="column">
+                            <p class="label">NITKU</p>
+                            <p>{{ $value['nitku'] ? $value['nitku'] : '-' }}</p>
+
+                            <p class="label">Nama Cabang</p>
+                            <p>{{ $value['nama'] ? $value['nama'] : '-' }}</p>
+                        </div>
+                        <div class="column">
+                            <p class="label">Alamat NITKU</p>
+                            <p>{{ $value['alamat'] ? $value['alamat'] : '-' }}</p>
+                        </div>
+                    @empty
+                        <div class="column">
+                            <p class="label">NITKU</p>
+                            <p>-</p>
+
+                            <p class="label">Nama Cabang</p>
+                            <p>-</p>
+                        </div>
+                        <div class="column">
+                            <p class="label">Alamat NITKU</p>
+                            <p>-</p>
+                        </div>
+                    @endforelse
+                </div>
+            @endif
+
             <hr>
 
             <h3>INFORMASI BANK</h3>
@@ -191,28 +220,18 @@
             <div class="row">
                 <div class="column">
                     <p class="label">Nama Penanggung Jawab</p>
-                    <p>{{ $data['data_identitas'] ? ($data['data_identitas']['nama'] ? $data['data_identitas']['nama'] : '-') : '-' }}</p>
+                    <p>{{ $data['data_identitas'] ? $data['data_identitas']['nama'] : '-' }}</p>
 
                     <p class="label">Identitas Penanggung Jawab</p>
-                    <p>{{ $data['data_identitas'] ? ($data['data_identitas']['identitas'] ? strtoupper($data['data_identitas']['identitas']) : '-') : '-' }}</p>
+                    <p>{{ $data['data_identitas'] ? strtoupper($data['data_identitas']['identitas']) : '-' }}</p>
                 </div>
                 <div class="column">
                     <p class="label">Jabatan</p>
-                    <p>{{ $data['data_identitas'] ? ($data['data_identitas']['jabatan'] ? $data['data_identitas']['jabatan'] : '-') : '-' }}</p>
+                    <p>{{ $data['data_identitas'] ? $data['data_identitas']['jabatan'] : '-' }}</p>
 
                     @if($data['data_identitas'])
-                        @if($data['data_identitas']['identitas'] == 'ktp')
-                            <p class="label">Foto KTP</p>
-                        @else
-                            <p class="label">Foto NPWP</p>
-                        @endif
-
-                        @if($data['data_identitas']['foto'] != null)
-                            <p>Lampiran Penanggung Jawab</p>
-                            {{-- <img src="uploads/penanggung_jawab/{{ $data['data_identitas']['foto'] }}" alt="" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9"> --}}
-                        @else
-                            <p>-</p>
-                        @endif
+                        <p class="label">Foto Identitas</p>
+                        <p>Lampiran Penanggung Jawab</p>
                     @else
                         <p class="label">Foto</p>
                         <p>-</p>
@@ -229,7 +248,7 @@
             </div>
         </div>
     </div>
-    <div class="break"></div>
+    {{-- <div class="break"></div>
     <div class="lampiran container">
         <div class="content-header">
             <h2>Lampiran</h2>
@@ -256,6 +275,6 @@
                 @endif
             @endif
         </div>
-    </div>
+    </div> --}}
 </body>
 </html>
