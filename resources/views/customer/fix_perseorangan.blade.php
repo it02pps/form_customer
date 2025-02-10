@@ -48,7 +48,7 @@
         padding: 0 0 16px 0;
     }
 
-    .content-body .section1, .section2, .section3 {
+    .content-body .section1, .section2, .section3, .section4 {
         display: flex;
         flex-wrap: wrap;
         row-gap: 16px;
@@ -74,7 +74,7 @@
         border-radius: 7px;
     }
 
-    .section1 {
+    .section1, .section4 {
         padding: 0 0 16px 0;
     }
     
@@ -353,15 +353,29 @@
                     @csrf
                     <input type="hidden" name="update_id" id="update_id" value="{{ $enkripsi }}">
                     <input type="hidden" name="bentuk_usaha" id="bentuk_usaha" value="perseorangan">
-                    <div class="row" style="padding-bottom: 16px;">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <label for="" class="mb-2">Jenis Customer <span class="text-danger">*</span></label>
-                            <br>
-                            <input type="radio" name="jenis_cust" id="cust_lama" value="lama" checked>
-                            <span for="">Customer Lama</span>
-                            <br>
-                            <input type="radio" name="jenis_cust" id="cust_baru" value="baru">
-                            <span for="">Customer Baru</span>
+                    <div class="section4">
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group" id="select">
+                                    <label for="">Jenis Customer <span class="text-danger">*</span></label>
+                                    <select name="jenis_cust" id="jenis_cust" autocomplete="off" class="form-control" required>
+                                        <option value="lama">Customer Lama</option>
+                                        <option value="baru">Customer Baru</option>
+                                    </select>
+                                    <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group" id="select">
+                                    <label for="">Sales <span class="text-danger">*</span></label>
+                                    <select name="sales" id="sales" autocomplete="off" class="form-control" required>
+                                        @foreach ($sales as $loop_sales)
+                                            <option value="{{ $loop->iteration }}">{{ $loop_sales->nama_sales }}</option>
+                                        @endforeach
+                                    </select>
+                                    <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <hr>
@@ -460,11 +474,11 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group" id="select">
                                         <label for="">Identitas Perseorangan <span class="text-danger">*</span></label>
-                                        <select name="identitas_perusahaan" id="identitas_perusahaan" class="form-control" required>
+                                        <input type="text" name="identitas_perusahaan" id="identitas_perusahaan" class="form-control" autocomplete="off" required readonly value="KTP">
+                                        {{-- <select name="identitas_perusahaan" id="identitas_perusahaan" class="form-control" required>
                                             <option value="ktp">KTP</option>
-                                            <option value="npwp">NPWP</option>
                                         </select>
-                                        <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
+                                        <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span> --}}
                                     </div>
                                 </div>
                             </div>
@@ -517,118 +531,6 @@
                                 </div>
                             </div>
                             {{-- END: KTP --}}
-                            {{-- START: NPWP --}}
-                            <div id="npwp-section" class="d-none">
-                                <div class="row">
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="form-group">
-                                            <label for="">Nama NPWP <span class="text-danger">*</span></label>
-                                            <input type="text" name="nama_npwp" id="nama_npwp" class="form-control" autocomplete="off" placeholder="Masukkan Nama NPWP" value="{{ $data ? $data['nama_npwp'] : '' }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="form-group">
-                                            <label for="">Nomor NPWP (16 digit) <span class="text-danger">*</span></label>
-                                            <input type="text" name="nomor_npwp" id="nomor_npwp" class="form-control" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="16" autocomplete="off" placeholder="Masukkan Nomor NPWP" value="{{ $data ? $data['nomor_npwp'] : '' }}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="form-group">
-                                            <label for="">Alamat NPWP <span class="text-danger">*</span></label>
-                                            <textarea name="alamat_npwp" id="alamat_npwp" cols="70" rows="6" autocomplete="off" class="form-control" placeholder="Masukkan alamat sesuai NPWP">{{ $data ? $data['alamat_npwp'] : '' }}</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="group-column">
-                                            <div class="form-group">
-                                                <label for="">Kota Sesuai NPWP <span class="text-danger">*</span></label>
-                                                <input type="text" name="kota_npwp" id="kota_npwp" class="form-control" autocomplete="off" placeholder="Masukkan kota sesuai NPWP" value="{{ $data ? $data['kota_npwp'] : '' }}">
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="">Email Khusus Untuk Faktur Pajak <span class="text-danger">*</span></label>
-                                                <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Contoh: faktur@gmail.com" value="{{ $data ? $data['email_khusus_faktur_pajak'] : '' }}">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="group-column">
-                                            <div class="form-group" id="select">
-                                                <label for="">Status Pengusaha Kena Pajak (PKP) <span class="text-danger">*</span></label>
-                                                <select name="status_pkp" id="status_pkp" class="form-control">
-                                                    <option value="non_pkp">Non PKP</option>
-                                                    <option value="pkp">PKP</option>
-                                                </select>
-                                                <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
-                                            </div>
-            
-                                            <div class="pkp d-none p-0">
-                                                <div class="form-group">
-                                                    <input type="file" name="sppkp" id="sppkp" class="form-control" onchange="previewFileSppkp(this);" accept=".jpg, .png, .pdf, .jpeg">
-                                                </div>
-                    
-                                                @if($data)
-                                                    @if($data['sppkp'] && File::extension($data['sppkp']) == 'pdf')
-                                                        <div id="preview_sppkp" class="form-group d-flex justify-between-center align-items-center py-2 px-3 m-0" style="height: auto;">
-                                                            <p style="font-size: 18px;">Preview file SPPKP</p>
-                                                            <a href="{{ asset('../../../uploads/identitas_perusahaan/' . $data['sppkp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                        </div>
-                                                    @elseif($data['sppkp'] && File::extension($data['sppkp']) != 'pdf')
-                                                        <div id="preview_sppkp" class="form-group">
-                                                            <img id="preview_foto_sppkp" src="{{ asset('../../../uploads/identitas_perusahaan/' . $data['sppkp']) }}" alt="Belum ada file" data-action="zoom">
-                                                        </div>
-                                                    @else
-                                                        <div id="preview_sppkp" class="form-group">
-                                                            <img id="preview_foto_sppkp" src="" alt="Belum ada file" data-action="zoom">
-                                                        </div>
-                                                    @endif
-                                                @else
-                                                    <div id="preview_sppkp" class="form-group">
-                                                        <img id="preview_foto_sppkp" src="" alt="Belum ada file" data-action="zoom">
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="group-column">
-                                            <div class="form-group">
-                                                <label for="">Foto NPWP <span class="text-danger">*</span></label>
-                                                <input type="file" name="foto_npwp" id="foto_npwp" class="form-control" onchange="previewFileNpwp(this);" accept=".jpg, .png, .pdf, .jpeg">
-                                            </div>
-                    
-                                            @if($data)
-                                                @if($data['foto_npwp'] && File::extension($data['foto_npwp']) == 'pdf')
-                                                    <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_npwp">
-                                                        <p style="font-size: 18px;">Preview file NPWP</p>
-                                                        <a href="{{ asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                    </div>
-                                                @elseif($data['foto_npwp'] && File::extension($data['foto_npwp']) != 'pdf')
-                                                    <div id="preview_npwp" class="form-group">
-                                                        <img id="preview_foto_npwp" src="{{ asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp']) }}" alt="Belum ada file" data-action="zoom">
-                                                    </div>
-                                                @else
-                                                    <div id="preview_npwp" class="form-group">
-                                                        <img id="preview_foto_npwp" src="" alt="Belum ada file" data-action="zoom">
-                                                    </div>
-                                                @endif
-                                            @else
-                                                <div id="preview_npwp" class="form-group">
-                                                    <img id="preview_foto_npwp" src="" alt="Belum ada file" data-action="zoom">
-                                                </div>
-                                            @endif
-                                            <div class="branch-section mt-3">
-                                                <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- END: NPWP --}}
                         </div>
                         <hr>
                         <div class="section2">
@@ -806,30 +708,30 @@
                                                     </div>
                                                 @endforeach
                                             @else
-                                            <hr class="line-1">
-                                            <div class="row align-items-center counter-1">
-                                                <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
-                                                    <button type="button" id="delRow" class="delRow" data-id="1"><i class="fa-solid fa-minus text-light"></i></button>
-                                                </div>
-                                                <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
-                                                    <div class="group-column-modal">
-                                                        <div class="form-group-modal">
-                                                            <label for="">Nomor NITKU (22 digit)</label>
-                                                            <input type="text" class="form-control" name="nitku_cabang[]" id="nitku_cabang" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" autocomplete="off" placeholder="Masukkan nomor NITKU">
+                                                <hr class="line-1">
+                                                <div class="row align-items-center counter-1">
+                                                    <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
+                                                        <button type="button" id="delRow" class="delRow" data-id="1"><i class="fa-solid fa-minus text-light"></i></button>
+                                                    </div>
+                                                    <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
+                                                        <div class="group-column-modal">
+                                                            <div class="form-group-modal">
+                                                                <label for="">Nomor NITKU (22 digit)</label>
+                                                                <input type="text" class="form-control" name="nitku_cabang[]" id="nitku_cabang" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" autocomplete="off" placeholder="Masukkan nomor NITKU">
+                                                            </div>
+                                                            <div class="form-group-modal">
+                                                                <label for="">Nama Cabang</label>
+                                                                <input type="text" class="form-control" name="nama_cabang[]" id="nama_cabang" autocomplete="off" placeholder="Masukkan nama cabang">
+                                                            </div>
                                                         </div>
+                                                    </div>
+                                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                                         <div class="form-group-modal">
-                                                            <label for="">Nama Cabang</label>
-                                                            <input type="text" class="form-control" name="nama_cabang[]" id="nama_cabang" autocomplete="off" placeholder="Masukkan nama cabang">
+                                                            <label for="">Alamat NITKU</label>
+                                                            <textarea name="alamat_nitku[]" id="alamat_nitku" cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NITKU"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                                    <div class="form-group-modal">
-                                                        <label for="">Alamat NITKU</label>
-                                                        <textarea name="alamat_nitku[]" id="alamat_nitku" cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NITKU"></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
                                             @endif
                                         @else
                                             <hr class="line-1">
@@ -896,33 +798,6 @@
                     $('#preview_ktp').html('<img id="preview_foto_ktp" src="" alt="Preview" data-action="zoom">');
                     reader.onload = function() {
                         $("#preview_foto_ktp").attr("src", reader.result);
-                    }
-                }
-                reader.readAsDataURL(file[0]);
-            }
-        }
-
-        function previewFileNpwp(input) {
-            var file = $("#foto_npwp").prop('files');
-            if(file){
-                let ext = file[0].type.split('/')[1];
-                var reader = new FileReader();
-                $("#preview_npwp").removeClass('d-none');
-                if(ext == 'pdf') {
-                    $('#preview_foto_npwp').find('img').remove();
-                    reader.onload = function() {
-                        let filename = reader.result.split(',')[1];
-                        $('#preview_npwp').html('File PDF telah ditambahkan!').css({
-                            'height': '50px',
-                            'padding': '16px',
-                            'font-weight': 'bold'
-                        });
-                    }
-                } else {
-                    $("#preview_npwp").css('height', '271px');
-                    $('#preview_npwp').html('<img id="preview_foto_npwp" src="" alt="Preview" data-action="zoom">');
-                    reader.onload = function() {
-                        $("#preview_foto_npwp").attr("src", reader.result);
                     }
                 }
                 reader.readAsDataURL(file[0]);

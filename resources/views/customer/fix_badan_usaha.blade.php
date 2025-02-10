@@ -48,7 +48,7 @@
         padding: 0 0 16px 0;
     }
 
-    .content-body .section1, .section2, .section3 {
+    .content-body .section1, .section2, .section3, .section4 {
         display: flex;
         flex-wrap: wrap;
         row-gap: 16px;
@@ -67,11 +67,11 @@
         border-radius: 7px;
     }
 
-    .section1 {
+    .section1, .section4 {
         padding: 0 0 16px 0;
     }
     
-    .section2, .section3 {
+    .section2, .section3, {
         padding: 16px 0;
     }
 
@@ -335,19 +335,33 @@
                     @csrf
                     <input type="hidden" name="update_id" id="update_id" value="{{ $enkripsi }}">
                     <input type="hidden" name="bentuk_usaha" id="bentuk_usaha" value="badan_usaha">
-                    <div class="row" style="padding-bottom: 16px;">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <label for="" class="mb-2">Jenis Customer <span class="text-danger">*</span></label>
-                            <br>
-                            <input type="radio" name="jenis_cust" id="cust_lama" value="lama" checked>
-                            <span for="">Customer Lama</span>
-                            <br>
-                            <input type="radio" name="jenis_cust" id="cust_baru" value="baru">
-                            <span for="">Customer Baru</span>
-                        </div>
-                    </div>
-                    <hr>
                     <div class="content-body">
+                        <div class="section4">
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group" id="select">
+                                        <label for="">Jenis Customer <span class="text-danger">*</span></label>
+                                        <select name="jenis_cust" id="jenis_cust" autocomplete="off" class="form-control" required>
+                                            <option value="lama">Customer Lama</option>
+                                            <option value="baru">Customer Baru</option>
+                                        </select>
+                                        <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group" id="select">
+                                        <label for="">Sales <span class="text-danger">*</span></label>
+                                        <select name="sales" id="sales" autocomplete="off" class="form-control" required>
+                                            @foreach ($sales as $loop_sales)
+                                                <option value="{{ $loop->iteration }}">{{ $loop_sales->nama_sales }}</option>
+                                            @endforeach
+                                        </select>
+                                        <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
                         <div class="section1">
                             <h1>Identitas Perusahaan</h1>
                             <div class="row">
@@ -728,8 +742,7 @@
                                                         </div>
                                                     </div>
                                                 @endforeach
-                                            @endif
-                                        @else
+                                            @else
                                                 <hr class="line-1">
                                                 <div class="row align-items-center counter-1">
                                                     <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">

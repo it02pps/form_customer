@@ -15,6 +15,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Helper\ApiStorage;
 use App\Helper\base30ToImage;
 use App\Models\Cabang;
+use App\Models\Sales;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\Visibility;
 use Illuminate\Support\Facades\Http;
@@ -48,7 +49,8 @@ class FormCustomerController extends Controller
             $url = null;
             $enkripsi = null;
         }
-
+        
+        $sales = Sales::select('nama_sales')->get();
         $bidang_usaha = [
             'toko_retail',
             'bumn',
@@ -65,9 +67,9 @@ class FormCustomerController extends Controller
         // dd($data);
 
         if ($menu === 'perseorangan') {
-            return view('customer.fix_perseorangan', compact('data', 'url', 'enkripsi', 'menu', 'bidang_usaha'));
+            return view('customer.fix_perseorangan', compact('data', 'url', 'enkripsi', 'menu', 'bidang_usaha', 'sales'));
         } else {
-            return view('customer.fix_badan_usaha', compact('data', 'url', 'enkripsi', 'menu', 'bidang_usaha'));
+            return view('customer.fix_badan_usaha', compact('data', 'url', 'enkripsi', 'menu', 'bidang_usaha', 'sales'));
         }
     }
 
@@ -225,6 +227,7 @@ class FormCustomerController extends Controller
             $identitas_perusahaan->alamat_email = $request->alamat_email_perusahaan;
             $identitas_perusahaan->nomor_handphone = $request->no_hp;
             $identitas_perusahaan->status_kepemilikan = $request->status_kepemilikan;
+            $identitas_perusahaan->nama_sales = $request->nama_sales;
             if($request->status_kepemilikan == 'group') {
                 $identitas_perusahaan->nama_group = $request->nama_group;
             }

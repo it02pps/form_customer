@@ -46,7 +46,7 @@
         padding: 0 0 16px 0;
     }
 
-    .content-body .section1, .section2, .section3 {
+    .content-body .section1, .section2, .section3, .section4 {
         display: flex;
         flex-wrap: wrap;
         row-gap: 16px;
@@ -65,11 +65,11 @@
         border-radius: 7px;
     }
 
-    .section1 {
+    .section1, .section4 {
         padding: 0 0 16px 0;
     }
     
-    .section2, .section3 {
+    .section2, .section3, {
         padding: 16px 0;
     }
 
@@ -333,19 +333,33 @@
                     <?php echo csrf_field(); ?>
                     <input type="hidden" name="update_id" id="update_id" value="<?php echo e($enkripsi); ?>">
                     <input type="hidden" name="bentuk_usaha" id="bentuk_usaha" value="badan_usaha">
-                    <div class="row" style="padding-bottom: 16px;">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <label for="" class="mb-2">Jenis Customer <span class="text-danger">*</span></label>
-                            <br>
-                            <input type="radio" name="jenis_cust" id="cust_lama" value="lama" checked>
-                            <span for="">Customer Lama</span>
-                            <br>
-                            <input type="radio" name="jenis_cust" id="cust_baru" value="baru">
-                            <span for="">Customer Baru</span>
-                        </div>
-                    </div>
-                    <hr>
                     <div class="content-body">
+                        <div class="section4">
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group" id="select">
+                                        <label for="">Jenis Customer <span class="text-danger">*</span></label>
+                                        <select name="jenis_cust" id="jenis_cust" autocomplete="off" class="form-control" required>
+                                            <option value="lama">Customer Lama</option>
+                                            <option value="baru">Customer Baru</option>
+                                        </select>
+                                        <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group" id="select">
+                                        <label for="">Sales <span class="text-danger">*</span></label>
+                                        <select name="sales" id="sales" autocomplete="off" class="form-control" required>
+                                            <?php $__currentLoopData = $sales; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $loop_sales): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($loop->iteration); ?>"><?php echo e($loop_sales->nama_sales); ?></option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        </select>
+                                        <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
                         <div class="section1">
                             <h1>Identitas Perusahaan</h1>
                             <div class="row">
@@ -504,22 +518,24 @@
                                             </div>
                 
                                             <?php if($data): ?>
-                                                <?php if($data['sppkp']): ?>
-                                                    <?php if(File::extension($data['sppkp']) == 'pdf'): ?>
-                                                        <div id="preview_sppkp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
-                                                            <p style="font-size: 18px;">Preview file SPPKP</p>
-                                                            <a href="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['sppkp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
-                                                        </div>
-                                                    <?php else: ?>
-                                                        <div id="preview_sppkp" class="form-group">
-                                                            <img id="preview_foto_sppkp" src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['sppkp'])); ?>" alt="Belum ada file" data-action="zoom">
-                                                        </div>
-                                                    <?php endif; ?>
+                                                <?php if($data['sppkp'] && File::extension($data['sppkp']) == 'pdf'): ?>
+                                                    <div id="preview_sppkp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                                        <p style="font-size: 18px;">Preview file SPPKP</p>
+                                                        <a href="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['sppkp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    </div>
+                                                <?php elseif($data['sppkp'] && File::extension($data['sppkp']) != 'pdf'): ?>
+                                                    <div id="preview_sppkp" class="form-group">
+                                                        <img id="preview_foto_sppkp" src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['sppkp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                    </div>
                                                 <?php else: ?>
                                                     <div id="preview_sppkp" class="form-group">
                                                         <img id="preview_foto_sppkp" src="" alt="Belum ada file" data-action="zoom">
                                                     </div>
                                                 <?php endif; ?>
+                                            <?php else: ?>
+                                                <div id="preview_sppkp" class="form-group">
+                                                    <img id="preview_foto_sppkp" src="" alt="Belum ada file" data-action="zoom">
+                                                </div>
                                             <?php endif; ?>
                                         </div>
                                     </div>
@@ -537,7 +553,7 @@
                                                     <p style="font-size: 18px;">Preview file NPWP</p>
                                                     <a href="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                                 </div>
-                                            <?php elseif($data['foto_npwp'] && File::extension($data['foto_npwp']) == 'jpg'): ?>
+                                            <?php elseif($data['foto_npwp'] && File::extension($data['foto_npwp']) != 'pdf'): ?>
                                                 <div id="preview_npwp" class="form-group">
                                                     <img id="preview_foto_npwp" src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp'])); ?>" alt="Belum ada file" data-action="zoom">
                                                 </div>
@@ -646,22 +662,24 @@
                                         </div>
             
                                         <?php if($data): ?>
-                                            <?php if($data['data_identitas']['foto']): ?>
-                                                <?php if(File::extension($data['data_identitas']['foto']) == 'pdf'): ?>
-                                                    <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
-                                                        <p style="font-size: 18px;">Preview file identitas</p>
-                                                        <a href="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
-                                                    </div>
-                                                <?php else: ?>
-                                                    <div id="preview_penanggung" class="form-group">
-                                                        <img id="preview_foto_penanggung" src="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
-                                                    </div>
-                                                <?php endif; ?>
+                                            <?php if($data['data_identitas']['foto'] && File::extension($data['data_identitas']['foto']) == 'pdf'): ?>
+                                                <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                                    <p style="font-size: 18px;">Preview file identitas</p>
+                                                    <a href="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                </div>
+                                            <?php elseif($data['data_identitas']['foto'] && File::extension($data['data_identitas']['foto']) != 'pdf'): ?>
+                                                <div id="preview_penanggung" class="form-group">
+                                                    <img id="preview_foto_penanggung" src="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                </div>
                                             <?php else: ?>
                                                 <div id="preview_penanggung" class="form-group">
                                                     <img id="preview_foto_penanggung" src="" alt="Belum ada file" data-action="zoom">
                                                 </div>
                                             <?php endif; ?>
+                                        <?php else: ?>
+                                            <div id="preview_penanggung" class="form-group">
+                                                <img id="preview_foto_penanggung" src="" alt="Belum ada file" data-action="zoom">
+                                            </div>
                                         <?php endif; ?>
                                     </div>
                                 </div>
