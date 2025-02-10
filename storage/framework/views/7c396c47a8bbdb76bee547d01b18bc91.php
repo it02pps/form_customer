@@ -211,6 +211,7 @@
                                         <th>Nama Perusahaan</th>
                                         <th>Alamat Lengkap</th>
                                         <th>Nomor HP</th>
+                                        <th>Sales</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -314,6 +315,7 @@
                     { data: 'nama_perusahaan', name: 'nama_perusahaan' },
                     { data: 'alamat_lengkap', name: 'alamat_lengkap' },
                     { data: 'nomor_handphone', name: 'nomor_handphone' },
+                    { data: 'nama_sales', name: 'nama_sales' },
                     { data: 'aksi', name: 'aksi', searchable: false, orderable: false },
                 ],
                 columnDefs: [

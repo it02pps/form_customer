@@ -335,33 +335,33 @@
                     @csrf
                     <input type="hidden" name="update_id" id="update_id" value="{{ $enkripsi }}">
                     <input type="hidden" name="bentuk_usaha" id="bentuk_usaha" value="badan_usaha">
-                    <div class="content-body">
-                        <div class="section4">
-                            <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group" id="select">
-                                        <label for="">Jenis Customer <span class="text-danger">*</span></label>
-                                        <select name="jenis_cust" id="jenis_cust" autocomplete="off" class="form-control" required>
-                                            <option value="lama">Customer Lama</option>
-                                            <option value="baru">Customer Baru</option>
-                                        </select>
-                                        <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
-                                    </div>
+                    <div class="section4">
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group" id="select">
+                                    <label for="">Jenis Customer <span class="text-danger">*</span></label>
+                                    <select name="jenis_cust" id="jenis_cust" autocomplete="off" class="form-control" required>
+                                        <option value="lama">Customer Lama</option>
+                                        <option value="baru">Customer Baru</option>
+                                    </select>
+                                    <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group" id="select">
-                                        <label for="">Sales <span class="text-danger">*</span></label>
-                                        <select name="sales" id="sales" autocomplete="off" class="form-control" required>
-                                            @foreach ($sales as $loop_sales)
-                                                <option value="{{ $loop->iteration }}">{{ $loop_sales->nama_sales }}</option>
-                                            @endforeach
-                                        </select>
-                                        <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
-                                    </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group" id="select">
+                                    <label for="">Sales <span class="text-danger">*</span></label>
+                                    <select name="sales" id="sales" autocomplete="off" class="form-control" required>
+                                        @foreach ($sales as $loop_sales)
+                                            <option value="{{ $loop->iteration }}">{{ $loop_sales->nama_sales }}</option>
+                                        @endforeach
+                                    </select>
+                                    <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                 </div>
                             </div>
                         </div>
-                        <hr>
+                    </div>
+                    <hr>
+                    <div class="content-body">
                         <div class="section1">
                             <h1>Identitas Perusahaan</h1>
                             <div class="row">
@@ -1053,18 +1053,17 @@
                         $('#status_kepemilikan').val(res.data.status_kepemilikan).change();
                         $('#badan_usaha').val(res.data.badan_usaha).change();
                         $('#bidang_usaha').val(res.data.bidang_usaha).change();
-                        $('#identitas_perusahaan').val(res.data.identitas).change();
                         $('#status_pkp').val(res.data.status_pkp).change();
                         $('#status_rekening').val(res.data.informasi_bank.status).change();
                         if(res.data.data_identitas) {
                             $('#identitas_penanggung_jawab').val(res.data.data_identitas.identitas).change();
                         }
-                        if(res.data.status_cust == 'lama') {
-                            $('#cust_lama').prop('checked', true);
-                        } else {
-                            $('#cust_baru').prop('checked', true);
-                        }
+                        
+                        let upperIdentitas = res.data.identitas.toUpperCase();
+                        $('#identitas_perusahaan').val(upperIdentitas).change();
+                        $('#jenis_cust').val(res.data.status_cust).change();
                         $('#status_cabang').val(res.data.status_cabang).change();
+                        $('#sales').val(res.data.nama_sales).change();
                     } else {
                         $('#status_kepemilikan').val('').change();
                         $('#badan_usaha').val('').change();
@@ -1075,6 +1074,8 @@
                         $('#identitas_penanggung_jawab').val('').change();
                         $('#cust_lama').prop('checked', true);
                         $('#status_cabang').val('').change();
+                        $('#jenis_cust').val('').change();
+                        $('#sales').val('').change();
                     }
                 }
             });

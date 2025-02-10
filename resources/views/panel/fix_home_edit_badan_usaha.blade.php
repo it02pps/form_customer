@@ -52,7 +52,7 @@
         padding: 0 0 16px 0;
     }
 
-    .content-body .section1, .section2, .section3, .section4 {
+    .content-body .section1, .section2, .section3, .section4, .section5 {
         display: flex;
         flex-wrap: wrap;
         row-gap: 16px;
@@ -71,7 +71,7 @@
         border-radius: 7px;
     }
 
-    .section1 {
+    .section1, .section5 {
         padding: 0 0 16px 0;
     }
     
@@ -311,15 +311,29 @@
                     @csrf
                     <input type="hidden" name="update_id" id="update_id" value="{{ $enkripsi }}">
                     <input type="hidden" name="bentuk_usaha" id="bentuk_usaha" value="badan_usaha">
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <label for="" class="mb-2">Jenis Customer <span class="text-danger">*</span></label>
-                            <br>
-                            <input type="radio" name="jenis_cust" id="cust_lama" value="lama" checked>
-                            <label for="">Customer Lama</label>
-                            <br>
-                            <input type="radio" name="jenis_cust" id="cust_baru" value="baru">
-                            <label for="">Customer Baru</label>
+                    <div class="section5">
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group" id="select">
+                                    <label for="">Jenis Customer <span class="text-danger">*</span></label>
+                                    <select name="jenis_cust" id="jenis_cust" autocomplete="off" class="form-control" required>
+                                        <option value="lama">Customer Lama</option>
+                                        <option value="baru">Customer Baru</option>
+                                    </select>
+                                    <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group" id="select">
+                                    <label for="">Sales <span class="text-danger">*</span></label>
+                                    <select name="sales" id="sales" autocomplete="off" class="form-control" required>
+                                        @foreach ($sales as $loop_sales)
+                                            <option value="{{ $loop->iteration }}">{{ $loop_sales->nama_sales }}</option>
+                                        @endforeach
+                                    </select>
+                                    <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <hr>
@@ -1095,12 +1109,6 @@
                 type: 'GET',
                 success: res => {
                     if(res.status == true) {
-                        if(res.data.status_cust == 'lama') {
-                            $('#cust_lama').prop('checked', true);
-                        } else {
-                            $('#cust_baru').prop('checked', true);
-                        }
-
                         if(res.data.tipe_customer) {
                             if(res.data.tipe_customer.jenis_transaksi == 'cash') {
                                 $('#transaksi_cash').prop('checked', true);
@@ -1117,14 +1125,18 @@
                             $('#channel_distributor').val(res.data.tipe_customer.channel_distributor).change();
                         }
 
+                        $('#jenis_cust').val(res.data.status_cust).change();
                         $('#status_cabang').val(res.data.status_cabang).change();
                         $('#bidang_usaha').val(res.data.bidang_usaha).change();
                         $('#status_kepemilikan').val(res.data.status_kepemilikan).change();
-                        $('#identitas_perusahaan').val(res.data.identitas).change();
+
+                        let upperIdentitas = res.data.identitas.toUpperCase();
+                        $('#identitas_perusahaan').val(upperIdentitas).change();
                         $('#status_pkp').val(res.data.status_pkp).change();
                         $('#badan_usaha').val(res.data.badan_usaha).change();
                         $('#status_rekening').val(res.data.informasi_bank.status).change();
                         $('#identitas_penanggung_jawab').val(res.data.data_identitas.identitas).change();
+                        $('#sales').val(res.data.nama_sales).change();
 
                         if(res.data.bidang_usaha == 'lainnya') {
                             $('#bidang_usaha_lain').removeClass('d-none');
@@ -1157,6 +1169,8 @@
                         $('#kategori_customer').val('').change();
                         $('#channel_distributor').val('').change();
                         $('#status_cabang').val('0').change();
+                        $('#jenis_cust').val('lama');
+                        $('#sales').val('').change();
                     }
                 }
             });

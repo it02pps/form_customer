@@ -364,8 +364,8 @@
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Nama Perusahaan</label>
-                                    <input type="text" name="nama_perusahaan" id="nama_perusahaan" class="form-control" readonly autocomplete="off" value="{{ $perusahaan['nama_perusahaan'] }}">
+                                    <label for="">Sales</label>
+                                    <input type="text" name="sales" id="sales" class="form-control" readonly autocomplete="off" value="{{ $perusahaan['sales'] }}">
                                 </div>
                             </div>
                         </div>
@@ -373,13 +373,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="group-column">
                                     <div class="form-group">
+                                        <label for="">Nama Perusahaan</label>
+                                        <input type="text" name="nama_perusahaan" id="nama_perusahaan" class="form-control" readonly autocomplete="off" value="{{ $perusahaan['nama_perusahaan'] }}">
+                                    </div>
+
+                                    <div class="form-group">
                                         <label for="">Nama Group Perusahaan</label>
                                         <input type="text" name="nama_group_perusahaan" id="nama_group_perusahaan" class="form-control" readonly autocomplete="off" value="{{ $perusahaan['nama_group_perusahaan'] }}">
-                                    </div>
-    
-                                    <div class="form-group">
-                                        <label for="">Kota/Kabupaten</label>
-                                        <input type="text" name="kota_kabupaten" id="kota_kabupaten" class="form-control" readonly autocomplete="off" value="{{ $perusahaan['kota_kabupaten'] }}">
                                     </div>
                                 </div>
                             </div>
@@ -393,32 +393,38 @@
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
+                                    <label for="">Kota/Kabupaten</label>
+                                    <input type="text" name="kota_kabupaten" id="kota_kabupaten" class="form-control" readonly autocomplete="off" value="{{ $perusahaan['kota_kabupaten'] }}">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group">
                                     <label for="">Alamat Email Perusahaan</label>
                                     <input type="email" name="alamat_email_perusahaan" id="alamat_email_perusahaan" readonly class="form-control" autocomplete="off" value="{{ $perusahaan['alamat_email'] ? $perusahaan['alamat_email'] : '-' }}">
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nomor Handphone Contact Person</label>
                                     <input type="text" name="no_hp" id="no_hp" readonly class="form-control" autocomplete="off" value="{{ $perusahaan['nomor_handphone'] }}">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Tahun Berdiri</label>
                                     <input type="text" name="tahun_berdiri" id="tahun_berdiri" autocomplete="off" readonly class="form-control" value="{{ $perusahaan['tahun_berdiri'] ? $perusahaan['tahun_berdiri'] : '-' }}">
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Lama Usaha (Tahun)</label>
                                     <input type="text" name="lama_usaha" id="lama_usaha" class="form-control" autocomplete="off" readonly value="{{ $perusahaan['lama_usaha'] ? $perusahaan['lama_usaha'] : '-' }}">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Bidang Usaha</label>
@@ -428,6 +434,8 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Status Kepemilkan Tempat Usaha</label>
@@ -437,33 +445,32 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group" >
                                     <label for="">Jenis Badan Usaha</label>
                                     <input type="text" name="badan_usaha" id="badan_usaha" class="form-control" autocomplete="off" readonly value="{{ strtoupper($perusahaan['badan_usaha'])}}">
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama NPWP</label>
                                     <input type="text" name="nama_npwp" id="nama_npwp" class="form-control" autocomplete="off" readonly value="{{ $perusahaan['nama_npwp']}}">
                                 </div>
                             </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Nomor NPWP (16 digit)</label>
+                                    <input type="text" name="nomor_npwp" id="nomor_npwp" readonly class="form-control" autocomplete="off" value="{{ $perusahaan['nomor_npwp'] }}">
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="group-column">
-                                    <div class="form-group">
-                                        <label for="">Nomor NPWP (16 digit)</label>
-                                        <input type="text" name="nomor_npwp" id="nomor_npwp" readonly class="form-control" autocomplete="off" value="{{ $perusahaan['nomor_npwp'] }}">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="">Alamat NPWP</label>
-                                        <textarea name="alamat_npwp" id="alamat_npwp" cols="70" rows="6" autocomplete="off" class="form-control" readonly>{{ $perusahaan['alamat_npwp'] }}</textarea>
-                                    </div>
+                                <div class="form-group">
+                                    <label for="">Alamat NPWP</label>
+                                    <textarea name="alamat_npwp" id="alamat_npwp" cols="70" rows="6" autocomplete="off" class="form-control" readonly>{{ $perusahaan['alamat_npwp'] }}</textarea>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -477,30 +484,32 @@
                                         <label for="">Email Khusus Untuk Faktur Pajak</label>
                                         <input type="text" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" readonly value="{{ $perusahaan['email_khusus_faktur_pajak'] }}">
                                     </div>
-
-                                    <div class="form-group p-0" id="cabang">
-                                        <label for="">Cabang</label>
-                                        <input type="text" class="form-control" autocomplete="off" readonly placeholder="{{ App\Models\Cabang::where('identitas_perusahaan_id', $perusahaan['id'])->count() }} Cabang">
-                                        <button type="button" class="btnDetailCabang" title="Detail Cabang" data-bs-target="#modalCabang" data-bs-toggle="modal">Detail Cabang</button>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Foto NPWP</label>
-                                    {{-- <input type="file" name="foto_npwp" id="foto_npwp" onchange="previewFileNpwp(this);" accept=".jpg, .png, .pdf, .jpeg" readonly class="form-control"> --}}
-                                    @if(File::extension($perusahaan['foto_npwp']) == 'pdf')
-                                        <div id="preview_npwp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
-                                            <p style="font-size: 18px;">Preview file NPWP</p>
-                                            <a href="{{ asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_npwp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                        </div>
-                                    @else
-                                        <div id="preview_npwp" class="form-group">
-                                            <img id="preview_foto_npwp" src="{{ asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_npwp']) }}" alt="Preview" data-action="zoom">
-                                        </div>
-                                    @endif
+                                <div class="group-column">
+                                    <div class="form-group" id="cabang">
+                                        <label for="">Cabang</label>
+                                        <input type="text" class="form-control" autocomplete="off" readonly placeholder="{{ App\Models\Cabang::where('identitas_perusahaan_id', $perusahaan['id'])->count() }} Cabang">
+                                        <button type="button" class="btnDetailCabang" title="Detail Cabang" data-bs-target="#modalCabang" data-bs-toggle="modal">Detail Cabang</button>
+                                    </div>
+    
+                                    <div class="form-group">
+                                        <label for="">Foto NPWP</label>
+                                        {{-- <input type="file" name="foto_npwp" id="foto_npwp" onchange="previewFileNpwp(this);" accept=".jpg, .png, .pdf, .jpeg" readonly class="form-control"> --}}
+                                        @if(File::extension($perusahaan['foto_npwp']) == 'pdf')
+                                            <div id="preview_npwp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                                <p style="font-size: 18px;">Preview file NPWP</p>
+                                                <a href="{{ asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_npwp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                            </div>
+                                        @else
+                                            <div id="preview_npwp" class="form-group">
+                                                <img id="preview_foto_npwp" src="{{ asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_npwp']) }}" alt="Preview" data-action="zoom">
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">

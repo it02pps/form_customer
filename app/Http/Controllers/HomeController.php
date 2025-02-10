@@ -15,6 +15,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Helper\ApiStorage;
 use App\Helper\base30ToImage;
 use App\Models\Cabang;
+use App\Models\Sales;
 use App\Models\TipeCustomer;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -91,6 +92,7 @@ class HomeController extends Controller
         $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank', 'tipe_customer')->where('id', Crypt::decryptString($id))->first();
         $enkripsi = $id;
 
+        $sales = Sales::select('nama_sales')->get();
         $bidang_usaha = [
             'toko_retail',
             'bumn',
@@ -106,9 +108,9 @@ class HomeController extends Controller
 
         $url = route('home');
         if ($data->bentuk_usaha == 'perseorangan') {
-            return view('panel.fix_home_edit_perseorangan', compact('data', 'enkripsi', 'bidang_usaha', 'url'));
+            return view('panel.fix_home_edit_perseorangan', compact('data', 'enkripsi', 'bidang_usaha', 'url', 'sales'));
         } else {
-            return view('panel.fix_home_edit_badan_usaha', compact('data', 'enkripsi', 'bidang_usaha', 'url'));
+            return view('panel.fix_home_edit_badan_usaha', compact('data', 'enkripsi', 'bidang_usaha', 'url', 'sales'));
         }
     }
 
@@ -124,18 +126,17 @@ class HomeController extends Controller
             'bidang_usaha' => 'required',
             'alamat_email_perusahaan' => $data['alamat_email_perusahaan'] != '' ? ($data['alamat_email_perusahaan'] != '-' ? 'email' : '') : '',
             'status_kepemilikan' => 'required',
-            'identitas_perusahaan' => $data['bentuk_usaha'] == 'perseorangan' ? 'required' : '',
-            'nama_lengkap' => $data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'ktp' ? 'required' : '') : '',
-            'nomor_ktp' => $data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'ktp' ? 'required|numeric|digits:16' : '') : '',
-            'foto_ktp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : ($data['bentuk_usaha'] == 'perseorangan' ? ($data['identitas_perusahaan'] == 'ktp' ? 'required|mimes:jpg,jpeg,pdf' : '') : ''),
-            'nomor_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
-            'nama_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
+            'nama_lengkap' => $data['bentuk_usaha'] == 'perseorangan' ? 'required' : '',
+            'nomor_ktp' => $data['bentuk_usaha'] == 'perseorangan' ? 'required|numeric|digits:16' : '',
+            'foto_ktp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : ($data['bentuk_usaha'] == 'perseorangan' ? 'required|mimes:jpg,jpeg,pdf' : ''),
+            'nomor_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
+            'nama_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'badan_usaha' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
-            'email_faktur' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required|email' : ($data['identitas_perusahaan'] == 'npwp' ? 'required|email' : ''),
-            'foto_npwp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : ($data['bentuk_usaha'] == 'badan_usaha' ? 'required|mimes:jpg,jpeg,pdf' : ($data['identitas_perusahaan'] == 'npwp' ? 'required|mimes:jpg,jpeg,pdf' : '')),
-            'foto_sppkp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : ($data['bentuk_usaha'] == 'badan_usaha' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,jpeg,pdf' : '') : ($data['identitas_perusahaan'] == 'npwp' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,jpeg,pdf' : '') : '')),
-            'alamat_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
-            'kota_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ($data['identitas_perusahaan'] == 'npwp' ? 'required' : ''),
+            'email_faktur' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required|email' : '',
+            'foto_npwp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : ($data['bentuk_usaha'] == 'badan_usaha' ? 'required|mimes:jpg,jpeg,pdf' : ''),
+            'foto_sppkp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : ($data['bentuk_usaha'] == 'badan_usaha' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,jpeg,pdf' : '') : ''),
+            'alamat_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
+            'kota_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'nama_group' => ($data['status_kepemilikan'] == 'group') ? 'required' : '',
             'bidang_usaha_lain' => ($data['bidang_usaha'] == 'lainnya') ? 'required' : '',
             'jenis_cust' => 'required',
@@ -170,7 +171,6 @@ class HomeController extends Controller
             'bidang_usaha.required' => 'Bidang usaha harus diisi',
             'alamat_email_perusahaan.email' => 'Email perusahaan harus valid',
             'status_kepemilikan.required' => 'Status kepemilikan harus diisi',
-            'identitas_perusahaan.required' => 'Identitas perusahaan harus diisi',
             'nama_lengkap.required' => 'Nama lengkap harus diisi',
             'nomor_ktp.required' => 'Nomor KTP harus diisi',
             'nomor_ktp.numeric' => 'Nomor KTP harus berupa angka',
@@ -239,6 +239,7 @@ class HomeController extends Controller
             $identitas_perusahaan->kota_kabupaten = $request->kota_kabupaten;
             $identitas_perusahaan->bidang_usaha = $request->bidang_usaha;
             $identitas_perusahaan->status_cust = $request->jenis_cust;
+            $identitas_perusahaan->identitas = ($request->bentuk_usaha == 'badan_usaha') ? 'npwp' : 'ktp';
 
             // Buat kode customer
             $lastest_cust = IdentitasPerusahaan::latest('id')->first();
@@ -262,15 +263,14 @@ class HomeController extends Controller
             $identitas_perusahaan->alamat_email = $request->alamat_email_perusahaan;
             $identitas_perusahaan->nomor_handphone = $request->no_hp;
             $identitas_perusahaan->status_kepemilikan = $request->status_kepemilikan;
+            $identitas_perusahaan->nama_sales = $request->sales;
+            $identitas_perusahaan->bentuk_usaha = $request->bentuk_usaha;
             if($request->status_kepemilikan == 'group') {
                 $identitas_perusahaan->nama_group = $request->nama_group;
             }
 
-            $identitas_perusahaan->identitas = ($request->bentuk_usaha == 'badan_usaha') ? 'npwp' : strtolower($request->identitas_perusahaan);
-            $identitas_perusahaan->bentuk_usaha = $request->bentuk_usaha;
-
             // Kondisi jika identitas perusahaan yang dipakai KTP / NPWP
-            if ($request->identitas_perusahaan == 'ktp' && $request->bentuk_usaha == 'perseorangan') {
+            if ($request->bentuk_usaha == 'perseorangan') {
                 $identitas_perusahaan->nama_lengkap = $request->nama_lengkap;
                 $identitas_perusahaan->nomor_ktp = $request->nomor_ktp;
                 if ($request->hasFile('foto_ktp')) {
@@ -312,7 +312,7 @@ class HomeController extends Controller
                 $identitas_perusahaan->status_pkp = 'non_pkp';
                 $identitas_perusahaan->sppkp = null;
                 $identitas_perusahaan->nitku = null;
-            } else if (($request->identitas_perusahaan == 'npwp' && $request->bentuk_usaha == 'perseorangan') || $request->bentuk_usaha == 'badan_usaha') {
+            } else {
                 $identitas_perusahaan->badan_usaha = $request->badan_usaha;
                 $identitas_perusahaan->nama_npwp = $request->nama_npwp;
                 $identitas_perusahaan->nomor_npwp = $request->nomor_npwp;

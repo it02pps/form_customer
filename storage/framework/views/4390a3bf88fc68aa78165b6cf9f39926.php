@@ -78,7 +78,7 @@
     }
     
     .section2, .section3 {
-        padding: 16px 0 16px 0;
+        padding: 16px 0;
     }
 
     .footer {
@@ -96,6 +96,15 @@
         background-color: #0063ee;
         border: none;
         color: #fff;
+    }
+
+    #previewPDF {
+        padding: 8px 16px;
+        border-radius: 8px;
+        background-color: #424242;
+        border: none;
+        color: #fff;
+        text-decoration: none;
     }
 
     .btnDownloadPdf {
@@ -135,7 +144,7 @@
     #signature {
         height: 271px;
         width: 100%;
-        border: 1px solid #1C4A9C;
+        border: 1px solid #cccccc;
         border-radius: 7px;
         padding: 0;
     }
@@ -168,6 +177,7 @@
 
     .form-group textarea {
         padding: 16px;
+        height: 164px;
     }
 
     .row {
@@ -229,8 +239,7 @@
     }
 
     .btnDetailCabang {
-        padding: 0 24px;
-        height: 48px;
+        padding: 8px 16px;
         border-radius: 8px;
         background-color: #424242;
         border: none;
@@ -290,7 +299,7 @@
         #signature {
             width: 100%;
             height: 180px;
-            border: 1px solid #1C4A9C;
+            border: 1px solid #cccccc;
             border-radius: 7px;
         }
 
@@ -344,8 +353,8 @@
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Nama Usaha</label>
-                                    <input type="text" name="nama_perusahaan" id="nama_perusahaan" class="form-control" autocomplete="off" readonly value="<?php echo e($perusahaan['nama_perusahaan']); ?>">
+                                    <label for="">Sales</label>
+                                    <input type="text" name="nama_sales" id="nama_sales" class="form-control" autocomplete="off" readonly value="<?php echo e($perusahaan['nama_sales']); ?>">
                                 </div>
                             </div>
                         </div>
@@ -353,13 +362,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="group-column">
                                     <div class="form-group">
+                                        <label for="">Nama Usaha</label>
+                                        <input type="text" name="nama_perusahaan" id="nama_perusahaan" class="form-control" autocomplete="off" readonly value="<?php echo e($perusahaan['nama_perusahaan']); ?>">
+                                    </div>
+
+                                    <div class="form-group">
                                         <label for="">Nama Group Usaha</label>
                                         <input type="text" name="nama_group_perusahaan" id="nama_group_perusahaan" class="form-control" autocomplete="off" readonly value="<?php echo e($perusahaan['nama_group_perusahaan']); ?>">
-                                    </div>
-    
-                                    <div class="form-group">
-                                        <label for="">Kota/Kabupaten</label>
-                                        <input type="text" name="kota_kabupaten" id="kota_kabupaten" class="form-control" autocomplete="off" readonly value="<?php echo e($perusahaan['kota_kabupaten']); ?>">
                                     </div>
                                 </div>
                             </div>
@@ -373,32 +382,38 @@
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
+                                    <label for="">Kota/Kabupaten</label>
+                                    <input type="text" name="kota_kabupaten" id="kota_kabupaten" class="form-control" autocomplete="off" readonly value="<?php echo e($perusahaan['kota_kabupaten']); ?>">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group">
                                     <label for="">Alamat Email usaha</label>
                                     <input type="text" name="alamat_email_perusahaan" id="alamat_email_perusahaan" class="form-control" autocomplete="off" readonly value="<?php echo e($perusahaan['alamat_email'] ? $perusahaan['alamat_email'] : '-'); ?>">
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nomor Handphone Contact Person</label>
                                     <input type="text" name="no_hp" id="no_hp" class="form-control" autocomplete="off" readonly value="<?php echo e($perusahaan['nomor_handphone']); ?>">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Tahun Berdiri</label>
                                     <input type="text" name="tahun_berdiri" id="tahun_berdiri" autocomplete="off" class="form-control" readonly value="<?php echo e($perusahaan['tahun_berdiri'] ? $perusahaan['tahun_berdiri'] : '-'); ?>">
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Lama Usaha (Tahun)</label>
                                     <input type="text" name="lama_usaha" id="lama_usaha" class="form-control" autocomplete="off" readonly value="<?php echo e($perusahaan['lama_usaha'] ? $perusahaan['lama_usaha'] : '-'); ?>">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Bidang Usaha</label>
@@ -408,6 +423,8 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Status Kepemilkan Tempat Usaha</label>
@@ -417,122 +434,44 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Identitas Perseorangan</label>
-                                    <input type="text" name="identitas_perusahaan" id="identitas_perusahaan" autocomplete="off" class="form-control" readonly value="<?php echo e(strtoupper($perusahaan['identitas'])); ?>">
+                                    <label for="">NIK</label>
+                                    <input type="text" id="nomor_ktp" name="nomor_ktp" autocomplete="off" class="form-control" readonly value="<?php echo e($perusahaan['nomor_ktp'] ? $perusahaan['nomor_ktp'] : '-'); ?>">
                                 </div>
                             </div>
-                            <?php if($perusahaan['identitas'] == 'ktp'): ?>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group">
-                                        <label for="">NIK</label>
-                                        <input type="text" id="nomor_ktp" name="nomor_ktp" autocomplete="off" class="form-control" readonly value="<?php echo e($perusahaan['nomor_ktp'] ? $perusahaan['nomor_ktp'] : '-'); ?>">
-                                    </div>
-                                </div>
-                            <?php else: ?>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group">
-                                        <label for="">Nama NPWP</label>
-                                        <input type="text" name="nama_npwp" id="nama_npwp" class="form-control" autocomplete="off" readonly value="<?php echo e($perusahaan['nama_npwp'] ? $perusahaan['nama_npwp'] : '-'); ?>">
-                                    </div>
-                                </div>
-                            <?php endif; ?>
                         </div>
-                        <?php if($perusahaan['identitas'] == 'ktp'): ?>
-                            
-                            <div id="ktp-section">
-                                <div class="row">
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="form-group">
-                                            <label for="">Nama Lengkap Sesuai Identitas</label>
-                                            <input type="text" id="nama_lengkap" name="nama_lengkap" autocomplete="off" class="form-control" readonly value="<?php echo e($perusahaan['nama_lengkap'] ? $perusahaan['nama_lengkap'] : '-'); ?>">
-                                        </div>
+                        <div id="ktp-section">
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label for="">Nama Lengkap Sesuai Identitas</label>
+                                        <input type="text" id="nama_lengkap" name="nama_lengkap" autocomplete="off" class="form-control" readonly value="<?php echo e($perusahaan['nama_lengkap'] ? $perusahaan['nama_lengkap'] : '-'); ?>">
                                     </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="group-column">
                                         <div class="form-group">
                                             <label for="">Foto KTP <span class="text-danger">*</span></label>
-                                            <div class="form-group" id="preview_ktp">
-                                                <img id="preview_foto_ktp" src="<?php echo e($perusahaan['foto_ktp'] ? asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_ktp']) : '-'); ?>" alt="Preview" data-action="zoom">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                        <?php else: ?>
-                            
-                            <div id="npwp-section">
-                                <div class="row">
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="form-group">
-                                            <label for="">Alamat NPWP</label>
-                                            <textarea name="alamat_npwp" id="alamat_npwp" cols="70" rows="6" autocomplete="off" class="form-control" readonly><?php echo e($perusahaan['alamat_npwp'] ? $perusahaan['alamat_npwp'] : '-'); ?></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="group-column">
-                                            <div class="form-group">
-                                                <label for="">Nomor NPWP</label>
-                                                <input type="text" name="nomor_npwp" id="nomor_npwp" class="form-control" autocomplete="off" readonly value="<?php echo e($perusahaan['nomor_npwp'] ? $perusahaan['nomor_npwp'] : '-'); ?>">
-                                            </div>
-    
-                                            <div class="form-group">
-                                                <label for="">Kota Sesuai NPWP</label>
-                                                <input type="text" name="kota_npwp" id="kota_npwp" class="form-control" autocomplete="off" readonly value="<?php echo e($perusahaan['kota_npwp'] ? $perusahaan['kota_npwp'] : '-'); ?>">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="form-group">
-                                            <label for="">Email Khusus Untuk Faktur Pajak</label>
-                                            <input type="text" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" readonly value="<?php echo e($perusahaan['email_khusus_faktur_pajak'] ? $perusahaan['email_khusus_faktur_pajak'] : '-'); ?>">
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="form-group" id="cabang">
-                                            <label for="">Cabang</label>
-                                            <input type="text" class="form-control" autocomplete="off" readonly placeholder="<?php echo e(App\Models\Cabang::where('identitas_perusahaan_id', $perusahaan['id'])->count()); ?> Cabang">
-                                            <button type="button" class="btnDetailCabang" title="Detail Cabang" data-bs-target="#modalCabang" data-bs-toggle="modal">Detail Cabang</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="group-column">
-                                            <div class="form-group">
-                                                <label for="">Status Pengusaha Kena Pajak (PKP)</label>
-                                                <input type="text" name="status_pkp" id="status_pkp" class="form-control" autocomplete="off" readonly value="<?php echo e($perusahaan['status_pkp'] ? strtoupper(str_replace('_', ' ', $perusahaan['status_pkp'])) : '-'); ?>">
-                                            </div>
-            
-                                            <div class="pkp <?php if($perusahaan['status_pkp'] != 'pkp'): ?> d-none <?php endif; ?>">
-                                                <div id="preview_sppkp" class="form-group">
-                                                    <img id="preview_foto_sppkp" src="<?php echo e($perusahaan['sppkp'] ? asset('../../../uploads/identitas_perusahaan/' . $perusahaan['sppkp']) : '-'); ?>" alt="Preview" data-action="zoom">
+                                            <?php if(File::extension($perusahaan['foto_ktp']) == 'pdf'): ?>
+                                                <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
+                                                    <p style="font-size: 18px;">Preview file KTP</p>
+                                                    <a href="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_ktp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="form-group">
-                                            <label for="">Foto NPWP</label>
-                                            <div class="form-group" id="preview_npwp">
-                                                <img id="preview_foto_npwp" src="<?php echo e($perusahaan['foto_npwp'] ? asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_npwp']) : '-'); ?>" alt="Preview" data-action="zoom">
-                                            </div>
+                                            <?php else: ?>
+                                                <div id="preview_ktp" class="form-group">
+                                                    <img id="preview_foto_ktp" src="<?php echo e($perusahaan['foto_ktp'] ? asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_ktp']) : '-'); ?>" alt="Belum ada file" data-action="zoom">
+                                                </div>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
-                        <?php endif; ?>
+                        </div>
                     </div>
                     <hr>
                     <div class="section2">
                         <h1>Informasi Bank</h1>
-
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
@@ -600,9 +539,16 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Foto Identitas</label>
-                                    <div id="preview_penanggung" class="form-group">
-                                        <img id="preview_foto_penanggung" src="<?php echo e($perusahaan['data_identitas']['foto'] ? asset('../../../uploads/penanggung_jawab/' . $perusahaan['data_identitas']['foto']) : '-'); ?>" alt="Preview" data-action="zoom">
-                                    </div>
+                                    <?php if(File::extension($perusahaan['data_identitas']['foto']) == 'pdf'): ?>
+                                        <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                            <p style="font-size: 18px;">Preview file identitas</p>
+                                            <a href="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $perusahaan['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                        </div>
+                                    <?php else: ?>
+                                        <div id="preview_penanggung" class="form-group">
+                                            <img id="preview_foto_penanggung" src="<?php echo e($perusahaan['data_identitas']['foto'] ? asset('../../../uploads/penanggung_jawab/' . $perusahaan['data_identitas']['foto']) : '-'); ?>" alt="Preview" data-action="zoom">
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -642,30 +588,32 @@
                 </div>
                 <div class="modal-body">
                     <div class="dynamic-row">
-                        <?php if($perusahaan['cabang']): ?>
+                        <?php if(count($perusahaan['cabang']) > 0): ?>
                             <?php $__currentLoopData = $perusahaan['cabang']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <div class="row align-items-center">
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="group-column-modal">
                                             <div class="form-group-modal">
-                                                <label for="">Nomor NITKU <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" autocomplete="off" required placeholder="Masukkan nomor NITKU" value="<?php echo e($value['nitku']); ?>">
+                                                <label for="">Nomor NITKU (22 digit)</label>
+                                                <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" readonly autocomplete="off" placeholder="Masukkan nomor NITKU" value="<?php echo e($value['nitku']); ?>">
                                             </div>
                                             <div class="form-group-modal">
-                                                <label for="">Nama Cabang <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" autocomplete="off" required placeholder="Masukkan nama cabang" value="<?php echo e($value['nama']); ?>">
+                                                <label for="">Nama Cabang</label>
+                                                <input type="text" class="form-control" autocomplete="off" readonly placeholder="Masukkan nama cabang" value="<?php echo e($value['nama']); ?>">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="form-group-modal">
-                                            <label for="">Alamat NITKU <span class="text-danger">*</span></label>
-                                            <textarea cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NITKU" required><?php echo e($value['alamat']); ?></textarea>
+                                            <label for="">Alamat NITKU</label>
+                                            <textarea cols="30" rows="5" class="form-control" autocomplete="off" readonly placeholder="Masukkan alamat NITKU"><?php echo e($value['alamat']); ?></textarea>
                                         </div>
                                     </div>
                                 </div>
                                 <hr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php else: ?>
+                            <h4>Tidak ada cabang</h4>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -682,7 +630,7 @@
     <script>
         // START: Direct login page
         function login() {
-            window.location.href = '/login';
+            window.location.href = '<?php echo e(route("form_customer.login")); ?>';
         }
         // END: Direct login page
 

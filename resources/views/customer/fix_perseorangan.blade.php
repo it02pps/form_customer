@@ -370,7 +370,7 @@
                                     <label for="">Sales <span class="text-danger">*</span></label>
                                     <select name="sales" id="sales" autocomplete="off" class="form-control" required>
                                         @foreach ($sales as $loop_sales)
-                                            <option value="{{ $loop->iteration }}">{{ $loop_sales->nama_sales }}</option>
+                                            <option value="{{ $loop_sales->nama_sales }}">{{ $loop_sales->nama_sales }}</option>
                                         @endforeach
                                     </select>
                                     <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
@@ -472,34 +472,21 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group" id="select">
-                                        <label for="">Identitas Perseorangan <span class="text-danger">*</span></label>
-                                        <input type="text" name="identitas_perusahaan" id="identitas_perusahaan" class="form-control" autocomplete="off" required readonly value="KTP">
-                                        {{-- <select name="identitas_perusahaan" id="identitas_perusahaan" class="form-control" required>
-                                            <option value="ktp">KTP</option>
-                                        </select>
-                                        <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span> --}}
+                                    <div class="form-group">
+                                        <label for="">NIK <span class="text-danger">*</span></label>
+                                        <input type="text" id="nomor_ktp" name="nomor_ktp" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="16" placeholder="Masukkan NIK" autocomplete="off" class="form-control" value="{{ $data ? $data['nomor_ktp'] : '' }}">
                                     </div>
                                 </div>
                             </div>
-                            {{-- START: KTP --}}
                             <div id="ktp-section">
                                 <div class="row">
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="form-group">
-                                            <label for="">NIK <span class="text-danger">*</span></label>
-                                            <input type="text" id="nomor_ktp" name="nomor_ktp" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="16" placeholder="Masukkan NIK" autocomplete="off" class="form-control" value="{{ $data ? $data['nomor_ktp'] : '' }}">
-                                        </div>
-                                    </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="form-group">
                                             <label for="">Nama Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
                                             <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan Nama Lengkap" autocomplete="off" class="form-control" value="{{ $data ? $data['nama_lengkap'] : '' }}">
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 p-0">
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="group-column">
                                             <div class="form-group">
                                                 <label for="">Foto KTP <span class="text-danger">*</span></label>
@@ -530,7 +517,6 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- END: KTP --}}
                         </div>
                         <hr>
                         <div class="section2">
@@ -948,36 +934,6 @@
                     $('.rekening_lain').find('input').val('').prop('required', false);
                 }
             });
-
-            $('#identitas_perusahaan').on('change', function() {
-                if($(this).val() == 'ktp') {
-                    $('#ktp-section').removeClass('d-none');
-                    $('#npwp-section').addClass('d-none');
-
-                    $('#nik').prop('required', true);
-                    $('#nama_lengkap').prop('required', true);
-
-                    $('#nama_npwp').val('').prop('required', false);
-                    $('#nomor_npwp').val('').prop('required', false);
-                    $('#kota_npwp').val('').prop('required', false);
-                    $('#alamat_npwp').val('').prop('required', false);
-                    $('#email_faktur').val('').prop('required', false);
-                    $('#status_pkp').val('').prop('required', false);
-                } else {
-                    $('#ktp-section').addClass('d-none');
-                    $('#npwp-section').removeClass('d-none');
-
-                    $('#nik').val('').prop('required', false);
-                    $('#nama_lengkap').val('').prop('required', false);
-
-                    $('#nama_npwp').prop('required', true);
-                    $('#nomor_npwp').prop('required', true);
-                    $('#kota_npwp').prop('required', true);
-                    $('#alamat_npwp').prop('required', true);
-                    $('#email_faktur').prop('required', true);
-                    $('#status_pkp').prop('required', true);
-                }
-            });
             // END: Change input properties
 
             // START: Submit Form Customer
@@ -1035,18 +991,17 @@
                         $('#status_kepemilikan').val(res.data.status_kepemilikan).change();
                         $('#badan_usaha').val(res.data.badan_usaha).change();
                         $('#bidang_usaha').val(res.data.bidang_usaha).change();
-                        $('#identitas_perusahaan').val(res.data.identitas).change();
                         $('#status_pkp').val(res.data.status_pkp).change();
                         $('#status_rekening').val(res.data.informasi_bank.status).change();
                         if(res.data.data_identitas) {
                             $('#identitas_penanggung_jawab').val(res.data.data_identitas.identitas).change();
                         }
-                        if(res.data.status_cust == 'lama') {
-                            $('#cust_lama').prop('checked', true);
-                        } else {
-                            $('#cust_baru').prop('checked', true);
-                        }
+                        let upperIdentitas = res.data.identitas.toUpperCase();
+                        $('#identitas_perusahaan').val(upperIdentitas).change();
+                        
+                        $('#jenis_cust').val(res.data.status_cust).change();
                         $('#status_cabang').val(res.data.status_cabang).change();
+                        $('#sales').val(res.data.nama_sales).change();
                     } else {
                         $('#status_kepemilikan').val('').change();
                         $('#badan_usaha').val('').change();
@@ -1057,6 +1012,8 @@
                         $('#identitas_penanggung_jawab').val('').change();
                         $('#cust_lama').prop('checked', true);
                         $('#status_cabang').val('').change();
+                        $('#nama_sales').val('').change();
+                        $('#jenis_cust').val('').change();
                     }
                 }
             });
