@@ -21,11 +21,6 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Auth::routes();
-// Route::get('/', [FormCustomer::class, 'index'])->name('form_customer.index');
-// Route::get('/showimage/{category}/{filename}', [ImageController::class, 'index'])->name("showimage.view");
-// Route::get('/{menu}', [FormCustomer::class, 'view'])->name("form_customer.view");
-// Route::get('/{menu}/detail', [FormCustomer::class, 'detail'])->name('form_customer.detail');
-// Route::post('/{menu}/confirmation', [FormCustomer::class, 'confirmation'])->name('form_customer.confirmation');
 
 Route::get('/', function() {
     return redirect('/form-customer');
@@ -41,19 +36,15 @@ Route::get('/form-customer/{menu}/pdf/{id}', [FormCustomer::class, 'download_pdf
 Route::get('/select/{id}', [FormCustomer::class, 'select'])->name('form_customer.select');
 
 // Login
-// Route::get('/login', [LoginController::class, 'index'])->name('login.index');
 Route::get('/form-customer/panel/login', [LoginController::class, 'index'])->name('form_customer.login');
 Route::post('/form-customer/panel/login-store', [LoginController::class, 'login'])->name('form_customer.login.store');
 Route::get('/form-customer/panel/lupa-password', [LoginController::class, 'lupa_password'])->name('form_customer.lupa_password');
 
 Route::middleware('web')->group(function () {
-    // Route::get('/internal/panel', [HomeController::class, 'index'])->name('home');
-    // Route::get('/internal/panel/detail', [HomeController::class, 'detail'])->name('home.detail');
-    // Route::get('/internal/panel/edit/{id}', [HomeController::class, 'edit'])->name('home.edit');
-    // Route::post('/internal/panel/edit-store', [HomeController::class, 'edit_store'])->name('home.edit_store');
     Route::get('/internal/panel', [HomeController::class, 'index'])->name('home');
     Route::get('/internal/panel/table', [HomeController::class, 'datatable'])->name('home.datatable');
     Route::get('/internal/panel/detail/{id}', [HomeController::class, 'detail'])->name('home.detail');
+    Route::post('/internal/panel/edit-store', [HomeController::class, 'edit_store'])->name('home.edit_store');
     Route::get('/internal/panel/edit/testing/{id}', [HomeController::class, 'edit'])->name('home.edit');
     Route::get('/internal/panel/get-pdf/{id}', [HomeController::class, 'getPdf'])->name('home.getPdf');
     Route::get('/internal/panel/select/{id}', [HomeController::class, 'select'])->name('home.select');
