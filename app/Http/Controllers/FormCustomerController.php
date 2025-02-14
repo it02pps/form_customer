@@ -236,6 +236,10 @@ class FormCustomerController extends Controller
             // Kondisi jika identitas perusahaan yang dipakai KTP / NPWP
             if ($request->bentuk_usaha == 'perseorangan') {
                 $identitas_perusahaan->nama_lengkap = $request->nama_lengkap;
+
+                if($request->nomor_ktp == '-') {
+                    return ['status' => false, 'error' => 'Nomor KTP harus diisi'];
+                }
                 $identitas_perusahaan->nomor_ktp = $request->nomor_ktp;
                 if ($request->hasFile('foto_ktp')) {
                     if (File::exists('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_ktp)) {
@@ -278,6 +282,10 @@ class FormCustomerController extends Controller
             } else {
                 $identitas_perusahaan->badan_usaha = $request->badan_usaha;
                 $identitas_perusahaan->nama_npwp = $request->nama_npwp;
+
+                if($request->nomor_npwp == '-') {
+                    return ['status' => false, 'error' => 'Nomor NPWP harus diisi'];
+                }
                 $identitas_perusahaan->nomor_npwp = $request->nomor_npwp;
                 if ($request->hasFile('foto_npwp')) {
                     if (File::exists('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_npwp)) {
@@ -312,7 +320,7 @@ class FormCustomerController extends Controller
 
                 // Validasi email faktur pajak
                 if($request->email_faktur == '-') {
-                    return ['error' => 'Email faktur pajak wajib diisi dengan format yang benar'];
+                    return ['status' => false, 'error' => 'Email faktur pajak wajib diisi dengan format yang benar'];
                 }
 
                 $identitas_perusahaan->email_khusus_faktur_pajak = $request->email_faktur;
@@ -365,6 +373,10 @@ class FormCustomerController extends Controller
             if($cabang->count() > 0) {
                 $cabang->delete();
                 if(!isEmpty($request->nitku_cabang)) {
+                    if($request->nitku_cabang == '-') {
+                        return ['status' => false, 'error' => 'NITKU cabang wajib diisi'];
+                    }
+
                     for($i = 0; $i < count($request->nitku_cabang); $i++) {
                         Cabang::insert([
                             'identitas_perusahaan_id' => $identitas_perusahaan->id,
@@ -378,6 +390,10 @@ class FormCustomerController extends Controller
                 }
             } else {
                 if(!isEmpty($request->nitku_cabang)) {
+                    if($request->nitku_cabang == '-') {
+                        return ['status' => false, 'error' => 'NITKU cabang wajib diisi'];
+                    }
+
                     for($i = 0; $i < count($request->nitku_cabang); $i++) {
                         Cabang::insert([
                             'identitas_perusahaan_id' => $identitas_perusahaan->id,
@@ -530,7 +546,7 @@ class FormCustomerController extends Controller
             $link = route('form_customer.detail', ['menu' => str_replace('_', '-', $request->bentuk_usaha), 'id' => Crypt::encryptString($identitas_perusahaan->id)]);
             return ['status' => true, 'link' => $link];
         } catch (\Exception $e) {
-            dd($e);
+            // dd($e);
             return ['status' => false, 'error' => 'Terjadi kesalahan'];
         }
     }

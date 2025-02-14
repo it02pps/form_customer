@@ -272,6 +272,10 @@ class HomeController extends Controller
             // Kondisi jika identitas perusahaan yang dipakai KTP / NPWP
             if ($request->bentuk_usaha == 'perseorangan') {
                 $identitas_perusahaan->nama_lengkap = $request->nama_lengkap;
+
+                if($request->nomor_ktp == '-') {
+                    return ['status' => false, 'error' => 'Nomor KTP harus diisi'];
+                }
                 $identitas_perusahaan->nomor_ktp = $request->nomor_ktp;
                 if ($request->hasFile('foto_ktp')) {
                     if (File::exists('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_ktp)) {
@@ -311,12 +315,14 @@ class HomeController extends Controller
                 $identitas_perusahaan->email_khusus_faktur_pajak = null;
                 $identitas_perusahaan->status_pkp = 'non_pkp';
                 $identitas_perusahaan->sppkp = null;
-                $identitas_perusahaan->nitku = null;
             } else {
                 $identitas_perusahaan->badan_usaha = $request->badan_usaha;
                 $identitas_perusahaan->nama_npwp = $request->nama_npwp;
+
+                if($request->nomor_npwp == '-') {
+                    return ['status' => false, 'error' => 'Nomor NPWP harus diisi'];
+                }
                 $identitas_perusahaan->nomor_npwp = $request->nomor_npwp;
-                $identitas_perusahaan->nitku = $request->nitku;
                 if ($request->hasFile('foto_npwp')) {
                     if (File::exists('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_npwp)) {
                         File::delete('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_npwp);
@@ -403,6 +409,10 @@ class HomeController extends Controller
             if($cabang->count() > 0) {
                 $cabang->delete();
                 if(!isEmpty($request->nitku_cabang)) {
+                    if($request->nitku_cabang) {
+                        return ['status' => false, 'error' => 'NITKU cabang harus diisi'];
+                    }
+
                     for($i = 0; $i < count($request->nitku_cabang); $i++) {
                         Cabang::insert([
                             'identitas_perusahaan_id' => $identitas_perusahaan->id,
@@ -416,6 +426,10 @@ class HomeController extends Controller
                 }
             } else {
                 if(!isEmpty($request->nitku_cabang)) {
+                    if($request->nitku_cabang) {
+                        return ['status' => false, 'error' => 'NITKU cabang harus diisi'];
+                    }
+
                     for($i = 0; $i < count($request->nitku_cabang); $i++) {
                         Cabang::insert([
                             'identitas_perusahaan_id' => $identitas_perusahaan->id,
