@@ -353,8 +353,8 @@
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group" id="select">
-                                    <label for="">Sales <span class="text-danger">*</span></label>
-                                    <select name="sales" id="sales" autocomplete="off" class="form-control" required>
+                                    <label for="">Sales</label>
+                                    <select name="sales" id="sales" autocomplete="off" class="form-control">
                                         <option value="">-</option>
                                         @foreach ($sales as $loop_sales)
                                             <option value="{{ $loop->iteration }}">{{ $loop_sales->nama_sales }}</option>
