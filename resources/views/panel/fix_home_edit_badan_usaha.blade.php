@@ -327,6 +327,7 @@
                                 <div class="form-group" id="select">
                                     <label for="">Sales <span class="text-danger">*</span></label>
                                     <select name="sales" id="sales" autocomplete="off" class="form-control" required>
+                                        <option value="">-</option>
                                         @foreach ($sales as $loop_sales)
                                             <option value="{{ $loop->iteration }}">{{ $loop_sales->nama_sales }}</option>
                                         @endforeach
@@ -632,7 +633,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="group-column p-0">
                                         <div class="form-group">
-                                            <label for="">Foto Identitas <span class="text-danger">*</span></label>
+                                            <label for="">Foto Identitas (KTP / NPWP) <span class="text-danger">*</span></label>
                                             <input type="file" name="foto_penanggung" id="foto_penanggung" class="form-control" onchange="previewFilePenanggung(this);" accept=".jpg, .png, .pdf, .jpeg">
                                         </div>
             

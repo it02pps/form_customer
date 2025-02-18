@@ -633,4 +633,9 @@ class FormCustomerController extends Controller
             return ['status' => false, 'error' => 'Terjadi Kesalahan'];
         }
     }
+
+    public function search($keyword) {
+        $data = IdentitasPerusahaan::with('informasi_bank')->where('nomor_ktp', 'LIKE', '%' . $keyword . '%')->orWhere('nomor_npwp', 'LIKE', '%' . $keyword . '%')->first();
+        return ['data' => $data];
+    }
 }

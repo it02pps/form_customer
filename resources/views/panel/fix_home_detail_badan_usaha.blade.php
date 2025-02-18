@@ -351,7 +351,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Sales</label>
-                                    <input type="text" name="sales" id="sales" class="form-control" readonly autocomplete="off" value="{{ $data['sales'] }}">
+                                    <input type="text" name="sales" id="sales" class="form-control" readonly autocomplete="off" value="{{ $data['nama_sales'] ? $data['nama_sales'] : '-' }}">
                                 </div>
                             </div>
                         </div>
@@ -592,7 +592,7 @@
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group p-0">
-                                    <label for="">Foto Identitas</label>
+                                    <label for="">Foto Identitas (KTP / NPWP)</label>
                                     @if(File::extension($data['data_identitas']['foto']) == 'pdf')
                                         <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                             <p style="font-size: 18px;">Preview file identitas</p>

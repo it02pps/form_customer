@@ -34,6 +34,7 @@ Route::get('/form-customer/{menu}/pdf/{id}', [FormCustomer::class, 'download_pdf
 
 // Get data select
 Route::get('/select/{id}', [FormCustomer::class, 'select'])->name('form_customer.select');
+Route::get('/form-customer/search/{keyword}', [FormCustomer::class, 'search'])->name('form_customer.search');
 
 // Login
 Route::get('/form-customer/panel/login', [LoginController::class, 'index'])->name('form_customer.login');
