@@ -374,42 +374,44 @@ class FormCustomerController extends Controller
             $identitas_perusahaan->save();
 
             // Cabang
-            $cabang = Cabang::where('identitas_perusahaan_id', $dekripsi);
-            if($cabang->count() > 0) {
-                $cabang->delete();
-                // if(!isEmpty($request->nitku_cabang)) {
-                    if($request->nitku_cabang == '-') {
-                        return ['status' => false, 'error' => 'NITKU cabang wajib diisi'];
-                    }
-
-                    for($i = 0; $i < count($request->nitku_cabang); $i++) {
-                        Cabang::insert([
-                            'identitas_perusahaan_id' => $identitas_perusahaan->id,
-                            'nitku' => $request->nitku_cabang[$i],
-                            'nama' => $request->nama_cabang[$i],
-                            'alamat' => $request->alamat_nitku[$i],
-                            'created_at' => Carbon::now(),
-                            'updated_at' => Carbon::now(),
-                        ]);
-                    }
-                // }
-            } else {
-                // if(!isEmpty($request->nitku_cabang)) {
-                    if($request->nitku_cabang == '-') {
-                        return ['status' => false, 'error' => 'NITKU cabang wajib diisi'];
-                    }
-
-                    for($i = 0; $i < count($request->nitku_cabang); $i++) {
-                        Cabang::insert([
-                            'identitas_perusahaan_id' => $identitas_perusahaan->id,
-                            'nitku' => $request->nitku_cabang[$i],
-                            'nama' => $request->nama_cabang[$i],
-                            'alamat' => $request->alamat_nitku[$i],
-                            'created_at' => Carbon::now(),
-                            'updated_at' => Carbon::now(),
-                        ]);
-                    }
-                // }
+            if($request->bentuk_usaha == 'badan_usaha') {
+                $cabang = Cabang::where('identitas_perusahaan_id', $dekripsi);
+                if($cabang->count() > 0) {
+                    $cabang->delete();
+                    // if(!isEmpty($request->nitku_cabang)) {
+                        if($request->nitku_cabang == '-') {
+                            return ['status' => false, 'error' => 'NITKU cabang wajib diisi'];
+                        }
+    
+                        for($i = 0; $i < count($request->nitku_cabang); $i++) {
+                            Cabang::insert([
+                                'identitas_perusahaan_id' => $identitas_perusahaan->id,
+                                'nitku' => $request->nitku_cabang[$i],
+                                'nama' => $request->nama_cabang[$i],
+                                'alamat' => $request->alamat_nitku[$i],
+                                'created_at' => Carbon::now(),
+                                'updated_at' => Carbon::now(),
+                            ]);
+                        }
+                    // }
+                } else {
+                    // if(!isEmpty($request->nitku_cabang)) {
+                        if($request->nitku_cabang == '-') {
+                            return ['status' => false, 'error' => 'NITKU cabang wajib diisi'];
+                        }
+    
+                        for($i = 0; $i < count($request->nitku_cabang); $i++) {
+                            Cabang::insert([
+                                'identitas_perusahaan_id' => $identitas_perusahaan->id,
+                                'nitku' => $request->nitku_cabang[$i],
+                                'nama' => $request->nama_cabang[$i],
+                                'alamat' => $request->alamat_nitku[$i],
+                                'created_at' => Carbon::now(),
+                                'updated_at' => Carbon::now(),
+                            ]);
+                        }
+                    // }
+                }
             }
 
             // Identitas penanggung jawab
@@ -641,7 +643,13 @@ class FormCustomerController extends Controller
     }
 
     public function search($keyword) {
-        $data = IdentitasPerusahaan::with('informasi_bank')->where('nomor_ktp', 'LIKE', '%' . $keyword . '%')->orWhere('nomor_npwp', 'LIKE', '%' . $keyword . '%')->first();
+        $data = IdentitasPerusahaan::with('informasi_bank')->where(function($e) use($keyword) {
+            $e->where('bentuk_usaha', 'badan_usaha');
+            $e->where('nomor_npwp', 'LIKE', '%' . $keyword . '%');
+        })->orWhere(function($e) use($keyword) {
+            $e->where('bentuk_usaha', 'perseorangan');
+            $e->where('nomor_ktp', 'LIKE', '%' . $keyword . '%');
+        })->first();
         return ['data' => $data];
     }
 }
