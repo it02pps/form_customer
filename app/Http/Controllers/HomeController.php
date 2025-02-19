@@ -163,7 +163,9 @@ class HomeController extends Controller
             'nomor_hp_penanggung_jawab' => 'required',
 
             // Cabang
-            'nitku_cabang.*' => (isEmpty($data['nitku_cabang']) ? '' : 'digits:22')
+            'nitku_cabang.*' => 'required|digits:22',
+            'nama_cabang.*' => 'required',
+            'alamat_nitku.*' => 'required',
         ];
 
         $message = [
@@ -220,7 +222,10 @@ class HomeController extends Controller
             'nomor_hp_penanggung_jawab.digits_between' => 'Nomor HP penanggung jawab harus diantara 10 - 13 digit',
 
             // Cabang
-            'nitku_cabang.*.digits' => 'NITKU harus 22 digit'
+            'nitku_cabang.*.required' => 'NITKU harus diisi',
+            'nitku_cabang.*.digits' => 'NITKU harus 22 digit',
+            'nama_cabang.*.required' => 'Nama cabang harus diisi',
+            'alamat_nitku.*.required' => 'Alamat cabang harus diisi',
         ];
 
         return Validator::make($data, $rules, $message);
