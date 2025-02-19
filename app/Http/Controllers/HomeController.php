@@ -71,7 +71,14 @@ class HomeController extends Controller
                 $aksi = $edit . ' ' . $detail;
                 return $aksi;
             })
-            ->rawColumns(['aksi'])
+            ->addColumn('status', function($e) {
+                if ($e->status_upload == 0) {
+                    return '<span class="badge bg-danger px-3 py-2">Belum Upload</span>';
+                } else {
+                    return '<span class="badge bg-success px-3 py-2">Sudah Upload</span>';
+                }
+            })
+            ->rawColumns(['aksi', 'status'])
             ->make(true);
     }
 

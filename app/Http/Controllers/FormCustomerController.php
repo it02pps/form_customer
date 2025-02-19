@@ -625,6 +625,7 @@ class FormCustomerController extends Controller
                 $file->move('uploads/identitas_perusahaan/', $filename);
     
                 $data->file_customer_external = $filename;
+                $data->status_upload = '1';
             }
             $data->save();
     

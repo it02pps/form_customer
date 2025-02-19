@@ -351,8 +351,8 @@
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group" id="select">
-                                    <label for="">Sales <span class="text-danger">*</span></label>
-                                    <select name="sales" id="sales" autocomplete="off" class="form-control" required>
+                                    <label for="">Sales</label>
+                                    <select name="sales" id="sales" autocomplete="off" class="form-control">
                                         <option value="">-</option>
                                         <?php $__currentLoopData = $sales; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $loop_sales): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <option value="<?php echo e($loop->iteration); ?>"><?php echo e($loop_sales->nama_sales); ?></option>
@@ -728,19 +728,19 @@
                                                         <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
                                                             <div class="group-column-modal">
                                                                 <div class="form-group-modal">
-                                                                    <label for="">Nomor NITKU (22 digit)</label>
-                                                                    <input type="text" class="form-control" name="nitku_cabang[]" id="nitku_cabang" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" autocomplete="off" placeholder="Masukkan nomor NITKU" value="<?php echo e($value['nitku']); ?>">
+                                                                    <label for="">Nomor NITKU (22 digit) <span class="text-danger">*</span></label>
+                                                                    <input type="text" class="form-control" name="nitku_cabang[]" id="nitku_cabang" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" autocomplete="off" placeholder="Masukkan nomor NITKU" value="<?php echo e($value['nitku']); ?>" required>
                                                                 </div>
                                                                 <div class="form-group-modal">
-                                                                    <label for="">Nama Cabang</label>
-                                                                    <input type="text" class="form-control" name="nama_cabang[]" id="nama_cabang" autocomplete="off" placeholder="Masukkan nama cabang" value="<?php echo e($value['nama']); ?>">
+                                                                    <label for="">Nama Cabang <span class="text-danger">*</span></label>
+                                                                    <input type="text" class="form-control" name="nama_cabang[]" id="nama_cabang" autocomplete="off" placeholder="Masukkan nama cabang" value="<?php echo e($value['nama']); ?>" required>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                                             <div class="form-group-modal">
-                                                                <label for="">Alamat NITKU</label>
-                                                                <textarea name="alamat_nitku[]" id="alamat_nitku" cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NITKU"><?php echo e($value['alamat']); ?></textarea>
+                                                                <label for="">Alamat NITKU <span class="text-danger">*</span></label>
+                                                                <textarea name="alamat_nitku[]" id="alamat_nitku" cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NITKU" required><?php echo e($value['alamat']); ?></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -754,19 +754,19 @@
                                                     <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
                                                         <div class="group-column-modal">
                                                             <div class="form-group-modal">
-                                                                <label for="">Nomor NITKU (22 digit)</label>
-                                                                <input type="text" class="form-control" name="nitku_cabang[]" id="nitku_cabang" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" required autocomplete="off" placeholder="Masukkan nomor NITKU">
+                                                                <label for="">Nomor NITKU (22 digit <span class="text-danger">*</span>)</label>
+                                                                <input type="text" class="form-control" name="nitku_cabang[]" id="nitku_cabang" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" required autocomplete="off" placeholder="Masukkan nomor NITKU" required>
                                                             </div>
                                                             <div class="form-group-modal">
-                                                                <label for="">Nama Cabang</label>
-                                                                <input type="text" class="form-control" name="nama_cabang[]" id="nama_cabang" autocomplete="off" required placeholder="Masukkan nama cabang">
+                                                                <label for="">Nama Cabang <span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control" name="nama_cabang[]" id="nama_cabang" autocomplete="off" required placeholder="Masukkan nama cabang" required>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                                         <div class="form-group-modal">
-                                                            <label for="">Alamat NITKU</label>
-                                                            <textarea name="alamat_nitku[]" id="alamat_nitku" cols="30" rows="5" class="form-control" autocomplete="off" required placeholder="Masukkan alamat NITKU"></textarea>
+                                                            <label for="">Alamat NITKU <span class="text-danger">*</span></label>
+                                                            <textarea name="alamat_nitku[]" id="alamat_nitku" cols="30" rows="5" class="form-control" autocomplete="off" required placeholder="Masukkan alamat NITKU" required></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -780,18 +780,18 @@
                                                 <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
                                                     <div class="group-column-modal">
                                                         <div class="form-group-modal">
-                                                            <label for="">Nomor NITKU (22 digit)</label>
+                                                            <label for="">Nomor NITKU (22 digit) <span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="nitku_cabang[]" id="nitku_cabang" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" autocomplete="off" required placeholder="Masukkan nomor NITKU">
                                                         </div>
                                                         <div class="form-group-modal">
-                                                            <label for="">Nama Cabang</label>
+                                                            <label for="">Nama Cabang <span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="nama_cabang[]" id="nama_cabang" autocomplete="off" required placeholder="Masukkan nama cabang">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                                     <div class="form-group-modal">
-                                                        <label for="">Alamat NITKU</label>
+                                                        <label for="">Alamat NITKU <span class="text-danger">*</span></label>
                                                         <textarea name="alamat_nitku[]" id="alamat_nitku" cols="30" rows="5" class="form-control" autocomplete="off" required placeholder="Masukkan alamat NITKU"></textarea>
                                                     </div>
                                                 </div>
