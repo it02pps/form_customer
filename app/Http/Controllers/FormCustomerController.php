@@ -377,7 +377,7 @@ class FormCustomerController extends Controller
             $cabang = Cabang::where('identitas_perusahaan_id', $dekripsi);
             if($cabang->count() > 0) {
                 $cabang->delete();
-                if(!isEmpty($request->nitku_cabang)) {
+                // if(!isEmpty($request->nitku_cabang)) {
                     if($request->nitku_cabang == '-') {
                         return ['status' => false, 'error' => 'NITKU cabang wajib diisi'];
                     }
@@ -392,9 +392,9 @@ class FormCustomerController extends Controller
                             'updated_at' => Carbon::now(),
                         ]);
                     }
-                }
+                // }
             } else {
-                if(!isEmpty($request->nitku_cabang)) {
+                // if(!isEmpty($request->nitku_cabang)) {
                     if($request->nitku_cabang == '-') {
                         return ['status' => false, 'error' => 'NITKU cabang wajib diisi'];
                     }
@@ -409,7 +409,7 @@ class FormCustomerController extends Controller
                             'updated_at' => Carbon::now(),
                         ]);
                     }
-                }
+                // }
             }
 
             // Identitas penanggung jawab
