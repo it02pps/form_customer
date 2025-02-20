@@ -163,9 +163,9 @@ class HomeController extends Controller
             'nomor_hp_penanggung_jawab' => 'required',
 
             // Cabang
-            'nitku_cabang.*' => 'required|digits:22',
-            'nama_cabang.*' => 'required',
-            'alamat_nitku.*' => 'required',
+            'nitku_cabang.*' => ($data['bentuk_usaha'] == 'badan_usaha' ? 'required|digits:22' : ''),
+            'nama_cabang.*' => ($data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ''),
+            'alamat_nitku.*' => ($data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ''),
         ];
 
         $message = [

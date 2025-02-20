@@ -369,8 +369,9 @@
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group" id="select">
-                                    <label for="">Sales <span class="text-danger">*</span></label>
-                                    <select name="sales" id="sales" autocomplete="off" class="form-control" required>
+                                    <label for="">Sales</label>
+                                    <select name="sales" id="sales" autocomplete="off" class="form-control">
+                                        <option value="">-</option>
                                         <?php $__currentLoopData = $sales; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $loop_sales): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <option value="<?php echo e($loop_sales->nama_sales); ?>"><?php echo e($loop_sales->nama_sales); ?></option>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -602,7 +603,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="group-column">
                                         <div class="form-group">
-                                            <label for="">Foto Identitas <span class="text-danger">*</span></label>
+                                            <label for="">Foto Identitas (KTP / NPWP) <span class="text-danger">*</span></label>
                                             <input type="file" name="foto_penanggung" id="foto_penanggung" class="form-control" onchange="previewFilePenanggung(this);" accept=".jpg, .png, .pdf, .jpeg">
                                         </div>
             
@@ -655,106 +656,7 @@
                     </div>
 
                     
-                    <div class="modal fade" id="modalCabang" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-xl">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Cabang</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="delRow-section">
-                                        <button type="button" id="addRow"><i class="fa-solid fa-plus text-light"></i></button>
-                                    </div>
-                                    <div class="dynamic-row">
-                                        <?php if($data): ?>
-                                            <?php if(count($data['cabang']) > 0): ?>
-                                                <?php $__currentLoopData = $data['cabang']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                    <hr class="line-<?php echo e($key + 1); ?>">
-                                                    <div class="row align-items-center counter-<?php echo e($key + 1); ?>">
-                                                        <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
-                                                            <button type="button" id="delRow" class="delRow" data-id="<?php echo e($key + 1); ?>"><i class="fa-solid fa-minus text-light"></i></button>
-                                                        </div>
-                                                        <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
-                                                            <div class="group-column-modal">
-                                                                <div class="form-group-modal">
-                                                                    <label for="">Nomor NITKU (22 digit)</label>
-                                                                    <input type="text" class="form-control" name="nitku_cabang[]" id="nitku_cabang" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" autocomplete="off" placeholder="Masukkan nomor NITKU" value="<?php echo e($value['nitku']); ?>" required>
-                                                                </div>
-                                                                <div class="form-group-modal">
-                                                                    <label for="">Nama Cabang</label>
-                                                                    <input type="text" class="form-control" name="nama_cabang[]" id="nama_cabang" autocomplete="off" placeholder="Masukkan nama cabang" value="<?php echo e($value['nama']); ?>" required>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                                            <div class="form-group-modal">
-                                                                <label for="">Alamat NITKU</label>
-                                                                <textarea name="alamat_nitku[]" id="alamat_nitku" cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NITKU" required><?php echo e($value['alamat']); ?></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                            <?php else: ?>
-                                                <hr class="line-1">
-                                                <div class="row align-items-center counter-1">
-                                                    <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
-                                                        <button type="button" id="delRow" class="delRow" data-id="1"><i class="fa-solid fa-minus text-light"></i></button>
-                                                    </div>
-                                                    <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
-                                                        <div class="group-column-modal">
-                                                            <div class="form-group-modal">
-                                                                <label for="">Nomor NITKU (22 digit)</label>
-                                                                <input type="text" class="form-control" name="nitku_cabang[]" id="nitku_cabang" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" autocomplete="off" placeholder="Masukkan nomor NITKU" required>
-                                                            </div>
-                                                            <div class="form-group-modal">
-                                                                <label for="">Nama Cabang</label>
-                                                                <input type="text" class="form-control" name="nama_cabang[]" id="nama_cabang" autocomplete="off" placeholder="Masukkan nama cabang" required>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                                        <div class="form-group-modal">
-                                                            <label for="">Alamat NITKU</label>
-                                                            <textarea name="alamat_nitku[]" id="alamat_nitku" cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NITKU" required></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            <?php endif; ?>
-                                        <?php else: ?>
-                                            <hr class="line-1">
-                                            <div class="row align-items-center counter-1">
-                                                <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
-                                                    <button type="button" id="delRow" class="delRow" data-id="1"><i class="fa-solid fa-minus text-light"></i></button>
-                                                </div>
-                                                <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
-                                                    <div class="group-column-modal">
-                                                        <div class="form-group-modal">
-                                                            <label for="">Nomor NITKU (22 digit)</label>
-                                                            <input type="text" class="form-control" name="nitku_cabang[]" id="nitku_cabang" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" autocomplete="off" placeholder="Masukkan nomor NITKU" required>
-                                                        </div>
-                                                        <div class="form-group-modal">
-                                                            <label for="">Nama Cabang</label>
-                                                            <input type="text" class="form-control" name="nama_cabang[]" id="nama_cabang" autocomplete="off" placeholder="Masukkan nama cabang" required>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                                    <div class="form-group-modal">
-                                                        <label for="">Alamat NITKU</label>
-                                                        <textarea name="alamat_nitku[]" id="alamat_nitku" cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NITKU" required></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
                     
                 </form>
             </div>

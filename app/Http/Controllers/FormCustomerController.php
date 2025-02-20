@@ -87,13 +87,13 @@ class FormCustomerController extends Controller
             'status_kepemilikan' => 'required',
             'nama_lengkap' => $data['bentuk_usaha'] == 'perseorangan' ? 'required' : '',
             'nomor_ktp' => $data['bentuk_usaha'] == 'perseorangan' ? 'required|numeric|digits:16' : '',
-            'foto_ktp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf|max:2048' : ($data['bentuk_usaha'] == 'perseorangan' ? 'required|mimes:jpg,jpeg,pdf|max:2048' : ''),
+            'foto_ktp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : ($data['bentuk_usaha'] == 'perseorangan' ? 'required|mimes:jpg,jpeg,pdf' : ''),
             'nomor_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'nama_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'badan_usaha' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'email_faktur' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required|email' : '',
-            'foto_npwp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf|max:2048' : ($data['bentuk_usaha'] == 'badan_usaha' ? 'required|mimes:jpg,jpeg,pdf|max:2048' : ''),
-            'foto_sppkp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf|max:2048' : ($data['bentuk_usaha'] == 'badan_usaha' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,jpeg,pdf|max:2048' : '') : ''),
+            'foto_npwp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : ($data['bentuk_usaha'] == 'badan_usaha' ? 'required|mimes:jpg,jpeg,pdf' : ''),
+            'foto_sppkp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : ($data['bentuk_usaha'] == 'badan_usaha' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,jpeg,pdf' : '') : ''),
             'alamat_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'kota_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'nama_group' => ($data['status_kepemilikan'] == 'group') ? 'required' : '',
@@ -108,16 +108,16 @@ class FormCustomerController extends Controller
             'rekening_lain' => ($data['status_rekening'] == 'lainnya') ? 'required' : '',
 
             // Identitas Penanggung Jawab
-            'foto_penanggung' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf|max:2048' : 'required|mimes:jpg,jpeg,pdf|max:2048',
+            'foto_penanggung' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : 'required|mimes:jpg,jpeg,pdf',
             'nama_penanggung_jawab' => 'required',
             'jabatan' => 'required',
             'identitas_penanggung_jawab' => 'required',
             'nomor_hp_penanggung_jawab' => 'required',
 
             // Cabang
-            'nitku_cabang.*' => 'required|digits:22',
-            'nama_cabang.*' => 'required',
-            'alamat_nitku.*' => 'required',
+            'nitku_cabang.*' => ($data['bentuk_usaha'] == 'badan_usaha' ? 'required|digits:22' : ''),
+            'nama_cabang.*' => ($data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ''),
+            'alamat_nitku.*' => ($data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ''),
         ];
 
         $message = [
@@ -138,7 +138,6 @@ class FormCustomerController extends Controller
             'nomor_ktp.digits' => 'Nomor KTP harus 16 digit',
             'foto_ktp.required' => 'Foto KTP harus diisi',
             'foto_ktp.mimes' => 'Format file KTP harus berupa JPG, PNG, JPEG, atau PDF',
-            'foto_ktp.max' => 'Maksimal ukuran file KTP 2MB',
             'nomor_npwp.required' => 'Nomor NPWP harus diisi',
             'nomor_npwp.digits_between' => 'Nomor NPWP harus diantara 15 - 16 digit',
             'nama_npwp.required' => 'Nama NPWP harus diisi',
@@ -147,10 +146,8 @@ class FormCustomerController extends Controller
             'email_faktur.email' => 'Format email harus valid',
             'foto_npwp.required' => 'Foto NPWP harus diisi',
             'foto_npwp.mimes' => 'Format file NPWP harus berupa JPG, PNG, JPEG, atau PDF',
-            'foto_npwp.max' => 'Maksimal ukuran file NPWP 2MB',
             'foto_sppkp.required' => 'Foto SPPKP harus diisi',
             'foto_sppkp.mimes' => 'Format file SPPKP harus berupa JPG, PNG, JPEG, atau PDF',
-            'foto_sppkp.max' => 'Maksimal ukuran file SPPKP 2MB',
             'alamat_npwp.required' => 'Alamat NPWP harus diisi',
             'kota_npwp.required' => 'Kota NPWP harus diisi',
             'nama_group.required' => 'Nama group harus diisi',
@@ -172,7 +169,6 @@ class FormCustomerController extends Controller
             'identitas_penanggung_jawab.required' => 'Identitas penanggung jawab harus diisi',
             'foto_penanggung.required' => 'Foto identitas penanggung jawab harus diisi',
             'foto_penanggung.mimes' => 'Format file identitas penanggung jawab harus berupa JPG, PNG, JPEG, atau PDF',
-            'foto_penanggung.max' => 'Maksimal ukuran file identitas penanggung jawab 2MB',
             'nomor_hp_penanggung_jawab.required' => 'Nomor HP penanggung jawab harus diisi',
             'nomor_hp_penanggung_jawab.numeric' => 'Nomor HP penanggung jawab harus berupa angka',
             'nomor_hp_penanggung_jawab.digits_between' => 'Nomor HP penanggung jawab harus diantara 10 - 13 digit',
@@ -643,13 +639,8 @@ class FormCustomerController extends Controller
     }
 
     public function search($keyword) {
-        $data = IdentitasPerusahaan::with('informasi_bank')->where(function($e) use($keyword) {
-            $e->where('bentuk_usaha', 'badan_usaha');
-            $e->where('nomor_npwp', 'LIKE', '%' . $keyword . '%');
-        })->orWhere(function($e) use($keyword) {
-            $e->where('bentuk_usaha', 'perseorangan');
-            $e->where('nomor_ktp', 'LIKE', '%' . $keyword . '%');
-        })->first();
-        return ['data' => $data];
+        $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas', 'cabang')->where('nomor_ktp', $keyword)->orWhere('nomor_npwp', $keyword)->first();
+        $enkripsi = Crypt::class::encryptString($data->id);
+        return ['data' => $data, 'enkripsi' => $enkripsi];
     }
 }

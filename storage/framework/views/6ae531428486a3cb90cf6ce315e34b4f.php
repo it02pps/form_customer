@@ -654,7 +654,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nomor Handphone <span class="text-danger">*</span></label>
-                                        <input type="text" name="nomor_hp_penanggung_jawab" id="no_hp_penanggung_jawab" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" maxlength="14" autocomplete="off" class="form-control" required placeholder="Contoh: 012345678910" value="<?php echo e($data ? ($data['data_identitas']['no_hp']) : ''); ?>">
+                                        <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" maxlength="14" autocomplete="off" class="form-control" required placeholder="Contoh: 012345678910" value="<?php echo e($data ? ($data['data_identitas']['no_hp']) : ''); ?>">
                                     </div>
                                 </div>
                             </div>
@@ -1100,18 +1100,18 @@
                         <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
                             <div class="group-column-modal">
                                 <div class="form-group-modal">
-                                    <label for="">Nomor NITKU</label>
+                                    <label for="">Nomor NITKU <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="nitku_cabang[]" id="nitku_cabang" placeholder="Masukkan nomor NITKU" required autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22">
                                 </div>
                                 <div class="form-group-modal">
-                                    <label for="">Nama Cabang</label>
+                                    <label for="">Nama Cabang <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="nama_cabang[]" id="nama_cabang" placeholder="Masukkan nama cabang" required autocomplete="off">
                                 </div>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group-modal">
-                                <label for="">Alamat NITKU</label>
+                                <label for="">Alamat NITKU <span class="text-danger">*</span></label>
                                 <textarea name="alamat_nitku[]" id="alamat_nitku" cols="30" rows="5" class="form-control" placeholder="Masukkan alamat NITKU" required autocomplete="off"></textarea>
                             </div>
                         </div>
@@ -1131,7 +1131,6 @@
 
             // START: Search Customer Lama
             var timer;
-
             $('#jenis_cust').on('change', function() {
                 if($(this).val() == 'baru') {
                     $('.cari-data').addClass('d-none');
@@ -1148,11 +1147,14 @@
                     $('#status_kepemilikan').prop('disabled', false);
                     $('#nama_group').prop('readonly', false);
                     $('#badan_usaha').prop('disabled', false);
-                    $('#nomor_rekening').prop('readonly', false);
-                    $('#nama_rekening').prop('readonly', false);
-                    $('#nama_bank').prop('readonly', false);
-                    $('#status_rekening').prop('disabled', false);
-                    $('#rekening_lain').prop('readonly', false);
+                    $('#nama_npwp').prop('readonly', false);
+                    $('#nomor_npwp').prop('readonly', false);
+                    $('#alamat_npwp').prop('readonly', false);
+                    $('#kota_npwp').prop('readonly', false);
+                    $('#email_faktur').prop('readonly', false);
+                    $('#status_pkp').prop('disabled', false);
+                    $('#foto_sppkp').prop('readonly', false);
+                    $('#foto_npwp').prop('readonly', false);
                 } else {
                     $('.cari-data').removeClass('d-none');
                     $('#nama_perusahaan').prop('readonly', true);
@@ -1168,11 +1170,14 @@
                     $('#status_kepemilikan').prop('disabled', true);
                     $('#nama_group').prop('readonly', true);
                     $('#badan_usaha').prop('disabled', true);
-                    $('#nomor_rekening').prop('readonly', true);
-                    $('#nama_rekening').prop('readonly', true);
-                    $('#nama_bank').prop('readonly', true);
-                    $('#status_rekening').prop('disabled', true);
-                    $('#rekening_lain').prop('readonly', true);
+                    $('#nama_npwp').prop('readonly', true);
+                    $('#nomor_npwp').prop('readonly', true);
+                    $('#alamat_npwp').prop('readonly', true);
+                    $('#kota_npwp').prop('readonly', true);
+                    $('#email_faktur').prop('readonly', true);
+                    $('#status_pkp').prop('disabled', true);
+                    $('#foto_sppkp').prop('readonly', true);
+                    $('#foto_npwp').prop('readonly', true);
                 }
             });
 
@@ -1201,6 +1206,7 @@
                             },
                             success: res => {
                                 Swal.close();
+                                $('#update_id').val(res.enkripsi);
                                 $('#nama_perusahaan').val(res.data.nama_perusahaan);
                                 $('#nama_group_perusahaan').val(res.data.nama_group_perusahaan);
                                 $('#alamat_lengkap').val(res.data.alamat_lengkap);
@@ -1219,9 +1225,51 @@
                                 $('#nama_bank').val(res.data.informasi_bank.nama_bank);
                                 $('#status_rekening').val(res.data.informasi_bank.status).change();
                                 $('#rekening_lain').val(res.data.informasi_bank.rekening_lain);
+                                $('#nama_npwp').val(res.data.nama_npwp);
+                                $('#nomor_npwp').val(res.data.nomor_npwp);
+                                $('#alamat_npwp').val(res.data.alamat_npwp);
+                                $('#kota_npwp').val(res.data.kota_npwp);
+                                $('#email_faktur').val(res.data.email_khusus_faktur_pajak);
+                                $('#status_pkp').val(res.data.status_pkp).change();
+                                $('#nama_penanggung_jawab').val(res.data.data_identitas.nama);
+                                $('#jabatan').val(res.data.data_identitas.jabatan);
+                                $('#identitas_penanggung_jawab').val(res.data.data_identitas.identitas).change();
+                                $('#nomor_hp_penanggung_jawab').val(res.data.data_identitas.no_hp);
+
+                                console.log(res.data.cabang);
+                                $('.dynamic-row').empty();
+                                for(let i = 0; i < res.data.cabang.length; i++) {
+                                    $('.dynamic-row').append(`
+                                        <hr class="line-`+(i+1)+`">
+                                        <div class="row align-items-center counter-`+(i+1)+`">
+                                            <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
+                                                <button type="button" id="delRow" class="delRow" data-id="`+(i+1)+`"><i class="fa-solid fa-minus text-light"></i></button>
+                                            </div>
+                                            <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
+                                                <div class="group-column-modal">
+                                                    <div class="form-group-modal">
+                                                        <label for="">Nomor NITKU (22 digit) <span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control" name="nitku_cabang[]" id="nitku_cabang" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" autocomplete="off" placeholder="Masukkan nomor NITKU" value="`+res.data.cabang[i].nitku+`">
+                                                    </div>
+                                                    <div class="form-group-modal">
+                                                        <label for="">Nama Cabang <span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control" name="nama_cabang[]" id="nama_cabang" autocomplete="off" placeholder="Masukkan nama cabang" value="`+res.data.cabang[i].nama+`">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                                <div class="form-group-modal">
+                                                    <label for="">Alamat NITKU <span class="text-danger">*</span></label>
+                                                    <textarea name="alamat_nitku[]" id="alamat_nitku" cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NITKU">`+res.data.cabang[i].alamat+`</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `);
+                                }
                             }
                         })
                     } else {
+                        $('#update_id').val('');
                         $('#nama_perusahaan').val('');
                         $('#nama_group_perusahaan').val('');
                         $('#alamat_lengkap').val('');
@@ -1240,6 +1288,16 @@
                         $('#nama_bank').val('');
                         $('#status_rekening').val('').change();
                         $('#rekening_lain').val('');
+                        $('#nama_npwp').val('');
+                        $('#nomor_npwp').val('');
+                        $('#alamat_npwp').val('');
+                        $('#kota_npwp').val('');
+                        $('#email_faktur').val('');
+                        $('#status_pkp').val('').change();
+                        $('#nama_penanggung_jawab').val('');
+                        $('#jabatan').val('');
+                        $('#identitas_penanggung_jawab').val('').change();
+                        $('#nomor_hp_penanggung_jawab').val('');
                     }
                 }, 1500);
             });
