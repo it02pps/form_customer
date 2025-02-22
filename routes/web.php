@@ -46,7 +46,7 @@ Route::middleware('web')->group(function () {
     Route::get('/internal/panel/table', [HomeController::class, 'datatable'])->name('home.datatable');
     Route::get('/internal/panel/detail/{id}', [HomeController::class, 'detail'])->name('home.detail');
     Route::post('/internal/panel/edit-store', [HomeController::class, 'edit_store'])->name('home.edit_store');
-    Route::get('/internal/panel/edit/testing/{id}', [HomeController::class, 'edit'])->name('home.edit');
+    Route::get('/internal/panel/edit/{id}', [HomeController::class, 'edit'])->name('home.edit');
     Route::get('/internal/panel/get-pdf/{id}', [HomeController::class, 'getPdf'])->name('home.getPdf');
     Route::get('/internal/panel/select/{id}', [HomeController::class, 'select'])->name('home.select');
     

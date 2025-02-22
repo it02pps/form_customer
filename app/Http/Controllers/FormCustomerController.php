@@ -375,11 +375,11 @@ class FormCustomerController extends Controller
                 if($cabang->count() > 0) {
                     $cabang->delete();
                     // if(!isEmpty($request->nitku_cabang)) {
-                        if($request->nitku_cabang == '-') {
-                            return ['status' => false, 'error' => 'NITKU cabang wajib diisi'];
-                        }
-    
                         for($i = 0; $i < count($request->nitku_cabang); $i++) {
+                            if($request->nitku_cabang[$i] == '-') {
+                                return ['status' => false, 'error' => 'NITKU Cabang wajib diisi dengan format yang benar'];
+                            }
+
                             Cabang::insert([
                                 'identitas_perusahaan_id' => $identitas_perusahaan->id,
                                 'nitku' => $request->nitku_cabang[$i],
@@ -392,11 +392,11 @@ class FormCustomerController extends Controller
                     // }
                 } else {
                     // if(!isEmpty($request->nitku_cabang)) {
-                        if($request->nitku_cabang == '-') {
-                            return ['status' => false, 'error' => 'NITKU cabang wajib diisi'];
-                        }
-    
                         for($i = 0; $i < count($request->nitku_cabang); $i++) {
+                            if($request->nitku_cabang[$i] == '-') {
+                                return ['status' => false, 'error' => 'NITKU Cabang wajib diisi dengan format yang benar'];
+                            }
+                            
                             Cabang::insert([
                                 'identitas_perusahaan_id' => $identitas_perusahaan->id,
                                 'nitku' => $request->nitku_cabang[$i],
@@ -640,7 +640,7 @@ class FormCustomerController extends Controller
 
     public function search($keyword) {
         $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas', 'cabang')->where('nomor_ktp', $keyword)->orWhere('nomor_npwp', $keyword)->first();
-        $enkripsi = Crypt::class::encryptString($data->id);
+        $enkripsi = Crypt::encryptString($data->id);
         return ['data' => $data, 'enkripsi' => $enkripsi];
     }
 }

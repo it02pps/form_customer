@@ -163,9 +163,9 @@ class HomeController extends Controller
             'nomor_hp_penanggung_jawab' => 'required',
 
             // Cabang
-            'nitku_cabang.*' => ($data['bentuk_usaha'] == 'badan_usaha' ? 'required|digits:22' : ''),
-            'nama_cabang.*' => ($data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ''),
-            'alamat_nitku.*' => ($data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ''),
+            'nitku_cabang.*' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required|digits:22' : '',
+            'nama_cabang.*' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
+            'alamat_nitku.*' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
         ];
 
         $message = [
@@ -422,11 +422,11 @@ class HomeController extends Controller
                 if($cabang->count() > 0) {
                     $cabang->delete();
                     // if(!isEmpty($request->nitku_cabang)) {
-                        if($request->nitku_cabang) {
-                            return ['status' => false, 'error' => 'NITKU cabang harus diisi'];
-                        }
-    
                         for($i = 0; $i < count($request->nitku_cabang); $i++) {
+                            if($request->nitku_cabang[$i] == '-') {
+                                return ['status' => false, 'error' => 'NITKU Cabang wajib diisi dengan format yang benar'];
+                            }
+                            
                             Cabang::insert([
                                 'identitas_perusahaan_id' => $identitas_perusahaan->id,
                                 'nitku' => $request->nitku_cabang[$i],
@@ -439,11 +439,11 @@ class HomeController extends Controller
                     // }
                 } else {
                     // if(!isEmpty($request->nitku_cabang)) {
-                        if($request->nitku_cabang) {
-                            return ['status' => false, 'error' => 'NITKU cabang harus diisi'];
-                        }
-    
                         for($i = 0; $i < count($request->nitku_cabang); $i++) {
+                            if($request->nitku_cabang[$i] == '-') {
+                                return ['status' => false, 'error' => 'NITKU Cabang wajib diisi dengan format yang benar'];
+                            }
+
                             Cabang::insert([
                                 'identitas_perusahaan_id' => $identitas_perusahaan->id,
                                 'nitku' => $request->nitku_cabang[$i],
@@ -604,6 +604,7 @@ class HomeController extends Controller
             $tipe_customer->payment_term = $request->payment_term;
             $tipe_customer->channel_distributor = $request->channel_distributor;
             $tipe_customer->keterangan = $request->keterangan;
+            $tipe_customer->kode_customer = $request->kode_customer;
             $tipe_customer->save();
 
             $link = route('home.detail', ['id' => Crypt::encryptString($identitas_perusahaan->id)]);

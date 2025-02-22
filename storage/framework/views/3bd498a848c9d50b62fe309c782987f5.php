@@ -349,7 +349,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Sales</label>
-                                    <input type="text" name="sales" id="sales" class="form-control" readonly autocomplete="off" value="<?php echo e($data['sales']); ?>">
+                                    <input type="text" name="sales" id="sales" class="form-control" readonly autocomplete="off" value="<?php echo e($data['nama_sales'] ? $data['nama_sales'] : '-'); ?>">
                                 </div>
                             </div>
                         </div>
@@ -590,7 +590,7 @@
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group p-0">
-                                    <label for="">Foto Identitas</label>
+                                    <label for="">Foto Identitas (KTP / NPWP)</label>
                                     <?php if(File::extension($data['data_identitas']['foto']) == 'pdf'): ?>
                                         <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                             <p style="font-size: 18px;">Preview file identitas</p>
@@ -658,10 +658,18 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" style="width: 100%;">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <label for="" class="mb-2">Keterangan</label>
-                                <input type="text" name="keterangan" id="keterangan" readonly autocomplete="off" class="form-control" value="<?php echo e($data['tipe_customer'] ? $data['tipe_customer']['keterangan'] : '-'); ?>" style="padding: 16px;">
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Keterangan</label>
+                                    <input type="text" name="keterangan" id="keterangan" readonly autocomplete="off" class="form-control" value="<?php echo e($data['tipe_customer'] ? $data['tipe_customer']['keterangan'] : '-'); ?>">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Kode Customer</label>
+                                    <input type="text" name="kode_customer" id="kode_customer" readonly autocomplete="off" class="form-control" value="<?php echo e($data['tipe_customer'] ? $data['tipe_customer']['kode_customer'] : '-'); ?>">
+                                </div>
                             </div>
                         </div>
                     </div>

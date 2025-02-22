@@ -660,10 +660,18 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" style="width: 100%;">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <label for="" class="mb-2">Keterangan</label>
-                                <input type="text" name="keterangan" id="keterangan" readonly autocomplete="off" class="form-control" value="{{ $data['tipe_customer'] ? $data['tipe_customer']['keterangan'] : '-' }}" style="padding: 16px;">
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Keterangan</label>
+                                    <input type="text" name="keterangan" id="keterangan" readonly autocomplete="off" class="form-control" value="{{ $data['tipe_customer'] ? $data['tipe_customer']['keterangan'] : '-' }}">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">Kode Customer</label>
+                                    <input type="text" name="kode_customer" id="kode_customer" readonly autocomplete="off" class="form-control" value="{{ $data['tipe_customer'] ? $data['tipe_customer']['kode_customer'] : '-' }}">
+                                </div>
                             </div>
                         </div>
                     </div>
