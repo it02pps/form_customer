@@ -215,7 +215,7 @@
 
     .branch-section {
         display: flex;
-        justify-content: end;
+        justify-content: space-between;
         padding: 0;
     }
 
@@ -573,8 +573,13 @@
                                             </div>
                                         <?php endif; ?>
 
-                                        <div class="branch-section mt-3">
-                                            <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>
+                                        <div class="branch-section mt-3 p-0">
+                                            <div >
+                                                <span class="text-danger">*Harap diisi cabang dengan <br> menekan tombol dibawah ini</span>
+                                            </div>
+                                            <div>
+                                                <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -721,7 +726,7 @@
                                             <?php if(count($data['cabang']) > 0): ?>
                                                 <?php $__currentLoopData = $data['cabang']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <hr class="line-<?php echo e($key + 1); ?>">
-                                                    <div class="row align-items-center counter-<?php echo e($key + 1); ?>">
+                                                    <div class="row align-items-center counter-<?php echo e($key + 1); ?> numDiv">
                                                         <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
                                                             <button type="button" id="delRow" class="delRow" data-id="<?php echo e($key + 1); ?>"><i class="fa-solid fa-minus text-light"></i></button>
                                                         </div>
@@ -747,14 +752,14 @@
                                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             <?php else: ?>
                                                 <hr class="line-1">
-                                                <div class="row align-items-center counter-1">
+                                                <div class="row align-items-center counter-1 numDiv">
                                                     <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
                                                         <button type="button" id="delRow" class="delRow" data-id="1"><i class="fa-solid fa-minus text-light"></i></button>
                                                     </div>
                                                     <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
                                                         <div class="group-column-modal">
                                                             <div class="form-group-modal">
-                                                                <label for="">Nomor NITKU (22 digit <span class="text-danger">*</span>)</label>
+                                                                <label for="">Nomor NITKU (22 digit) <span class="text-danger">*</span></label>
                                                                 <input type="text" class="form-control" name="nitku_cabang[]" id="nitku_cabang" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" autocomplete="off" placeholder="Masukkan nomor NITKU">
                                                             </div>
                                                             <div class="form-group-modal">
@@ -773,7 +778,7 @@
                                             <?php endif; ?>
                                         <?php else: ?>
                                             <hr class="line-1">
-                                            <div class="row align-items-center counter-1">
+                                            <div class="row align-items-center counter-1 numDiv">
                                                 <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
                                                     <button type="button" id="delRow" class="delRow" data-id="1"><i class="fa-solid fa-minus text-light"></i></button>
                                                 </div>
@@ -896,6 +901,18 @@
             }
         }
         // END: Preview foto
+
+        // START: Sembunyikan tombol remove
+        function updateDeleteButtonVisibility() {
+            if ($('.numDiv').length <= 1) {
+                $('#delRow').hide(); // Hide minus button when only one row remains
+            } else {
+                $('#delRow').show(); // Show minus button if more than one row exists
+            }
+        }
+
+        updateDeleteButtonVisibility();
+        // END: Sembunyikan tombol remove
 
         // START: Direct login page
         function login() {
@@ -1100,7 +1117,7 @@
                         <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
                             <div class="group-column-modal">
                                 <div class="form-group-modal">
-                                    <label for="">Nomor NITKU <span class="text-danger">*</span></label>
+                                    <label for="">Nomor NITKU (22 digit) <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="nitku_cabang[]" id="nitku_cabang" placeholder="Masukkan nomor NITKU" required autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22">
                                 </div>
                                 <div class="form-group-modal">
@@ -1117,6 +1134,7 @@
                         </div>
                     </div>
                 `);
+                updateDeleteButtonVisibility();
             });
 
             $(document).on('click', '#delRow', function() {
@@ -1126,6 +1144,7 @@
                 $('.dynamic-row').find('.counter-'+id).remove();
                 counter--;
                 $('#counter').val(counter);
+                updateDeleteButtonVisibility();
             });
             // END: Dynamic row
 
@@ -1236,7 +1255,6 @@
                                 $('#identitas_penanggung_jawab').val(res.data.data_identitas.identitas).change();
                                 $('#nomor_hp_penanggung_jawab').val(res.data.data_identitas.no_hp);
 
-                                console.log(res.data.cabang);
                                 $('.dynamic-row').empty();
                                 for(let i = 0; i < res.data.cabang.length; i++) {
                                     $('.dynamic-row').append(`

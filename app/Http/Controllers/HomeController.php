@@ -147,6 +147,7 @@ class HomeController extends Controller
             'nama_group' => ($data['status_kepemilikan'] == 'group') ? 'required' : '',
             'bidang_usaha_lain' => ($data['bidang_usaha'] == 'lainnya') ? 'required' : '',
             'jenis_cust' => 'required',
+            'npwp_perseorangan' => 'required',
 
             // Informasi Bank
             'nomor_rekening' => 'required|numeric|digits_between:10,16',
@@ -201,6 +202,7 @@ class HomeController extends Controller
             'nama_group.required' => 'Nama group harus diisi',
             'bidang_usaha_lain.required' => 'Bidang usaha harus diisi',
             'jenis_cust.required' => 'Jenis customer harus diisi',
+            'npwp_perseorangan.required' => 'NPWP perseorangan harus diisi',
             
             // Informasi Bank
             'nomor_rekening.required' => 'Nomor rekening harus diisi',
@@ -284,11 +286,19 @@ class HomeController extends Controller
             // Kondisi jika identitas perusahaan yang dipakai KTP / NPWP
             if ($request->bentuk_usaha == 'perseorangan') {
                 $identitas_perusahaan->nama_lengkap = $request->nama_lengkap;
+                $identitas_perusahaan->npwp_perseorangan = $request->npwp_perseorangan;
+
+                if($request->npwp_perseorangan == '1') {
+                    $identitas_perusahaan->nomor_npwp = $request->nomor_ktp;
+                    $identitas_perusahaan->nomor_ktp = null;
+                } else {
+                    $identitas_perusahaan->nomor_ktp = $request->nomor_ktp;
+                    $identitas_perusahaan->nomor_npwp = null;
+                }
 
                 if($request->nomor_ktp == '-') {
                     return ['status' => false, 'error' => 'Nomor KTP harus diisi'];
                 }
-                $identitas_perusahaan->nomor_ktp = $request->nomor_ktp;
                 if ($request->hasFile('foto_ktp')) {
                     if (File::exists('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_ktp)) {
                         File::delete('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_ktp);
@@ -322,7 +332,6 @@ class HomeController extends Controller
                 // Clear NPWP column
                 $identitas_perusahaan->badan_usaha = null;
                 $identitas_perusahaan->nama_npwp = null;
-                $identitas_perusahaan->nomor_npwp = null;
                 $identitas_perusahaan->foto_npwp = null;
                 $identitas_perusahaan->email_khusus_faktur_pajak = null;
                 $identitas_perusahaan->status_pkp = 'non_pkp';
@@ -417,11 +426,11 @@ class HomeController extends Controller
             $identitas_perusahaan->save();
 
             // Cabang
-            if($request->bentuk_usaha == 'badan_usaha') {
+            // if($request->bentuk_usaha == 'badan_usaha') {
                 $cabang = Cabang::where('identitas_perusahaan_id', $dekripsi);
                 if($cabang->count() > 0) {
                     $cabang->delete();
-                    // if(!isEmpty($request->nitku_cabang)) {
+                    if(count($request->nitku_cabang) > 0) {
                         for($i = 0; $i < count($request->nitku_cabang); $i++) {
                             if($request->nitku_cabang[$i] == '-') {
                                 return ['status' => false, 'error' => 'NITKU Cabang wajib diisi dengan format yang benar'];
@@ -436,9 +445,9 @@ class HomeController extends Controller
                                 'updated_at' => Carbon::now(),
                             ]);
                         }
-                    // }
+                    }
                 } else {
-                    // if(!isEmpty($request->nitku_cabang)) {
+                    if(count($request->nitku_cabang) > 0) {
                         for($i = 0; $i < count($request->nitku_cabang); $i++) {
                             if($request->nitku_cabang[$i] == '-') {
                                 return ['status' => false, 'error' => 'NITKU Cabang wajib diisi dengan format yang benar'];
@@ -453,8 +462,8 @@ class HomeController extends Controller
                                 'updated_at' => Carbon::now(),
                             ]);
                         }
-                    // }
-                }
+                    }
+                // }
             }
 
             // Identitas penanggung jawab

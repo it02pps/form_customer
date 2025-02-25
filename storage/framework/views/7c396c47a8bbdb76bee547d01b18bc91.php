@@ -366,7 +366,7 @@
             // START: Button edit
             $(document).on('click', '#editCustomer', function() {
                 let id = $(this).data('id');
-                window.location.href = '/internal/panel/edit/testing/' + id;
+                window.location.href = '/internal/panel/edit/' + id;
             });
             // END: Button edit
 

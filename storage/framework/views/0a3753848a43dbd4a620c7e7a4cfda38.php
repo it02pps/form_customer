@@ -431,12 +431,26 @@
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">NIK</label>
-                                    <input type="text" id="nomor_ktp" name="nomor_ktp" autocomplete="off" class="form-control" readonly value="<?php echo e($data['nomor_ktp'] ? $data['nomor_ktp'] : '-'); ?>">
+                                    <label for="">Apakah ada NPWP sebelum tahun 2024? <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="npwp_perseorangan" id="npwp_perseorangan" autocomplete="off" readonly value="<?php echo e($data['npwp_perseorangan'] ? $data['npwp_perseorangan'] : '-'); ?>">
                                 </div>
                             </div>
                         </div>
                         <div id="ktp-section">
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label for="">NIK</label>
+                                        <input type="text" id="nomor_ktp" name="nomor_ktp" autocomplete="off" class="form-control" readonly value="<?php echo e($data['npwp_perseorangan'] ? ($data['npwp_perseorangan'] == '1' ? $data['nomor_npwp'] : $data['nomor_ktp'])  : '-'); ?>">
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label for="">Nama Lengkap Sesuai Identitas</label>
+                                        <input type="text" id="nama_lengkap" name="nama_lengkap" autocomplete="off" class="form-control" readonly value="<?php echo e($data['nama_lengkap'] ? $data['nama_lengkap'] : '-'); ?>">
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
@@ -453,10 +467,11 @@
                                         <?php endif; ?>
                                     </div>
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group">
-                                        <label for="">Nama Lengkap Sesuai Identitas</label>
-                                        <input type="text" id="nama_lengkap" name="nama_lengkap" autocomplete="off" class="form-control" readonly value="<?php echo e($data['nama_lengkap'] ? $data['nama_lengkap'] : '-'); ?>">
+                                <div class="col-xl6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group" id="cabang">
+                                        <label for="">Cabang</label>
+                                        <input type="text" class="form-control" autocomplete="off" readonly placeholder="<?php echo e(App\Models\Cabang::where('identitas_perusahaan_id', $data['id'])->count()); ?> Cabang">
+                                        <button type="button" class="btnDetailCabang" title="Detail Cabang" data-bs-target="#modalCabang" data-bs-toggle="modal">Detail Cabang</button>
                                     </div>
                                 </div>
                             </div>
@@ -646,7 +661,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="dynamic-row">
-                        <?php if($data['cabang']): ?>
+                        <?php if(count($data['cabang']) > 0): ?>
                             <?php $__currentLoopData = $data['cabang']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <div class="row align-items-center">
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -670,6 +685,8 @@
                                 </div>
                                 <hr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php else: ?>
+                            <h4>Tidak ada cabang</h4>
                         <?php endif; ?>
                     </div>
                 </div>

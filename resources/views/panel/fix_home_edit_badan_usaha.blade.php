@@ -226,8 +226,10 @@
 
     .branch-section {
         display: flex;
-        justify-content: end;
+        justify-content: space-between;
+        align-items: center;
         padding: 0;
+        height: 100%;
     }
 
     @media screen and (max-width: 475px) {
@@ -545,8 +547,13 @@
                                             </div>
                                         @endif
 
-                                        <div class="branch-section mt-3">
-                                            <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>
+                                        <div class="branch-section mt-4 p-0">
+                                            <div >
+                                                <span class="text-danger">*Harap diisi cabang dengan <br> menekan tombol dibawah ini</span>
+                                            </div>
+                                            <div>
+                                                <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -666,27 +673,29 @@
                         <div class="section4">
                             <div class="row mb-2">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group">
+                                    <div class="form-group" id="select">
                                         <label for="">Jenis Transaksi</label>
                                         <select name="jenis_transaksi" id="jenis_transaksi" class="form-control" required>
                                             <option value="cash">Cash</option>
                                             <option value="credit">Credit</option>
                                         </select>
+                                        <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group">
+                                    <div class="form-group" id="select">
                                         <label for="">Tipe Harga</label>
                                         <select name="tipe_harga" id="tipe_harga" class="form-control" required>
                                             <option value="end_user">End User</option>
                                             <option value="retail">Retail</option>
                                         </select>
+                                        <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group">
+                                    <div class="form-group" id="select">
                                         <label for="">Kategori Customer</label>
                                         <select name="kategori_customer" id="kategori_customer" class="form-control">
                                             <option value="">Pilih kategori customer</option>
@@ -694,12 +703,13 @@
                                                 <option value="{{ $loop_bidang_usaha }}">{{ str_replace('_', ' ', strtoupper($loop_bidang_usaha)) }}</option>
                                             @endforeach
                                         </select>
+                                        <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Plafond</label>
-                                        <input type="text" name="plafond" id="plafond" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" class="form-control" placeholder="Masukkan plafond" autocomplete="off" value="{{ $data['tipe_customer'] ? $data['tipe_customer']['plafond'] : '' }}">
+                                        <input type="text" name="plafond" id="plafond" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" class="form-control" placeholder="Masukkan plafond" autocomplete="off" value="{{ $data['tipe_customer'] ? 'Rp ' . number_format($data['tipe_customer']['plafond'], 0, ',', '.') : '' }}">
                                     </div>
                                 </div>
                             </div>
@@ -711,25 +721,27 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group">
+                                    <div class="form-group" id="select">
                                         <label for="">Channel Distributor</label>
                                         <select name="channel_distributor" id="channel_distributor" class="form-control">
                                             <option value="">Pilih channel distributor</option>
                                             <option value="allptk">Semua Jalur Pontianak</option>
                                             <option value="alljkt">Semua Jalur Jakarta</option>
                                         </select>
+                                        <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group">
+                                    <div class="form-group" id="select">
                                         <label for="">Keterangan</label>
                                         <select name="keterangan" id="keterangan" class="form-control">
                                             <option value="New Customer">New Customer</option>
                                             <option value="New Bill To">New Bill To</option>
                                             <option value="Update Data">Update Data</option>
                                         </select>
+                                        <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -950,34 +962,6 @@
             }
         }
         // END: Preview foto
-
-        // START: Auto format NPWP
-        // const npwp = document.getElementById('nomor_npwp');
-        // npwp.oninput = (e) => {
-        //     e.target.value = autoFormatNPWP(e.target.value);
-        // }
-        // function autoFormatNPWP(NPWPString) {
-        //     try {
-        //         var cleaned = ("" + NPWPString).replace(/\D/g, "");
-        //         var match = cleaned.match(/(\d{0,2})?(\d{0,3})?(\d{0,3})?(\d{0,1})?(\d{0,3})?(\d{0,3})$/);
-        //         return [      
-        //                 match[1], 
-        //                 match[2] ? ".": "",
-        //                 match[2], 
-        //                 match[3] ? ".": "",
-        //                 match[3],
-        //                 match[4] ? ".": "",
-        //                 match[4],
-        //                 match[5] ? "-": "",
-        //                 match[5],
-        //                 match[6] ? ".": "",
-        //                 match[6]].join("")
-                
-        //     } catch(err) {
-        //         return "";
-        //     }
-        // }
-        // END: Auto format NPWP
 
         // START: Format rupiah
         var rupiah = document.getElementById('plafond');

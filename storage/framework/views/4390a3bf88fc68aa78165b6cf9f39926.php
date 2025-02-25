@@ -436,8 +436,8 @@
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">NIK</label>
-                                    <input type="text" id="nomor_ktp" name="nomor_ktp" autocomplete="off" class="form-control" readonly value="<?php echo e($perusahaan['nomor_ktp'] ? $perusahaan['nomor_ktp'] : '-'); ?>">
+                                    <label for="">Apakah ada nomor NPWP sebelum tahun 2024? <span class="text-danger">*</span></label>
+                                    <input type="text" id="npwp_perseorangan" name="npwp_perseorangan" class="form-control" readonly value="<?php echo e($perusahaan['npwp_perseorangan'] == '1' ? 'Ada' : 'Tidak ada'); ?>">
                                 </div>
                             </div>
                         </div>
@@ -445,13 +445,21 @@
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
+                                        <label for="">NIK</label>
+                                        <input type="text" id="nomor_ktp" name="nomor_ktp" autocomplete="off" class="form-control" readonly value="<?php echo e($perusahaan['npwp_perseorangan'] == '1' ? $perusahaan['nomor_npwp'] : $perusahaan['nomor_ktp']); ?>">
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group">
                                         <label for="">Nama Lengkap Sesuai Identitas</label>
                                         <input type="text" id="nama_lengkap" name="nama_lengkap" autocomplete="off" class="form-control" readonly value="<?php echo e($perusahaan['nama_lengkap'] ? $perusahaan['nama_lengkap'] : '-'); ?>">
                                     </div>
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 p-0">
                                     <div class="group-column">
-                                        <div class="form-group">
+                                        <div class="form-group p-0">
                                             <label for="">Foto KTP <span class="text-danger">*</span></label>
                                             <?php if(File::extension($perusahaan['foto_ktp']) == 'pdf'): ?>
                                                 <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
@@ -464,6 +472,13 @@
                                                 </div>
                                             <?php endif; ?>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group" id="cabang">
+                                        <label for="">Cabang</label>
+                                        <input type="text" class="form-control" autocomplete="off" readonly placeholder="<?php echo e(App\Models\Cabang::where('identitas_perusahaan_id', $perusahaan['id'])->count()); ?> Cabang">
+                                        <button type="button" class="btnDetailCabang" title="Detail Cabang" data-bs-target="#modalCabang" data-bs-toggle="modal">Detail Cabang</button>
                                     </div>
                                 </div>
                             </div>
@@ -497,7 +512,7 @@
                                 <div class="form-group">
                                     <label for="">Pemilik Rekening</label>
                                     <input type="text" name="pemilik_rekening" id="pemilik_rekening" class="form-control" autocomplete="off" readonly value="<?php echo e(ucwords(str_replace('_', ' ', $perusahaan['informasi_bank']['status']))); ?>">
-                                    <div class="rekening_lain <?php if($perusahaan['informasi_bank']['status'] != 'lainnya'): ?> d-none <?php endif; ?>">
+                                    <div class="rekening_lain p-0 <?php if($perusahaan['informasi_bank']['status'] != 'lainnya'): ?> d-none <?php endif; ?>">
                                         <input type="text" class="form-control" name="rekening_lain" id="rekening_lain" autocomplete="off" readonly value="<?php echo e($perusahaan['informasi_bank']['rekening_lain'] ? $perusahaan['informasi_bank']['rekening_lain'] : '-'); ?>">
                                     </div>
                                 </div>
@@ -595,7 +610,7 @@
                                         <div class="group-column-modal">
                                             <div class="form-group-modal">
                                                 <label for="">Nomor NITKU (22 digit)</label>
-                                                <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" readonly autocomplete="off" placeholder="Masukkan nomor NITKU" value="<?php echo e($value['nitku']); ?>">
+                                                <input type="text" class="form-control" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="22" autocomplete="off" readonly placeholder="Masukkan nomor NITKU" value="<?php echo e($value['nitku']); ?>">
                                             </div>
                                             <div class="form-group-modal">
                                                 <label for="">Nama Cabang</label>
@@ -606,7 +621,7 @@
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="form-group-modal">
                                             <label for="">Alamat NITKU</label>
-                                            <textarea cols="30" rows="5" class="form-control" autocomplete="off" readonly placeholder="Masukkan alamat NITKU"><?php echo e($value['alamat']); ?></textarea>
+                                            <textarea cols="30" rows="5" class="form-control" autocomplete="off" placeholder="Masukkan alamat NITKU" readonly><?php echo e($value['alamat']); ?></textarea>
                                         </div>
                                     </div>
                                 </div>
