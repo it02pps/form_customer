@@ -912,7 +912,6 @@
                 $('#delRow').show(); // Show minus button if more than one row exists
             }
         }
-
         updateDeleteButtonVisibility();
         // END: Sembunyikan tombol remove
 
@@ -922,33 +921,6 @@
         }
         // END: Direct login page
 
-        // START: Auto format NPWP
-        // const npwp = document.getElementById('nomor_npwp');
-        // npwp.oninput = (e) => {
-        //     e.target.value = autoFormatNPWP(e.target.value);
-        // }
-        // function autoFormatNPWP(NPWPString) {
-        //     try {
-        //         var cleaned = ("" + NPWPString).replace(/\D/g, "");
-        //         var match = cleaned.match(/(\d{0,2})?(\d{0,3})?(\d{0,3})?(\d{0,1})?(\d{0,3})?(\d{0,3})$/);
-        //         return [      
-        //                 match[1], 
-        //                 match[2] ? ".": "",
-        //                 match[2], 
-        //                 match[3] ? ".": "",
-        //                 match[3],
-        //                 match[4] ? ".": "",
-        //                 match[4],
-        //                 match[5] ? "-": "",
-        //                 match[5],
-        //                 match[6] ? ".": "",
-        //                 match[6]].join("")
-                
-        //     } catch(err) {
-        //         return "";
-        //     }
-        // }
-        // END: Auto format NPWP
         $(document).ready(function() {
             // START: Tombol Kembali
             $('.btnKembali').on('click', function() {
@@ -1112,7 +1084,7 @@
                 $('#counter').val(counter);
                 $('.dynamic-row').append(`
                     <hr class="line-`+counter+`">
-                    <div class="row align-items-center counter-`+counter+`">
+                    <div class="row align-items-center counter-`+counter+` numDiv">
                         <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
                             <button type="button" id="delRow" data-id="`+counter+`"><i class="fa-solid fa-minus text-light"></i></button>
                         </div>
@@ -1261,7 +1233,7 @@
                                 for(let i = 0; i < res.data.cabang.length; i++) {
                                     $('.dynamic-row').append(`
                                         <hr class="line-`+(i+1)+`">
-                                        <div class="row align-items-center counter-`+(i+1)+`">
+                                        <div class="row align-items-center counter-`+(i+1)+` numDiv">
                                             <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
                                                 <button type="button" id="delRow" class="delRow" data-id="`+(i+1)+`"><i class="fa-solid fa-minus text-light"></i></button>
                                             </div>

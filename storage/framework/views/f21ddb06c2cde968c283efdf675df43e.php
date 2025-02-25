@@ -555,7 +555,6 @@
                         <hr>
                         <div class="section2">
                             <h1>Informasi Bank</h1>
-    
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
@@ -885,9 +884,9 @@
         // START: Sembunyikan tombol remove
         function updateDeleteButtonVisibility() {
             if ($('.numDiv').length <= 1) {
-                $('#delRow').hide(); // Hide minus button when only one row remains
+                $('#delRow').hide();
             } else {
-                $('#delRow').show(); // Show minus button if more than one row exists
+                $('#delRow').show();
             }
         }
 
