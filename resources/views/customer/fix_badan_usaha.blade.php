@@ -907,9 +907,9 @@
         // START: Sembunyikan tombol remove
         function updateDeleteButtonVisibility() {
             if ($('.numDiv').length <= 1) {
-                $('#delRow').hide(); // Hide minus button when only one row remains
+                $('#delRow').hide();
             } else {
-                $('#delRow').show(); // Show minus button if more than one row exists
+                $('#delRow').show();
             }
         }
         updateDeleteButtonVisibility();

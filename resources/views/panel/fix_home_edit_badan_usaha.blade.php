@@ -779,7 +779,7 @@
                                             @if(count($data['cabang']) > 0)
                                                 @foreach($data['cabang'] as $key => $value)
                                                     <hr class="line-{{ $key + 1 }}">
-                                                    <div class="row align-items-center counter-{{ $key + 1 }}">
+                                                    <div class="row align-items-center counter-{{ $key + 1 }} numDiv">
                                                         <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
                                                             <button type="button" id="delRow" class="delRow" data-id="{{ $key + 1 }}"><i class="fa-solid fa-minus text-light"></i></button>
                                                         </div>
@@ -805,7 +805,7 @@
                                                 @endforeach
                                             @else
                                                 <hr class="line-1">
-                                                <div class="row align-items-center counter-1">
+                                                <div class="row align-items-center counter-1 numDiv">
                                                     <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
                                                         <button type="button" id="delRow" class="delRow" data-id="1"><i class="fa-solid fa-minus text-light"></i></button>
                                                     </div>
@@ -831,7 +831,7 @@
                                             @endif
                                         @else
                                             <hr class="line-1">
-                                            <div class="row align-items-center counter-1">
+                                            <div class="row align-items-center counter-1 numDiv">
                                                 <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
                                                     <button type="button" id="delRow" class="delRow" data-id="1"><i class="fa-solid fa-minus text-light"></i></button>
                                                 </div>
@@ -1046,6 +1046,17 @@
             });
             // END: Change input properties
 
+            // START: Sembunyikan tombol remove
+            function updateDeleteButtonVisibility() {
+                if ($('.numDiv').length <= 1) {
+                    $('#delRow').hide();
+                } else {
+                    $('#delRow').show();
+                }
+            }
+            updateDeleteButtonVisibility();
+            // END: Sembunyikan tombol remove
+
             // START: Submit Form Customer
             $(document).on('submit', '#formCustomer', function(e) {
                 e.preventDefault();
@@ -1176,7 +1187,7 @@
                 $('#counter').val(counter);
                 $('.dynamic-row').append(`
                     <hr class="line-`+counter+`">
-                    <div class="row align-items-center counter-`+counter+`">
+                    <div class="row align-items-center counter-`+counter+` numDiv">
                         <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
                             <button type="button" id="delRow" data-id="`+counter+`"><i class="fa-solid fa-minus text-light"></i></button>
                         </div>
@@ -1200,6 +1211,7 @@
                         </div>
                     </div>
                 `);
+                updateDeleteButtonVisibility();
             });
 
             $(document).on('click', '#delRow', function() {
@@ -1209,6 +1221,7 @@
                 $('.dynamic-row').find('.counter-'+id).remove();
                 counter--;
                 $('#counter').val(counter);
+                updateDeleteButtonVisibility();
             });
             // END: Dynamic row
         });
