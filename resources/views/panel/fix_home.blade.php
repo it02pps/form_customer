@@ -107,26 +107,19 @@
         vertical-align: middle;
     }
 
-    input {
-        width: 250px;
-        height: 50px;
-        border-radius: 6px;
-        border: 1px solid #E7E6EB;
-        padding: 16px;
-    }
-
     #search {
         position: relative;
     }
 
     #search input {
         padding-left: 50px;
+        height: 50px;
     }
 
     #search::before {
         content: '';
         position: absolute;
-        left: 20px;
+        left: 30px;
         top: 33%;
         pointer-events: none;
         background-image: url('../../../images/search.png');
@@ -200,8 +193,17 @@
                 <hr>
                 <div class="content-body">
                     <div class="table-responsive">
-                        <div id="search">
-                            <input type="text" name="searchInput" id="searchInput" placeholder="Search" autocomplete="off">
+                        <div id="search" class="row">
+                            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                                <input type="text" name="searchInput" id="searchInput" class="form-control" placeholder="Search" autocomplete="off">
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                                <select name="filter_status" id="filter_status" class="form-control" style="height: 50px;">
+                                    <option value="">Cari Status</option>
+                                    <option value="Belum Upload">Belum Upload</option>
+                                    <option value="Sudah Upload">Sudah Upload</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="mt-3">
                             <table id="datatable" class="table" style="border: 1px solid #cfcfd1;">
@@ -356,6 +358,10 @@
             $('#searchInput').on('keyup', function() {
                 table.search(this.value).draw();
             });
+
+            $('#filter_status').on('change', function() {
+                table.search(this.value).draw();
+            })
             // END: Search
 
             // START: Button detail
