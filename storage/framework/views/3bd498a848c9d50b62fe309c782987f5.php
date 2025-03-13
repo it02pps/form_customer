@@ -392,7 +392,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nomor Handphone Contact Person</label>
-                                    <input type="text" name="no_hp" id="no_hp" readonly class="form-control" autocomplete="off" value="<?php echo e($data['nomor_handphone']); ?>">
+                                    <input type="text" name="no_hp" id="no_hp" readonly class="form-control" autocomplete="off" value="<?php echo e($data['nomor_handphone'] ? $data['nomor_handphone'] : '-'); ?>">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -432,7 +432,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group" >
                                     <label for="">Jenis Badan Usaha</label>
-                                    <input type="text" name="badan_usaha" id="badan_usaha" class="form-control" autocomplete="off" readonly value="<?php echo e(strtoupper($data['badan_usaha'])); ?>">
+                                    <input type="text" name="badan_usaha" id="badan_usaha" class="form-control" autocomplete="off" readonly value="<?php echo e($data['badan_usaha'] ? strtoupper($data['badan_usaha']) : '-'); ?>">
                                 </div>
                             </div>
                         </div>
@@ -466,7 +466,7 @@
 
                                     <div class="form-group pt-3">
                                         <label for="">Email Khusus Untuk Faktur Pajak</label>
-                                        <input type="text" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" readonly value="<?php echo e($data['email_khusus_faktur_pajak']); ?>">
+                                        <input type="text" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" readonly value="<?php echo e($data['email_khusus_faktur_pajak'] ? $data['email_khusus_faktur_pajak'] : '-'); ?>">
                                     </div>
                                 </div>
                             </div>
@@ -490,7 +490,7 @@
                                             </div>
                                         <?php else: ?>
                                             <div id="preview_npwp" class="form-group">
-                                                <img id="preview_foto_npwp" src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp'])); ?>" alt="Preview" data-action="zoom">
+                                                <img id="preview_foto_npwp" src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp'])); ?>" alt="Belum ada file" data-action="zoom">
                                             </div>
                                         <?php endif; ?>
                                     </div>
@@ -511,7 +511,7 @@
                                             </div>
                                         <?php else: ?>
                                             <div id="preview_sppkp" class="form-group">
-                                                <img id="preview_foto_sppkp" src="<?php echo e($data['sppkp'] ? asset('../../../uploads/identitas_perusahaan/' . $data['sppkp']) : ''); ?>" alt="Preview" data-action="zoom">
+                                                <img id="preview_foto_sppkp" src="<?php echo e($data['sppkp'] ? asset('../../../uploads/identitas_perusahaan/' . $data['sppkp']) : ''); ?>" alt="Belum ada file" data-action="zoom">
                                             </div>
                                         <?php endif; ?>
                                     </div>
@@ -526,13 +526,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nomor Rekening</label>
-                                    <input type="text" name="nomor_rekening" id="nomor_rekening" readonly class="form-control" autocomplete="off" value="<?php echo e($data['informasi_bank']['nomor_rekening']); ?>">
+                                    <input type="text" name="nomor_rekening" id="nomor_rekening" readonly class="form-control" autocomplete="off" value="<?php echo e($data['informasi_bank']['nomor_rekening'] ? $data['informasi_bank']['nomor_rekening'] : '-'); ?>">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Rekening</label>
-                                    <input type="text" name="nama_rekening" id="nama_rekening" class="form-control" autocomplete="off" readonly value="<?php echo e($data['informasi_bank']['nama_rekening']); ?>">
+                                    <input type="text" name="nama_rekening" id="nama_rekening" class="form-control" autocomplete="off" readonly value="<?php echo e($data['informasi_bank']['nama_rekening'] ? $data['informasi_bank']['nama_rekening'] : '-'); ?>">
                                 </div>
                             </div>
                         </div>
@@ -540,14 +540,14 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Bank</label>
-                                    <input type="text" name="nama_bank" id="nama_bank" class="form-control" autocomplete="off" readonly value="<?php echo e($data['informasi_bank']['nama_bank']); ?>">
+                                    <input type="text" name="nama_bank" id="nama_bank" class="form-control" autocomplete="off" readonly value="<?php echo e($data['informasi_bank']['nama_bank'] ? $data['informasi_bank']['nama_bank'] : '-'); ?>">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="group-column">
                                     <div class="form-group">
                                         <label for="">Pemilik Rekening</label>
-                                        <input type="text" name="status" id="pemilik_rekening" class="form-control" autocomplete="off" readonly value="<?php echo e(ucwords(str_replace('_', ' ', $data['informasi_bank']['status']))); ?>">
+                                        <input type="text" name="status" id="pemilik_rekening" class="form-control" autocomplete="off" readonly value="<?php echo e($data['informasi_bank']['status'] ? ucwords(str_replace('_', ' ', $data['informasi_bank']['status'])) : '-'); ?>">
                                         <div class="rekening_lain p-0 <?php if($data['informasi_bank']['status'] != 'lainnya'): ?> d-none <?php endif; ?>">
                                             <input type="text" class="form-control" name="rekening_lain" id="rekening_lain" readonly autocomplete="off" value="<?php echo e($data['informasi_bank']['rekening_lain'] ? $data['informasi_bank']['rekening_lain'] : '-'); ?>">
                                         </div>
@@ -563,13 +563,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Penanggung Jawab</label>
-                                    <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" readonly autocomplete="off" class="form-control" value="<?php echo e($data['data_identitas']['nama']); ?>">
+                                    <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" readonly autocomplete="off" class="form-control" value="<?php echo e($data['data_identitas']['nama'] ? $data['data_identitas']['nama'] : '-'); ?>">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Jabatan</label>
-                                    <input type="text" name="jabatan" id="jabatan" class="form-control" autocomplete="off" readonly value="<?php echo e($data['data_identitas']['jabatan']); ?>">
+                                    <input type="text" name="jabatan" id="jabatan" class="form-control" autocomplete="off" readonly value="<?php echo e($data['data_identitas']['jabatan'] ? $data['data_identitas']['jabatan'] : '-'); ?>">
                                 </div>
                             </div>
                         </div>
@@ -577,13 +577,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group" >
                                     <label for="">Identitas Penanggung Jawab</label>
-                                    <input type="text" name="identitas_penanggung_jawab" id="identitas_penanggung_jawab" class="form-control" autocomplete="off" readonly value="<?php echo e(strtoupper($data['data_identitas']['identitas'])); ?>">
+                                    <input type="text" name="identitas_penanggung_jawab" id="identitas_penanggung_jawab" class="form-control" autocomplete="off" readonly value="<?php echo e($data['data_identitas']['identitas'] ? strtoupper($data['data_identitas']['identitas']) : '-'); ?>">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nomor Handphone</label>
-                                    <input type="text" name="nomor_hp_penanggung_jawab" id="no_hp_penanggung_jawab" readonly autocomplete="off" class="form-control" value="<?php echo e($data['data_identitas']['no_hp']); ?>">
+                                    <input type="text" name="nomor_hp_penanggung_jawab" id="no_hp_penanggung_jawab" readonly autocomplete="off" class="form-control" value="<?php echo e($data['data_identitas']['no_hp'] ? $data['data_identitas']['no_hp'] : '-'); ?>">
                                 </div>
                             </div>
                         </div>
@@ -598,7 +598,7 @@
                                         </div>
                                     <?php else: ?>
                                         <div id="preview_penanggung" class="form-group">
-                                            <img id="preview_foto_penanggung" src="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $data['data_identitas']['foto'])); ?>" alt="Preview" data-action="zoom">
+                                            <img id="preview_foto_penanggung" src="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
                                         </div>
                                     <?php endif; ?>
                                 </div>

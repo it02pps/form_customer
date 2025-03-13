@@ -76,8 +76,12 @@
     .profile {
         display: flex;
         flex-wrap: wrap;
-        gap: 16px;
+        gap: 24px;
         cursor: pointer;
+    }
+
+    .logoutBtn  {
+        filter: brightness(1.5) contrast(0.9);
     }
 
     table {
@@ -107,6 +111,11 @@
 
     #search {
         position: relative;
+        width: 100%;
+    }
+
+    #search row{
+        width: 100%;
     }
 
     #search input {
@@ -157,6 +166,12 @@
             padding-bottom: 32px;
         }
 
+        .profile {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
         .header .profile img {
             height: 64px;
             padding-bottom: 32px;
@@ -179,7 +194,7 @@
                     </div>
                     <div class="profile">
                         <img id="Edit Profile" data-bs-toggle="modal" data-bs-target="#modalEditProfil" src="<?php echo e(asset('../../../images/Profile.svg')); ?>" title="Edit Profile" alt="Profile">
-                        <img id="logoutBtn" src="<?php echo e(asset('../../../images/Log Out.png')); ?>" title="Logout" alt="Logout">
+                        <img id="logoutBtn" src="<?php echo e(asset('../../../images/Log Out.png')); ?>" title="Logout" alt="Logout" class="logoutBtn">
                         <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" class="d-none">
                             <?php echo csrf_field(); ?>
                         </form>
@@ -190,19 +205,20 @@
                 </div>
                 <hr>
                 <div class="content-body">
-                    <div class="table-responsive">
-                        <div id="search" class="row">
-                            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                <input type="text" name="searchInput" id="searchInput" class="form-control" placeholder="Search" autocomplete="off">
-                            </div>
-                            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                <select name="filter_status" id="filter_status" class="form-control" style="height: 50px;">
-                                    <option value="">Cari Status</option>
-                                    <option value="Belum Upload">Belum Upload</option>
-                                    <option value="Sudah Upload">Sudah Upload</option>
-                                </select>
-                            </div>
+                    
+                    <div id="search" class="row">
+                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                            <input type="text" name="searchInput" id="searchInput" class="form-control" placeholder="Search" autocomplete="off">
                         </div>
+                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                            <select name="filter_status" id="filter_status" class="form-control" style="height: 50px;">
+                                <option value="">Cari Status</option>
+                                <option value="Belum Upload">Belum Upload</option>
+                                <option value="Sudah Upload">Sudah Upload</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
                         <div class="mt-3">
                             <table id="datatable" class="table" style="border: 1px solid #cfcfd1;">
                                 <thead style="background-color: #E7E6EB;">

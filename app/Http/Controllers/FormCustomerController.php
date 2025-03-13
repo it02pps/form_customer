@@ -19,6 +19,7 @@ use App\Models\Sales;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\Visibility;
 use Illuminate\Support\Facades\Http;
+use setasign\Fpdi\Fpdi;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -28,17 +29,20 @@ class FormCustomerController extends Controller
     public $apiUrl;
     public $path;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->apiKey = 'Telor-Asin-951357-Papasari';
         $this->apiUrl = env('API_URL') . 'upload';
         $this->path = 'penanggung_jawab/';
     }
 
-    public function menu() {
+    public function menu()
+    {
         return view('customer.fix_menu');
     }
 
-    public function index($menu, Request $request) {
+    public function index($menu, Request $request)
+    {
         if ($request->enkripsi) {
             $data = Crypt::decryptString($request->enkripsi);
             $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas', 'cabang')->where('bentuk_usaha', str_replace('-', '_', $menu))->where('id', $data)->first();
@@ -49,7 +53,7 @@ class FormCustomerController extends Controller
             $url = null;
             $enkripsi = null;
         }
-        
+
         $sales = Sales::select('nama_sales')->get();
         $bidang_usaha = [
             'toko_retail',
@@ -96,10 +100,10 @@ class FormCustomerController extends Controller
             'foto_sppkp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : ($data['bentuk_usaha'] == 'badan_usaha' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,jpeg,pdf' : '') : ''),
             'alamat_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'kota_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
-            'nama_group' => ($data['status_kepemilikan'] == 'group') ? 'required' : '',
-            'bidang_usaha_lain' => ($data['bidang_usaha'] == 'lainnya') ? 'required' : '',
+            'nama_group' => $data['status_kepemilikan'] == 'group' ? 'required' : '',
+            'bidang_usaha_lain' => $data['bidang_usaha'] == 'lainnya' ? 'required' : '',
             'jenis_cust' => 'required',
-            'npwp_perseorangan' => 'required',
+            'npwp_perseorangan' => $data['bentuk_usaha'] == 'perseorangan' ? 'required' : '',
 
             // Informasi Bank
             'nomor_rekening' => 'required|numeric|digits_between:10,16',
@@ -155,7 +159,7 @@ class FormCustomerController extends Controller
             'bidang_usaha_lain.required' => 'Bidang usaha harus diisi',
             'jenis_cust.required' => 'Jenis customer harus diisi',
             'npwp_perseorangan.required' => 'NPWP perseorangan harus diisi',
-            
+
             // Informasi Bank
             'nomor_rekening.required' => 'Nomor rekening harus diisi',
             'nomor_rekening.numeric' => 'Nomor rekening harus berupa angka',
@@ -164,7 +168,7 @@ class FormCustomerController extends Controller
             'status_rekening' => 'Status rekening harus diisi',
             'nama_bank.required' => 'Nama bank harus diisi',
             'rekening_lain.required' => 'Rekening lain wajib diisi',
-            
+
             // Identitas Penanggung Jawab
             'nama_penanggung_jawab.required' => 'Nama penanggung jawab harus diisi',
             'jabatan.required' => 'Jabatan harus diisi',
@@ -214,7 +218,7 @@ class FormCustomerController extends Controller
             $kode_cust = 'K-' . $number;
             $identitas_perusahaan->kode_customer = $kode_cust;
 
-            if($request->bidang_usaha == 'lainnya') {
+            if ($request->bidang_usaha == 'lainnya') {
                 $identitas_perusahaan->bidang_usaha_lain = $request->bidang_usaha_lain;
             }
 
@@ -229,7 +233,7 @@ class FormCustomerController extends Controller
             $identitas_perusahaan->nomor_handphone = $request->no_hp;
             $identitas_perusahaan->status_kepemilikan = $request->status_kepemilikan;
             $identitas_perusahaan->nama_sales = $request->sales;
-            if($request->status_kepemilikan == 'group') {
+            if ($request->status_kepemilikan == 'group') {
                 $identitas_perusahaan->nama_group = $request->nama_group;
             }
 
@@ -241,7 +245,7 @@ class FormCustomerController extends Controller
                 $identitas_perusahaan->nama_lengkap = $request->nama_lengkap;
                 $identitas_perusahaan->npwp_perseorangan = $request->npwp_perseorangan;
 
-                if($request->npwp_perseorangan == '1') {
+                if ($request->npwp_perseorangan == '1') {
                     $identitas_perusahaan->nomor_npwp = $request->nomor_ktp;
                     $identitas_perusahaan->nomor_ktp = null;
                 } else {
@@ -249,7 +253,7 @@ class FormCustomerController extends Controller
                     $identitas_perusahaan->nomor_npwp = null;
                 }
 
-                if($request->nomor_ktp == '-') {
+                if ($request->nomor_ktp == '-') {
                     return ['status' => false, 'error' => 'Nomor KTP harus diisi'];
                 }
 
@@ -294,7 +298,7 @@ class FormCustomerController extends Controller
                 $identitas_perusahaan->badan_usaha = $request->badan_usaha;
                 $identitas_perusahaan->nama_npwp = $request->nama_npwp;
 
-                if($request->nomor_npwp == '-') {
+                if ($request->nomor_npwp == '-') {
                     return ['status' => false, 'error' => 'Nomor NPWP harus diisi'];
                 }
                 $identitas_perusahaan->nomor_npwp = $request->nomor_npwp;
@@ -330,7 +334,7 @@ class FormCustomerController extends Controller
                 }
 
                 // Validasi email faktur pajak
-                if($request->email_faktur == '-') {
+                if ($request->email_faktur == '-') {
                     return ['status' => false, 'error' => 'Email faktur pajak wajib diisi dengan format yang benar'];
                 }
 
@@ -381,43 +385,43 @@ class FormCustomerController extends Controller
 
             // Cabang
             // if($request->bentuk_usaha == 'badan_usaha') {
-                $cabang = Cabang::where('identitas_perusahaan_id', $dekripsi);
-                if($cabang->count() > 0) {
-                    $cabang->delete();
-                    if(count($request->nitku_cabang) > 0) {
-                        for($i = 0; $i < count($request->nitku_cabang); $i++) {
-                            if($request->nitku_cabang[$i] == '-') {
-                                return ['status' => false, 'error' => 'NITKU Cabang wajib diisi dengan format yang benar'];
-                            }
+            $cabang = Cabang::where('identitas_perusahaan_id', $dekripsi);
+            if ($cabang->count() > 0) {
+                $cabang->delete();
+                if (count($request->nitku_cabang) > 0) {
+                    for ($i = 0; $i < count($request->nitku_cabang); $i++) {
+                        if ($request->nitku_cabang[$i] == '-') {
+                            return ['status' => false, 'error' => 'NITKU Cabang wajib diisi dengan format yang benar'];
+                        }
 
-                            Cabang::insert([
-                                'identitas_perusahaan_id' => $identitas_perusahaan->id,
-                                'nitku' => $request->nitku_cabang[$i],
-                                'nama' => $request->nama_cabang[$i],
-                                'alamat' => $request->alamat_nitku[$i],
-                                'created_at' => Carbon::now(),
-                                'updated_at' => Carbon::now(),
-                            ]);
-                        }
-                    }
-                } else {
-                    if(count($request->nitku_cabang) > 0) {
-                        for($i = 0; $i < count($request->nitku_cabang); $i++) {
-                            if($request->nitku_cabang[$i] == '-') {
-                                return ['status' => false, 'error' => 'NITKU Cabang wajib diisi dengan format yang benar'];
-                            }
-                            
-                            Cabang::insert([
-                                'identitas_perusahaan_id' => $identitas_perusahaan->id,
-                                'nitku' => $request->nitku_cabang[$i],
-                                'nama' => $request->nama_cabang[$i],
-                                'alamat' => $request->alamat_nitku[$i],
-                                'created_at' => Carbon::now(),
-                                'updated_at' => Carbon::now(),
-                            ]);
-                        }
+                        Cabang::insert([
+                            'identitas_perusahaan_id' => $identitas_perusahaan->id,
+                            'nitku' => $request->nitku_cabang[$i],
+                            'nama' => $request->nama_cabang[$i],
+                            'alamat' => $request->alamat_nitku[$i],
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now(),
+                        ]);
                     }
                 }
+            } else {
+                if (count($request->nitku_cabang) > 0) {
+                    for ($i = 0; $i < count($request->nitku_cabang); $i++) {
+                        if ($request->nitku_cabang[$i] == '-') {
+                            return ['status' => false, 'error' => 'NITKU Cabang wajib diisi dengan format yang benar'];
+                        }
+
+                        Cabang::insert([
+                            'identitas_perusahaan_id' => $identitas_perusahaan->id,
+                            'nitku' => $request->nitku_cabang[$i],
+                            'nama' => $request->nama_cabang[$i],
+                            'alamat' => $request->alamat_nitku[$i],
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now(),
+                        ]);
+                    }
+                }
+            }
             // }
 
             // Identitas penanggung jawab
@@ -431,17 +435,17 @@ class FormCustomerController extends Controller
             $identitas_penanggung_jawab->no_hp = $request->nomor_hp_penanggung_jawab;
 
             if ($request->bentuk_usaha == 'perseorangan') {
-                if($request->hasil_ttd) {
+                if ($request->hasil_ttd) {
                     // Konversi base30 menjadi koordinat asli
                     $JSignatureTools = new base30ToImage;
                     $rawData = $JSignatureTools->base64ToNative($request->hasil_ttd);
-    
+
                     // Membuat canvas gambar
                     $img = imagecreatetruecolor(592, 271);
                     $white = imagecolorallocate($img, 255, 255, 255);
                     $black = imagecolorallocate($img, 0, 0, 0);
                     imagefill($img, 0, 0, $white);
-    
+
                     // Membuat fungsi untuk menggambar garis yang lebih tebal (bold)
                     function drawBoldLine($image, $x1, $y1, $x2, $y2, $penColor, $thickness = 3)
                     {
@@ -452,7 +456,7 @@ class FormCustomerController extends Controller
                             }
                         }
                     }
-    
+
                     // Menggambar tanda tangan ke canvas
                     foreach ($rawData as $stroke) {
                         for ($i = 0; $i < count($stroke['x']); $i++) {
@@ -469,20 +473,20 @@ class FormCustomerController extends Controller
                             }
                         }
                     }
-                    if(!is_dir('uploads/ttd')) {
+                    if (!is_dir('uploads/ttd')) {
                         mkdir('uploads/ttd/', 0777, true);
                     }
-                    
+
                     // Nama file untuk menyimpan gambar
                     $imageName = str_replace(' ', '-', $request->nama_penanggung_jawab) . '.png';
                     $filePath = 'uploads/ttd/' . $imageName;
-                    
+
                     // Menyimpan gambar ke storage
                     $fullPath = public_path($filePath);
                     imagepng($img, $fullPath);
                     imagedestroy($img);
                     $identitas_penanggung_jawab->ttd = $imageName;
-    
+
                     // Mengirim gambar ke API
                     // $foto_ttd = fopen($filePath, 'r');
                     // // dd($foto_ttd);
@@ -491,14 +495,14 @@ class FormCustomerController extends Controller
                     // ])->attach(
                     //     'file',
                     //     $foto_ttd,
-                        //     $imageName
-                        // )->post($this->apiUrl, [
-                        //     'category' => 'sign',
-                        //     'filename' => $imageName,
-                        // ]);
-        
-                        // fclose($foto_ttd);
-    
+                    //     $imageName
+                    // )->post($this->apiUrl, [
+                    //     'category' => 'sign',
+                    //     'filename' => $imageName,
+                    // ]);
+
+                    // fclose($foto_ttd);
+
                     // // dd($response);
                     // if ($response->successful()) {
                     //     $filename = $response->json('filename');
@@ -551,7 +555,7 @@ class FormCustomerController extends Controller
             $bank->nama_rekening = $request->nama_rekening;
             $bank->status = $request->status_rekening;
             $bank->nama_bank = $request->nama_bank;
-            if($request->status_rekening == 'lainnya') {
+            if ($request->status_rekening == 'lainnya') {
                 $bank->rekening_lain = $request->rekening_lain;
             }
             $bank->save();
@@ -564,7 +568,8 @@ class FormCustomerController extends Controller
         }
     }
 
-    public function detail($menu, Request $request) {
+    public function detail($menu, Request $request)
+    {
         // dd($request->all());
         // Mendekripsikan id
         $dekripsi = Crypt::decryptString($request->id);
@@ -614,6 +619,10 @@ class FormCustomerController extends Controller
             ]);
             $pdf->setPaper('A4', 'portrait');
             $pdf->render();
+
+            $pdfFiles = [];
+
+
             return $pdf->stream();
             // return $pdf->download($data['nama_perusahaan'] . '.pdf');
         } else {
@@ -627,30 +636,38 @@ class FormCustomerController extends Controller
         }
     }
 
-    public function upload_pdf(Request $request, $menu, $id) {
+    public function upload_pdf(Request $request, $menu, $id)
+    {
         try {
             $data = IdentitasPerusahaan::find(Crypt::decryptString($id));
-    
-            if($request->hasFile('file_pdf')) {
+
+            if ($request->hasFile('file_pdf')) {
                 $file = $request->file('file_pdf');
                 $ext = $file->getClientOriginalExtension();
                 $filename = uniqid() . '-' . $data->nama_perusahaan . '.' . $ext;
                 $file->move('uploads/identitas_perusahaan/', $filename);
-    
+
                 $data->file_customer_external = $filename;
                 $data->status_upload = '1';
             }
             $data->save();
-    
+
             return ['status' => true, 'url' => 'https://papasari.com'];
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return ['status' => false, 'error' => 'Terjadi Kesalahan'];
         }
     }
 
-    public function search($keyword) {
+    public function search($keyword)
+    {
         $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas', 'cabang')->where('nomor_ktp', $keyword)->orWhere('nomor_npwp', $keyword)->first();
         $enkripsi = Crypt::encryptString($data->id);
         return ['data' => $data, 'enkripsi' => $enkripsi];
     }
+
+    // Function for merging PDF
+    // private function mergingPdf(array $pdfFiles, string $outputFilename): string
+    // {
+    //     $pdf = new Fpdi();
+    // }
 }

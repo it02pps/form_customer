@@ -88,7 +88,7 @@
         .container-fluid {
             background-color: #fff;
             border-radius: 0;
-            box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.25);
+            /* box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.25); */
             height: 100vh;
             display: flex;
             align-items: center;
@@ -109,6 +109,10 @@
         .content-footer {
             display: flex;
             align-items: center;
+        }
+
+        .content .content-left img {
+            height: 33.6px;
         }
     }
 </style>
@@ -141,7 +145,7 @@
                     </div>
                     <div class="content-footer">
                         <button type="submit">Masuk</button>
-                        <a href="" class="text-decoration-none" style="color: #021526;">Lupa Password?</a>
+                        <a href="" onclick="lupa_password()" class="text-decoration-none" style="color: #021526;">Lupa Password?</a>
                     </div>
                 </form>
             </div>
@@ -157,9 +161,14 @@
         window.location.href = '/form-customer';
     }
     
+    function lupa_password() {
+        window.location.href = '/lupa_password';
+    }
+    
     $(document).ready(function() {
 
     });
+
 </script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.main_app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\laragon\www\form_customer\resources\views/auth/loginfix.blade.php ENDPATH**/ ?>

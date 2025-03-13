@@ -70,7 +70,8 @@
 
     @media screen and (max-width: 475px) {
         body {
-            overflow: hidden;
+            overflow-x: hidden;
+            background: #fff;
         }
         
         .container {
@@ -90,6 +91,8 @@
             background-color: #fff;
             border-radius: 0;
             height: 100vh;
+            box-shadow: none;
+
         }
 
         .content-menu {

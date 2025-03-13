@@ -969,7 +969,6 @@
                 $('#delRow').show();
             }
         }
-
         updateDeleteButtonVisibility();
         // END: Sembunyikan tombol remove
 

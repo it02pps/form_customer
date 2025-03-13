@@ -67,7 +67,7 @@
         border-radius: 7px;
     }
 
-    .section1, .section4 {
+    .section1, .section2, .section4 {
         padding: 0 0 16px 0;
     }
     
@@ -230,6 +230,7 @@
         text-decoration: none;
     }
 
+
     @media screen and (max-width: 475px) {
         .container {
             padding: 0;
@@ -262,13 +263,13 @@
         }
 
         .form-group {
-            margin: 0 12px;
+            /* padding: 0 16px; */
             width: auto;
         }
 
         .form-group input {
-            padding: 16px;
-            /* width: 100%; */
+            /* padding: 16px; */
+            width: 100%;
         }
 
         .form-group select {
@@ -277,6 +278,10 @@
 
         .form-group textarea {
             height: 165px;
+        }
+
+        .section1, .section2, .section3, .section4 {
+            padding: 0 16px;
         }
 
         .row {
@@ -310,6 +315,14 @@
             display: flex;
             justify-content: center;
             padding: 0;
+        }
+
+        .additional-label{
+            padding-top: 16px;
+        }
+
+        h1 {
+            padding-bottom: 8px;
         }
     }
 </style>
@@ -367,8 +380,8 @@
                     </div>
                     <hr>
                     <div class="content-body">
+                        <h1>Identitas Perusahaan</h1>
                         <div class="section1">
-                            <h1>Identitas Perusahaan</h1>
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
@@ -399,7 +412,7 @@
                                         </div>
                 
                                         <div class="form-group pb-0">
-                                            <label for="">Alamat Email Perusahaan</label>
+                                            <label for="" class="additional-label">Alamat Email Perusahaan</label>
                                             <input type="text" name="alamat_email_perusahaan" id="alamat_email_perusahaan" class="form-control" autocomplete="off" placeholder="Contoh: perusahaan@gmail.com" value="{{ $data ? ($data['alamat_email'] ? $data['alamat_email'] : '') : '' }}">
                                         </div>
                                     </div>
@@ -502,7 +515,7 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="">Email Khusus Untuk Faktur Pajak <span class="text-danger">*</span></label>
+                                            <label for="" class="additional-label">Email Khusus Untuk Faktur Pajak <span class="text-danger">*</span></label>
                                             <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Contoh: faktur@gmail.com" required value="{{ $data ? $data['email_khusus_faktur_pajak'] : '' }}">
                                         </div>
                                     </div>
@@ -588,9 +601,8 @@
                             </div>
                         </div>
                         <hr>
+                        <h1>Informasi Bank</h1>
                         <div class="section2">
-                            <h1>Informasi Bank</h1>
-    
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
@@ -631,8 +643,8 @@
                             </div>
                         </div>
                         <hr>
+                        <h1>Data Identitas Penanggung Jawab</h1>
                         <div class="section3">
-                            <h1>Data Identitas Penanggung Jawab</h1>
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
