@@ -522,7 +522,12 @@
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="group-column">
-                                        <div class="form-group" id="select">
+                                        <div class="form-group">
+                                            <label for="">Nomor Aktif Untuk Faktur Pajak</label>
+                                            <input type="text" name="no_wa" id="no_wa" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" maxlength="14" class="form-control" autocomplete="off" placeholder="Contoh: 012345678910" required value="<?php echo e($data ? $data['nomor_whatsapp'] : ''); ?>">
+                                        </div>
+
+                                        <div class="form-group mt-4" id="select">
                                             <label for="">Status Pengusaha Kena Pajak (PKP) <span class="text-danger">*</span></label>
                                             <select name="status_pkp" id="status_pkp" class="form-control" required>
                                                 <option value="non_pkp">Non PKP</option>

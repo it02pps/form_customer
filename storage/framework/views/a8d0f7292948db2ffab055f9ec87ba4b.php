@@ -161,11 +161,10 @@
                 </div>
             </div>
 
-            <hr>
-
-            <h3>Cabang</h3>
-            <div class="row" style="margin-bottom: 20px;">
-                <?php if($data['cabang']): ?>
+            <?php if($data['cabang']): ?>
+                <hr>
+                <h3>Cabang</h3>
+                <div class="row" style="margin-bottom: 20px;">
                     <?php $__empty_1 = true; $__currentLoopData = $data['cabang']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                         <div class="column">
                             <p class="label">NITKU</p>
@@ -191,8 +190,8 @@
                             <p>-</p>
                         </div>
                     <?php endif; ?>
-                <?php endif; ?>
-            </div>
+                </div>
+            <?php endif; ?>
 
             <hr>
 

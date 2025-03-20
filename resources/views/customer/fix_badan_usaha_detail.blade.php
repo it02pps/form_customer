@@ -513,23 +513,30 @@
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group" style="padding-left: 16px;">
-                                    <label for="">Status Pengusaha Kena Pajak (PKP)</label>
-                                    <input type="text" name="status_pkp" id="status_pkp" class="form-control" autocomplete="off" readonly value="{{ strtoupper(str_replace('_', ' ', $perusahaan['status_pkp'])) }}">
-                                </div>
-    
-                                <div class="pkp p-0 @if($perusahaan['status_pkp'] != 'pkp') d-none @endif">
+                                <div class="group-column">
                                     <div class="form-group">
-                                        @if(File::extension($perusahaan['sppkp']) == 'pdf')
-                                            <div id="preview_sppkp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
-                                                <p style="font-size: 18px;">Preview file SPPKP</p>
-                                                <a href="{{ asset('../../../uploads/identitas_perusahaan/' . $perusahaan['sppkp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                            </div>
-                                        @else
-                                            <div id="preview_sppkp" class="form-group">
-                                                <img id="preview_foto_sppkp" src="{{ $perusahaan['sppkp'] ? asset('../../../uploads/identitas_perusahaan/' . $perusahaan['sppkp']) : '' }}" alt="Preview" data-action="zoom">
-                                            </div>
-                                        @endif
+                                        <label for="">Nomor Aktif Untuk Faktur Pajak</label>
+                                        <input type="text" name="no_wa" id="no_wa" class="form-control" autocomplete="off" readonly value="{{ $perusahaan['nomor_whatsapp'] }}">
+                                    </div>
+    
+                                    <div class="form-group pt-3">
+                                        <label for="">Status Pengusaha Kena Pajak (PKP)</label>
+                                        <input type="text" name="status_pkp" id="status_pkp" class="form-control" autocomplete="off" readonly value="{{ strtoupper(str_replace('_', ' ', $perusahaan['status_pkp'])) }}">
+                                    </div>
+        
+                                    <div class="pkp p-0 @if($perusahaan['status_pkp'] != 'pkp') d-none @endif">
+                                        <div class="form-group">
+                                            @if(File::extension($perusahaan['sppkp']) == 'pdf')
+                                                <div id="preview_sppkp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                                    <p style="font-size: 18px;">Preview file SPPKP</p>
+                                                    <a href="{{ asset('../../../uploads/identitas_perusahaan/' . $perusahaan['sppkp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                </div>
+                                            @else
+                                                <div id="preview_sppkp" class="form-group">
+                                                    <img id="preview_foto_sppkp" src="{{ $perusahaan['sppkp'] ? asset('../../../uploads/identitas_perusahaan/' . $perusahaan['sppkp']) : '' }}" alt="Preview" data-action="zoom">
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -58,7 +58,7 @@ class HomeController extends Controller
 
     public function datatable()
     {
-        $data = IdentitasPerusahaan::orderBy('created_at', 'DESC')->select('*');
+        $data = IdentitasPerusahaan::orderBy('kode_customer', 'DESC')->select('*');
         return DataTables::of($data)
             ->addIndexColumn()
             ->editColumn('bentuk_usaha', function ($e) {

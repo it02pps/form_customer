@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Storage;
 use League\Flysystem\Visibility;
 use Illuminate\Support\Facades\Http;
 use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfReader\PageBoundaries;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -91,13 +92,13 @@ class FormCustomerController extends Controller
             'status_kepemilikan' => 'required',
             'nama_lengkap' => $data['bentuk_usaha'] == 'perseorangan' ? 'required' : '',
             'nomor_ktp' => $data['bentuk_usaha'] == 'perseorangan' ? 'required|numeric|digits:16' : '',
-            'foto_ktp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : ($data['bentuk_usaha'] == 'perseorangan' ? 'required|mimes:jpg,jpeg,pdf' : ''),
+            'foto_ktp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf,png' : ($data['bentuk_usaha'] == 'perseorangan' ? 'required|mimes:jpg,jpeg,pdf,png' : ''),
             'nomor_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'nama_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'badan_usaha' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'email_faktur' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required|email' : '',
-            'foto_npwp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : ($data['bentuk_usaha'] == 'badan_usaha' ? 'required|mimes:jpg,jpeg,pdf' : ''),
-            'foto_sppkp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : ($data['bentuk_usaha'] == 'badan_usaha' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,jpeg,pdf' : '') : ''),
+            'foto_npwp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf,png' : ($data['bentuk_usaha'] == 'badan_usaha' ? 'required|mimes:jpg,jpeg,pdf,png' : ''),
+            'foto_sppkp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf,png' : ($data['bentuk_usaha'] == 'badan_usaha' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,jpeg,pdf,png' : '') : ''),
             'alamat_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'kota_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'nama_group' => $data['status_kepemilikan'] == 'group' ? 'required' : '',
@@ -113,7 +114,7 @@ class FormCustomerController extends Controller
             'rekening_lain' => ($data['status_rekening'] == 'lainnya') ? 'required' : '',
 
             // Identitas Penanggung Jawab
-            'foto_penanggung' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : 'required|mimes:jpg,jpeg,pdf',
+            'foto_penanggung' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf,png' : 'required|mimes:jpg,jpeg,pdf,png',
             'nama_penanggung_jawab' => 'required',
             'jabatan' => 'required',
             'identitas_penanggung_jawab' => 'required',
@@ -294,6 +295,7 @@ class FormCustomerController extends Controller
                 $identitas_perusahaan->email_khusus_faktur_pajak = null;
                 $identitas_perusahaan->status_pkp = 'non_pkp';
                 $identitas_perusahaan->sppkp = null;
+                $identitas_perusahaan->nomor_whatsapp = null;
             } else {
                 $identitas_perusahaan->badan_usaha = $request->badan_usaha;
                 $identitas_perusahaan->nama_npwp = $request->nama_npwp;
@@ -339,6 +341,7 @@ class FormCustomerController extends Controller
                 }
 
                 $identitas_perusahaan->email_khusus_faktur_pajak = $request->email_faktur;
+                $identitas_perusahaan->nomor_whatsapp = $request->no_wa;
                 $identitas_perusahaan->status_pkp = $request->status_pkp;
                 $identitas_perusahaan->alamat_npwp = $request->alamat_npwp;
                 $identitas_perusahaan->kota_npwp = $request->kota_npwp;
@@ -407,18 +410,20 @@ class FormCustomerController extends Controller
             } else {
                 if (count($request->nitku_cabang) > 0) {
                     for ($i = 0; $i < count($request->nitku_cabang); $i++) {
-                        if ($request->nitku_cabang[$i] == '-') {
-                            return ['status' => false, 'error' => 'NITKU Cabang wajib diisi dengan format yang benar'];
-                        }
+                        if ($request->nitku_cabang[$i] != '') {
+                            if ($request->nitku_cabang[$i] == '-') {
+                                return ['status' => false, 'error' => 'NITKU Cabang wajib diisi dengan format yang benar'];
+                            }
 
-                        Cabang::insert([
-                            'identitas_perusahaan_id' => $identitas_perusahaan->id,
-                            'nitku' => $request->nitku_cabang[$i],
-                            'nama' => $request->nama_cabang[$i],
-                            'alamat' => $request->alamat_nitku[$i],
-                            'created_at' => Carbon::now(),
-                            'updated_at' => Carbon::now(),
-                        ]);
+                            Cabang::insert([
+                                'identitas_perusahaan_id' => $identitas_perusahaan->id,
+                                'nitku' => $request->nitku_cabang[$i],
+                                'nama' => $request->nama_cabang[$i],
+                                'alamat' => $request->alamat_nitku[$i],
+                                'created_at' => Carbon::now(),
+                                'updated_at' => Carbon::now(),
+                            ]);
+                        }
                     }
                 }
             }
@@ -607,35 +612,6 @@ class FormCustomerController extends Controller
         }
     }
 
-    public function download_pdf($menu, Request $request)
-    {
-        $decrypt = Crypt::decryptString($request->id);
-        $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank')->where('id', $decrypt)->first();
-        // dd($data);
-
-        if ($menu == 'badan_usaha' || $menu == 'badan-usaha') {
-            $pdf = Pdf::loadView('pdf.badan_usaha_pdf', [
-                'data' => $data
-            ]);
-            $pdf->setPaper('A4', 'portrait');
-            $pdf->render();
-
-            $pdfFiles = [];
-
-
-            return $pdf->stream();
-            // return $pdf->download($data['nama_perusahaan'] . '.pdf');
-        } else {
-            $pdf = Pdf::loadView('pdf.perseorangan_pdf', [
-                'data' => $data
-            ]);
-            $pdf->setPaper('A4', 'portrait');
-            $pdf->render();
-            return $pdf->stream();
-            // return $pdf->download($data['nama_perusahaan'] . '.pdf');
-        }
-    }
-
     public function upload_pdf(Request $request, $menu, $id)
     {
         try {
@@ -665,9 +641,102 @@ class FormCustomerController extends Controller
         return ['data' => $data, 'enkripsi' => $enkripsi];
     }
 
+    public function download_pdf($menu, Request $request)
+    {
+        $decrypt = Crypt::decryptString($request->id);
+        $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank')->where('id', $decrypt)->first();
+
+        if ($menu == 'badan_usaha' || $menu == 'badan-usaha') {
+            $pdf = Pdf::loadView('pdf.badan_usaha_pdf', [
+                'data' => $data
+            ]);
+            $pdf->setPaper('A4', 'portrait');
+            $pdf->render();
+
+            $temp_pdf = public_path('uploads/temporary/tempFile-' . $data->nama_perusahaan . '.pdf');
+            file_put_contents($temp_pdf, $pdf->output());
+
+            // Merging pdf
+            $files = [
+                $data->foto_npwp ? public_path('uploads/identitas_perusahaan/' . $data->foto_npwp) : '',
+                $data->foto_ktp ? public_path('uploads/identitas_perusahaan/' . $data->foto_ktp) : '',
+                $data->sppkp ? public_path('uploads/identitas_perusahaan/' . $data->sppkp) : '',
+                public_path('uploads/penanggung_jawab/' . $data->data_identitas->foto),
+            ];
+
+            $all_files = array_merge([$temp_pdf], $files);
+            $mergePdfPath = $this->mergingPdf($all_files, $data['nama_perusahaan'] . '.pdf');
+
+            File::delete($temp_pdf);
+            return response()->download($mergePdfPath);
+        } else {
+            $pdf = Pdf::loadView('pdf.perseorangan_pdf', [
+                'data' => $data
+            ]);
+            $pdf->setPaper('A4', 'portrait');
+            $pdf->render();
+
+            $temp_pdf = public_path('uploads/temporary/tempFile-' . $data->nama_perusahaan . '.pdf');
+            file_put_contents($temp_pdf, $pdf->output());
+
+            // Merging pdf
+            $files = [
+                $data->foto_npwp ? public_path('uploads/identitas_perusahaan/' . $data->foto_npwp) : NULL,
+                $data->foto_ktp ? public_path('uploads/identitas_perusahaan/' . $data->foto_ktp) : NULL,
+                $data->sppkp ? public_path('uploads/identitas_perusahaan/' . $data->sppkp) : NULL,
+                public_path('uploads/penanggung_jawab/' . $data->data_identitas->foto),
+            ];
+
+            $all_files = array_merge([$temp_pdf], $files);
+            $mergePdfPath = $this->mergingPdf($all_files, $data['nama_perusahaan'] . '.pdf');
+
+            File::delete($temp_pdf);
+            return response()->download($mergePdfPath);
+        }
+    }
+
     // Function for merging PDF
-    // private function mergingPdf(array $pdfFiles, string $outputFilename): string
-    // {
-    //     $pdf = new Fpdi();
-    // }
+    private function mergingPdf(array $pdfFiles, string $outputFilename): string
+    {
+        // dd($pdfFiles);
+        // Manually include FPDF
+        require_once base_path('vendor/setasign/fpdf/fpdf.php');
+        require_once base_path('vendor/setasign/fpdi/src/autoload.php');
+
+        $pdf = new Fpdi();
+        $pageWidth = 210;
+        $maxImageWidth = 180;
+        $y = 20;
+        foreach ($pdfFiles as $file) {
+            if (!$file || !file_exists($file)) {
+                continue;
+            }
+
+            $fileInfo = pathinfo($file);
+            $ext = strtolower($fileInfo['extension']);
+            if ($ext == 'pdf') {
+                $pageCount = $pdf->setSourceFile($file);
+
+                for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                    $pdf->AddPage();
+                    $pdfIdx = $pdf->importPage($pageNo);
+                    $size = $pdf->getTemplateSize($pdfIdx);
+                    $width = min($size['width'], $maxImageWidth);
+                    $height = $size['height'] * ($width / $size['width']);
+
+                    $x = ($pageWidth - $width) / 2;
+                    $pdf->useTemplate($pdfIdx, $x, $y, $width);
+                }
+            } else {
+                $pdf->AddPage();
+                $pdf->Image($file, 10, 10, 100);
+            }
+        }
+
+        // Define Output
+        $outputPath = public_path('uploads/pdf/' . $outputFilename);
+        $pdf->Output($outputPath, 'F');
+
+        return $outputPath;
+    }
 }

@@ -481,7 +481,12 @@
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="group-column">
-                                        <div class="form-group" id="select">
+                                        <div class="form-group">
+                                            <label for="">Nomor Aktif Untuk Faktur Pajak</label>
+                                            <input type="text" name="no_wa" id="no_wa" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" maxlength="14" class="form-control" autocomplete="off" placeholder="Contoh: 012345678910" required value="<?php echo e($data ? $data['nomor_whatsapp'] : ''); ?>">
+                                        </div>
+
+                                        <div class="form-group pt-3" id="select">
                                             <label for="">Status Pengusaha Kena Pajak (PKP) <span class="text-danger">*</span></label>
                                             <select name="status_pkp" id="status_pkp" class="form-control" required>
                                                 <option value="non_pkp">Non PKP</option>
@@ -777,7 +782,7 @@
                                             <?php if(count($data['cabang']) > 0): ?>
                                                 <?php $__currentLoopData = $data['cabang']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <hr class="line-<?php echo e($key + 1); ?>">
-                                                    <div class="row align-items-center counter-<?php echo e($key + 1); ?>">
+                                                    <div class="row align-items-center counter-<?php echo e($key + 1); ?> numDiv">
                                                         <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
                                                             <button type="button" id="delRow" class="delRow" data-id="<?php echo e($key + 1); ?>"><i class="fa-solid fa-minus text-light"></i></button>
                                                         </div>
@@ -803,7 +808,7 @@
                                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             <?php else: ?>
                                                 <hr class="line-1">
-                                                <div class="row align-items-center counter-1">
+                                                <div class="row align-items-center counter-1 numDiv">
                                                     <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
                                                         <button type="button" id="delRow" class="delRow" data-id="1"><i class="fa-solid fa-minus text-light"></i></button>
                                                     </div>
@@ -829,7 +834,7 @@
                                             <?php endif; ?>
                                         <?php else: ?>
                                             <hr class="line-1">
-                                            <div class="row align-items-center counter-1">
+                                            <div class="row align-items-center counter-1 numDiv">
                                                 <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
                                                     <button type="button" id="delRow" class="delRow" data-id="1"><i class="fa-solid fa-minus text-light"></i></button>
                                                 </div>
@@ -1044,6 +1049,17 @@
             });
             // END: Change input properties
 
+            // START: Sembunyikan tombol remove
+            function updateDeleteButtonVisibility() {
+                if ($('.numDiv').length <= 1) {
+                    $('#delRow').hide();
+                } else {
+                    $('#delRow').show();
+                }
+            }
+            updateDeleteButtonVisibility();
+            // END: Sembunyikan tombol remove
+
             // START: Submit Form Customer
             $(document).on('submit', '#formCustomer', function(e) {
                 e.preventDefault();
@@ -1174,7 +1190,7 @@
                 $('#counter').val(counter);
                 $('.dynamic-row').append(`
                     <hr class="line-`+counter+`">
-                    <div class="row align-items-center counter-`+counter+`">
+                    <div class="row align-items-center counter-`+counter+` numDiv">
                         <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
                             <button type="button" id="delRow" data-id="`+counter+`"><i class="fa-solid fa-minus text-light"></i></button>
                         </div>
@@ -1198,6 +1214,7 @@
                         </div>
                     </div>
                 `);
+                updateDeleteButtonVisibility();
             });
 
             $(document).on('click', '#delRow', function() {
@@ -1207,6 +1224,7 @@
                 $('.dynamic-row').find('.counter-'+id).remove();
                 counter--;
                 $('#counter').val(counter);
+                updateDeleteButtonVisibility();
             });
             // END: Dynamic row
         });
