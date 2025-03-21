@@ -818,7 +818,6 @@
                             showConfirmButton: false,
                             allowOutsideClick: false
                         });
-                        $('#modalUpload').modal('hide');
                     },
                     success: res => {
                         if(res.status == true) {
@@ -827,6 +826,8 @@
                                 text: 'PDF berhasil diupload',
                                 icon: 'success'
                             });
+                            $('#modalUpload').modal('hide');
+                            window.location.reload();
                         } else {
                             Swal.fire({
                                 title: 'Gagal!',

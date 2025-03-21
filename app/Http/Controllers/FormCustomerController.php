@@ -621,7 +621,7 @@ class FormCustomerController extends Controller
                 $file = $request->file('file_pdf');
                 $ext = $file->getClientOriginalExtension();
                 $filename = uniqid() . '-' . $data->nama_perusahaan . '.' . $ext;
-                $file->move('uploads/identitas_perusahaan/', $filename);
+                $file->move('uploads/identitas_perusahaan/final/', $filename);
 
                 $data->file_customer_external = $filename;
                 $data->status_upload = '1';
@@ -636,9 +636,13 @@ class FormCustomerController extends Controller
 
     public function search($keyword)
     {
-        $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas', 'cabang')->where('nomor_ktp', $keyword)->orWhere('nomor_npwp', $keyword)->first();
-        $enkripsi = Crypt::encryptString($data->id);
-        return ['data' => $data, 'enkripsi' => $enkripsi];
+        try {
+            $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas', 'cabang')->where('nomor_ktp', 'LIKE', '%' . $keyword . '%')->orWhere('nomor_npwp', 'LIKE', '%' . $keyword . '%')->first();
+            $enkripsi = Crypt::encryptString($data->id);
+            return ['data' => $data, 'enkripsi' => $enkripsi];
+        } catch (\Exception $e) {
+            return ['status' => false, 'error' => 'Terjadi Kesalahan'];
+        }
     }
 
     public function download_pdf($menu, Request $request)

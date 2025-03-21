@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Auth;
 
 Auth::routes();
 
-Route::get('/', function() {
+Route::get('/', function () {
     return redirect('/form-customer');
 });
 Route::get('/form-customer', [FormCustomer::class, 'menu'])->name('form_customer.menu');
@@ -49,7 +49,7 @@ Route::middleware('web')->group(function () {
     Route::get('/internal/panel/edit/{id}', [HomeController::class, 'edit'])->name('home.edit');
     Route::get('/internal/panel/get-pdf/{id}', [HomeController::class, 'getPdf'])->name('home.getPdf');
     Route::get('/internal/panel/select/{id}', [HomeController::class, 'select'])->name('home.select');
-    
+
     // Update profil & Password
     Route::post('/internal/panel/update-profil', [HomeController::class, 'update_profil'])->name('home.update_profil');
     Route::post('/internal/panel/forgot-password', [HomeController::class, 'forgot_password'])->name('home.forgot_password');
