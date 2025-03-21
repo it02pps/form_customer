@@ -524,7 +524,7 @@
                                     <div class="group-column">
                                         <div class="form-group">
                                             <label for="">Nomor Aktif Untuk Faktur Pajak</label>
-                                            <input type="text" name="no_wa" id="no_wa" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" maxlength="14" class="form-control" autocomplete="off" placeholder="Contoh: 012345678910" required value="<?php echo e($data ? $data['nomor_whatsapp'] : ''); ?>">
+                                            <input type="text" name="no_wa" id="no_wa" oninput="this.value = this.value.replace(/[^0-9+-]/g, '')" maxlength="14" class="form-control" autocomplete="off" placeholder="Contoh: 012345678910" required value="<?php echo e($data ? $data['nomor_whatsapp'] : ''); ?>">
                                         </div>
 
                                         <div class="form-group mt-4" id="select">
@@ -972,7 +972,7 @@
             $('#status_pkp').on('change', function() {
                 if($(this).val() == 'pkp') {
                     $('.pkp').removeClass('d-none').prop('required', true);
-                    $('.pkp').find('input').prop('required', true);
+                    $('.pkp').find('input').prop('required', false);
                 } else {
                     $('.pkp').addClass('d-none').prop('required', false);
                     $('.pkp').find('input').val('').prop('required', false);

@@ -73,6 +73,9 @@ class HomeController extends Controller
                 $aksi = $edit . ' ' . $detail;
                 return $aksi;
             })
+            ->addColumn('sales', function ($e) {
+                return $e->nama_sales != '' ? $e->nama_sales : '-';
+            })
             ->addColumn('status', function ($e) {
                 if ($e->status_upload == 0) {
                     return '<span class="badge bg-danger px-3 py-2">Belum Upload</span>';

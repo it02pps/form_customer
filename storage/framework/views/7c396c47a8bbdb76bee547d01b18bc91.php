@@ -334,7 +334,7 @@
                     { data: 'nama_perusahaan', name: 'nama_perusahaan' },
                     { data: 'alamat_lengkap', name: 'alamat_lengkap' },
                     { data: 'nomor_handphone', name: 'nomor_handphone' },
-                    { data: 'nama_sales', name: 'nama_sales' },
+                    { data: 'sales', name: 'sales' },
                     { data: 'status', name: 'status' },
                     { data: 'aksi', name: 'aksi', searchable: false, orderable: false },
                 ],
