@@ -251,6 +251,24 @@
         text-decoration: none;
     }
 
+    .btnUpload {
+        padding: 0 24px;
+        height: 48px;
+        border-radius: 8px;
+        background-color: #0063ee;
+        border: none;
+        color: #fff;
+    }
+
+    .btnBatal {
+        width: 144px;
+        height: 48px;
+        border-radius: 8px;
+        background-color: #E7E6EB;
+        border: none;
+        color: #000;
+    }
+
     @media screen and (max-width: 475px) {
         .container {
             padding: 0;

@@ -262,7 +262,7 @@
         color: #fff;
     }
 
-    .btnKembali {
+    .btnBatal {
         width: 144px;
         height: 48px;
         border-radius: 8px;
