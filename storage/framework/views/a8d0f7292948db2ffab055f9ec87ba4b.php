@@ -76,14 +76,10 @@
             <h3>IDENTITAS PERUSAHAAN</h3>
             <div class="row" style="margin-bottom: 20px;">
                 <div class="column">
-                    <p class="label">Jenis Customer</p>
-                    <?php if($data['status_cust'] == 'lama'): ?>
-                        <p>Customer Lama</p>
-                    <?php else: ?>
-                        <p>Customer Baru</p>
-                    <?php endif; ?>
+                    <p class="label">Sales Person</p>
+                    <p><?php echo e($data['nama_sales']); ?></p>
 
-                    <p class="label">Nama Group Perusahaan</p>
+                    <p class="label">Nama Perusahaan</p>
                     <p><?php echo e($data['nama_group_perusahaan']); ?></p>
 
                     <p class="label">Alamat Lengkap Perusahaan</p>
@@ -91,6 +87,9 @@
 
                     <p class="label">Tahun Berdiri</p>
                     <p><?php echo e($data['tahun_berdiri'] ? ($data['tahun_berdiri'] ? \Carbon\Carbon::parse($data['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') : '-') : '-'); ?></p>
+
+                    <p class="label">Nomor Handphone Contact Person</p>
+                    <p><?php echo e($data['nomor_handphone']); ?></p>
 
                     <p class="label">Alamat Email Perusahaan</p>
                     <p><?php echo e($data['alamat_email'] ? $data['alamat_email'] : '-'); ?></p>
@@ -112,11 +111,11 @@
                     <p><?php echo e($data['email_khusus_faktur_pajak']); ?></p>
                 </div>
                 <div class="column">
-                    <p class="label">Nama Perusahaan</p>
+                    <p class="label">Nama Group Perusahaan</p>
                     <p><?php echo e($data['nama_perusahaan']); ?></p>
 
-                    <p class="label">Nomor Handphone Contact Person</p>
-                    <p><?php echo e($data['nomor_handphone']); ?></p>
+                    <p class="label">Alamat Group Perusahaan</p>
+                    <p><?php echo e($data['alamat_group_lengkap']); ?></p>
 
                     <p class="label">Kota / Kabupaten</p>
                     <p><?php echo e($data['kota_kabupaten']); ?></p>

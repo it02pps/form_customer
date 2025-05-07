@@ -76,14 +76,10 @@
             <h3>IDENTITAS PERUSAHAAN</h3>
             <div class="row" style="margin-bottom: 20px;">
                 <div class="column">
-                    <p class="label">Jenis Customer</p>
-                    @if($data['status_cust'] == 'lama')
-                        <p>Customer Lama</p>
-                    @else
-                        <p>Customer Baru</p>
-                    @endif
+                    <p class="label">Sales Person</p>
+                    <p>{{ $data['nama_sales'] }}</p>
 
-                    <p class="label">Nama Group Perusahaan</p>
+                    <p class="label">Nama Perusahaan</p>
                     <p>{{ $data['nama_group_perusahaan'] }}</p>
 
                     <p class="label">Alamat Lengkap Perusahaan</p>
@@ -91,6 +87,9 @@
 
                     <p class="label">Tahun Berdiri</p>
                     <p>{{ $data['tahun_berdiri'] ? ($data['tahun_berdiri'] ? \Carbon\Carbon::parse($data['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') : '-') : '-' }}</p>
+
+                    <p class="label">Nomor Handphone Contact Person</p>
+                    <p>{{ $data['nomor_handphone'] }}</p>
 
                     <p class="label">Alamat Email Perusahaan</p>
                     <p>{{ $data['alamat_email'] ? $data['alamat_email'] : '-' }}</p>
@@ -112,11 +111,11 @@
                     <p>{{ $data['email_khusus_faktur_pajak'] }}</p>
                 </div>
                 <div class="column">
-                    <p class="label">Nama Perusahaan</p>
+                    <p class="label">Nama Group Perusahaan</p>
                     <p>{{ $data['nama_perusahaan'] }}</p>
 
-                    <p class="label">Nomor Handphone Contact Person</p>
-                    <p>{{ $data['nomor_handphone'] }}</p>
+                    <p class="label">Alamat Group Perusahaan</p>
+                    <p>{{ $data['alamat_group_lengkap'] }}</p>
 
                     <p class="label">Kota / Kabupaten</p>
                     <p>{{ $data['kota_kabupaten'] }}</p>

@@ -68,6 +68,27 @@
         cursor: pointer;
     }
 
+    .card {
+        padding: 16px;
+        cursor: pointer;
+    }
+
+    .card i {
+        padding-right: 6px;
+    }
+
+    .card span {
+        text-align: center;
+    }
+
+    .row {
+        display: flex;
+    }
+
+    .card.active {
+        border: 2px solid #0063ee;
+    }
+
     @media screen and (max-width: 475px) {
         body {
             overflow-x: hidden;
@@ -153,12 +174,12 @@
                     </div>
                 </div>
                 <div class="content-body">
-                    <div class="row"> 
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 badan_usaha" onclick="form_customer('badan-usaha')">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 badan_usaha" onclick="badan_usaha('badan_usaha')">
                             <img src="<?php echo e(asset('../../../images/enterprise 1.svg')); ?>" alt="Logo">
                             <p style="font-weight: 700;">Badan Usaha</p>
                         </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 perseorangan" onclick="form_customer('perseorangan')">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 perseorangan" data-bs-toggle="modal" data-bs-target="#modalMenu">
                             <img src="<?php echo e(asset('../../../images/Single Entity 1.svg')); ?>" alt="Logo">
                             <p style="font-weight: 700;">Perseorangan</p>
                         </div>
@@ -167,13 +188,111 @@
             </div>
         </div>
     </div>
+
+    
+    <div class="modal fade" id="modalMenu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Pilih Menu</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row gap-0 pb-4">
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                            <div class="card active cust_baru">
+                                <span><i class="fa-solid fa-person-circle-plus"></i> Customer Baru</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                            <div class="card">
+                                <span><i class="fa-solid fa-rotate-left"></i> Customer Lama</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                            <div class="card">
+                                <span><i class="fa-solid fa-building"></i> Usaha Baru</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row gap-0">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <label for="">NIK <span class="text-danger">*</span></label>
+                            <input type="text" placeholder="Masukkan NIK" class="form-control" name="nik" id="nik" autocomplete="off" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="16" onkeyup="checkNIK()" readonly>
+                            <span class="nik_check_message"></span>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <label for="">Nama Identitas <span class="text-danger">*</span></label>
+                            <input type="text" placeholder="Masukkan Nama Identitas" class="form-control" autocomplete="off" name="nama_identitas" id="nama_identitas" readonly>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-primary" id="next">Selanjutnya</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('js'); ?>
     <script>
-        function form_customer(value) {
+        function checkNIK() {
+            const nik = document.getElementById('nik').value;
+
+            fetch("/check-nik", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                body: JSON.stringify({ nik: nik })
+            })
+            .then(response => response.json())
+            .then(res => {
+                let message1 = document.getElementsByClassName('nik_check_message')[0];
+                if(res.status == true) {
+                    message1.innerHTML = '*NIK ditemukan';
+                    message1.style.color = 'green';
+                } else {
+                    message1.innerHTML = '*NIK tidak ditemukan';
+                    message1.style.color = 'red';
+                }
+            });
+        }
+
+        function badan_usaha(value) {
             window.location.href = '/form-customer/'+value;
         }
+
+        $(document).ready(function() {
+            $('.modal-body .card').on('click', function() {
+                $('.modal-body .card').removeClass('active');
+                $(this).addClass('active');
+
+                if($(this).hasClass('cust_baru')) {
+                    $('#nik').attr('required', false).prop('readonly', true);
+                    $('#nama_identitas').attr('required', false).prop('readonly', true);
+                    $('#nik').val(null);
+                    $('#nama_identitas').val(null);
+                    $('.nik_check_message').html('');
+                } else {
+                    $('#nik').attr('required', true).prop('readonly', false);
+                    $('#nama_identitas').attr('required', true).prop('readonly', false);
+                }
+            });
+
+            $(document).on('click', '#next', function() {
+                const nik = $('#nik').val();
+                const menu = 'perseorangan';
+                const encoded = btoa(nik);
+
+                window.location.href = '/form-customer/' + menu + '/' + encoded;
+            })
+        });
     </script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.main_app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\laragon\www\form_customer\resources\views/customer/fix_menu.blade.php ENDPATH**/ ?>

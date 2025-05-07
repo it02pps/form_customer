@@ -7,7 +7,9 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\PreviewPdfController;
+use App\Models\IdentitasPerusahaan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,20 +28,26 @@ Route::get('/', function () {
     return redirect('/form-customer');
 });
 Route::get('/form-customer', [FormCustomer::class, 'menu'])->name('form_customer.menu');
-Route::get('/form-customer/{menu}', [FormCustomer::class, 'index'])->name('form_customer.index');
+
+// Login
+Route::get('/form-customer/panel/login', [LoginController::class, 'index'])->name('form_customer.login');
+Route::post('/form-customer/panel/login-store', [LoginController::class, 'login'])->name('form_customer.login.store');
+Route::get('/form-customer/panel/lupa-password', [LoginController::class, 'lupa_password'])->name('form_customer.lupa_password');
+
+// View Badan Usaha
+Route::get('/form-customer/{menu}', [FormCustomer::class, 'view_badan_usaha'])->name('form_customer.view_badan_usaha');
+
+// View Perseorangan
+Route::get('/form-customer/{menu}/{status}/{status2?}/{param?}', [FormCustomer::class, 'view_perseorangan'])->where('status', 'customer-baru|customer-lama')->where('status2', 'pengkinian-data|cabang-baru')->name('form_customer.view_perseorangan');
+Route::get('/form-customer/{menu}/{status}/{status2?}/{param?}/check', [FormCustomer::class, 'pengkinian'])->where('status', 'customer-baru|customer-lama')->where('status2', 'pengkinian-data|cabang-baru')->name('form_customer.pengkinian');
+
 Route::post('/form-customer/{menu}/store', [FormCustomer::class, 'store'])->name('form_customer.store');
 Route::get('/form-customer/{menu}/detail', [FormCustomer::class, 'detail'])->name('form_customer.detail');
 Route::post('/form-customer/{menu}/detail/upload/{id}', [FormCustomer::class, 'upload_pdf'])->name('form_customer.upload_pdf');
 Route::get('/form-customer/{menu}/pdf/{id}', [FormCustomer::class, 'download_pdf'])->name('form_customer.pdf');
 
 // Get data select
-Route::get('/select/{id}', [FormCustomer::class, 'select'])->name('form_customer.select');
-Route::get('/form-customer/search/{keyword}', [FormCustomer::class, 'search'])->name('form_customer.search');
-
-// Login
-Route::get('/form-customer/panel/login', [LoginController::class, 'index'])->name('form_customer.login');
-Route::post('/form-customer/panel/login-store', [LoginController::class, 'login'])->name('form_customer.login.store');
-Route::get('/form-customer/panel/lupa-password', [LoginController::class, 'lupa_password'])->name('form_customer.lupa_password');
+Route::get('/form-customer/select/{menu}/{id}', [FormCustomer::class, 'select'])->name('form_customer.select');
 
 Route::middleware('web')->group(function () {
     Route::get('/internal/panel', [HomeController::class, 'index'])->name('home');

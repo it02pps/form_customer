@@ -110,30 +110,12 @@
     }
 
     #search {
-        position: relative;
-        width: 100%;
-    }
-
-    #search row{
         width: 100%;
     }
 
     #search input {
-        padding-left: 50px;
+        padding-left: 40px;
         height: 50px;
-    }
-
-    #search::before {
-        content: '';
-        position: absolute;
-        left: 30px;
-        top: 33%;
-        pointer-events: none;
-        background-image: url('../../../images/search.png');
-        background-size: contain;
-        background-repeat: no-repeat;
-        width: 16px;
-        height: 16px;
     }
 
     .modal-content {
@@ -143,6 +125,13 @@
     .forgot_password {
         display: flex;
         justify-content: end;
+    }
+
+    .searchCustomerNameIcon, .searchBillToAddressIcon, .searchSalesPersonIcon {
+        position: absolute;
+        top: 37px;
+        left: 30px;
+        opacity: 0.5;
     }
 
     @media screen and (max-width: 475px) {
@@ -205,33 +194,46 @@
                 </div>
                 <hr>
                 <div class="content-body">
-                    
                     <div id="search" class="row">
-                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                            <input type="text" name="searchInput" id="searchInput" class="form-control" placeholder="Search" autocomplete="off">
+                        <h5 class="mb-0">Filter</h5>
+                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 position-relative">
+                            <label for="">Customer Name</label>
+                            <input type="text" name="searchCustomerName" id="searchCustomerName" class="form-control" placeholder="Search Customer Name" autocomplete="off">
+                            <span class="searchCustomerNameIcon"><i class="fa-solid fa-search"></i></span>
+                        </div>
+                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 position-relative">
+                            <label for="">Bill to Address</label>
+                            <input type="text" name="searchBillToAddress" id="searchBillToAddress" class="form-control" placeholder="Search Bill To Address" autocomplete="off">
+                            <span class="searchBillToAddressIcon"><i class="fa-solid fa-search"></i></span>
+                        </div>
+                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 position-relative">
+                            <label for="">Sales Person</label>
+                            <input type="text" name="searchSalesPerson" id="searchSalesPerson" class="form-control" placeholder="Search Sales Person" autocomplete="off">
+                            <span class="searchSalesPersonIcon"><i class="fa-solid fa-search"></i></span>
                         </div>
                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                            <label for="">Upload Status</label>
                             <select name="filter_status" id="filter_status" class="form-control" style="height: 50px;">
-                                <option value="">Cari Status</option>
-                                <option value="Belum Upload">Belum Upload</option>
-                                <option value="Sudah Upload">Sudah Upload</option>
+                                <option value="">Filter By Status</option>
+                                <option value="0">Belum Upload</option>
+                                <option value="1">Sudah Upload</option>
                             </select>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive" style="overflow-x: hidden;">
                         <div class="mt-3">
+                            <span class="text-danger">*Note: U = Badan Usaha | O = Perseorangan</span>
                             <table id="datatable" class="table" style="border: 1px solid #cfcfd1;">
                                 <thead style="background-color: #E7E6EB;">
                                     <tr>
-                                        <th width="5%" class="text-center">No</th>
-                                        <th>Kode Customer</th>
-                                        <th>Bentuk Usaha</th>
-                                        <th>Nama Perusahaan</th>
-                                        <th>Alamat Lengkap</th>
-                                        <th>Nomor HP</th>
-                                        <th>Sales</th>
-                                        <th>Status</th>
-                                        <th>Aksi</th>
+                                        <th style="width: 75px;">No</th>
+                                        <th style="width: 100px;">Bussiness Entity</th>
+                                        <th style="width: 120px;" class="text-center align-middle">Customer Name</th>
+                                        <th style="width: 120px;" class="text-center align-middle">Bill to Name</th>
+                                        <th style="width: 150px;" class="text-center align-middle">Bill to Address</th>
+                                        <th style="width: 120px;" class="text-center align-middle">Sales Person</th>
+                                        <th style="width: 50px;">Upload Status</th>
+                                        <th style="width: 220px;">Update</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -326,31 +328,52 @@
                 serverSide: true,
                 responsive: true,
                 ordering: false,
+                autoWidth: false,
                 ajax: '<?php echo e(route('home.datatable')); ?>',
                 columns: [
-                    { data: 'DT_RowIndex', name: 'DT_RowIndex', searchable: false, orderable: false },
                     { data: 'kode_customer', name: 'kode_customer' },
                     { data: 'bentuk_usaha', name: 'bentuk_usaha' },
                     { data: 'nama_perusahaan', name: 'nama_perusahaan' },
-                    { data: 'alamat_lengkap', name: 'alamat_lengkap' },
-                    { data: 'nomor_handphone', name: 'nomor_handphone' },
-                    { data: 'sales', name: 'sales' },
-                    { data: 'status', name: 'status' },
+                    { data: 'bill_to_name', name: 'bill_to_name' },
+                    { data: 'bill_to_address', name: 'bill_to_address'},
+                    { data: 'sales', name: 'nama_sales' },
+                    { data: 'status', name: 'status_upload' },
                     { data: 'aksi', name: 'aksi', searchable: false, orderable: false },
                 ],
                 columnDefs: [
                     {
-                        'targets': 0,
+                        width: '75px',
+                        targets: 0,
+                        className: 'text-center align-middle',
+                    },
+                    {
+                        width: '120px',
+                        targets: 1,
+                        className: 'text-center align-middle'
+                    },
+                    {
+                        width: '150px',
+                        targets: 4,
                         createdCell: function(td) {
-                            $(td).css('text-align', 'center');
+                            $(td).css('text-align', 'left');
                         }
                     },
                     {
-                        'targets': 5,
+                        width: '120px',
+                        targets: [2, 3, 5],
                         createdCell: function(td) {
                             $(td).css('text-align', 'left');
-                        },
-                        'className': 'dt-head-left'
+                        }
+                    },
+                    {
+                        width: '50px',
+                        targets: 6,
+                        className: 'text-center align-middle'
+                    },
+                    {
+                        width: '220px',
+                        targets: 7,
+                        className: 'text-center align-middle'
                     },
                 ],
                 pagingType: 'simple_numbers',
@@ -369,12 +392,20 @@
             // END: Datatable
 
             // START: Search
-            $('#searchInput').on('keyup', function() {
-                table.search(this.value).draw();
+            $('#searchCustomerName').on('keyup', function() {
+                table.column(2).search(this.value).draw();
+            });
+
+            $('#searchBillToAddress').on('keyup', function() {
+                table.column(4).search(this.value).draw();
+            });
+
+            $('#searchSalesPerson').on('keyup', function() {
+                table.column(5).search(this.value).draw();
             });
 
             $('#filter_status').on('change', function() {
-                table.search(this.value).draw();
+                table.column(6).search(this.value).draw();
             })
             // END: Search
 

@@ -76,21 +76,20 @@
             <h3>IDENTITAS PERUSAHAAN</h3>
             <div class="row" style="margin-bottom: 20px;">
                 <div class="column">
-                    <p class="label">Jenis Customer</p>
-                    <?php if($data['status_cust'] == 'lama'): ?>
-                        <p>Customer Lama</p>
-                    <?php else: ?>
-                        <p>Customer Baru</p>
-                    <?php endif; ?>
+                    <p class="label">Sales Person</p>
+                    <p><?php echo e($data['nama_sales'] ? $data['nama_sales'] : '-'); ?></p>
 
-                    <p class="label">Nama Group Perusahaan</p>
-                    <p><?php echo e($data['nama_group_perusahaan']); ?></p>
+                    <p class="label">Nama Usaha</p>
+                    <p><?php echo e($data['nama_perusahaan']); ?></p>
 
-                    <p class="label">Alamat Lengkap Perusahaan</p>
+                    <p class="label">Alamat Lengkap Usaha</p>
                     <p><?php echo e($data['alamat_lengkap']); ?></p>
 
                     <p class="label">Tahun Berdiri</p>
                     <p><?php echo e($data['tahun_berdiri'] ? ($data['tahun_berdiri'] ? \Carbon\Carbon::parse($data['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') : '-') : '-'); ?></p>
+
+                    <p class="label">Nomor Handphone Contact Person</p>
+                    <p><?php echo e($data['nomor_handphone']); ?></p>
 
                     <p class="label">Alamat Email Perusahaan</p>
                     <p><?php echo e($data['alamat_email'] ? $data['alamat_email'] : '-'); ?></p>
@@ -120,11 +119,11 @@
                     <?php endif; ?>
                 </div>
                 <div class="column">
-                    <p class="label">Nama Perusahaan</p>
-                    <p><?php echo e($data['nama_perusahaan']); ?></p>
+                    <p class="label">Nama Group Usaha</p>
+                    <p><?php echo e($data['nama_group_perusahaan']); ?></p>
 
-                    <p class="label">Nomor Handphone Contact Person</p>
-                    <p><?php echo e($data['nomor_handphone']); ?></p>
+                    <p class="label">Alamat Group Usaha</p>
+                    <p><?php echo e($data['alamat_group_lengkap']); ?></p>
 
                     <p class="label">Kota / Kabupaten</p>
                     <p><?php echo e($data['kota_kabupaten']); ?></p>
@@ -263,7 +262,11 @@
                     <div class="content-ttd">
                         <p>Penanggung Jawab</p>
                         
-                        <img src="uploads/ttd/<?php echo e($data['data_identitas']['ttd']); ?>" alt="" style="width: 70%;">
+                        <?php if($data['data_identitas']['ttd']): ?>
+                            <img src="<?php echo e(public_path('uploads/ttd/'.$data['data_identitas']['ttd'])); ?>" alt="" style="width: 70%;">
+                        <?php else: ?>
+                            <br><br><br><br>
+                        <?php endif; ?>
                         <p>______________________</p>
                     </div>
                 </div>

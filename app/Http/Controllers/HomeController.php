@@ -53,19 +53,40 @@ class HomeController extends Controller
     public function index()
     {
         $data = IdentitasPerusahaan::orderBy('created_at', 'DESC')->get();
-        return view('panel.fix_home', compact('data'));
+        return view('panel.home', compact('data'));
     }
 
-    public function datatable()
+    public function datatable(Request $request)
     {
-        $data = IdentitasPerusahaan::orderBy('kode_customer', 'DESC')->select('*');
+        $data = IdentitasPerusahaan::where('status_aktif', '1')->orderBy('nama_group_perusahaan')->orderBy('kode_customer', 'ASC');
         return DataTables::of($data)
             ->addIndexColumn()
             ->editColumn('bentuk_usaha', function ($e) {
-                return ucwords(str_replace('_', ' ', $e->bentuk_usaha));
+                if ($e->bentuk_usaha == 'perseorangan') {
+                    $stat = 'O';
+                } else {
+                    $stat = 'U';
+                }
+                return $stat;
             })
-            ->editColumn('alamat_lengkap', function ($e) {
-                return $e->alamat_lengkap . ', ' . $e->kota_kabupaten;
+            ->addColumn('bill_to_name', function ($e) {
+                if ($e->bentuk_usaha == 'perseorangan') {
+                    return $e->nama_lengkap ? $e->nama_lengkap : '-';
+                } else {
+                    return $e->nama_npwp ? $e->nama_npwp : '-';
+                }
+            })
+            ->addColumn('bill_to_address', function ($e) {
+                if ($e->bentuk_usaha == 'perseorangan') {
+                    return $e->alamat_ktp ? $e->alamat_ktp : '-';
+                } else {
+                    return $e->alamat_npwp ? $e->alamat_npwp : '-';
+                }
+            })
+            ->filterColumn('bill_to_address', function ($e, $keyword) {
+                $e->where(function ($q) use ($keyword) {
+                    $q->where('alamat_ktp', 'LIKE', "%{$keyword}%")->orWhere('alamat_npwp', 'LIKE', "%{$keyword}%");
+                });
             })
             ->addColumn('aksi', function ($e) {
                 $edit = '<button type="button" id="editCustomer" title="Edit Data Customer" data-id="' . Crypt::encryptString($e->id) . '">Edit</button>';
@@ -95,9 +116,9 @@ class HomeController extends Controller
         $url = route('home.edit', ['id' => $enkripsi]);
 
         if ($data->bentuk_usaha == 'perseorangan') {
-            return view('panel.fix_home_detail_perseorangan', compact('data', 'enkripsi', 'url'));
+            return view('panel.perseorangan.home_detail_perseorangan', compact('data', 'enkripsi', 'url'));
         } else {
-            return view('panel.fix_home_detail_badan_usaha', compact('data', 'enkripsi', 'url'));
+            return view('panel.badan_usaha.home_detail_badan_usaha', compact('data', 'enkripsi', 'url'));
         }
     }
 
@@ -122,9 +143,9 @@ class HomeController extends Controller
 
         $url = route('home');
         if ($data->bentuk_usaha == 'perseorangan') {
-            return view('panel.fix_home_edit_perseorangan', compact('data', 'enkripsi', 'bidang_usaha', 'url', 'sales'));
+            return view('panel.perseorangan.home_edit_perseorangan', compact('data', 'enkripsi', 'bidang_usaha', 'url', 'sales'));
         } else {
-            return view('panel.fix_home_edit_badan_usaha', compact('data', 'enkripsi', 'bidang_usaha', 'url', 'sales'));
+            return view('panel.badan_usaha.home_edit_badan_usaha', compact('data', 'enkripsi', 'bidang_usaha', 'url', 'sales'));
         }
     }
 

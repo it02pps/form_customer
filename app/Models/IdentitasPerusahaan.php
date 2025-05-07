@@ -9,7 +9,7 @@ class IdentitasPerusahaan extends Model
 {
     use HasFactory;
     protected $table = 'identitas_perusahaan';
-    protected $fillable = ['*'];
+    protected $guarded = [];
 
     public function data_identitas() {
         return $this->hasOne(DataIdentitas::class, 'identitas_perusahaan_id', 'id');
