@@ -486,31 +486,37 @@
                             <div id="ktp-section">
                                 <div class="row">
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="form-group">
-                                            <label for="">Nama Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
-                                            <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan Nama Lengkap" autocomplete="off" class="form-control">
+                                        <div class="group-column">
+                                            <div class="form-group">
+                                                <label for="">Nama Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
+                                                <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan Nama Lengkap" autocomplete="off" class="form-control">
+                                            </div>
+
+                                            <div class="group-column p-0 mt-3">
+                                                <div class="form-group">
+                                                    <label for="">Foto KTP <span class="text-danger">*</span></label>
+                                                    <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
+                                                </div>
+                                                <div class="form-group" id="preview_ktp">
+                                                    <img id="preview_foto_ktp" src="" alt="Belum ada file" data-action="zoom">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="group-column">
                                             <div class="form-group">
-                                                <label for="">Foto KTP <span class="text-danger">*</span></label>
-                                                <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
+                                                <label for="">Alamat Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
+                                                <textarea name="alamat_ktp" id="alamat_ktp" class="form-control" placeholder="Masukkan alamat lengkap KTP" autocomplete="off" required></textarea>
                                             </div>
-                                            <div class="form-group" id="preview_ktp">
-                                                <img id="preview_foto_ktp" src="" alt="Belum ada file" data-action="zoom">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="branch-section d-none">
-                                            <div >
-                                                <span class="text-danger">*Harap diisi cabang dengan <br> menekan tombol dibawah ini</span>
-                                            </div>
-                                            <div>
-                                                <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>
+
+                                            <div class="branch-section mt-5 p-0">
+                                                <div >
+                                                    <span class="text-danger">*Harap diisi cabang dengan <br> menekan tombol dibawah ini</span>
+                                                </div>
+                                                <div>
+                                                    <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -887,8 +893,7 @@
             // START: Get data untuk select
             var enkripsi = $('#update_id').val();
             if(enkripsi) {
-                let url = '<?php echo e(route('form_customer.select', ':id')); ?>';
-                url = url.replace(':id', enkripsi);
+                let url = '/form-customer/select/perseorangan/' + enkripsi;
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -971,129 +976,6 @@
                 updateDeleteButtonVisibility();
             });
             // END: Dynamic row
-
-            // START: Search Customer Lama
-            var timer;
-
-            $('#jenis_cust').on('change', function() {
-                if($(this).val() == 'baru') {
-                    $('.cari-data').addClass('d-none');
-                    $('#nama_perusahaan').prop('readonly', false);
-                    $('#nama_group_perusahaan').prop('readonly', false);
-                    $('#alamat_lengkap').prop('readonly', false);
-                    $('#kota_kabupaten').prop('readonly', false);
-                    $('#alamat_email_perusahaan').prop('readonly', false);
-                    $('#no_hp').prop('readonly', false);
-                    $('#tahun_berdiri').prop('readonly', false);
-                    $('#lama_usaha').prop('readonly', false);
-                    $('#bidang_usaha').prop('disabled', false);
-                    $('#bidang_usaha_lain').prop('readonly', false);
-                    $('#status_kepemilikan').prop('disabled', false);
-                    $('#nama_group').prop('readonly', false);
-                    $('#nomor_rekening').prop('readonly', false);
-                    $('#nama_rekening').prop('readonly', false);
-                    $('#nama_bank').prop('readonly', false);
-                    $('#status_rekening').prop('disabled', false);
-                    $('#rekening_lain').prop('readonly', false);
-                } else {
-                    $('.cari-data').removeClass('d-none');
-                    $('#nama_perusahaan').prop('readonly', true);
-                    $('#nama_group_perusahaan').prop('readonly', true);
-                    $('#alamat_lengkap').prop('readonly', true);
-                    $('#kota_kabupaten').prop('readonly', true);
-                    $('#alamat_email_perusahaan').prop('readonly', true);
-                    $('#no_hp').prop('readonly', true);
-                    $('#tahun_berdiri').prop('readonly', true);
-                    $('#lama_usaha').prop('readonly', true);
-                    $('#bidang_usaha').prop('disabled', true);
-                    $('#bidang_usaha_lain').prop('readonly', true);
-                    $('#status_kepemilikan').prop('disabled', true);
-                    $('#nama_group').prop('readonly', true);
-                    $('#nomor_rekening').prop('readonly', true);
-                    $('#nama_rekening').prop('readonly', true);
-                    $('#nama_bank').prop('readonly', true);
-                    $('#status_rekening').prop('disabled', true);
-                    $('#rekening_lain').prop('readonly', true);
-                }
-            });
-
-
-            $('#searching').on('keyup', function() {
-                clearTimeout(timer);
-                let query = $(this).val().trim();
-                timer = setTimeout(function() {
-                    if(query.length > 0) {
-                        let search_url = '<?php echo e(route('form_customer.search', ':data')); ?>';
-                        search_url = search_url.replace(':data', query);
-                        $.ajax({
-                            url: search_url,
-                            type: "GET",
-                            cache: false,
-                            contentType: false,
-                            processData: false,
-                            beforeSend: () => {
-                                Swal.fire({
-                                    title: 'Loading...',
-                                    text: 'Harap Menunggu',
-                                    icon: 'info',
-                                    allowOutsideClick: false,
-                                    showConfirmButton: false,
-                                });
-                            },
-                            success: res => {
-                                Swal.close();
-                                $('#nama_perusahaan').val(res.data.nama_perusahaan);
-                                $('#nama_group_perusahaan').val(res.data.nama_group_perusahaan);
-                                $('#alamat_lengkap').val(res.data.alamat_lengkap);
-                                $('#kota_kabupaten').val(res.data.kota_kabupaten);
-                                $('#alamat_email_perusahaan').val(res.data.alamat_email);
-                                $('#no_hp').val(res.data.nomor_handphone);
-                                $('#tahun_berdiri').val(res.data.tahun_berdiri);
-                                $('#lama_usaha').val(res.data.lama_usaha);
-                                $('#bidang_usaha').val(res.data.bidang_usaha).change();
-                                $('#bidang_usaha_lain').val(res.data.bidang_usaha_lain);
-                                $('#status_kepemilikan').val(res.data.status_kepemilikan).change();
-                                $('#nama_group').val(res.data.nama_group);
-                                $('#nomor_rekening').val(res.data.informasi_bank.nomor_rekening);
-                                $('#nama_rekening').val(res.data.informasi_bank.nama_rekening);
-                                $('#nama_bank').val(res.data.informasi_bank.nama_bank);
-                                $('#status_rekening').val(res.data.informasi_bank.status).change();
-                                $('#rekening_lain').val(res.data.informasi_bank.rekening_lain);
-                            }
-                        })
-                    } else {
-                        $('#nama_perusahaan').val('');
-                        $('#nama_group_perusahaan').val('');
-                        $('#alamat_lengkap').val('');
-                        $('#kota_kabupaten').val('');
-                        $('#alamat_email_perusahaan').val('');
-                        $('#no_hp').val('');
-                        $('#tahun_berdiri').val('');
-                        $('#lama_usaha').val('');
-                        $('#bidang_usaha').val('').change();
-                        $('#bidang_usaha_lain').val('');
-                        $('#status_kepemilikan').val('').change();
-                        $('#nama_group').val('');
-                        $('#badan_usaha').val('').change();
-                        $('#nomor_rekening').val('');
-                        $('#nama_rekening').val('');
-                        $('#nama_bank').val('');
-                        $('#status_rekening').val('').change();
-                        $('#rekening_lain').val('');
-                    }
-                }, 1500);
-            });
-            // END: Search Customer Lama
-
-            // START: NPWP Perseorangan
-            $('#npwp_perseorangan').on('change', function() {
-                if($(this).val() == '0') {
-                    $('.branch-section').addClass('d-none');
-                } else {
-                    $('.branch-section').removeClass('d-none');
-                }
-            });
-            // END: NPWP Perseorangan
         });
     </script>
 <?php $__env->stopSection(); ?>

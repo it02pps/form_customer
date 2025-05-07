@@ -58,9 +58,13 @@ class perusahaanServices
 
             // Non-aktif old customer
             if ($request->bentuk_usaha == 'perseorangan') {
-                $update = IdentitasPerusahaan::where('nomor_ktp', Crypt::decryptString($request->update_id))->orWhere('nomor_npwp', Crypt::decryptString($request->update_id));
-                $update->update(['status_aktif' => '0']);
-                $oldData = $update->latest()->first();
+                if ($request->update_id) {
+                    $update = IdentitasPerusahaan::where('nomor_ktp', Crypt::decryptString($request->update_id))->orWhere('nomor_npwp', Crypt::decryptString($request->update_id));
+                    $update->update(['status_aktif' => '0']);
+                    $oldData = $update->latest()->first();
+                } else {
+                    $oldData = '';
+                }
             } else {
                 $update = IdentitasPerusahaan::where('id', Crypt::decryptString($request->update_id));
                 $update->update(['status_aktif' => '0']);
@@ -91,6 +95,7 @@ class perusahaanServices
                     // Perseorangan
                     'nomor_ktp' => $request->bentuk_usaha == 'perseorangan' ? $request->nomor_ktp : null,
                     'nama_lengkap' => $request->bentuk_usaha == 'perseorangan' ? $request->nama_lengkap : null,
+                    'alamat_ktp' => $request->bentuk_usaha == 'perseorangan' ? $request->alamat_ktp : null,
 
                     // Badan Usaha
                     'nomor_npwp' => $request->bentuk_usaha == 'badan_usaha' ? $request->nomor_npwp : null,
@@ -150,9 +155,9 @@ class perusahaanServices
             $data->save();
 
             $link = route('form_customer.detail', ['menu' => str_replace('_', '-', $request->bentuk_usaha), 'id' => Crypt::encryptString($data->id)]);
-            return ['status' => true, 'link' => $link, 'new_data' => $data->id, 'old_data' => ($data->bentuk_usaha == 'perseorangan' ? $oldData->id : '')];
+            return ['status' => true, 'link' => $link, 'new_data' => $data->id, 'old_data' => ($data->bentuk_usaha == 'perseorangan' ? ($request->update_id ? $oldData->id : '') : '')];
         } catch (\Exception $e) {
-            dd($e);
+            // dd($e);
             return ['status' => false, 'error' => 'Terjadi Kesalahaan'];
         }
     }

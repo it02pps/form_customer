@@ -486,31 +486,37 @@
                             <div id="ktp-section">
                                 <div class="row">
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="form-group">
-                                            <label for="">Nama Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
-                                            <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan Nama Lengkap" autocomplete="off" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="group-column">
                                             <div class="form-group">
-                                                <label for="">Foto KTP <span class="text-danger">*</span></label>
-                                                <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
+                                                <label for="">Nama Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
+                                                <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan Nama Lengkap" autocomplete="off" class="form-control">
                                             </div>
-                                            <div class="form-group" id="preview_ktp">
-                                                <img id="preview_foto_ktp" src="" alt="Belum ada file" data-action="zoom">
+
+                                            <div class="group-column mt-3 p-0">
+                                                <div class="form-group">
+                                                    <label for="">Foto KTP <span class="text-danger">*</span></label>
+                                                    <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
+                                                </div>
+                                                <div class="form-group" id="preview_ktp">
+                                                    <img id="preview_foto_ktp" src="" alt="Belum ada file" data-action="zoom">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="branch-section">
-                                            <div >
-                                                <span class="text-danger">*Harap diisi cabang dengan <br> menekan tombol dibawah ini</span>
+                                        <div class="group-colum">
+                                            <div class="form-group">
+                                                <label for="">Alamat Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
+                                                <textarea name="alamat_ktp" id="alamat_ktp" class="form-control" placeholder="Masukkan alamat lengkap KTP" autocomplete="off" required></textarea>
                                             </div>
-                                            <div>
-                                                <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>
+
+                                            <div class="branch-section mt-5 p-0">
+                                                <div >
+                                                    <span class="text-danger">*Harap diisi cabang dengan <br> menekan tombol dibawah ini</span>
+                                                </div>
+                                                <div>
+                                                    <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -883,6 +889,48 @@
                 })
             });
             // END: Submit Form Customer
+
+            // START: Get data untuk select
+            var enkripsi = $('#update_id').val();
+            if(enkripsi) {
+                let url = '/form-customer/select/perseorangan/' + enkripsi;
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: res => {
+                        if(res.status == true) {
+                            $('#status_kepemilikan').val(res.data.status_kepemilikan).change();
+                            $('#badan_usaha').val(res.data.badan_usaha).change();
+                            $('#bidang_usaha').val(res.data.bidang_usaha).change();
+                            $('#status_pkp').val(res.data.status_pkp).change();
+                            $('#status_rekening').val(res.data.informasi_bank.status).change();
+                            if(res.data.data_identitas) {
+                                $('#identitas_penanggung_jawab').val(res.data.data_identitas.identitas).change();
+                            }
+                            let upperIdentitas = res.data.identitas.toUpperCase();
+                            $('#identitas_perusahaan').val(upperIdentitas).change();
+                            
+                            $('#jenis_cust').val(res.data.status_cust).change();
+                            $('#status_cabang').val(res.data.status_cabang).change();
+                            $('#sales').val(res.data.nama_sales).change();
+                            $('#npwp_perseorangan').val(res.data.npwp_perseorangan).change();
+                        } else {
+                            $('#status_kepemilikan').val('').change();
+                            $('#badan_usaha').val('').change();
+                            $('#bidang_usaha').val('').change();
+                            $('#identitas_perusahaan').val('ktp').change();
+                            $('#status_pkp').val('non_pkp').change();
+                            $('#status_rekening').val('').change();
+                            $('#identitas_penanggung_jawab').val('').change();
+                            $('#status_cabang').val('').change();
+                            $('#nama_sales').val('').change();
+                            $('#jenis_cust').val('').change();
+                            $('#npwp_perseorangan').val('').change();
+                        }
+                    }
+                });
+            }
+            // END: Get data untuk select
 
             // START: Dynamic row
             let counter = 1;

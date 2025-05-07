@@ -237,7 +237,7 @@
     #cabang button {
         position: absolute;
         right: 0;
-        top: 37px;
+        top: 55px;
     }
 
     .btnDetailCabang {
@@ -466,49 +466,49 @@
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Apakah ada nomor NPWP sebelum tahun 2024? <span class="text-danger">*</span></label>
-                                    <input type="text" id="npwp_perseorangan" name="npwp_perseorangan" class="form-control" readonly value="{{ $perusahaan['npwp_perseorangan'] == '1' ? 'Ada' : 'Tidak ada' }}">
+                                    <label for="">NIK</label>
+                                    <input type="text" id="nomor_ktp" name="nomor_ktp" autocomplete="off" class="form-control" readonly value="{{ $perusahaan['npwp_perseorangan'] == '1' ? $perusahaan['nomor_npwp'] : $perusahaan['nomor_ktp'] }}">
                                 </div>
                             </div>
                         </div>
                         <div id="ktp-section">
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group">
-                                        <label for="">NIK</label>
-                                        <input type="text" id="nomor_ktp" name="nomor_ktp" autocomplete="off" class="form-control" readonly value="{{ $perusahaan['npwp_perseorangan'] == '1' ? $perusahaan['nomor_npwp'] : $perusahaan['nomor_ktp'] }}">
-                                    </div>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group">
-                                        <label for="">Nama Lengkap Sesuai Identitas</label>
-                                        <input type="text" id="nama_lengkap" name="nama_lengkap" autocomplete="off" class="form-control" readonly value="{{ $perusahaan['nama_lengkap'] ? $perusahaan['nama_lengkap'] : '-' }}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 p-0">
                                     <div class="group-column">
-                                        <div class="form-group p-0">
-                                            <label for="">Foto KTP <span class="text-danger">*</span></label>
-                                            @if(File::extension($perusahaan['foto_ktp']) == 'pdf')
-                                                <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
-                                                    <p style="font-size: 18px;">Preview file KTP</p>
-                                                    <a href="{{ asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                </div>
-                                            @else
-                                                <div id="preview_ktp" class="form-group">
-                                                    <img id="preview_foto_ktp" src="{{ $perusahaan['foto_ktp'] ? asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_ktp']) : '-' }}" alt="Belum ada file" data-action="zoom">
-                                                </div>
-                                            @endif
+                                        <div class="form-group">
+                                            <label for="">Nama Lengkap Sesuai Identitas</label>
+                                            <input type="text" id="nama_lengkap" name="nama_lengkap" autocomplete="off" class="form-control" readonly value="{{ $perusahaan['nama_lengkap'] ? $perusahaan['nama_lengkap'] : '-' }}">
+                                        </div>
+
+                                        <div class="group-column p-0 mt-2">
+                                            <div class="form-group">
+                                                <label for="">Foto KTP <span class="text-danger">*</span></label>
+                                                @if(File::extension($perusahaan['foto_ktp']) == 'pdf')
+                                                    <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
+                                                        <p style="font-size: 18px;">Preview file KTP</p>
+                                                        <a href="{{ asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    </div>
+                                                @else
+                                                    <div id="preview_ktp" class="form-group">
+                                                        <img id="preview_foto_ktp" src="{{ $perusahaan['foto_ktp'] ? asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_ktp']) : '-' }}" alt="Belum ada file" data-action="zoom">
+                                                    </div>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group" id="cabang">
-                                        <label for="">Cabang</label>
-                                        <input type="text" class="form-control" autocomplete="off" readonly placeholder="{{ App\Models\Cabang::where('identitas_perusahaan_id', $perusahaan['id'])->count() }} Cabang">
-                                        <button type="button" class="btnDetailCabang" title="Detail Cabang" data-bs-target="#modalCabang" data-bs-toggle="modal">Detail Cabang</button>
+                                    <div class="group-column">
+                                        <div class="form-group">
+                                            <label for="">Alamat Lengkap Sesuai Identitas</label>
+                                            <textarea name="alamat_ktp" id="alamat_ktp" class="form-control" rows="6" autocomplete="off" readonly>{{ $perusahaan['alamat_ktp'] }}</textarea>
+                                        </div>
+                                    
+                                        <div class="form-group" id="cabang">
+                                            <label for="">Cabang</label>
+                                            <input type="text" class="form-control" autocomplete="off" readonly placeholder="{{ App\Models\Cabang::where('identitas_perusahaan_id', $perusahaan['id'])->count() }} Cabang">
+                                            <button type="button" class="btnDetailCabang" title="Detail Cabang" data-bs-target="#modalCabang" data-bs-toggle="modal">Detail Cabang</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

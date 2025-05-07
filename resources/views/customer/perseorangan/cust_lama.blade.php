@@ -488,49 +488,55 @@
                             <div id="ktp-section">
                                 <div class="row">
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="form-group">
-                                            <label for="">Nama Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
-                                            <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan Nama Lengkap" autocomplete="off" class="form-control" value="{{ $data ? $data['nama_lengkap'] : '' }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="group-column">
                                             <div class="form-group">
-                                                <label for="">Foto KTP <span class="text-danger">*</span></label>
-                                                <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
+                                                <label for="">Nama Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
+                                                <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan Nama Lengkap" autocomplete="off" class="form-control" value="{{ $data ? $data['nama_lengkap'] : '' }}">
                                             </div>
-                                            
-                                            @if($data)
-                                                @if($data['foto_ktp'] && File::extension($data['foto_ktp']) == 'pdf')
-                                                    <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
-                                                        <p style="font-size: 18px;">Preview file KTP</p>
-                                                        <a href="{{ asset('../../../uploads/identitas_perusahaan/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                    </div>
-                                                @elseif($data['foto_ktp'] && File::extension($data['foto_ktp']) != 'pdf')
-                                                    <div class="form-group" id="preview_ktp">
-                                                        <img id="preview_foto_ktp" src="{{ asset('../../../uploads/identitas_perusahaan/' . $data['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
-                                                    </div>
+
+                                            <div class="group-column mt-3 p-0">
+                                                <div class="form-group">
+                                                    <label for="">Foto KTP <span class="text-danger">*</span></label>
+                                                    <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
+                                                </div>
+                                                
+                                                @if($data)
+                                                    @if($data['foto_ktp'] && File::extension($data['foto_ktp']) == 'pdf')
+                                                        <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
+                                                            <p style="font-size: 18px;">Preview file KTP</p>
+                                                            <a href="{{ asset('../../../uploads/identitas_perusahaan/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                        </div>
+                                                    @elseif($data['foto_ktp'] && File::extension($data['foto_ktp']) != 'pdf')
+                                                        <div class="form-group" id="preview_ktp">
+                                                            <img id="preview_foto_ktp" src="{{ asset('../../../uploads/identitas_perusahaan/' . $data['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
+                                                        </div>
+                                                    @else
+                                                        <div class="form-group" id="preview_ktp">
+                                                            <img id="preview_foto_ktp" src="" alt="Belum ada file" data-action="zoom">
+                                                        </div>
+                                                    @endif
                                                 @else
                                                     <div class="form-group" id="preview_ktp">
                                                         <img id="preview_foto_ktp" src="" alt="Belum ada file" data-action="zoom">
                                                     </div>
                                                 @endif
-                                            @else
-                                                <div class="form-group" id="preview_ktp">
-                                                    <img id="preview_foto_ktp" src="" alt="Belum ada file" data-action="zoom">
-                                                </div>
-                                            @endif
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="branch-section">
-                                            <div >
-                                                <span class="text-danger">*Harap diisi cabang dengan <br> menekan tombol dibawah ini</span>
+                                        <div class="group-column">
+                                            <div class="form-group">
+                                                <label for="">Alamat Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
+                                                <textarea name="alamat_ktp" id="alamat_ktp" class="form-control" placeholder="Masukkan alamat lengkap KTP" autocomplete="off" required></textarea>
                                             </div>
-                                            <div>
-                                                <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>
+
+                                            <div class="branch-section mt-5 p-0">
+                                                <div >
+                                                    <span class="text-danger">*Harap diisi cabang dengan <br> menekan tombol dibawah ini</span>
+                                                </div>
+                                                <div>
+                                                    <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

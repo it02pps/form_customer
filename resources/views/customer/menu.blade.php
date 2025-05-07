@@ -293,7 +293,7 @@
                 const nik = $('#nik_npwp').val();
 
                 if(status == 'customer-baru/') {
-                    window.location.href = '/form-customer/perseorangan/' + status + status2 + nik;
+                    window.location.href = '/form-customer/perseorangan/' + status;
                 } else {
                     if(nik == null || nik == '') {
                         Swal.fire({
