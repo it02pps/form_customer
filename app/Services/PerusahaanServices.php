@@ -28,8 +28,8 @@ class perusahaanServices
             // Automatic create customer code
             $lastest_cust = IdentitasPerusahaan::latest('id')->first();
             $lastSerialNumber = $lastest_cust ? $lastest_cust->kode_customer : '00001';
-            $serial_number = (int) substr($lastSerialNumber, 2);
-            $number = str_pad($serial_number, 0, '0', STR_PAD_LEFT);
+            $serial_number = (int) substr($lastSerialNumber, 0);
+            $number = str_pad($serial_number, 5, "0", STR_PAD_LEFT);
             $kode_cust = $number;
 
             // Validation NIK, NPWP and Email Faktur
