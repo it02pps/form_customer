@@ -529,7 +529,7 @@
                                             </div>
 
                                             <div class="branch-section mt-5 p-0">
-                                                <div >
+                                                <div>
                                                     <span class="text-danger">*Harap diisi cabang dengan <br> menekan tombol dibawah ini</span>
                                                 </div>
                                                 <div>
@@ -990,6 +990,7 @@
                     url: url,
                     type: 'GET',
                     success: res => {
+                        console.log(res);
                         if(res.status == true) {
                             $('#status_kepemilikan').val(res.data.status_kepemilikan).change();
                             $('#badan_usaha').val(res.data.badan_usaha).change();
