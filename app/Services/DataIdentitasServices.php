@@ -26,7 +26,17 @@ class DataIdentitasServices
             }
 
             if ($request->bentuk_usaha == 'perseorangan') {
-                $oldData = DataIdentitas::where('identitas_perusahaan_id', $old_perusahaan)->latest()->first();
+                if ($old_perusahaan) {
+                    $oldData = DataIdentitas::where('identitas_perusahaan_id', $old_perusahaan)->latest()->first();
+                } else {
+                    $oldData = '';
+                }
+            } else {
+                if ($old_perusahaan) {
+                    $oldData = DataIdentitas::where('identitas_perusahaan_id', $old_perusahaan)->latest()->first();
+                } else {
+                    $oldData = '';
+                }
             }
 
             $data = DataIdentitas::create(
@@ -48,6 +58,8 @@ class DataIdentitasServices
                 $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $foto->getClientOriginalExtension();
                 $foto->storeAs('uploads/penanggung_jawab', $filename, 'custom_path');
                 $data->foto = $filename;
+            } else {
+                $data->foto = $oldData->foto;
             }
 
             if ($request->bentuk_usaha == 'perseorangan') {

@@ -525,7 +525,7 @@
                                         <div class="group-column">
                                             <div class="form-group">
                                                 <label for="">Alamat Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
-                                                <textarea name="alamat_ktp" id="alamat_ktp" class="form-control" placeholder="Masukkan alamat lengkap KTP" autocomplete="off" required></textarea>
+                                                <textarea name="alamat_ktp" id="alamat_ktp" class="form-control" placeholder="Masukkan alamat lengkap KTP" autocomplete="off" required><?php echo e($data ? $data['alamat_ktp'] : ''); ?></textarea>
                                             </div>
 
                                             <div class="branch-section mt-5 p-0">

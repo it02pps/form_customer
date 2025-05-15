@@ -25,15 +25,17 @@ class CabangServices
                 return ['status' => false, 'error' => $validator->errors()->all()];
             }
 
-            foreach ($request['nitku_cabang'] as $i => $loop_cabang) {
-                Cabang::insert([
-                    'identitas_perusahaan_id' => $perusahaan,
-                    'nitku' => $request['nitku_cabang'][$i],
-                    'nama' => $request['nama_cabang'][$i],
-                    'alamat' => $request['alamat_nitku'][$i],
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ]);
+            if ($request['nitku_cabang'][0] != null) {
+                foreach ($request['nitku_cabang'] as $i => $loop_cabang) {
+                    Cabang::insert([
+                        'identitas_perusahaan_id' => $perusahaan,
+                        'nitku' => $request['nitku_cabang'][$i],
+                        'nama' => $request['nama_cabang'][$i],
+                        'alamat' => $request['alamat_nitku'][$i],
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ]);
+                }
             }
 
             return ['status' => true];

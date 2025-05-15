@@ -29,7 +29,7 @@ class perusahaanServices
             $lastest_cust = IdentitasPerusahaan::latest('id')->first();
             $lastSerialNumber = $lastest_cust ? $lastest_cust->kode_customer : '00001';
             $serial_number = (int) substr($lastSerialNumber, 0);
-            $number = str_pad($serial_number, 5, "0", STR_PAD_LEFT);
+            $number = str_pad($serial_number + 1, 5, "0", STR_PAD_LEFT);
             $kode_cust = $number;
 
             // Validation NIK, NPWP and Email Faktur
@@ -66,9 +66,13 @@ class perusahaanServices
                     $oldData = '';
                 }
             } else {
-                $update = IdentitasPerusahaan::where('id', Crypt::decryptString($request->update_id));
-                $update->update(['status_aktif' => '0']);
-                $oldData = $update->latest()->first();
+                if ($request->update_id) {
+                    $update = IdentitasPerusahaan::where('id', Crypt::decryptString($request->update_id));
+                    $update->update(['status_aktif' => '0']);
+                    $oldData = $update->latest()->first();
+                } else {
+                    $oldData = '';
+                }
             }
 
             // Store data
