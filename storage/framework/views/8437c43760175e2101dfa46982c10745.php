@@ -48,6 +48,15 @@
         color: #fff;
     }
 
+    #hapusCustomer {
+        width: 100px;
+        height: 35px;
+        border-radius: 8px;
+        background-color: #e30606;
+        border: none;
+        color: #fff;
+    }
+
     .btnSimpan {
         padding: 8px 80px;
         border-radius: 5px;
@@ -233,7 +242,7 @@
                                         <th style="width: 150px; font-size: 12px;" class="text-center align-middle">Bill to Address</th>
                                         <th style="width: 120px; font-size: 12px;" class="text-center align-middle">Sales Person</th>
                                         <th style="width: 50px; font-size: 12px;">Upload Status</th>
-                                        <th style="width: 220px; font-size: 12px;">Update</th>
+                                        <th style="width: 310px; font-size: 12px;">Update</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -377,7 +386,7 @@
                         className: 'text-center align-middle'
                     },
                     {
-                        width: '220px',
+                        width: '310px',
                         targets: 7,
                         className: 'text-center align-middle'
                     },
@@ -428,6 +437,57 @@
                 window.location.href = '/internal/panel/edit/' + id;
             });
             // END: Button edit
+
+            // Start: Button delete
+            $(document).on('click', '#hapusCustomer', function() {
+                let id = $(this).data('id');
+                Swal.fire({
+                    title: "Yakin?",
+                    text: "Data yang dihapus tidak dapat dikembalikan!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#0063ee",
+                    cancelButtonColor: "#e30606",
+                    confirmButtonText: "Hapus",
+                    cancelButtonText: `Batal`
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '<?php echo e(route("home.delete")); ?>',
+                            type: 'GET',
+                            data: {
+                                id: id
+                            },
+                            beforeSend: () => {
+                                Swal.fire({
+                                    title: 'Loading...',
+                                    text: 'Harap Menunggu',
+                                    icon: 'info',
+                                    allowOutsideClick: false,
+                                    showConfirmButton: false,
+                                });
+                            },
+                            success: res => {
+                                if(res.status == true) {
+                                    Swal.fire({
+                                        title: 'Berhasil!',
+                                        text: res.pesan,
+                                        icon: 'success'
+                                    });
+                                    table.ajax.reload();
+                                } else {
+                                    Swal.fire({
+                                        title: 'Gagal!',
+                                        text: res.error,
+                                        icon: 'error'
+                                    });
+                                }
+                            }
+                        })
+                    }
+                });
+            });
+            // END: Button delete
 
             // START: Form profil
             $(document).on('submit', '#formProfil', function(e) {

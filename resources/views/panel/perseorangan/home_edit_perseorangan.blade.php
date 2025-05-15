@@ -324,17 +324,7 @@
                     <div class="section5">
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group" id="select">
-                                    <label for="">Jenis Customer <span class="text-danger">*</span></label>
-                                    <select name="jenis_cust" id="jenis_cust" autocomplete="off" class="form-control" required>
-                                        <option value="lama">Customer Lama</option>
-                                        <option value="baru">Customer Baru</option>
-                                    </select>
-                                    <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group" id="select">
+                                <div class="form-group p-0" id="select">
                                     <label for="">Sales</label>
                                     <select name="sales" id="sales" autocomplete="off" class="form-control">
                                         <option value="">-</option>
@@ -369,22 +359,29 @@
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label for="">Alamat usaha <span class="text-danger">*</span></label>
+                                        <label for="">Alamat Usaha <span class="text-danger">*</span></label>
                                         <textarea name="alamat_lengkap" id="alamat_lengkap" class="form-control" rows="6" placeholder="Masukkan alamat lengkap usaha" autocomplete="off" required>{{ $data['alamat_lengkap'] ? $data['alamat_lengkap'] : '' }}</textarea>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="group-column">
-                                        <div class="form-group">
-                                            <label for="">Kota/Kabupaten <span class="text-danger">*</span></label>
-                                            <input type="text" name="kota_kabupaten" id="kota_kabupaten" class="form-control" placeholder="Masukkan Kota/Kabupaten" autocomplete="off" required value="{{ $data['kota_kabupaten'] ? $data['kota_kabupaten'] : '' }}">
-                                        </div>
-                
-                                        <div class="form-group">
-                                            <label for="">Alamat Email usaha</label>
-                                            <input type="text" name="alamat_email_perusahaan" id="alamat_email_perusahaan" class="form-control" autocomplete="off" placeholder="Masukkan alamat email usaha" value="{{ $data['alamat_email'] ? $data['alamat_email'] : '' }}">
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="">Alamat Group Usaha <span class="text-danger">*</span></label>
+                                        <textarea name="alamat_group_lengkap" id="alamat_group_lengkap" class="form-control" rows="6" placeholder="Masukkan alamat group usaha" autocomplete="off" required>{{ $data['alamat_lengkap'] ? $data['alamat_lengkap'] : '' }}</textarea>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label for="">Kota/Kabupaten <span class="text-danger">*</span></label>
+                                        <input type="text" name="kota_kabupaten" id="kota_kabupaten" class="form-control" placeholder="Masukkan Kota/Kabupaten" autocomplete="off" required value="{{ $data['kota_kabupaten'] ? $data['kota_kabupaten'] : '' }}">
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label for="">Alamat Email Usaha</label>
+                                        <input type="text" name="alamat_email_perusahaan" id="alamat_email_perusahaan" class="form-control" autocomplete="off" placeholder="Masukkan alamat email usaha" value="{{ $data['alamat_email'] ? $data['alamat_email'] : '' }}">
+                                    </div>    
                                 </div>
                             </div>
                             <div class="row">
@@ -441,69 +438,64 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group" id="select">
-                                        <label for="">Apakah ada NPWP sebelum tahun 2024? <span class="text-danger">*</span></label>
-                                        <select name="npwp_perseorangan" id="npwp_perseorangan" class="form-control">
-                                            <option value="0">Tidak ada</option>
-                                            <option value="1">Ada</option>
-                                        </select>
-                                        <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
-                                        <span class="text-danger">*Jika ada, silahkan mengisi nomor NPWP dikolom NIK</span>
+                                    <div class="form-group">
+                                        <label for="">NIK <span class="text-danger">*</span></label>
+                                        <input type="text" id="nomor_ktp" name="nomor_ktp" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="16" placeholder="Masukkan NIK" autocomplete="off" class="form-control" value="{{ $data['nomor_ktp'] ? $data['nomor_ktp'] : $data['nomor_npwp'] }}">
                                     </div>
                                 </div>
                             </div>
                             <div id="ktp-section">
                                 <div class="row">
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="form-group">
-                                            <label for="">NIK <span class="text-danger">*</span></label>
-                                            <input type="text" id="nomor_ktp" name="nomor_ktp" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="16" placeholder="Masukkan NIK" autocomplete="off" class="form-control" value="{{ $data['npwp_perseorangan'] ? ($data['npwp_perseorangan'] == '1' ? $data['nomor_npwp'] : $data['nomor_ktp']) : '' }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="form-group">
-                                            <label for="">Nama Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
-                                            <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan Nama Lengkap" autocomplete="off" class="form-control" value="{{ $data['nama_lengkap'] ? $data['nama_lengkap'] : '' }}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                         <div class="group-column">
                                             <div class="form-group">
-                                                <label for="">Foto KTP <span class="text-danger">*</span></label>
-                                                <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
+                                                <label for="">Nama Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
+                                                <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan Nama Lengkap" autocomplete="off" class="form-control" value="{{ $data['nama_lengkap'] ? $data['nama_lengkap'] : '' }}">
                                             </div>
-                    
-                                            @if($data)
-                                                @if($data['foto_ktp'] && File::extension($data['foto_ktp']) == 'pdf')
-                                                    <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
-                                                        <p style="font-size: 18px;">Preview file KTP</p>
-                                                        <a href="{{ asset('../../../uploads/identitas_perusahaan/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                    </div>
-                                                @elseif($data['foto_ktp'] && File::extension($data['foto_ktp']) != 'pdf')
-                                                    <div class="form-group" id="preview_ktp">
-                                                        <img id="preview_foto_ktp" src="{{ asset('../../../uploads/identitas_perusahaan/' . $data['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
-                                                    </div>
+
+                                            <div class="group-column p-0 mt-3">
+                                                <div class="form-group">
+                                                    <label for="">Foto KTP <span class="text-danger">*</span></label>
+                                                    <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
+                                                </div>
+                        
+                                                @if($data)
+                                                    @if($data['foto_ktp'] && File::extension($data['foto_ktp']) == 'pdf')
+                                                        <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
+                                                            <p style="font-size: 18px;">Preview file KTP</p>
+                                                            <a href="{{ asset('../../../uploads/identitas_perusahaan/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                        </div>
+                                                    @elseif($data['foto_ktp'] && File::extension($data['foto_ktp']) != 'pdf')
+                                                        <div class="form-group" id="preview_ktp">
+                                                            <img id="preview_foto_ktp" src="{{ asset('../../../uploads/identitas_perusahaan/' . $data['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
+                                                        </div>
+                                                    @else
+                                                        <div class="form-group" id="preview_ktp">
+                                                            <img id="preview_foto_ktp" src="" alt="Belum ada file" data-action="zoom">
+                                                        </div>
+                                                    @endif
                                                 @else
                                                     <div class="form-group" id="preview_ktp">
                                                         <img id="preview_foto_ktp" src="" alt="Belum ada file" data-action="zoom">
                                                     </div>
                                                 @endif
-                                            @else
-                                                <div class="form-group" id="preview_ktp">
-                                                    <img id="preview_foto_ktp" src="" alt="Belum ada file" data-action="zoom">
-                                                </div>
-                                            @endif
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="branch-section d-none">
-                                            <div >
-                                                <span class="text-danger">*Harap diisi cabang dengan <br> menekan tombol dibawah ini</span>
+                                        <div class="group-column">
+                                            <div class="form-group">
+                                                <label for="">Alamat Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
+                                                <textarea name="alamat_ktp" id="alamat_ktp" class="form-control" rows="6" placeholder="Masukkan alamat lengkap KTP" autocomplete="off" required>{{ $data['alamat_lengkap'] ? $data['alamat_lengkap'] : '' }}</textarea>
                                             </div>
-                                            <div>
-                                                <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>
+
+                                            <div class="branch-section mt-5 p-0">
+                                                <div >
+                                                    <span class="text-danger">*Harap diisi cabang dengan <br> menekan tombol dibawah ini</span>
+                                                </div>
+                                                <div>
+                                                    <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1180,15 +1172,24 @@
             });
             // END: Dynamic row
 
-            // START: NPWP Perseorangan
-            $('#npwp_perseorangan').on('change', function() {
-                if($(this).val() == '0') {
-                    $('.branch-section').addClass('d-none');
+            // START: Tahun berdiri
+            $(document).on('change', '#tahun_berdiri', function(e) {
+                if(e.target.value != '') {
+                    let tgl = new Date();
+                    let tgl_berdiri = new Date($(this).val());
+    
+                    let thn_berdiri = tgl_berdiri.getFullYear();
+                    let thn_sekarang = tgl.getFullYear();
+                    let result = thn_sekarang - thn_berdiri;
+                    
+                    $('#lama_usaha').val(result + ' tahun');
+                    $('#lama_usaha_hide').val(result);
                 } else {
-                    $('.branch-section').removeClass('d-none');
+                    $('#lama_usaha').val('');
+                    $('#lama_usaha_hide').val('');
                 }
             });
-            // END: NPWP Perseorangan
+            // END: Tahun berdiri
         });
     </script>
 @endsection

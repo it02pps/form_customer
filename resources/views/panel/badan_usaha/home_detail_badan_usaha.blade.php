@@ -343,13 +343,7 @@
                         <h1>Identitas Perusahaan</h1>
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Jenis Customer</label>
-                                    <input type="text" name="jenis_cust" id="jenis_cust" class="form-control" readonly autocomplete="off" value="{{ strtoupper($data['status_cust']) }}">
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group">
+                                <div class="form-group p-0">
                                     <label for="">Sales</label>
                                     <input type="text" name="sales" id="sales" class="form-control" readonly autocomplete="off" value="{{ $data['nama_sales'] ? $data['nama_sales'] : '-' }}">
                                 </div>
@@ -364,15 +358,22 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="">Nama Group Perusahaan</label>
-                                        <input type="text" name="nama_group_perusahaan" id="nama_group_perusahaan" class="form-control" readonly autocomplete="off" value="{{ $data['nama_group_perusahaan'] }}">
+                                        <label for="">Alamat Perusahaan</label>
+                                        <textarea name="alamat_lengkap" id="alamat_lengkap" class="form-control" rows="6" readonly autocomplete="off">{{ $data['alamat_lengkap'] }}</textarea>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Alamat Perusahaan</label>
-                                    <textarea name="alamat_lengkap" id="alamat_lengkap" class="form-control" rows="6" readonly autocomplete="off">{{ $data['alamat_lengkap'] }}</textarea>
+                                <div class="group-column">
+                                    <div class="form-group">
+                                        <label for="">Nama Group Perusahaan</label>
+                                        <input type="text" name="nama_group_perusahaan" id="nama_group_perusahaan" class="form-control" readonly autocomplete="off" value="{{ $data['nama_group_perusahaan'] }}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="">Alamat Group Perusahaan</label>
+                                        <textarea name="alamat_group_lengkap" id="alamat_group_lengkap" class="form-control" rows="6" readonly autocomplete="off">{{ $data['alamat_group_lengkap'] }}</textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>

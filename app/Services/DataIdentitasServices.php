@@ -39,6 +39,8 @@ class DataIdentitasServices
                 }
             }
 
+            // dd($oldData->foto);
+
             $data = DataIdentitas::create(
                 [
                     'identitas_perusahaan_id' => $new_perusahaan,

@@ -314,17 +314,7 @@
                     <div class="section5">
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group" id="select">
-                                    <label for="">Jenis Customer <span class="text-danger">*</span></label>
-                                    <select name="jenis_cust" id="jenis_cust" autocomplete="off" class="form-control" required>
-                                        <option value="lama">Customer Lama</option>
-                                        <option value="baru">Customer Baru</option>
-                                    </select>
-                                    <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group" id="select">
+                                <div class="form-group p-0" id="select">
                                     <label for="">Sales</label>
                                     <select name="sales" id="sales" autocomplete="off" class="form-control">
                                         <option value="">-</option>
@@ -358,22 +348,33 @@
                             </div>
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group">
-                                        <label for="">Alamat Perusahaan <span class="text-danger">*</span></label>
-                                        <textarea name="alamat_lengkap" id="alamat_lengkap" class="form-control" rows="6" placeholder="Masukkan alamat lengkap perusahaan" autocomplete="off" required><?php echo e($data ? $data['alamat_lengkap'] : ''); ?></textarea>
-                                    </div>
+                                    
+                                        <div class="form-group">
+                                            <label for="">Alamat Perusahaan <span class="text-danger">*</span></label>
+                                            <textarea name="alamat_lengkap" id="alamat_lengkap" class="form-control" rows="6" placeholder="Masukkan alamat lengkap perusahaan" autocomplete="off" required><?php echo e($data ? $data['alamat_lengkap'] : ''); ?></textarea>
+                                        </div>
+                                    
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="group-column">
                                         <div class="form-group">
-                                            <label for="">Kota/Kabupaten <span class="text-danger">*</span></label>
-                                            <input type="text" name="kota_kabupaten" id="kota_kabupaten" class="form-control" placeholder="Masukkan Kota/Kabupaten" autocomplete="off" required value="<?php echo e($data ? $data['kota_kabupaten'] : ''); ?>">
+                                            <label for="">Alamat Group Perusahaan <span class="text-danger">*</span></label>
+                                            <textarea name="alamat_group_lengkap" id="alamat_group_lengkap" class="form-control" rows="6" placeholder="Masukkan alamat group perusahaan" autocomplete="off" required><?php echo e($data ? $data['alamat_lengkap'] : ''); ?></textarea>
                                         </div>
-                
-                                        <div class="form-group">
-                                            <label for="">Alamat Email Perusahaan</label>
-                                            <input type="text" name="alamat_email_perusahaan" id="alamat_email_perusahaan" class="form-control" autocomplete="off" placeholder="Contoh: perusahaan@gmail.com" value="<?php echo e($data ? ($data['alamat_email'] ? $data['alamat_email'] : '') : ''); ?>">
-                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label for="">Kota/Kabupaten <span class="text-danger">*</span></label>
+                                        <input type="text" name="kota_kabupaten" id="kota_kabupaten" class="form-control" placeholder="Masukkan Kota/Kabupaten" autocomplete="off" required value="<?php echo e($data ? $data['kota_kabupaten'] : ''); ?>">
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label for="">Alamat Email Perusahaan</label>
+                                        <input type="text" name="alamat_email_perusahaan" id="alamat_email_perusahaan" class="form-control" autocomplete="off" placeholder="Contoh: perusahaan@gmail.com" value="<?php echo e($data ? ($data['alamat_email'] ? $data['alamat_email'] : '') : ''); ?>">
                                     </div>
                                 </div>
                             </div>
@@ -483,7 +484,7 @@
                                     <div class="group-column">
                                         <div class="form-group">
                                             <label for="">Nomor Aktif Untuk Faktur Pajak</label>
-                                            <input type="text" name="no_wa" id="no_wa" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" maxlength="14" class="form-control" autocomplete="off" placeholder="Contoh: 012345678910" required value="<?php echo e($data ? $data['nomor_whatsapp'] : ''); ?>">
+                                            <input type="text" name="no_wa" id="no_wa" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" maxlength="14" class="form-control" autocomplete="off" placeholder="Contoh: 012345678910" value="<?php echo e($data ? $data['nomor_whatsapp'] : ''); ?>">
                                         </div>
 
                                         <div class="form-group pt-3" id="select">

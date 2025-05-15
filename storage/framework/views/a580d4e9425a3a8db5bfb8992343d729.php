@@ -255,6 +255,7 @@
                     status = 'customer-baru/';
                     status2 = '';
                 } else {
+                    $('.modal-body .opsi2').empty();
                     $('#nik_npwp').attr('required', true);
                     $('.modal-body .opsi2').append(`
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -268,6 +269,7 @@
                             </div>
                         </div>
                     `).addClass('pb-4');
+                    $('.identity').empty();
                     $('.identity').append(`
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <label for="">Nomor NIK / NPWP <span class="text-danger">*</span></label>
@@ -314,14 +316,22 @@
                             },
                             success: res => {
                                 Swal.close();
-                                if(res.data) {
-                                    window.location.href = '/form-customer/perseorangan/' + status + status2 + res.datID;
+                                if(res.status == true) {
+                                    if(res.data) {
+                                        window.location.href = '/form-customer/perseorangan/' + status + status2 + res.datID;
+                                    } else {
+                                        Swal.fire({
+                                            title: 'Gagal!',
+                                            text: res.error,
+                                            icon: 'error'
+                                        });    
+                                    }
                                 } else {
                                     Swal.fire({
                                         title: 'Gagal!',
-                                        text: 'Data tidak ditemukan',
+                                        text: res.error,
                                         icon: 'error'
-                                    })
+                                    });
                                 }
                             }
                         })

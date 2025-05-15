@@ -390,7 +390,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="">Alamat usaha</label>
+                                        <label for="">Alamat Usaha</label>
                                         <textarea name="alamat_lengkap" id="alamat_lengkap" class="form-control" rows="6" autocomplete="off" readonly>{{ $perusahaan['alamat_lengkap'] }}</textarea>
                                     </div>
                                 </div>
@@ -418,7 +418,7 @@
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Alamat Email usaha</label>
+                                    <label for="">Alamat Email Usaha</label>
                                     <input type="text" name="alamat_email_perusahaan" id="alamat_email_perusahaan" class="form-control" autocomplete="off" readonly value="{{ $perusahaan['alamat_email'] ? $perusahaan['alamat_email'] : '-' }}">
                                 </div>
                             </div>

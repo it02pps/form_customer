@@ -385,11 +385,9 @@
                             </div>
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="group-column">
-                                        <div class="form-group">
-                                            <label for="">Alamat Perusahaan <span class="text-danger">*</span></label>
-                                            <textarea name="alamat_lengkap" id="alamat_lengkap" class="form-control" rows="6" placeholder="Masukkan alamat lengkap perusahaan" autocomplete="off" required>{{ $data ? $data['alamat_lengkap'] : '' }}</textarea>
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="">Alamat Perusahaan <span class="text-danger">*</span></label>
+                                        <textarea name="alamat_lengkap" id="alamat_lengkap" class="form-control" rows="6" placeholder="Masukkan alamat lengkap perusahaan" autocomplete="off" required>{{ $data ? $data['alamat_lengkap'] : '' }}</textarea>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">

@@ -57,6 +57,7 @@ Route::middleware('web')->group(function () {
     Route::get('/internal/panel/edit/{id}', [HomeController::class, 'edit'])->name('home.edit');
     Route::get('/internal/panel/get-pdf/{id}', [HomeController::class, 'getPdf'])->name('home.getPdf');
     Route::get('/internal/panel/select/{id}', [HomeController::class, 'select'])->name('home.select');
+    Route::get('/internal/panel/delete-cust', [HomeController::class, 'hapusCustomer'])->name('home.delete');
 
     // Update profil & Password
     Route::post('/internal/panel/update-profil', [HomeController::class, 'update_profil'])->name('home.update_profil');

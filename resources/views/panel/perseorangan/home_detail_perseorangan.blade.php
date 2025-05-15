@@ -213,7 +213,7 @@
     #cabang button {
         position: absolute;
         right: 0;
-        top: 37px;
+        top: 55px;
     }
 
     .btnDetailCabang {
@@ -376,13 +376,7 @@
                         <h1>Identitas Perseorangan</h1>
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Jenis Customer</label>
-                                    <input type="text" name="nama_perusahaan" id="nama_perusahaan" class="form-control" autocomplete="off" readonly value="{{ strtoupper($data['status_cust']) }}">
-                                </div>
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group">
+                                <div class="form-group p-0">
                                     <label for="">Sales</label>
                                     <input type="text" name="nama_sales" id="nama_sales" class="form-control" autocomplete="off" readonly value="{{ $data['nama_sales'] ? $data['nama_sales'] : '-' }}">
                                 </div>
@@ -397,29 +391,36 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="">Nama Group Usaha</label>
-                                        <input type="text" name="nama_group_perusahaan" id="nama_group_perusahaan" class="form-control" autocomplete="off" readonly value="{{ $data['nama_group_perusahaan'] }}">
+                                        <label for="">Alamat Usaha</label>
+                                        <textarea name="alamat_lengkap" id="alamat_lengkap" class="form-control" rows="6" autocomplete="off" readonly>{{ $data['alamat_lengkap'] }}</textarea>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label for="">Alamat usaha</label>
-                                    <textarea name="alamat_lengkap" id="alamat_lengkap" class="form-control" rows="6" autocomplete="off" readonly>{{ $data['alamat_lengkap'] }}</textarea>
+                                <div class="group-column">
+                                    <div class="form-group">
+                                        <label for="">Nama Group Usaha</label>
+                                        <input type="text" name="nama_group_perusahaan" id="nama_group_perusahaan" class="form-control" autocomplete="off" readonly value="{{ $data['nama_group_perusahaan'] }}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="">Alamat Group Usaha</label>
+                                        <textarea name="alamat_group_lengkap" id="alamat_group_lengkap" class="form-control" rows="6" autocomplete="off" readonly>{{ $data['alamat_group_lengkap'] }}</textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Alamat Email usaha</label>
-                                    <input type="text" name="alamat_email_perusahaan" id="alamat_email_perusahaan" class="form-control" autocomplete="off" readonly value="{{ $data['alamat_email'] ? $data['alamat_email'] : '-' }}">
+                                    <label for="">Kota/Kabupaten</label>
+                                    <input type="text" name="kota_kabupaten" id="kota_kabupaten" class="form-control" autocomplete="off" readonly value="{{ $data['kota_kabupaten'] }}">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Kota/Kabupaten</label>
-                                    <input type="text" name="kota_kabupaten" id="kota_kabupaten" class="form-control" autocomplete="off" readonly value="{{ $data['kota_kabupaten'] }}">
+                                    <label for="">Alamat Email Usaha</label>
+                                    <input type="text" name="alamat_email_perusahaan" id="alamat_email_perusahaan" class="form-control" autocomplete="off" readonly value="{{ $data['alamat_email'] ? $data['alamat_email'] : '-' }}">
                                 </div>
                             </div>
                         </div>
@@ -466,47 +467,49 @@
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
-                                    <label for="">Apakah ada NPWP sebelum tahun 2024? <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="npwp_perseorangan" id="npwp_perseorangan" autocomplete="off" readonly value="{{ $data['npwp_perseorangan'] ? $data['npwp_perseorangan'] : '-' }}">
+                                    <label for="">NIK</label>
+                                    <input type="text" id="nomor_ktp" name="nomor_ktp" autocomplete="off" class="form-control" readonly value="{{ $data['nomor_ktp'] ? $data['nomor_ktp']  : $data['nomor_npwp'] }}">
                                 </div>
                             </div>
                         </div>
                         <div id="ktp-section">
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group">
-                                        <label for="">NIK</label>
-                                        <input type="text" id="nomor_ktp" name="nomor_ktp" autocomplete="off" class="form-control" readonly value="{{ $data['npwp_perseorangan'] ? ($data['npwp_perseorangan'] == '1' ? $data['nomor_npwp'] : $data['nomor_ktp'])  : '-' }}">
+                                    <div class="group-column">
+                                        <div class="form-group">
+                                            <label for="">Nama Lengkap Sesuai Identitas</label>
+                                            <input type="text" id="nama_lengkap" name="nama_lengkap" autocomplete="off" class="form-control" readonly value="{{ $data['nama_lengkap'] ? $data['nama_lengkap'] : '-' }}">
+                                        </div>
+
+                                        <div class="group-colum">
+                                            <div class="form-group p-0 mt-2">
+                                                <label for="">Foto KTP <span class="text-danger">*</span></label>
+                                                @if(File::extension($data['foto_ktp']) == 'pdf')
+                                                    <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
+                                                        <p style="font-size: 18px;">Preview file KTP</p>
+                                                        <a href="{{ asset('../../../uploads/identitas_perusahaan/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    </div>
+                                                @else
+                                                    <div class="form-group" id="preview_ktp">
+                                                        <img id="preview_foto_ktp" src="{{ $data['foto_ktp'] ? asset('../../../uploads/identitas_perusahaan/' . $data['foto_ktp']) : '-' }}" alt="Belum ada file" data-action="zoom">
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group">
-                                        <label for="">Nama Lengkap Sesuai Identitas</label>
-                                        <input type="text" id="nama_lengkap" name="nama_lengkap" autocomplete="off" class="form-control" readonly value="{{ $data['nama_lengkap'] ? $data['nama_lengkap'] : '-' }}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group">
-                                        <label for="">Foto KTP <span class="text-danger">*</span></label>
-                                        @if(File::extension($data['foto_ktp']) == 'pdf')
-                                            <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
-                                                <p style="font-size: 18px;">Preview file KTP</p>
-                                                <a href="{{ asset('../../../uploads/identitas_perusahaan/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                            </div>
-                                        @else
-                                            <div class="form-group" id="preview_ktp">
-                                                <img id="preview_foto_ktp" src="{{ $data['foto_ktp'] ? asset('../../../uploads/identitas_perusahaan/' . $data['foto_ktp']) : '-' }}" alt="Belum ada file" data-action="zoom">
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="col-xl6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group" id="cabang">
-                                        <label for="">Cabang</label>
-                                        <input type="text" class="form-control" autocomplete="off" readonly placeholder="{{ App\Models\Cabang::where('identitas_perusahaan_id', $data['id'])->count() }} Cabang">
-                                        <button type="button" class="btnDetailCabang" title="Detail Cabang" data-bs-target="#modalCabang" data-bs-toggle="modal">Detail Cabang</button>
+                                    <div class="group-column">
+                                        <div class="form-group">
+                                            <label for="">Alamat Lengkap Sesuai KTP</label>
+                                            <textarea name="alamat_ktp" id="alamat_ktp" rows="6" class="form-control" autocomplete="off" readonly>{{ $data['alamat_ktp'] }}</textarea>
+                                        </div>
+
+                                        <div class="form-group" id="cabang">
+                                            <label for="">Cabang</label>
+                                            <input type="text" class="form-control" autocomplete="off" readonly placeholder="{{ App\Models\Cabang::where('identitas_perusahaan_id', $data['id'])->count() }} Cabang">
+                                            <button type="button" class="btnDetailCabang" title="Detail Cabang" data-bs-target="#modalCabang" data-bs-toggle="modal">Detail Cabang</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -668,7 +671,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Kode Customer</label>
-                                    <input type="text" name="kode_customer" id="kode_customer" readonly autocomplete="off" class="form-control" value="{{ $data['tipe_customer'] ? $data['tipe_customer']['kode_customer'] : '-' }}">
+                                    <input type="text" name="kode_customer" id="kode_customer" readonly autocomplete="off" class="form-control" value="{{ $data['tipe_customer'] ? $data['tipe_customer']['kode_customer'] ? $data['tipe_customer']['kode_customer'] : '-' : '-' }}">
                                 </div>
                             </div>
                         </div>

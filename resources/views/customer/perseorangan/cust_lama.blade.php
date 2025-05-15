@@ -1071,6 +1071,25 @@
                 updateDeleteButtonVisibility();
             });
             // END: Dynamic row
+
+            // START: Tahun berdiri
+            $(document).on('change', '#tahun_berdiri', function(e) {
+                if(e.target.value != '') {
+                    let tgl = new Date();
+                    let tgl_berdiri = new Date($(this).val());
+    
+                    let thn_berdiri = tgl_berdiri.getFullYear();
+                    let thn_sekarang = tgl.getFullYear();
+                    let result = thn_sekarang - thn_berdiri;
+                    
+                    $('#lama_usaha').val(result + ' tahun');
+                    $('#lama_usaha_hide').val(result);
+                } else {
+                    $('#lama_usaha').val('');
+                    $('#lama_usaha_hide').val('');
+                }
+            });
+            // END: Tahun berdiri
         });
     </script>
 @endsection

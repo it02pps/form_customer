@@ -121,7 +121,7 @@ class FormCustomerController extends Controller
             $param = Crypt::decryptString($param);
             // dd($param);
             $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas', 'cabang')->where(function ($query) use ($param) {
-                $query->where('nomor_ktp', $param)->orWhere('nomor_npwp', $param);
+                $query->where('nomor_ktp', '=', $param)->orWhere('nomor_npwp', $param);
             })->latest()->first();
             $url = route('form_customer.detail', ['menu' => $menu, 'id' => Crypt::encryptString($data)]);
             $enkripsi = Crypt::encryptString($param);
@@ -294,7 +294,7 @@ class FormCustomerController extends Controller
             $mergePdfPath = $this->mergingPdf($all_files, $data['nama_perusahaan'] . '.pdf');
 
             File::delete($temp_pdf);
-            return $pdf->stream();
+            // return $pdf->stream();
             return response()->download($mergePdfPath);
         } else {
             $pdf = Pdf::loadView('pdf.perseorangan_pdf', [
@@ -371,36 +371,42 @@ class FormCustomerController extends Controller
 
     public function pengkinian($menu, $status, $status2 = NULL, $param = NULL)
     {
-        $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas', 'cabang')->where('nomor_ktp', $param)->OrWhere('nomor_npwp', $param)->first();
-        $enkripsi = Crypt::encryptString($param);
-        if ($data) {
-            $data->makeHidden(
-                'id',
-                'created_at',
-                'updated_at'
-            );
+        if (strlen($param) != 15 && strlen($param) != 16) {
+            return ['status' => false, 'error' => 'NIK / NPWP tidak valid!'];
+        } else {
+            $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas', 'cabang')->where('nomor_ktp', $param)->OrWhere('nomor_npwp', $param)->first();
+            $enkripsi = Crypt::encryptString($param);
+            if ($data) {
+                $data->makeHidden(
+                    'id',
+                    'created_at',
+                    'updated_at'
+                );
 
-            $data->informasi_bank->makeHidden(
-                'id',
-                'created_at',
-                'updated_at',
-                'identitas_perusahaan_id'
-            );
+                $data->informasi_bank->makeHidden(
+                    'id',
+                    'created_at',
+                    'updated_at',
+                    'identitas_perusahaan_id'
+                );
 
-            $data->data_identitas->makeHidden(
-                'id',
-                'created_at',
-                'updated_at',
-                'identitas_perusahaan_id'
-            );
+                $data->data_identitas->makeHidden(
+                    'id',
+                    'created_at',
+                    'updated_at',
+                    'identitas_perusahaan_id'
+                );
 
-            $data->cabang->makeHidden(
-                'id',
-                'created_at',
-                'updated_at',
-                'identitas_perusahaan_id'
-            );
+                $data->cabang->makeHidden(
+                    'id',
+                    'created_at',
+                    'updated_at',
+                    'identitas_perusahaan_id'
+                );
+                return ['status' => true, 'dataa' => $data, 'datID' => $enkripsi];
+            } else {
+                return ['status' => false, 'error' => 'Data tidak ditemukan'];
+            }
         }
-        return response()->json(['data' => $data, 'datID' => $enkripsi]);
     }
 }

@@ -58,7 +58,7 @@ class HomeController extends Controller
 
     public function datatable(Request $request)
     {
-        $data = IdentitasPerusahaan::where('status_aktif', '1')->orderBy('nama_group_perusahaan')->orderBy('kode_customer', 'ASC');
+        $data = IdentitasPerusahaan::where('status_aktif', '1')->orderBy('kode_customer', 'DESC')->orderBy('nama_group_perusahaan');
         return DataTables::of($data)
             ->addIndexColumn()
             ->editColumn('bentuk_usaha', function ($e) {
@@ -91,7 +91,8 @@ class HomeController extends Controller
             ->addColumn('aksi', function ($e) {
                 $edit = '<button type="button" id="editCustomer" title="Edit Data Customer" data-id="' . Crypt::encryptString($e->id) . '">Edit</button>';
                 $detail = '<button type="button" id="detailCustomer" title="Detail Data Customer" data-id="' . Crypt::encryptString($e->id) . '">Detail</button>';
-                $aksi = $edit . ' ' . $detail;
+                $delete = '<button type="button" id="hapusCustomer" title="Hapus Data Customer" data-id="' . Crypt::encryptString($e->id) . '">Delete</button>';
+                $aksi = $edit . ' ' . $detail . ' ' . $delete;
                 return $aksi;
             })
             ->addColumn('sales', function ($e) {
@@ -174,8 +175,6 @@ class HomeController extends Controller
             'kota_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'nama_group' => ($data['status_kepemilikan'] == 'group') ? 'required' : '',
             'bidang_usaha_lain' => ($data['bidang_usaha'] == 'lainnya') ? 'required' : '',
-            'jenis_cust' => 'required',
-            'npwp_perseorangan' => 'required',
 
             // Informasi Bank
             'nomor_rekening' => 'required|numeric|digits_between:10,16',
@@ -229,8 +228,6 @@ class HomeController extends Controller
             'kota_npwp.required' => 'Kota NPWP harus diisi',
             'nama_group.required' => 'Nama group harus diisi',
             'bidang_usaha_lain.required' => 'Bidang usaha harus diisi',
-            'jenis_cust.required' => 'Jenis customer harus diisi',
-            'npwp_perseorangan.required' => 'NPWP perseorangan harus diisi',
 
             // Informasi Bank
             'nomor_rekening.required' => 'Nomor rekening harus diisi',
@@ -278,18 +275,10 @@ class HomeController extends Controller
             $identitas_perusahaan->nama_perusahaan = $request->nama_perusahaan;
             $identitas_perusahaan->nama_group_perusahaan = $request->nama_group_perusahaan;
             $identitas_perusahaan->alamat_lengkap = $request->alamat_lengkap;
+            $identitas_perusahaan->alamat_group_lengkap = $request->alamat_group_lengkap;
             $identitas_perusahaan->kota_kabupaten = $request->kota_kabupaten;
             $identitas_perusahaan->bidang_usaha = $request->bidang_usaha;
-            $identitas_perusahaan->status_cust = $request->jenis_cust;
             $identitas_perusahaan->identitas = ($request->bentuk_usaha == 'badan_usaha') ? 'npwp' : 'ktp';
-
-            // Buat kode customer
-            $lastest_cust = IdentitasPerusahaan::latest('id')->first();
-            $lastSerialNumber = $lastest_cust ? $lastest_cust->kode_customer : 'K-00001';
-            $serial_number = (int) substr($lastSerialNumber, 2);
-            $number = str_pad($serial_number + 1, 5, '0', STR_PAD_LEFT);
-            $kode_cust = 'K-' . $number;
-            $identitas_perusahaan->kode_customer = $kode_cust;
 
             if ($request->bidang_usaha == 'lainnya') {
                 $identitas_perusahaan->bidang_usaha_lain = $request->bidang_usaha_lain;
@@ -314,15 +303,6 @@ class HomeController extends Controller
             // Kondisi jika identitas perusahaan yang dipakai KTP / NPWP
             if ($request->bentuk_usaha == 'perseorangan') {
                 $identitas_perusahaan->nama_lengkap = $request->nama_lengkap;
-                $identitas_perusahaan->npwp_perseorangan = $request->npwp_perseorangan;
-
-                if ($request->npwp_perseorangan == '1') {
-                    $identitas_perusahaan->nomor_npwp = $request->nomor_ktp;
-                    $identitas_perusahaan->nomor_ktp = null;
-                } else {
-                    $identitas_perusahaan->nomor_ktp = $request->nomor_ktp;
-                    $identitas_perusahaan->nomor_npwp = null;
-                }
 
                 if ($request->nomor_ktp == '-') {
                     return ['status' => false, 'error' => 'Nomor KTP harus diisi'];
@@ -458,7 +438,7 @@ class HomeController extends Controller
             $cabang = Cabang::where('identitas_perusahaan_id', $dekripsi);
             if ($cabang->count() > 0) {
                 $cabang->delete();
-                if (count($request->nitku_cabang) > 0) {
+                if ($request['nitku_cabang'][0] != null) {
                     for ($i = 0; $i < count($request->nitku_cabang); $i++) {
                         if ($request->nitku_cabang[$i] == '-') {
                             return ['status' => false, 'error' => 'NITKU Cabang wajib diisi dengan format yang benar'];
@@ -475,7 +455,7 @@ class HomeController extends Controller
                     }
                 }
             } else {
-                if (count($request->nitku_cabang) > 0) {
+                if ($request['nitku_cabang'][0] != null) {
                     for ($i = 0; $i < count($request->nitku_cabang); $i++) {
                         if ($request->nitku_cabang[$i] == '-') {
                             return ['status' => false, 'error' => 'NITKU Cabang wajib diisi dengan format yang benar'];
@@ -742,5 +722,26 @@ class HomeController extends Controller
         );
 
         return Response::download($path, $data->file_customer_external, $headers);
+    }
+
+    public function hapusCustomer(Request $request)
+    {
+        try {
+            $dekripsi = Crypt::decryptString($request->id);
+            IdentitasPerusahaan::where('id', $dekripsi)->delete();
+            DataIdentitas::where('identitas_perusahaan_id', $dekripsi)->delete();
+            InformasiBank::where('identitas_perusahaan_id', $dekripsi)->delete();
+            TipeCustomer::where('identitas_perusahaan_id', $dekripsi)->delete();
+
+            $cabangCount = Cabang::where('identitas_perusahaan_id', $dekripsi)->count();
+            if ($cabangCount > 0) {
+                Cabang::where('identitas_perusahaan_id', $dekripsi)->delete();
+            }
+
+            return ['status' => true, 'pesan' => 'Data berhasil dihapus'];
+        } catch (\Exception $e) {
+            dd($e);
+            return ['status' => false, 'error' => 'Terjadi Kesalahan'];
+        }
     }
 }
