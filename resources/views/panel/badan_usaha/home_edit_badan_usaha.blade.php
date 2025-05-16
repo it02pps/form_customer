@@ -1133,20 +1133,21 @@
                             $('#tipe_harga').val(res.data.tipe_customer.tipe_harga).change();
                             $('#kategori_customer').val(res.data.tipe_customer.kategori_customer).change();
                             $('#channel_distributor').val(res.data.tipe_customer.channel_distributor).change();
+                            $('#keterangan').val(res.data.tipe_customer.keterangan).change();
                         }
 
                         $('#jenis_cust').val(res.data.status_cust).change();
                         $('#status_cabang').val(res.data.status_cabang).change();
                         $('#bidang_usaha').val(res.data.bidang_usaha).change();
                         $('#status_kepemilikan').val(res.data.status_kepemilikan).change();
-
-                        let upperIdentitas = res.data.identitas.toUpperCase();
-                        $('#identitas_perusahaan').val(upperIdentitas).change();
                         $('#status_pkp').val(res.data.status_pkp).change();
                         $('#badan_usaha').val(res.data.badan_usaha).change();
                         $('#status_rekening').val(res.data.informasi_bank.status).change();
                         $('#identitas_penanggung_jawab').val(res.data.data_identitas.identitas).change();
                         $('#sales').val(res.data.nama_sales).change();
+                        
+                        let upperIdentitas = res.data.identitas.toUpperCase();
+                        $('#identitas_perusahaan').val(upperIdentitas).change();
 
                         if(res.data.bidang_usaha == 'lainnya') {
                             $('#bidang_usaha_lain').removeClass('d-none');
@@ -1178,6 +1179,7 @@
                         $('input[name="tipe_harga"]').val('end_user').prop('checked', true);
                         $('#kategori_customer').val('').change();
                         $('#channel_distributor').val('').change();
+                        $('#keterangan').val('').change();
                         $('#status_cabang').val('0').change();
                         $('#jenis_cust').val('lama');
                         $('#sales').val('').change();

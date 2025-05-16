@@ -453,7 +453,7 @@
 
                                             <div class="group-column p-0 mt-3">
                                                 <div class="form-group">
-                                                    <label for="">Foto KTP <span class="text-danger">*</span></label>
+                                                    <label for="">Foto KTP / NPWP <span class="text-danger">*</span></label>
                                                     <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
                                                 </div>
                         
@@ -1079,14 +1079,12 @@
                         $('#bidang_usaha').val(res.data.bidang_usaha).change();
                         $('#status_kepemilikan').val(res.data.status_kepemilikan).change();
                         $('#sales').val(res.data.nama_sales).change();
-                        $('#npwp_perseorangan').val(res.data.npwp_perseorangan).change();
-
-                        let upperIdentitas = res.data.identitas.toUpperCase();
-                        $('#identitas_perusahaan').val(upperIdentitas).change();
                         $('#status_pkp').val(res.data.status_pkp).change();
                         $('#status_rekening').val(res.data.informasi_bank.status).change();
                         $('#identitas_penanggung_jawab').val(res.data.data_identitas.identitas).change();
-                        $('#npwp_perseorangan').val(res.data.npwp_perseorangan).change();
+
+                        let upperIdentitas = res.data.identitas.toUpperCase();
+                        $('#identitas_perusahaan').val(upperIdentitas).change();
 
                         if(res.data.bidang_usaha == 'lainnya') {
                             $('#bidang_usaha_lain').removeClass('d-none');

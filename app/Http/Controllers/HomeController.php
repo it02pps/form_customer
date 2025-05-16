@@ -127,6 +127,7 @@ class HomeController extends Controller
     {
         $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank', 'tipe_customer')->where('id', Crypt::decryptString($id))->first();
         $enkripsi = $id;
+        // dd($data);
 
         $sales = Sales::select('nama_sales')->get();
         $bidang_usaha = [
@@ -302,6 +303,7 @@ class HomeController extends Controller
 
             // Kondisi jika identitas perusahaan yang dipakai KTP / NPWP
             if ($request->bentuk_usaha == 'perseorangan') {
+                $identitas_perusahaan->identitas = 'ktp';
                 $identitas_perusahaan->nama_lengkap = $request->nama_lengkap;
 
                 if ($request->nomor_ktp == '-') {
@@ -345,6 +347,7 @@ class HomeController extends Controller
                 $identitas_perusahaan->status_pkp = 'non_pkp';
                 $identitas_perusahaan->sppkp = null;
             } else {
+                $identitas_perusahaan->identitas = 'npwp';
                 $identitas_perusahaan->badan_usaha = $request->badan_usaha;
                 $identitas_perusahaan->nama_npwp = $request->nama_npwp;
 
@@ -434,7 +437,6 @@ class HomeController extends Controller
             $identitas_perusahaan->save();
 
             // Cabang
-            // if($request->bentuk_usaha == 'badan_usaha') {
             $cabang = Cabang::where('identitas_perusahaan_id', $dekripsi);
             if ($cabang->count() > 0) {
                 $cabang->delete();
@@ -471,7 +473,6 @@ class HomeController extends Controller
                         ]);
                     }
                 }
-                // }
             }
 
             // Identitas penanggung jawab
@@ -740,7 +741,7 @@ class HomeController extends Controller
 
             return ['status' => true, 'pesan' => 'Data berhasil dihapus'];
         } catch (\Exception $e) {
-            dd($e);
+            // dd($e);
             return ['status' => false, 'error' => 'Terjadi Kesalahan'];
         }
     }

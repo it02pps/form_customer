@@ -455,7 +455,7 @@
 
                                             <div class="group-column p-0 mt-3">
                                                 <div class="form-group">
-                                                    <label for="">Foto KTP <span class="text-danger">*</span></label>
+                                                    <label for="">Foto KTP / NPWP <span class="text-danger">*</span></label>
                                                     <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
                                                 </div>
                         
@@ -1074,6 +1074,7 @@
                             $('#tipe_harga').val(res.data.tipe_customer.tipe_harga).change();
                             $('#kategori_customer').val(res.data.tipe_customer.kategori_customer).change();
                             $('#channel_distributor').val(res.data.tipe_customer.channel_distributor).change();
+                            $('#keterangan').val(res.data.tipe_customer.keterangan).change();
                         }
                         
                         $('#jenis_cust').val(res.data.status_cust).change();
@@ -1081,14 +1082,12 @@
                         $('#bidang_usaha').val(res.data.bidang_usaha).change();
                         $('#status_kepemilikan').val(res.data.status_kepemilikan).change();
                         $('#sales').val(res.data.nama_sales).change();
-                        $('#npwp_perseorangan').val(res.data.npwp_perseorangan).change();
-
-                        let upperIdentitas = res.data.identitas.toUpperCase();
-                        $('#identitas_perusahaan').val(upperIdentitas).change();
                         $('#status_pkp').val(res.data.status_pkp).change();
                         $('#status_rekening').val(res.data.informasi_bank.status).change();
                         $('#identitas_penanggung_jawab').val(res.data.data_identitas.identitas).change();
-                        $('#npwp_perseorangan').val(res.data.npwp_perseorangan).change();
+
+                        let upperIdentitas = res.data.identitas.toUpperCase();
+                        $('#identitas_perusahaan').val(upperIdentitas).change();
 
                         if(res.data.bidang_usaha == 'lainnya') {
                             $('#bidang_usaha_lain').removeClass('d-none');
@@ -1119,6 +1118,7 @@
                         $('input[name="tipe_harga"]').val('end_user').prop('checked', true);
                         $('#kategori_customer').val('').change();
                         $('#channel_distributor').val('').change();
+                        $('#keterangan').val('').change();
                         $('#status_cabang').val('0').change();
                         $('#sales').val('').change();
                         $('#npwp_perseorangan').val('').change();

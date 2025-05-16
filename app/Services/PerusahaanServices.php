@@ -95,6 +95,7 @@ class perusahaanServices
                     'nama_sales' => $request->sales,
                     'status_aktif' => '1',
                     'bentuk_usaha' => $request->bentuk_usaha,
+                    'identitas' => $request->bentuk_usaha == 'perseorangan' ? 'ktp' : 'npwp',
 
                     // Perseorangan
                     'nomor_ktp' => $request->bentuk_usaha == 'perseorangan' ? $request->nomor_ktp : null,

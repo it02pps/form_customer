@@ -420,7 +420,7 @@
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label for="">Alamat Email usaha</label>
+                                        <label for="">Alamat Email Usaha</label>
                                         <input type="text" name="alamat_email_perusahaan" id="alamat_email_perusahaan" class="form-control" autocomplete="off" placeholder="Masukkan alamat email usaha">
                                     </div>
                                 </div>
@@ -496,7 +496,7 @@
 
                                             <div class="group-column p-0 mt-3">
                                                 <div class="form-group">
-                                                    <label for="">Foto KTP <span class="text-danger">*</span></label>
+                                                    <label for="">Foto KTP / NPWP <span class="text-danger">*</span></label>
                                                     <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
                                                 </div>
                                                 <div class="form-group" id="preview_ktp">
