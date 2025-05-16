@@ -118,7 +118,8 @@
     }
 
     .btnCabang {
-        padding: 0 24px;
+        padding: 0 5px;
+        width: 180px;
         height: 48px;
         border-radius: 8px;
         background-color: #0063ee;
@@ -512,9 +513,9 @@
                                                 <textarea name="alamat_ktp" id="alamat_ktp" class="form-control" placeholder="Masukkan alamat lengkap KTP" autocomplete="off" required></textarea>
                                             </div>
 
-                                            <div class="branch-section mt-5 p-0">
+                                            <div class="branch-section mt-4 p-0">
                                                 <div >
-                                                    <span class="text-danger">*Harap diisi cabang dengan <br> menekan tombol dibawah ini</span>
+                                                    <span class="text-danger">*Jika terdapat cabang, silahkan tekan tombol disamping. Apabila tidak ada, dapat diabaikan</span>
                                                 </div>
                                                 <div>
                                                     <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>

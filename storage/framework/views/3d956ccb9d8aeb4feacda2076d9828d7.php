@@ -113,7 +113,8 @@
     }
 
     .btnCabang {
-        padding: 0 24px;
+        padding: 0 5px;
+        width: 180px;
         height: 48px;
         border-radius: 8px;
         background-color: #0063ee;
@@ -553,7 +554,7 @@
 
                                         <div class="branch-section mt-4 p-0">
                                             <div >
-                                                <span class="text-danger">*Harap diisi cabang dengan <br> menekan tombol dibawah ini</span>
+                                                <span class="text-danger">*Jika terdapat cabang, silahkan tekan tombol disamping. Apabila tidak ada, dapat diabaikan</span>
                                             </div>
                                             <div>
                                                 <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>
@@ -751,7 +752,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group d-none">
                                         <label for="">Kode Customer</label>
-                                        <input type="text" name="kode_customer" id="kode_customer" class="form-control" placeholder="Masukkan kode customer" autocomplete="off">
+                                        <input type="text" name="kode_customer" id="kode_customer" class="form-control" placeholder="Masukkan kode customer" autocomplete="off" value="<?php echo e($data['tipe_customer'] ? $data['tipe_customer']['kode_customer'] : '-'); ?>">
                                     </div>
                                 </div>
                             </div>
