@@ -625,6 +625,7 @@ class HomeController extends Controller
             $tipe_customer->kode_customer = $request->kode_customer;
             $tipe_customer->save();
 
+
             $link = route('home.detail', ['id' => Crypt::encryptString($identitas_perusahaan->id)]);
             return ['status' => true, 'link' => $link];
         } catch (\Exception $e) {

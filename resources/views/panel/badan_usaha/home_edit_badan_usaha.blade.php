@@ -307,7 +307,7 @@
                 </div>
                 <div class="title">
                     <h1>Formulir Data Customer</h1>
-                    <h5>Silahkan isi data terkini anda, kemudian tanda tangan.</h5>
+                    <h5>Silahkan isi data terkini anda, kemudian tanda tangan. Testing123</h5>
                 </div>
                 <form id="formCustomer" enctype="multipart/form-data">
                     @csrf
@@ -753,7 +753,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group d-none">
                                         <label for="">Kode Customer</label>
-                                        <input type="text" name="kode_customer" id="kode_customer" class="form-control" placeholder="Masukkan kode customer" autocomplete="off">
+                                        <input type="text" name="kode_customer" id="kode_customer" class="form-control" placeholder="Masukkan kode customer" autocomplete="off" value="{{ $data['tipe_customer'] ? $data['tipe_customer']['kode_customer'] : '-' }}">
                                     </div>
                                 </div>
                             </div>

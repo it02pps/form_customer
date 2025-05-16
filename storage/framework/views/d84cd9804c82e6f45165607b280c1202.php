@@ -1048,7 +1048,6 @@
                                 text: 'Data berhasil ditambahkan!',
                                 icon: 'success'
                             });
-                            window.location.href = res.link;
                         } else {
                             Swal.fire({
                                 title: 'Gagal',
@@ -1072,6 +1071,7 @@
                             $('#tipe_harga').val(res.data.tipe_customer.tipe_harga).change();
                             $('#kategori_customer').val(res.data.tipe_customer.kategori_customer).change();
                             $('#channel_distributor').val(res.data.tipe_customer.channel_distributor).change();
+                            $('#keterangan').val(res.data.tipe_customer.keterangan).change();
                         }
                         
                         $('#jenis_cust').val(res.data.status_cust).change();
@@ -1115,6 +1115,7 @@
                         $('input[name="tipe_harga"]').val('end_user').prop('checked', true);
                         $('#kategori_customer').val('').change();
                         $('#channel_distributor').val('').change();
+                        $('#keterangan').val('').change();
                         $('#status_cabang').val('0').change();
                         $('#sales').val('').change();
                         $('#npwp_perseorangan').val('').change();

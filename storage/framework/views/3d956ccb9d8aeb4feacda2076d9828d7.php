@@ -305,7 +305,7 @@
                 </div>
                 <div class="title">
                     <h1>Formulir Data Customer</h1>
-                    <h5>Silahkan isi data terkini anda, kemudian tanda tangan.</h5>
+                    <h5>Silahkan isi data terkini anda, kemudian tanda tangan. Testing123</h5>
                 </div>
                 <form id="formCustomer" enctype="multipart/form-data">
                     <?php echo csrf_field(); ?>
