@@ -515,12 +515,12 @@
                                                     </div>
                                                 @else
                                                     <div id="preview_sppkp" class="form-group">
-                                                        <img id="preview_foto_sppkp" src="" alt="Belum ada file" data-action="zoom">
+                                                        <p class="text-center">Belum ada file</p>
                                                     </div>
                                                 @endif
                                             @else
                                                 <div id="preview_sppkp" class="form-group">
-                                                    <img id="preview_foto_sppkp" src="" alt="Belum ada file" data-action="zoom">
+                                                    <p class="text-center">Belum ada file</p>
                                                 </div>
                                             @endif
                                         </div>
@@ -545,12 +545,12 @@
                                                 </div>
                                             @else
                                                 <div id="preview_npwp" class="form-group">
-                                                    <img id="preview_foto_npwp" src="" alt="Belum ada file" data-action="zoom">
+                                                    <p class="text-center">Belum ada file</p>
                                                 </div>
                                             @endif
                                         @else
                                             <div id="preview_npwp" class="form-group">
-                                                <img id="preview_foto_npwp" src="" alt="Belum ada file" data-action="zoom">
+                                                <p class="text-center">Belum ada file</p>
                                             </div>
                                         @endif
 
@@ -663,12 +663,12 @@
                                                 </div>
                                             @else
                                                 <div id="preview_penanggung" class="form-group">
-                                                    <img id="preview_foto_penanggung" src="" alt="Belum ada file" data-action="zoom">
+                                                    <p class="text-center">Belum ada file</p>
                                                 </div>
                                             @endif
                                         @else
                                             <div id="preview_penanggung" class="form-group">
-                                                <img id="preview_foto_penanggung" src="" alt="Belum ada file" data-action="zoom">
+                                                <p class="text-center">Belum ada file</p>
                                             </div>
                                         @endif
                                     </div>
@@ -912,6 +912,8 @@
                     }
                 }
                 reader.readAsDataURL(file[0]);
+            } else {
+                $("#preview_npwp").html('<p class="text-center">Belum ada file</p>');
             }
         }
 
@@ -939,6 +941,8 @@
                     }
                 }
                 reader.readAsDataURL(file[0]);
+            } else {
+                $("#preview_sppkp").html('<p class="text-center">Belum ada file</p>');
             }
         }
 
@@ -966,6 +970,8 @@
                     }
                 }
                 reader.readAsDataURL(file[0]);
+            } else {
+                $("#preview_penanggung").html('<p class="text-center">Belum ada file</p>');
             }
         }
         // END: Preview foto

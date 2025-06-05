@@ -59,14 +59,14 @@
         width: 100%;
     }
 
-    #preview_ktp, #preview_npwp, #preview_sppkp, #preview_penanggung {
+    #preview_ktp, #preview_penanggung {
         border: 1px solid #D2D0D8;
         border-radius: 5px;
         height: 271px;
         width: 100%;
     }
 
-    #preview_ktp img, #preview_npwp img, #preview_sppkp img, #preview_penanggung img {
+    #preview_ktp img, #preview_penanggung img {
         width: 100%;
         height: 269px;
         border-radius: 7px;
@@ -116,7 +116,8 @@
     }
 
     .btnCabang {
-        padding: 0 24px;
+        padding: 0 5px;
+        width: 180px;
         height: 48px;
         border-radius: 8px;
         background-color: #0063ee;
@@ -154,7 +155,7 @@
         cursor: pointer;
     }
 
-    #preview_penanggung .zoom-img-wrap .zoom-img, #preview_ktp .zoom-img-wrap .zoom-img, #preview_npwp .zoom-img-wrap .zoom-img, #preview_sppkp .zoom-img-wrap .zoom-img {
+    #preview_penanggung .zoom-img-wrap .zoom-img, #preview_ktp .zoom-img-wrap .zoom-img {
         width: 100%;
         height: 100%;
         transition: 1s;
@@ -323,14 +324,14 @@
             height: 177px !important;
         }
 
-        #preview_ktp, #preview_npwp, #preview_sppkp, #preview_penanggung {
+        #preview_ktp, #preview_penanggung {
             border: 1px solid #D2D0D8;
             border-radius: 5px;
             height: 205px;
             width: 333px;
         }
 
-        #preview_ktp img, #preview_npwp img, #preview_sppkp img, #preview_penanggung img {
+        #preview_ktp img, #preview_penanggung img {
             width: 330px;
             height: 200px;
             border-radius: 7px;
@@ -418,7 +419,7 @@
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label for="">Alamat Email usaha</label>
+                                        <label for="">Alamat Email Usaha</label>
                                         <input type="text" name="alamat_email_perusahaan" id="alamat_email_perusahaan" class="form-control" autocomplete="off" placeholder="Masukkan alamat email usaha">
                                     </div>
                                 </div>
@@ -494,11 +495,11 @@
 
                                             <div class="group-column p-0 mt-3">
                                                 <div class="form-group">
-                                                    <label for="">Foto KTP <span class="text-danger">*</span></label>
+                                                    <label for="">Foto KTP / NPWP <span class="text-danger">*</span></label>
                                                     <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
                                                 </div>
                                                 <div class="form-group" id="preview_ktp">
-                                                    <img id="preview_foto_ktp" src="" alt="Belum ada file" data-action="zoom">
+                                                    <p class="text-center">Belum ada file</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -510,9 +511,9 @@
                                                 <textarea name="alamat_ktp" id="alamat_ktp" class="form-control" placeholder="Masukkan alamat lengkap KTP" autocomplete="off" required></textarea>
                                             </div>
 
-                                            <div class="branch-section mt-5 p-0">
+                                            <div class="branch-section mt-4 p-0">
                                                 <div >
-                                                    <span class="text-danger">*Harap diisi cabang dengan <br> menekan tombol dibawah ini</span>
+                                                    <span class="text-danger">*Jika terdapat cabang, silahkan tekan tombol disamping. Apabila tidak ada, dapat diabaikan</span>
                                                 </div>
                                                 <div>
                                                     <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>
@@ -606,7 +607,7 @@
                                             <input type="file" name="foto_penanggung" id="foto_penanggung" class="form-control" onchange="previewFilePenanggung(this);" accept=".jpg, .png, .pdf, .jpeg">
                                         </div>
                                         <div id="preview_penanggung" class="form-group">
-                                            <img id="preview_foto_penanggung" src="" alt="Belum ada file" data-action="zoom">
+                                            <p class="text-center">Belum ada file</p>
                                         </div>
                                     </div>
                                 </div>
@@ -715,33 +716,8 @@
                     }
                 }
                 reader.readAsDataURL(file[0]);
-            }
-        }
-
-        function previewFileSppkp(input) {
-            var file = $("#sppkp").prop('files');
-            if(file){
-                let ext = file[0].type.split('/')[1];
-                var reader = new FileReader();
-                $("#preview_sppkp").removeClass('d-none');
-                if(ext == 'pdf') {
-                    $('#preview_foto_sppkp').find('img').remove();
-                    reader.onload = function() {
-                        let filename = reader.result.split(',')[1];
-                        $('#preview_sppkp').html('File PDF telah ditambahkan!').css({
-                            'height': '50px',
-                            'padding': '16px',
-                            'font-weight': 'bold'
-                        });
-                    }
-                } else {
-                    $("#preview_sppkp").css('height', '271px');
-                    $('#preview_sppkp').html('<img id="preview_foto_sppkp" src="" alt="Preview" data-action="zoom">');
-                    reader.onload = function() {
-                        $("#preview_foto_sppkp").attr("src", reader.result);
-                    }
-                }
-                reader.readAsDataURL(file[0]);
+            } else {
+                $('#preview_ktp').html('<p class="text-center">Belum ada file</p>');
             }
         }
 
@@ -769,6 +745,8 @@
                     }
                 }
                 reader.readAsDataURL(file[0]);
+            } else {
+                $('#preview_penanggung').html('<p class="text-center">Belum ada file</p>');
             }
         }
 

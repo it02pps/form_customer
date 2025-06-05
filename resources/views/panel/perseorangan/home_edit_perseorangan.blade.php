@@ -79,14 +79,14 @@
     }
 
 
-    #preview_ktp, #preview_npwp, #preview_sppkp, #preview_penanggung {
+    #preview_ktp, #preview_penanggung {
         border: 1px solid #D2D0D8;
         border-radius: 5px;
         height: 233px;
         width: 100%;
     }
 
-    #preview_ktp img, #preview_npwp img, #preview_sppkp img, #preview_penanggung img {
+    #preview_ktp img, #preview_penanggung img {
         width: 100%;
         height: 230px;
         border-radius: 7px;
@@ -175,7 +175,7 @@
         cursor: pointer;
     }
 
-    #preview_penanggung .zoom-img-wrap .zoom-img, #preview_ktp .zoom-img-wrap .zoom-img, #preview_npwp .zoom-img-wrap .zoom-img, #preview_sppkp .zoom-img-wrap .zoom-img {
+    #preview_penanggung .zoom-img-wrap .zoom-img, #preview_ktp .zoom-img-wrap .zoom-img {
         width: 100%;
         height: 100%;
         transition: 1s;
@@ -472,12 +472,12 @@
                                                         </div>
                                                     @else
                                                         <div class="form-group" id="preview_ktp">
-                                                            <img id="preview_foto_ktp" src="" alt="Belum ada file" data-action="zoom">
+                                                            <p class="text-center">Belum ada file</p>
                                                         </div>
                                                     @endif
                                                 @else
                                                     <div class="form-group" id="preview_ktp">
-                                                        <img id="preview_foto_ktp" src="" alt="Belum ada file" data-action="zoom">
+                                                        <p class="text-center">Belum ada file</p>
                                                     </div>
                                                 @endif
                                             </div>
@@ -597,12 +597,12 @@
                                             </div>
                                         @else
                                             <div id="preview_penanggung" class="form-group">
-                                                <img id="preview_foto_penanggung" src="" alt="Belum ada file" data-action="zoom">
+                                                <p class="text-center">Belum ada file</p>
                                             </div>
                                         @endif
                                     @else
                                         <div id="preview_penanggung" class="form-group">
-                                            <img id="preview_foto_penanggung" src="" alt="Belum ada file" data-action="zoom">
+                                            <p class="text-center">Belum ada file</p>
                                         </div>
                                     @endif
                                 </div>
@@ -845,60 +845,8 @@
                     }
                 }
                 reader.readAsDataURL(file[0]);
-            }
-        }
-
-        function previewFileNpwp(input) {
-            var file = $("#foto_npwp").prop('files');
-            if(file){
-                let ext = file[0].type.split('/')[1];
-                var reader = new FileReader();
-                $("#preview_npwp").removeClass('d-none');
-                if(ext == 'pdf') {
-                    $('#preview_foto_npwp').find('img').remove();
-                    reader.onload = function() {
-                        let filename = reader.result.split(',')[1];
-                        $('#preview_npwp').html('File PDF telah ditambahkan!').css({
-                            'height': '50px',
-                            'padding': '16px',
-                            'font-weight': 'bold'
-                        });
-                    }
-                } else {
-                    $("#preview_npwp").css('height', '197px');
-                    $('#preview_npwp').html('<img id="preview_foto_npwp" src="" alt="Preview" data-action="zoom">');
-                    reader.onload = function() {
-                        $("#preview_foto_npwp").attr("src", reader.result);
-                    }
-                }
-                reader.readAsDataURL(file[0]);
-            }
-        }
-
-        function previewFileSppkp(input) {
-            var file = $("#sppkp").prop('files');
-            if(file){
-                let ext = file[0].type.split('/')[1];
-                var reader = new FileReader();
-                $("#preview_sppkp").removeClass('d-none');
-                if(ext == 'pdf') {
-                    $('#preview_foto_sppkp').find('img').remove();
-                    reader.onload = function() {
-                        let filename = reader.result.split(',')[1];
-                        $('#preview_sppkp').html('File PDF telah ditambahkan!').css({
-                            'height': '50px',
-                            'padding': '16px',
-                            'font-weight': 'bold'
-                        });
-                    }
-                } else {
-                    $("#preview_sppkp").css('height', '197px');
-                    $('#preview_sppkp').html('<img id="preview_foto_sppkp" src="" alt="Preview" data-action="zoom">');
-                    reader.onload = function() {
-                        $("#preview_foto_sppkp").attr("src", reader.result);
-                    }
-                }
-                reader.readAsDataURL(file[0]);
+            } else {
+                $('#preview_ktp').html('<p class="text-center">Belum ada file</p>');
             }
         }
 
@@ -926,6 +874,8 @@
                     }
                 }
                 reader.readAsDataURL(file[0]);
+            } else {
+                $('#preview_penanggung').html('<p class="text-center">Belum ada file</p>');
             }
         }
         // END: Preview foto

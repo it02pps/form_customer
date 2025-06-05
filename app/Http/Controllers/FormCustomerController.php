@@ -56,17 +56,95 @@ class FormCustomerController extends Controller
         return view('customer.menu');
     }
 
-    // public function index_badan_usaha($menu, Request $request)
+    public function view_badan_usaha($menu, $status = NULL, $status2 = NULL, $param = NULL)
+    {
+        if ($menu == 'badan-usaha') {
+            if ($param) {
+                $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas', 'cabang')->where('bentuk_usaha', 'badan_usaha')->where('nomor_npwp', Crypt::decryptString($param))->latest()->first();
+                $url = route('form_customer.detail', ['menu' => $menu, 'id' => $param]);
+                $enkripsi = $param;
+            } else {
+                $data = NULL;
+                $enkripsi = NULL;
+                $url = NULL;
+            }
+
+            $sales = Sales::select('nama_sales')->get();
+            $bidang_usaha = [
+                'toko_retail',
+                'bumn',
+                'reseller',
+                'pabrik',
+                'kontraktor',
+                'toko_online',
+                'dock_kapal',
+                'end_user',
+                'ekspedisi',
+                'lainnya'
+            ];
+
+            if ($status == 'customer-baru') {
+                return view('customer.badan_usaha.cust_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
+            }
+
+            if ($status2 == 'pengkinian-data') {
+                return view('customer.badan_usaha.cust_lama', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
+            } else {
+                return view('customer.badan_usaha.usaha_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
+            }
+        } else {
+            if ($param) {
+                $param = Crypt::decryptString($param);
+                // dd($param);
+                $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas', 'cabang')->where('bentuk_usaha', 'perseorangan')->where('nomor_ktp', $param)->latest()->first();
+                $url = route('form_customer.detail', ['menu' => $menu, 'id' => Crypt::encryptString($data)]);
+                $enkripsi = Crypt::encryptString($param);
+            } else {
+                $data = NULL;
+                $url = NULL;
+                $enkripsi = NULL;
+            }
+
+            $sales = Sales::select('nama_sales')->get();
+            $bidang_usaha = [
+                'toko_retail',
+                'bumn',
+                'reseller',
+                'pabrik',
+                'kontraktor',
+                'toko_online',
+                'dock_kapal',
+                'end_user',
+                'ekspedisi',
+                'lainnya'
+            ];
+
+            // dd($data);
+
+            if ($status == 'customer-baru') {
+                return view('customer.perseorangan.cust_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
+            }
+
+            if ($status2 == 'pengkinian-data') {
+                return view('customer.perseorangan.cust_lama', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
+            } else {
+                return view('customer.perseorangan.usaha_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
+            }
+        }
+    }
+
+    // public function view_perseorangan($menu, $status = NULL, $status2 = NULL, $param = NULL)
     // {
-    //     if ($request->enkripsi) {
-    //         $dekripsi = Crypt::decryptString($request->enkripsi);
-    //         $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas', 'cabang')->where('bentuk_usaha', str_replace('-', '_', $menu))->where('id', $dekripsi)->first();
-    //         $url = route('form_customer.detail', ['menu' => $menu, 'id' => $request->enkripsi]);
-    //         $enkripsi = $request->enkripsi;
+    //     if ($param) {
+    //         $param = Crypt::decryptString($param);
+    //         // dd($param);
+    //         $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas', 'cabang')->where('bentuk_usaha', 'perseorangan')->where('nomor_ktp', $param)->latest()->first();
+    //         $url = route('form_customer.detail', ['menu' => $menu, 'id' => Crypt::encryptString($data)]);
+    //         $enkripsi = Crypt::encryptString($param);
     //     } else {
-    //         $data = null;
-    //         $url = null;
-    //         $enkripsi = null;
+    //         $data = NULL;
+    //         $url = NULL;
+    //         $enkripsi = NULL;
     //     }
 
     //     $sales = Sales::select('nama_sales')->get();
@@ -83,80 +161,18 @@ class FormCustomerController extends Controller
     //         'lainnya'
     //     ];
 
-    //     return view('customer.fix_badan_usaha', compact('data', 'url', 'enkripsi', 'menu', 'bidang_usaha', 'sales'));
+    //     // dd($data);
+
+    //     if ($status == 'customer-baru') {
+    //         return view('customer.perseorangan.cust_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
+    //     }
+
+    //     if ($status2 == 'pengkinian-data') {
+    //         return view('customer.perseorangan.cust_lama', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
+    //     } else {
+    //         return view('customer.perseorangan.usaha_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
+    //     }
     // }
-
-    public function view_badan_usaha($menu, Request $request)
-    {
-        if ($request->param) {
-            $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas', 'cabang')->where('bentuk_usaha', str_replace('-', '_', $menu))->where('id', Crypt::decryptString($request->param))->first();
-            $url = route('form_customer.detail', ['menu' => $menu, 'id' => $request->param]);
-            $enkripsi = $request->param;
-        } else {
-            $data = NULL;
-            $enkripsi = NULL;
-            $url = NULL;
-        }
-
-        $sales = Sales::select('nama_sales')->get();
-        $bidang_usaha = [
-            'toko_retail',
-            'bumn',
-            'reseller',
-            'pabrik',
-            'kontraktor',
-            'toko_online',
-            'dock_kapal',
-            'end_user',
-            'ekspedisi',
-            'lainnya'
-        ];
-
-        return view('customer.badan_usaha.index', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
-    }
-
-    public function view_perseorangan($menu, $status = NULL, $status2 = NULL, $param = NULL)
-    {
-        if ($param) {
-            $param = Crypt::decryptString($param);
-            // dd($param);
-            $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas', 'cabang')->where(function ($query) use ($param) {
-                $query->where('nomor_ktp', '=', $param)->orWhere('nomor_npwp', $param);
-            })->latest()->first();
-            $url = route('form_customer.detail', ['menu' => $menu, 'id' => Crypt::encryptString($data)]);
-            $enkripsi = Crypt::encryptString($param);
-        } else {
-            $data = NULL;
-            $url = NULL;
-            $enkripsi = NULL;
-        }
-
-        $sales = Sales::select('nama_sales')->get();
-        $bidang_usaha = [
-            'toko_retail',
-            'bumn',
-            'reseller',
-            'pabrik',
-            'kontraktor',
-            'toko_online',
-            'dock_kapal',
-            'end_user',
-            'ekspedisi',
-            'lainnya'
-        ];
-
-        // dd($data);
-
-        if ($status == 'customer-baru') {
-            return view('customer.perseorangan.cust_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
-        }
-
-        if ($status2 == 'pengkinian-data') {
-            return view('customer.perseorangan.cust_lama', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
-        } else {
-            return view('customer.perseorangan.usaha_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
-        }
-    }
 
     public function store(Request $request)
     {
@@ -205,14 +221,14 @@ class FormCustomerController extends Controller
                 'enkripsi' => $request->id,
                 'perusahaan' => $data_perusahaan,
                 'menu' => $menu,
-                'url' => route('form_customer.view_badan_usaha', ['menu' => $menu, 'param' => $request->id])
+                'url' => route('form_customer.view_badan_usaha', ['menu' => $menu, 'status' => 'customer-lama', 'status2' => 'pengkinian-data', 'param' => Crypt::encryptString($data_perusahaan->nomor_npwp)])
             ]);
         } else {
             return view('customer.perseorangan.detail', [
                 'enkripsi' => $request->id,
                 'perusahaan' => $data_perusahaan,
                 'menu' => $menu,
-                'url' => route('form_customer.view_perseorangan', ['menu' => $menu, 'status' => 'customer-lama', 'status2' => 'pengkinian-data', 'param' => ($data_perusahaan->nomor_ktp ? Crypt::encryptString($data_perusahaan->nomor_ktp) : Crypt::encryptString($data_perusahaan->nomor_npwp))])
+                'url' => route('form_customer.view_perseorangan', ['menu' => $menu, 'status' => 'customer-lama', 'status2' => 'pengkinian-data', 'param' => Crypt::encryptString($data_perusahaan->nomor_ktp)])
             ]);
         }
     }
@@ -222,7 +238,7 @@ class FormCustomerController extends Controller
         if ($menu == 'perseorangan') {
             if ($id) {
                 $dekripsi = Crypt::decryptString($id);
-                $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank')->where('nomor_ktp', $dekripsi)->orWhere('nomor_npwp', $dekripsi)->latest()->first();
+                $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank')->where('nomor_ktp', $dekripsi)->latest()->first();
 
                 return ['status' => true, 'data' => $data];
             } else {
@@ -231,7 +247,7 @@ class FormCustomerController extends Controller
         } else {
             if ($id) {
                 $dekripsi = Crypt::decryptString($id);
-                $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank')->where('id', $dekripsi)->latest()->first();
+                $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank')->where('nomor_npwp', $dekripsi)->latest()->first();
 
                 return ['status' => true, 'data' => $data];
             } else {
