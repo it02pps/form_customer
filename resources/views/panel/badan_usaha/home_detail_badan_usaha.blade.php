@@ -436,6 +436,9 @@
                                 <div class="form-group" >
                                     <label for="">Jenis Badan Usaha</label>
                                     <input type="text" name="badan_usaha" id="badan_usaha" class="form-control" autocomplete="off" readonly value="{{ $data['badan_usaha'] ? strtoupper($data['badan_usaha']) : '-'}}">
+                                    <div class="badan_usaha_lain p-0 @if($perusahaan['badan_usaha'] != 'lainnya') d-none @endif">
+                                        <input type="text" class="form-control" name="badan_usaha_lain" id="badan_usaha_lain" readonly autocomplete="off" value="{{ $perusahaan['badan_usaha_lain'] ? $perusahaan['badan_usaha_lain'] : '-' }}">
+                                    </div>
                                 </div>
                             </div>
                         </div>

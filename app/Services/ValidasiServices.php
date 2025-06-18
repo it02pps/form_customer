@@ -30,7 +30,8 @@ class ValidasiServices
             'alamat_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'kota_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'nama_group' => $data['status_kepemilikan'] == 'group' ? 'required' : '',
-            'bidang_usaha_lain' => $data['bidang_usaha'] == 'lainnya' ? 'required' : ''
+            'bidang_usaha_lain' => $data['bidang_usaha'] == 'lainnya' ? 'required' : '',
+            'badan_usaha_lain' => $data['badan_usaha'] == 'lainnya' ? 'required' : ''
         ];
 
         $message = [
@@ -64,7 +65,8 @@ class ValidasiServices
             'alamat_npwp.required' => 'Alamat NPWP harus diisi',
             'kota_npwp.required' => 'Kota NPWP harus diisi',
             'nama_group.required' => 'Nama group harus diisi',
-            'bidang_usaha_lain.required' => 'Bidang usaha harus diisi'
+            'bidang_usaha_lain.required' => 'Bidang usaha lain harus diisi',
+            'badan_usaha_lain.required' => 'Badan usaha lain harus diisi'
         ];
 
         return Validator::make($data, $rules, $message);

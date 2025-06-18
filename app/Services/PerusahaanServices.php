@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
 
 class perusahaanServices
 {
@@ -90,6 +91,7 @@ class perusahaanServices
                     'lama_usaha' => $request->lama_usaha,
                     'bidang_usaha' => $request->bidang_usaha,
                     'bidang_usaha_lain' => $request->bidang_usaha == 'lainnya' ? $request->bidang_usaha_lain : null,
+                    'badan_usaha_lain' => $request->badan_usaha == 'lainnya' ? $request->badan_usaha_lain : null,
                     'status_kepemilikan' => $request->status_kepemilikan,
                     'nama_group' => $request->status_kepemilikan == 'group' ? $request->nama_group : null,
                     'nama_sales' => $request->sales,
@@ -125,6 +127,29 @@ class perusahaanServices
                     $filename = uniqid() . '-' . 'KTP-' . Str::slug($request->nama_lengkap, '-') . '.' . $foto->getClientOriginalExtension();
                     $foto->storeAs('uploads/identitas_perusahaan', $filename, 'custom_path');
                     $data->foto_ktp = $filename;
+
+                    // Mengirim gambar ke API
+                    // $foto_ttd = fopen($filePath, 'r');
+                    // // dd($foto_ttd);
+                    // $response = Http::withHeaders([
+                    //     'x-api-key' => $this->apiKey,
+                    // ])->attach(
+                    //     'file',
+                    //     $foto_ttd,
+                    //     $imageName
+                    // )->post($this->apiUrl, [
+                    //     'category' => 'sign',
+                    //     'filename' => $imageName,
+                    // ]);
+
+                    // fclose($foto_ttd);
+
+                    // // dd($response);
+                    // if ($response->successful()) {
+                    //     $filename = $response->json('filename');
+                    //     $filepath = $response->json('filepath');
+                    //     $identitas_penanggung_jawab->ttd = $filename;
+                    // }
                 } else {
                     $data->foto_ktp = $oldData->foto_ktp;
                 }

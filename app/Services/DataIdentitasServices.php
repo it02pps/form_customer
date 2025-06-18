@@ -117,7 +117,7 @@ class DataIdentitasServices
                     imagedestroy($img);
                     $data->ttd = $imageName;
 
-                    // Mengirim gambar ke API
+                    // // Mengirim gambar ke API
                     // $foto_ttd = fopen($filePath, 'r');
                     // // dd($foto_ttd);
                     // $response = Http::withHeaders([

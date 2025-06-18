@@ -176,6 +176,7 @@ class HomeController extends Controller
             'kota_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'nama_group' => ($data['status_kepemilikan'] == 'group') ? 'required' : '',
             'bidang_usaha_lain' => ($data['bidang_usaha'] == 'lainnya') ? 'required' : '',
+            'badan_usaha_lain' => ($data['badan_usaha'] == 'lainnya') ? 'required' : '',
 
             // Informasi Bank
             'nomor_rekening' => 'required|numeric|digits_between:10,16',
@@ -228,7 +229,8 @@ class HomeController extends Controller
             'alamat_npwp.required' => 'Alamat NPWP harus diisi',
             'kota_npwp.required' => 'Kota NPWP harus diisi',
             'nama_group.required' => 'Nama group harus diisi',
-            'bidang_usaha_lain.required' => 'Bidang usaha harus diisi',
+            'bidang_usaha_lain.required' => 'Bidang usaha lain harus diisi',
+            'badan_usaha_lain.required' => 'Badan usaha lain harus diisi',
 
             // Informasi Bank
             'nomor_rekening.required' => 'Nomor rekening harus diisi',
@@ -350,6 +352,9 @@ class HomeController extends Controller
                 $identitas_perusahaan->identitas = 'npwp';
                 $identitas_perusahaan->badan_usaha = $request->badan_usaha;
                 $identitas_perusahaan->nama_npwp = $request->nama_npwp;
+                if ($request->badan_usaha == 'lainnya') {
+                    $identitas_perusahaan->badan_usaha_lain = $request->badan_usaha_lain;
+                }
 
                 if ($request->nomor_npwp == '-') {
                     return ['status' => false, 'error' => 'Nomor NPWP harus diisi'];
