@@ -473,7 +473,13 @@
                                             <option value="pt">PT</option>
                                             <option value="cv">CV</option>
                                             <option value="pd">PD</option>
+                                            <option value="pribadi">Pribadi</option>
+                                            <option value="yayasan">Yayasan</option>
+                                            <option value="lainnya">Lainnya</option>
                                         </select>
+                                        <div class="badan_usaha_lain d-none">
+                                            <input type="text" class="form-control" name="badan_usaha_lain" id="badan_usaha_lain" placeholder="Masukkan badan usaha lain" autocomplete="off">
+                                        </div>
                                         <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                     </div>
                                 </div>
