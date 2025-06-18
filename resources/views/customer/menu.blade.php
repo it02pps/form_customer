@@ -95,6 +95,10 @@
         border: 2px solid #0063ee;
     }
 
+    .profile {
+        cursor: pointer;
+    }
+
     @media screen and (max-width: 475px) {
         body {
             overflow-x: hidden;
@@ -168,9 +172,12 @@
 
 @section('content')
     <div class="container">
-        <div class="container-fluid">
+        <div class="container-fluid position-relative">
             <div class="content-menu">
                 <div class="content-header">
+                    <div class="profile position-absolute top-0 end-0 p-5" onclick="login()">
+                        <img src="{{ asset('../../../images/Profile.svg') }}" alt="Profile" width="40">
+                    </div>
                     <div class="logo">
                         <img src="{{ asset('../../../images/PNG 4125 x 913.png') }}" alt="Logo">
                     </div>
@@ -276,6 +283,12 @@
     <script>
         var status = 'customer-baru/';
         var status2 = '';
+
+        // START: Direct login page
+        function login() {
+            window.location.href = '{{ route("form_customer.login") }}';
+        }
+        // END: Direct login page
 
         $(document).ready(function() {
             $('.modal-body .opsi2Perseorangan').children().remove();
