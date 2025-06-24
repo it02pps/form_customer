@@ -158,7 +158,7 @@
                 </div>
                 <div class="modal-body">
                     <h6>Apakah sudah pernah bertransaksi di PT Papasari?</h6>
-                    <div class="row gap-0 pb-4 opsi1Perseorangan">
+                    <div class="row gap-0 pb-4 opsi1Perseorangan text-center">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="card active1 cust_baru">
                                 <span><i class="fa-solid fa-person-circle-plus"></i> Belum</span>
@@ -170,7 +170,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row gap-0 pb-4 opsi2Perseorangan">
+                    <div class="row gap-0 pb-4 opsi2Perseorangan text-center">
                         
                     </div>
                     <div class="row gap-0 identityPerseorangan">
@@ -196,7 +196,7 @@
                 </div>
                 <div class="modal-body">
                     <h6>Apakah sudah pernah bertransaksi di PT Papasari?</h6>
-                    <div class="row gap-0 pb-4 opsi1BadanUsaha">
+                    <div class="row gap-0 pb-4 opsi1BadanUsaha text-center">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="card active1 cust_baru">
                                 <span><i class="fa-solid fa-person-circle-plus"></i> Belum</span>
@@ -208,7 +208,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row gap-0 pb-4 opsi2BadanUsaha">
+                    <div class="row gap-0 pb-4 opsi2BadanUsaha text-center">
                         
                     </div>
                     <div class="row gap-0 identityBadanUsaha">

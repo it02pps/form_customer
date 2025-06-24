@@ -340,6 +340,7 @@
                 <form id="formCustomer" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="update_id" id="update_id" value="{{ $enkripsi }}">
+                    <input type="hidden" name="opsi" id="opsi" value="cabang_baru">
                     <input type="hidden" name="bentuk_usaha" id="bentuk_usaha" value="badan_usaha">
                     <div class="section4">
                         <div class="row">

@@ -198,14 +198,6 @@
         width: 100vw;
     }
 
-    .row div:first-child {
-        padding: 0;
-    }
-
-    .row div:last-child {
-        padding-left: 16px;
-    }
-
     .row div .group-column .form-group:last-child {
         padding-top: 16px;
         padding-left: 0;
@@ -359,6 +351,7 @@
                 <form id="formCustomer" enctype="multipart/form-data">
                     <?php echo csrf_field(); ?>
                     <input type="hidden" name="update_id" id="update_id" value="<?php echo e($enkripsi); ?>">
+                    <input type="hidden" name="opsi" id="opsi" value="pengkinian_data">
                     <input type="hidden" name="bentuk_usaha" id="bentuk_usaha" value="perseorangan">
                     <div class="section4">
                         <div class="row">

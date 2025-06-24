@@ -60,17 +60,25 @@ class perusahaanServices
             // Non-aktif old customer
             if ($request->bentuk_usaha == 'perseorangan') {
                 if ($request->update_id) {
-                    $update = IdentitasPerusahaan::where('nomor_ktp', Crypt::decryptString($request->update_id));
-                    $update->update(['status_aktif' => '0']);
-                    $oldData = $update->latest()->first();
+                    if ($request->opsi == 'pengkinian_data') {
+                        $update = IdentitasPerusahaan::where('nomor_ktp', Crypt::decryptString($request->update_id));
+                        $update->update(['status_aktif' => '0']);
+                        $oldData = $update->latest()->first();
+                    } else {
+                        $oldData = IdentitasPerusahaan::where('nomor_ktp', Crypt::decryptString($request->update_id))->latest()->first();
+                    }
                 } else {
                     $oldData = '';
                 }
             } else {
                 if ($request->update_id) {
-                    $update = IdentitasPerusahaan::where('nomor_npwp', Crypt::decryptString($request->update_id));
-                    $update->update(['status_aktif' => '0']);
-                    $oldData = $update->latest()->first();
+                    if ($request->opsi == 'pengkinian_data') {
+                        $update = IdentitasPerusahaan::where('nomor_npwp', Crypt::decryptString($request->update_id));
+                        $update->update(['status_aktif' => '0']);
+                        $oldData = $update->latest()->first();
+                    } else {
+                        $oldData = IdentitasPerusahaan::where('nomor_npwp', Crypt::decryptString($request->update_id))->latest()->first();
+                    }
                 } else {
                     $oldData = '';
                 }
