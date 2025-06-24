@@ -162,14 +162,6 @@
         width: 100vw;
     }
 
-    .row div:first-child {
-        padding: 0;
-    }
-
-    .row div:last-child {
-        padding-left: 16px;
-    }
-
     .row div .group-column .form-group:first-child {
         padding: 0;
     }

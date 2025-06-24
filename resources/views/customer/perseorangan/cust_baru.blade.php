@@ -200,14 +200,6 @@
         width: 100vw;
     }
 
-    .row div:first-child {
-        padding: 0;
-    }
-
-    .row div:last-child {
-        padding-left: 16px;
-    }
-
     .row div .group-column .form-group:last-child {
         padding-top: 16px;
         padding-left: 0;
@@ -383,13 +375,13 @@
                         <div class="section1">
                             <h1>Identitas Perseorangan</h1>
                             <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nama Usaha <span class="text-danger">*</span></label>
                                         <input type="text" name="nama_perusahaan" id="nama_perusahaan" class="form-control" placeholder="Masukkan nama usaha" autocomplete="off" required>
                                     </div>
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nama Group Usaha <span class="text-danger">*</span></label>
                                         <input type="text" name="nama_group_perusahaan" id="nama_group_perusahaan" class="form-control" placeholder="Masukkan nama group usaha" autocomplete="off" required>

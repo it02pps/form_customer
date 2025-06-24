@@ -181,14 +181,6 @@
         width: 100vw;
     }
 
-    .row div:first-child {
-        padding: 0;
-    }
-
-    .row div:last-child {
-        padding-left: 16px;
-    }
-
     .row div .group-column .form-group:last-child {
         padding-top: 16px;
         padding-left: 0;
