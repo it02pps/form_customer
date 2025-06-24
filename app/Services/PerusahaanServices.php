@@ -60,7 +60,7 @@ class perusahaanServices
             // Non-aktif old customer
             if ($request->bentuk_usaha == 'perseorangan') {
                 if ($request->update_id) {
-                    $update = IdentitasPerusahaan::where('nomor_ktp', Crypt::decryptString($request->update_id))->orWhere('nomor_npwp', Crypt::decryptString($request->update_id));
+                    $update = IdentitasPerusahaan::where('nomor_ktp', Crypt::decryptString($request->update_id));
                     $update->update(['status_aktif' => '0']);
                     $oldData = $update->latest()->first();
                 } else {
@@ -68,7 +68,7 @@ class perusahaanServices
                 }
             } else {
                 if ($request->update_id) {
-                    $update = IdentitasPerusahaan::where('id', Crypt::decryptString($request->update_id));
+                    $update = IdentitasPerusahaan::where('nomor_npwp', Crypt::decryptString($request->update_id));
                     $update->update(['status_aktif' => '0']);
                     $oldData = $update->latest()->first();
                 } else {
@@ -91,7 +91,6 @@ class perusahaanServices
                     'lama_usaha' => $request->lama_usaha,
                     'bidang_usaha' => $request->bidang_usaha,
                     'bidang_usaha_lain' => $request->bidang_usaha == 'lainnya' ? $request->bidang_usaha_lain : null,
-                    'badan_usaha_lain' => $request->badan_usaha == 'lainnya' ? $request->badan_usaha_lain : null,
                     'status_kepemilikan' => $request->status_kepemilikan,
                     'nama_group' => $request->status_kepemilikan == 'group' ? $request->nama_group : null,
                     'nama_sales' => $request->sales,
@@ -113,6 +112,7 @@ class perusahaanServices
                     'status_pkp' => $request->bentuk_usaha == 'badan_usaha' ? $request->status_pkp : null,
                     'alamat_npwp' => $request->bentuk_usaha == 'badan_usaha' ? $request->alamat_npwp : null,
                     'kota_npwp' => $request->bentuk_usaha == 'badan_usaha' ? $request->kota_npwp : null,
+                    'badan_usaha_lain' => $request->bentuk_usaha == 'badan_usaha' ? ($request->badan_usaha == 'lainnya' ? $request->badan_usaha_lain : null) : '',
                 ]
             );
 

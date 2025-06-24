@@ -31,15 +31,11 @@
             color: #021526;
         }
         
-        body {
+        html, body {
+            height: auto;
+            margin: 0;
+            padding: 0;
             background-image: linear-gradient(315deg, #E1F5FE, #CEF0FF);
-        }
-
-        main {
-            /* display: flex;
-            align-items: center; */
-            width: 100%;
-            height: 100vh;
         }
 
         p {
@@ -72,12 +68,7 @@
             font-size: 18px;
         }
 
-        @media screen and (max-width: 475px) {
-            main {
-                width: 100vw;
-                height: 100vh;
-            }
-
+        @media (max-width: 575.98px) {
             p {
                 font-size: 18px;
             }
@@ -113,11 +104,9 @@
     @yield('css')
 </head>
 <body>
-    <div id="app">
-        <main class="main">
-            @yield('content')
-        </main>
-    </div>
+    <main>
+        @yield('content')
+    </main>
 </body>
 </html>
 

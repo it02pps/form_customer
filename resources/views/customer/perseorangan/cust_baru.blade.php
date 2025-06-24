@@ -486,40 +486,44 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="ktp-section">
-                                <div class="row">
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="group-column">
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label for="">Nama Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
+                                        <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan Nama Lengkap" autocomplete="off" class="form-control">
+                                    </div>
+                                    {{-- <div class="group-column"> --}}
+                                        <div class="group-column p-0 mt-3">
                                             <div class="form-group">
-                                                <label for="">Nama Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
-                                                <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan Nama Lengkap" autocomplete="off" class="form-control">
+                                                <label for="">Foto KTP / NPWP <span class="text-danger">*</span></label>
+                                                <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
                                             </div>
-
-                                            <div class="group-column p-0 mt-3">
-                                                <div class="form-group">
-                                                    <label for="">Foto KTP / NPWP <span class="text-danger">*</span></label>
-                                                    <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
-                                                </div>
-                                                <div class="form-group" id="preview_ktp">
-                                                    <p class="text-center">Belum ada file</p>
-                                                </div>
+                                            <div class="form-group" id="preview_ktp">
+                                                <p class="text-center">Belum ada file</p>
                                             </div>
                                         </div>
+                                    {{-- </div> --}}
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label for="">Alamat Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
+                                        <textarea name="alamat_ktp" id="alamat_ktp" class="form-control" placeholder="Masukkan alamat lengkap KTP" autocomplete="off" required></textarea>
                                     </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <div class="group-column">
-                                            <div class="form-group">
-                                                <label for="">Alamat Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
-                                                <textarea name="alamat_ktp" id="alamat_ktp" class="form-control" placeholder="Masukkan alamat lengkap KTP" autocomplete="off" required></textarea>
-                                            </div>
+                                    <div class="group-column">
+                                        {{-- <div class="row">
+                                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
 
-                                            <div class="branch-section mt-4 p-0">
-                                                <div >
-                                                    <span class="text-danger">*Jika terdapat cabang, silahkan tekan tombol disamping. Apabila tidak ada, dapat diabaikan</span>
-                                                </div>
-                                                <div>
-                                                    <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>
-                                                </div>
+                                            </div>
+                                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                                                
+                                            </div>
+                                        </div> --}}
+                                        <div class="branch-section mt-4 p-0">
+                                            <div>
+                                                <span class="text-danger">*Jika terdapat cabang, silahkan tekan tombol disamping. Apabila tidak ada, dapat diabaikan</span>
+                                            </div>
+                                            <div>
+                                                <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>
                                             </div>
                                         </div>
                                     </div>

@@ -5,66 +5,39 @@
 <?php $__env->startSection('css'); ?>
 <style>
     body {
-        overflow-x: hidden;
+        overflow-y: hidden;
     }
 
-    .container {
-        padding: 64px 0;
-    }
-    
-    .container-fluid {
-        background-color: #fff;
-        border-radius: 16px;
-        box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.25);
+    .container .header img {
+        width: 35%;
     }
 
-    .content-menu {
+    .page-wrapper {
+        max-height: auto;
+        flex: 1;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 64px;
     }
 
-    .content-menu .content-header .logo {
-        padding-bottom: 2rem;
+    .option-menu {
+        width: 70%;
+        gap: 12px;
     }
 
-    .content-menu .content-header .logo img {
-        width: 347px;
-        height: 76px;
-    }
-
-    .content-header {
-        text-align: center;
-        padding-bottom: 32px;
-    }
-
-    .row {
-        gap: 64px;
-        flex-wrap: nowrap;
-    }
-
-    .row .badan_usaha, .perseorangan {
+    .option-menu .badan_usaha, .option-menu .perseorangan {
         display: flex;
         align-items: center;
         flex-direction: column;
         border: 1px solid #D2D0D8;
         border-radius: 8px;
-        padding: 32px 64px;
+        padding: 32px 0;
+        cursor: pointer;
     }
 
-    .row div img {
-        width: 152px;
-        height: 152px;
-        padding-bottom: 16px;
-    }
-
-    p {
-        margin: 0;
-    }
-
-    .badan_usaha, .perseorangan {
+    .profile-icon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
         cursor: pointer;
     }
 
@@ -73,125 +46,97 @@
         cursor: pointer;
     }
 
-    .card i {
-        padding-right: 6px;
-    }
-
-    .card span {
-        text-align: center;
-    }
-
-    .row {
-        display: flex;
-    }
-
-    .modal-body .opsi1Perseorangan .card.active1, .opsi1BadanUsaha .card.active1 {
+    .modal-body .opsi1Perseorangan .card.active1,
+    .modal-body .opsi1BadanUsaha .card.active1,
+    .modal-body .opsi2Perseorangan .card.active2,
+    .modal-body .opsi2BadanUsaha .card.active2 {
         border: 2px solid #0063ee;
     }
 
-    .modal-body .opsi2Perseorangan .card.active2, .opsi2BadanUsaha .card.active2 {
-        border: 2px solid #0063ee;
+    .badan_usaha, .perseorangan {
+        gap: 8px;
     }
 
-    .profile {
-        cursor: pointer;
-    }
-
-    @media screen and (max-width: 475px) {
+    /* TABLET RESOLUTION */
+    @media (min-width: 576px) and (max-width: 991.98px) {
         body {
-            overflow-x: hidden;
-            background: #fff;
+            overflow-y: auto;
         }
-        
-        .container {
-            padding: 0;
+
+        .container .header img {
+            width: 80%;
+        }
+
+        .modal-body .opsi1Perseorangan,
+        .modal-body .opsi1BadanUsaha,
+        .modal-body .opsi2Perseorangan,
+        .modal-body .opsi2BadanUsaha {
+            gap: 8px !important;
+        }
+    }
+
+    /* MOBILE RESOLUTION */
+    @media (max-width: 575.98px) {
+        body {
+            overflow-y: auto;
+            background-image: none;
+        }
+
+        .container-fill-mobile {
             height: 100vh;
-        }
-
-        .title h1 {
-            font-size: 32px;
-        }
-
-        .title p {
-            font-size: 16px;
-        }
-        
-        .container-fluid {
-            background-color: #fff;
-            border-radius: 0;
-            height: 100vh;
-            box-shadow: none;
-
-        }
-
-        .content-menu {
+            flex: 1;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 80px 64px 32px 64px;
+            /* flex-direction: column; */
+            /* justify-content: space-between; */
+            padding: 0 !important;
         }
 
-        .content-menu .content-header .logo {
-            padding-bottom: 1.5rem;
+        .container .header img {
+            width: 80%;
         }
 
-        .content-menu .content-header .logo img {
-            width: 256px;
-            height: 60px;
+        .container > div {
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
         }
 
-        .content-header {
-            text-align: center;
-            padding-bottom: 16px;
+        .option-menu {
+            width: 100%;
         }
 
-        .row {
-            gap: 24px;
-            flex-wrap: wrap;
-        }
-
-        .row .badan_usaha, .perseorangan {
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            border: 1px solid #D2D0D8;
-            border-radius: 8px;
-            padding: 24px 40px;
-        }
-
-        .row div img {
-            height: 100px;
-            padding-bottom: 4px;
+        .modal-body .opsi1Perseorangan,
+        .modal-body .opsi1BadanUsaha,
+        .modal-body .opsi2Perseorangan,
+        .modal-body .opsi2BadanUsaha {
+            gap: 8px !important;
         }
     }
 </style>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
-    <div class="container">
-        <div class="container-fluid position-relative">
-            <div class="content-menu">
-                <div class="content-header">
-                    <div class="profile position-absolute top-0 end-0 p-5" onclick="login()">
-                        <img src="<?php echo e(asset('../../../images/Profile.svg')); ?>" alt="Profile" width="40">
-                    </div>
-                    <div class="logo">
-                        <img src="<?php echo e(asset('../../../images/PNG 4125 x 913.png')); ?>" alt="Logo">
-                    </div>
-                    <div class="title">
-                        <h1>Pilih Menu</h1>
-                        <p>Silahkan pilih menu dibawah ini untuk mengisi data customer.<br>Bentuk usaha customer:</p>
+<div class="page-wrapper">
+    <div class="container container-fill-mobile py-5">
+        <div class="p-5 bg-white rounded-4 shadow text-center position-relative">
+            <div class="d-grid gap-5">
+                <div class="header d-grid gap-3">
+                    <img src="<?php echo e(asset('../../../images/Profile.svg')); ?>" style="width: 40px;" class="profile-icon" onclick="login()">
+                    <img src="<?php echo e(asset('../../../images/PNG 4125 x 913.png')); ?>" class="mx-auto">
+                    <div class="title text-center">
+                        <h1 class="m-0">Pilih Menu</h1>
+                        <p class="m-0">Silahkan pilih menu dibawah ini untuk mengisi data customer.<br> Bentuk Usaha Customer:</p>
                     </div>
                 </div>
-                <div class="content-body">
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 badan_usaha" data-bs-toggle="modal" data-bs-target="#modalMenuBadanUsaha">
-                            <img src="<?php echo e(asset('../../../images/enterprise 1.svg')); ?>" alt="Logo">
+                <div class="content-menu d-flex justify-content-center">
+                    <div class="row text-center option-menu justify-content-around">
+                        <div class="col-lg-5 col-sm-12 badan_usaha" data-bs-toggle="modal" data-bs-target="#modalMenuBadanUsaha">
+                            <img src="<?php echo e(asset('../../../images/enterprise 1.svg')); ?>" width="150">
                             <p style="font-weight: 700;">Badan Usaha</p>
                         </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 perseorangan" data-bs-toggle="modal" data-bs-target="#modalMenuPerseorangan">
-                            <img src="<?php echo e(asset('../../../images/Single Entity 1.svg')); ?>" alt="Logo">
+                        <div class="col-lg-5 col-sm-12 perseorangan" data-bs-toggle="modal" data-bs-target="#modalMenuPerseorangan">
+                            <img src="<?php echo e(asset('../../../images/Single Entity 1.svg')); ?>" width="135">
                             <p style="font-weight: 700;">Perseorangan</p>
                         </div>
                     </div>
@@ -199,6 +144,7 @@
             </div>
         </div>
     </div>
+</div>
 
     
     <div class="modal fade" id="modalMenuPerseorangan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -296,13 +242,16 @@
 
             // Modal Perseorangan
             $('.modal-body .opsi1Perseorangan .card').on('click', function() {
+                $('.modal-body .opsi2Perseorangan').children().remove();
+                $('.identityPerseorangan').children().remove();
+                $('.modal-body .opsi2BadanUsaha').children().remove();
+                $('.identityBadanUsaha').children().remove();
                 $('.modal-body .opsi1Perseorangan .card').removeClass('active1');
                 $(this).addClass('active1');
 
                 if($(this).hasClass('cust_baru')) {
                     $('#nik').attr('required', false);
                     $('#nik').val(null);
-                    $('#nama_identitas').val(null);
                     $('.modal-body .opsi2Perseorangan').children().remove().removeClass('pb-4');
                     $('.identityPerseorangan').children().remove().removeClass('pb-4');
                     $('.modal-body .opsi2Perseorangan').empty();
@@ -344,13 +293,16 @@
 
             // Modal Badan Usaha
             $('.modal-body .opsi1BadanUsaha .card').on('click', function() {
+                $('.modal-body .opsi2Perseorangan').children().remove();
+                $('.identityPerseorangan').children().remove();
+                $('.modal-body .opsi2BadanUsaha').children().remove();
+                $('.identityBadanUsaha').children().remove();
                 $('.modal-body .opsi1BadanUsaha .card').removeClass('active1');
                 $(this).addClass('active1');
 
                 if($(this).hasClass('cust_baru')) {
                     $('#npwp').attr('required', false);
                     $('#npwp').val(null);
-                    $('#nama_identitas').val(null);
                     $('.modal-body .opsi2BadanUsaha').children().remove().removeClass('pb-4');
                     $('.identityBadanUsaha').children().remove().removeClass('pb-4');
                     $('.modal-body .opsi2BadanUsaha').empty();

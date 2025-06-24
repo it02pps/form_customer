@@ -719,7 +719,7 @@
                 }
                 reader.readAsDataURL(file[0]);
             } else {
-                $("#preview_ktp")..html('<p class="text-center">Belum ada file</p>');
+                $("#preview_ktp").html('<p class="text-center">Belum ada file</p>');
             }
         }
 
@@ -748,7 +748,7 @@
                 }
                 reader.readAsDataURL(file[0]);
             } else {
-                $("#preview_ktp")..html('<p class="text-center">Belum ada file</p>');
+                $("#preview_ktp").html('<p class="text-center">Belum ada file</p>');
             }
         }
 

@@ -228,7 +228,7 @@ class FormCustomerController extends Controller
                 'enkripsi' => $request->id,
                 'perusahaan' => $data_perusahaan,
                 'menu' => $menu,
-                'url' => route('form_customer.view_perseorangan', ['menu' => $menu, 'status' => 'customer-lama', 'status2' => 'pengkinian-data', 'param' => Crypt::encryptString($data_perusahaan->nomor_ktp)])
+                'url' => route('form_customer.view_badan_usaha', ['menu' => $menu, 'status' => 'customer-lama', 'status2' => 'pengkinian-data', 'param' => Crypt::encryptString($data_perusahaan->nomor_ktp)])
             ]);
         }
     }

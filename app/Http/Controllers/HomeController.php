@@ -176,7 +176,7 @@ class HomeController extends Controller
             'kota_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'nama_group' => ($data['status_kepemilikan'] == 'group') ? 'required' : '',
             'bidang_usaha_lain' => ($data['bidang_usaha'] == 'lainnya') ? 'required' : '',
-            'badan_usaha_lain' => ($data['badan_usaha'] == 'lainnya') ? 'required' : '',
+            'badan_usaha_lain' => $data['bentuk_usaha'] == 'badan_usaha' ? ($data['badan_usaha'] == 'lainnya' ? 'required' : '') : '',
 
             // Informasi Bank
             'nomor_rekening' => 'required|numeric|digits_between:10,16',

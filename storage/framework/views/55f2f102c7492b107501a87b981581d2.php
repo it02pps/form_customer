@@ -59,7 +59,7 @@
         width: 100%;
     }
 
-    #preview_ktp, #preview_npwp, #preview_sppkp, #preview_penanggung {
+    #preview_ktp, #preview_npwp, #preview_penanggung {
         border: 1px solid #D2D0D8;
         border-radius: 5px;
         height: 271px;
@@ -67,7 +67,7 @@
         padding: 0;
     }
 
-    #preview_ktp img, #preview_npwp img, #preview_sppkp img, #preview_penanggung img {
+    #preview_ktp img, #preview_npwp img, #preview_penanggung img {
         width: 100%;
         height: 269px;
         border-radius: 7px;
@@ -135,7 +135,7 @@
         cursor: pointer;
     }
 
-    #preview_penanggung .zoom-img-wrap .zoom-img, #preview_ktp .zoom-img-wrap .zoom-img, #preview_npwp .zoom-img-wrap .zoom-img, #preview_sppkp .zoom-img-wrap .zoom-img {
+    #preview_penanggung .zoom-img-wrap .zoom-img, #preview_ktp .zoom-img-wrap .zoom-img, #preview_npwp .zoom-img-wrap .zoom-img {
         width: 100%;
         height: 100%;
         transition: 1s;
@@ -335,14 +335,14 @@
             height: 177px !important;
         }
 
-        #preview_ktp, #preview_npwp, #preview_sppkp, #preview_penanggung {
+        #preview_ktp, #preview_npwp, #preview_penanggung {
             border: 1px solid #D2D0D8;
             border-radius: 5px;
             height: 205px;
             width: 333px;
         }
 
-        #preview_ktp img, #preview_npwp img, #preview_sppkp img, #preview_penanggung img {
+        #preview_ktp img, #preview_npwp img, #preview_penanggung img {
             width: 330px;
             height: 200px;
             border-radius: 7px;
