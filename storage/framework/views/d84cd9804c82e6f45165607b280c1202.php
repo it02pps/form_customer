@@ -77,14 +77,14 @@
     }
 
 
-    #preview_ktp, #preview_npwp, #preview_sppkp, #preview_penanggung {
+    #preview_ktp, #preview_penanggung {
         border: 1px solid #D2D0D8;
         border-radius: 5px;
         height: 233px;
         width: 100%;
     }
 
-    #preview_ktp img, #preview_npwp img, #preview_sppkp img, #preview_penanggung img {
+    #preview_ktp img, #preview_penanggung img {
         width: 100%;
         height: 230px;
         border-radius: 7px;
@@ -134,7 +134,8 @@
     }
 
     .btnCabang {
-        padding: 0 24px;
+        padding: 0 5px;
+        width: 180px;
         height: 48px;
         border-radius: 8px;
         background-color: #0063ee;
@@ -172,7 +173,7 @@
         cursor: pointer;
     }
 
-    #preview_penanggung .zoom-img-wrap .zoom-img, #preview_ktp .zoom-img-wrap .zoom-img, #preview_npwp .zoom-img-wrap .zoom-img, #preview_sppkp .zoom-img-wrap .zoom-img {
+    #preview_penanggung .zoom-img-wrap .zoom-img, #preview_ktp .zoom-img-wrap .zoom-img {
         width: 100%;
         height: 100%;
         transition: 1s;
@@ -184,14 +185,6 @@
 
     .row {
         width: 100vw;
-    }
-
-    .row div:first-child {
-        padding: 0;
-    }
-
-    .row div:last-child {
-        padding-left: 16px;
     }
 
     .row div .group-column .form-group:last-child {
@@ -469,12 +462,12 @@
                                                         </div>
                                                     <?php else: ?>
                                                         <div class="form-group" id="preview_ktp">
-                                                            <img id="preview_foto_ktp" src="" alt="Belum ada file" data-action="zoom">
+                                                            <p class="text-center">Belum ada file</p>
                                                         </div>
                                                     <?php endif; ?>
                                                 <?php else: ?>
                                                     <div class="form-group" id="preview_ktp">
-                                                        <img id="preview_foto_ktp" src="" alt="Belum ada file" data-action="zoom">
+                                                        <p class="text-center">Belum ada file</p>
                                                     </div>
                                                 <?php endif; ?>
                                             </div>
@@ -487,9 +480,9 @@
                                                 <textarea name="alamat_ktp" id="alamat_ktp" class="form-control" rows="6" placeholder="Masukkan alamat lengkap KTP" autocomplete="off" required><?php echo e($data['alamat_lengkap'] ? $data['alamat_lengkap'] : ''); ?></textarea>
                                             </div>
 
-                                            <div class="branch-section mt-5 p-0">
+                                            <div class="branch-section mt-4 p-0">
                                                 <div >
-                                                    <span class="text-danger">*Harap diisi cabang dengan <br> menekan tombol dibawah ini</span>
+                                                    <span class="text-danger">*Jika terdapat cabang, silahkan tekan tombol disamping. Apabila tidak ada, dapat diabaikan</span>
                                                 </div>
                                                 <div>
                                                     <button type="button" class="btnCabang" data-bs-toggle="modal" data-bs-target="#modalCabang">Tambah Cabang</button>
@@ -594,12 +587,12 @@
                                             </div>
                                         <?php else: ?>
                                             <div id="preview_penanggung" class="form-group">
-                                                <img id="preview_foto_penanggung" src="" alt="Belum ada file" data-action="zoom">
+                                                <p class="text-center">Belum ada file</p>
                                             </div>
                                         <?php endif; ?>
                                     <?php else: ?>
                                         <div id="preview_penanggung" class="form-group">
-                                            <img id="preview_foto_penanggung" src="" alt="Belum ada file" data-action="zoom">
+                                            <p class="text-center">Belum ada file</p>
                                         </div>
                                     <?php endif; ?>
                                 </div>
@@ -842,60 +835,8 @@
                     }
                 }
                 reader.readAsDataURL(file[0]);
-            }
-        }
-
-        function previewFileNpwp(input) {
-            var file = $("#foto_npwp").prop('files');
-            if(file){
-                let ext = file[0].type.split('/')[1];
-                var reader = new FileReader();
-                $("#preview_npwp").removeClass('d-none');
-                if(ext == 'pdf') {
-                    $('#preview_foto_npwp').find('img').remove();
-                    reader.onload = function() {
-                        let filename = reader.result.split(',')[1];
-                        $('#preview_npwp').html('File PDF telah ditambahkan!').css({
-                            'height': '50px',
-                            'padding': '16px',
-                            'font-weight': 'bold'
-                        });
-                    }
-                } else {
-                    $("#preview_npwp").css('height', '197px');
-                    $('#preview_npwp').html('<img id="preview_foto_npwp" src="" alt="Preview" data-action="zoom">');
-                    reader.onload = function() {
-                        $("#preview_foto_npwp").attr("src", reader.result);
-                    }
-                }
-                reader.readAsDataURL(file[0]);
-            }
-        }
-
-        function previewFileSppkp(input) {
-            var file = $("#sppkp").prop('files');
-            if(file){
-                let ext = file[0].type.split('/')[1];
-                var reader = new FileReader();
-                $("#preview_sppkp").removeClass('d-none');
-                if(ext == 'pdf') {
-                    $('#preview_foto_sppkp').find('img').remove();
-                    reader.onload = function() {
-                        let filename = reader.result.split(',')[1];
-                        $('#preview_sppkp').html('File PDF telah ditambahkan!').css({
-                            'height': '50px',
-                            'padding': '16px',
-                            'font-weight': 'bold'
-                        });
-                    }
-                } else {
-                    $("#preview_sppkp").css('height', '197px');
-                    $('#preview_sppkp').html('<img id="preview_foto_sppkp" src="" alt="Preview" data-action="zoom">');
-                    reader.onload = function() {
-                        $("#preview_foto_sppkp").attr("src", reader.result);
-                    }
-                }
-                reader.readAsDataURL(file[0]);
+            } else {
+                $('#preview_ktp').html('<p class="text-center">Belum ada file</p>');
             }
         }
 
@@ -923,6 +864,8 @@
                     }
                 }
                 reader.readAsDataURL(file[0]);
+            } else {
+                $('#preview_penanggung').html('<p class="text-center">Belum ada file</p>');
             }
         }
         // END: Preview foto
@@ -1048,6 +991,7 @@
                                 text: 'Data berhasil ditambahkan!',
                                 icon: 'success'
                             });
+                            window.location.href = res.link;
                         } else {
                             Swal.fire({
                                 title: 'Gagal',

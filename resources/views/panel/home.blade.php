@@ -145,15 +145,15 @@
         opacity: 0.5;
     }
 
-    @media screen and (max-width: 475px) {
+    @media (max-width: 575.98px) {
         .container {
             padding: 0;
         }
         
         .container-fluid {
             background-color: #fff;
-            border-radius: 16px;
-            box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.25);
+            border-radius: 0;
+            box-shadow: none;
         }
 
         .content {
@@ -179,6 +179,14 @@
 
         #datatable_wrapper .table-footer div {
             justify-content: center !important;
+        }
+
+        .table-responsive {
+            overflow-x: auto !important;
+        }
+
+        table thead tr th:nth-child(8), table tbody tr th:nth-child(8) {
+            width: 800px !important;
         }
     }
 </style>

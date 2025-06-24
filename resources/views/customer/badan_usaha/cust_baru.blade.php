@@ -343,7 +343,7 @@
                     <input type="hidden" name="bentuk_usaha" id="bentuk_usaha" value="badan_usaha">
                     <div class="section4">
                         <div class="row">
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                                 <div class="form-group p-0" id="select">
                                     <label for="">Sales</label>
                                     <select name="sales" id="sales" autocomplete="off" class="form-control">

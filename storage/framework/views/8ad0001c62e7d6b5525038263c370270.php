@@ -33,9 +33,11 @@
         
         html, body {
             height: auto;
+            min-height: 100vh;
             margin: 0;
             padding: 0;
             background-image: linear-gradient(315deg, #E1F5FE, #CEF0FF);
+            background-repeat: no-repeat;
         }
 
         p {
