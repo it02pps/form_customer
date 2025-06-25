@@ -750,9 +750,17 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group d-none">
+                                    <div class="form-group">
                                         <label for="">Kode Customer</label>
-                                        <input type="text" name="kode_customer" id="kode_customer" class="form-control" placeholder="Masukkan kode customer" autocomplete="off" value="{{ $data['tipe_customer'] ? $data['tipe_customer']['kode_customer'] : '-' }}">
+                                        <input type="text" name="kode_customer" id="kode_customer" class="form-control" placeholder="Masukkan kode customer" autocomplete="off" value="{{ $data['tipe_customer'] ? $data['tipe_customer']['kode_customer'] ? $data['tipe_customer']['kode_customer'] : '-' : '-' }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label for="">New Bill To Code</label>
+                                        <input type="text" name="new_bill_to_code" id="new_bill_to_code" class="form-control" placeholder="Masukkan new bill to code" autocomplete="off" value="{{ $data['tipe_customer'] ? $data['tipe_customer']['new_bill_to_code'] : '-' }}">
                                     </div>
                                 </div>
                             </div>
@@ -1060,9 +1068,11 @@
 
             $('#keterangan').on('change', function() {
                 if($(this).val() == 'New Customer') {
-                    $('#kode_customer').parent().addClass('d-none').prop('required', false);
+                    $('#kode_customer').prop('required', false).prop('readonly', true);
+                    $('#kode_customer').val('');
                 } else {
-                    $('#kode_customer').parent().removeClass('d-none').prop('required', true);
+                    $('#kode_customer').prop('required', true).prop('readonly', false);
+                    $('#kode_customer').val('');
                 }
             });
             // END: Change input properties

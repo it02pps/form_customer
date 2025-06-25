@@ -663,7 +663,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Kode Customer</label>
-                                    <input type="text" name="kode_customer" id="kode_customer" readonly autocomplete="off" class="form-control" value="{{ $data['tipe_customer'] ? $data['tipe_customer']['kode_customer'] ? $data['tipe_customer']['kode_customer'] : '-' : '-' }}">
+                                    <input type="text" name="kode_customer" id="kode_customer" readonly autocomplete="off" class="form-control" value="{{ $data['tipe_customer'] ? $data['tipe_customer']['kode_customer'] : '-' }}">
                                 </div>
                             </div>
                         </div>

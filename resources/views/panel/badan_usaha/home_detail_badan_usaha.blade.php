@@ -428,8 +428,8 @@
                                 <div class="form-group" >
                                     <label for="">Jenis Badan Usaha</label>
                                     <input type="text" name="badan_usaha" id="badan_usaha" class="form-control" autocomplete="off" readonly value="{{ $data['badan_usaha'] ? strtoupper($data['badan_usaha']) : '-'}}">
-                                    <div class="badan_usaha_lain p-0 @if($perusahaan['badan_usaha'] != 'lainnya') d-none @endif">
-                                        <input type="text" class="form-control" name="badan_usaha_lain" id="badan_usaha_lain" readonly autocomplete="off" value="{{ $perusahaan['badan_usaha_lain'] ? $perusahaan['badan_usaha_lain'] : '-' }}">
+                                    <div class="badan_usaha_lain p-0 @if($data['badan_usaha'] != 'lainnya') d-none @endif">
+                                        <input type="text" class="form-control" name="badan_usaha_lain" id="badan_usaha_lain" readonly autocomplete="off" value="{{ $data['badan_usaha_lain'] ? $data['badan_usaha_lain'] : '-' }}">
                                     </div>
                                 </div>
                             </div>
@@ -674,6 +674,14 @@
                                 <div class="form-group">
                                     <label for="">Kode Customer</label>
                                     <input type="text" name="kode_customer" id="kode_customer" readonly autocomplete="off" class="form-control" value="{{ $data['tipe_customer'] ? $data['tipe_customer']['kode_customer'] : '-' }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">New Bill To Code</label>
+                                    <input type="text" name="new_bill_to_code" id="new_bill_to_code" readonly autocomplete="off" class="form-control" value="{{ $data['tipe_customer'] ? $data['tipe_customer']['new_bill_to_code'] : '-' }}">
                                 </div>
                             </div>
                         </div>

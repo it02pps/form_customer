@@ -179,14 +179,6 @@
         width: 100vw;
     }
 
-    .row div:first-child {
-        padding: 0;
-    }
-
-    .row div:last-child {
-        padding-left: 16px;
-    }
-
     .row div .group-column .form-group:last-child {
         padding-top: 16px;
         padding-left: 0;
@@ -440,7 +432,13 @@
                                             <option value="pt">PT</option>
                                             <option value="cv">CV</option>
                                             <option value="pd">PD</option>
+                                            <option value="pribadi">PRIBADI</option>
+                                            <option value="yayasan">YAYASAN</option>
+                                            <option value="lainnya">LAINNYA</option>
                                         </select>
+                                        <div class="badan_usaha_lain d-none">
+                                            <input type="text" class="form-control" name="badan_usaha_lain" id="badan_usaha_lain" placeholder="Masukkan badan usaha lain" autocomplete="off" value="<?php echo e($data ? ($data['badan_usaha_lain'] ? $data['badan_usaha_lain'] : '') : ''); ?>">
+                                        </div>
                                         <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                     </div>
                                 </div>
@@ -513,12 +511,12 @@
                                                     </div>
                                                 <?php else: ?>
                                                     <div id="preview_sppkp" class="form-group">
-                                                        <img id="preview_foto_sppkp" src="" alt="Belum ada file" data-action="zoom">
+                                                        <p class="text-center">Belum ada file</p>
                                                     </div>
                                                 <?php endif; ?>
                                             <?php else: ?>
                                                 <div id="preview_sppkp" class="form-group">
-                                                    <img id="preview_foto_sppkp" src="" alt="Belum ada file" data-action="zoom">
+                                                    <p class="text-center">Belum ada file</p>
                                                 </div>
                                             <?php endif; ?>
                                         </div>
@@ -543,12 +541,12 @@
                                                 </div>
                                             <?php else: ?>
                                                 <div id="preview_npwp" class="form-group">
-                                                    <img id="preview_foto_npwp" src="" alt="Belum ada file" data-action="zoom">
+                                                    <p class="text-center">Belum ada file</p>
                                                 </div>
                                             <?php endif; ?>
                                         <?php else: ?>
                                             <div id="preview_npwp" class="form-group">
-                                                <img id="preview_foto_npwp" src="" alt="Belum ada file" data-action="zoom">
+                                                <p class="text-center">Belum ada file</p>
                                             </div>
                                         <?php endif; ?>
 
@@ -661,12 +659,12 @@
                                                 </div>
                                             <?php else: ?>
                                                 <div id="preview_penanggung" class="form-group">
-                                                    <img id="preview_foto_penanggung" src="" alt="Belum ada file" data-action="zoom">
+                                                    <p class="text-center">Belum ada file</p>
                                                 </div>
                                             <?php endif; ?>
                                         <?php else: ?>
                                             <div id="preview_penanggung" class="form-group">
-                                                <img id="preview_foto_penanggung" src="" alt="Belum ada file" data-action="zoom">
+                                                <p class="text-center">Belum ada file</p>
                                             </div>
                                         <?php endif; ?>
                                     </div>
@@ -750,9 +748,17 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group d-none">
+                                    <div class="form-group">
                                         <label for="">Kode Customer</label>
-                                        <input type="text" name="kode_customer" id="kode_customer" class="form-control" placeholder="Masukkan kode customer" autocomplete="off" value="<?php echo e($data['tipe_customer'] ? $data['tipe_customer']['kode_customer'] : '-'); ?>">
+                                        <input type="text" name="kode_customer" id="kode_customer" class="form-control" placeholder="Masukkan kode customer" autocomplete="off" value="<?php echo e($data['tipe_customer'] ? $data['tipe_customer']['kode_customer'] ? $data['tipe_customer']['kode_customer'] : '-' : '-'); ?>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label for="">New Bill To Code</label>
+                                        <input type="text" name="new_bill_to_code" id="new_bill_to_code" class="form-control" placeholder="Masukkan new bill to code" autocomplete="off" value="<?php echo e($data['tipe_customer'] ? $data['tipe_customer']['new_bill_to_code'] : '-'); ?>">
                                     </div>
                                 </div>
                             </div>
@@ -910,6 +916,8 @@
                     }
                 }
                 reader.readAsDataURL(file[0]);
+            } else {
+                $("#preview_npwp").html('<p class="text-center">Belum ada file</p>');
             }
         }
 
@@ -937,6 +945,8 @@
                     }
                 }
                 reader.readAsDataURL(file[0]);
+            } else {
+                $("#preview_sppkp").html('<p class="text-center">Belum ada file</p>');
             }
         }
 
@@ -964,6 +974,8 @@
                     }
                 }
                 reader.readAsDataURL(file[0]);
+            } else {
+                $("#preview_penanggung").html('<p class="text-center">Belum ada file</p>');
             }
         }
         // END: Preview foto
@@ -1012,6 +1024,16 @@
                 }
             });
 
+            $('#badan_usaha').on('change', function() {
+                if($(this).val() == 'lainnya') {
+                    $('.badan_usaha_lain').removeClass('d-none').prop('required', true);
+                    $('.badan_usaha_lain').find('input').prop('required', true);
+                } else {
+                    $('.badan_usaha_lain').addClass('d-none').prop('required', false);
+                    $('.badan_usaha_lain').find('input').val('').prop('required', false);
+                }
+            });
+
             $('#status_kepemilikan').on('change', function() {
                 if($(this).val() == 'group') {
                     $('.group').removeClass('d-none').prop('required', true);
@@ -1044,9 +1066,11 @@
 
             $('#keterangan').on('change', function() {
                 if($(this).val() == 'New Customer') {
-                    $('#kode_customer').parent().addClass('d-none').prop('required', false);
+                    $('#kode_customer').prop('required', false).prop('readonly', true);
+                    $('#kode_customer').val('');
                 } else {
-                    $('#kode_customer').parent().removeClass('d-none').prop('required', true);
+                    $('#kode_customer').prop('required', true).prop('readonly', false);
+                    $('#kode_customer').val('');
                 }
             });
             // END: Change input properties

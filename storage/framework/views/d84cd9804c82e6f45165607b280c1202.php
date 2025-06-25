@@ -677,7 +677,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Customer Code</label>
-                                        <input type="text" name="kode_customer" id="kode_customer" class="form-control" placeholder="Masukkan kode customer" autocomplete="off">
+                                        <input type="text" name="kode_customer" id="kode_customer" class="form-control" placeholder="Masukkan kode customer" autocomplete="off" value="<?php echo e($data['tipe_customer'] ? $data['tipe_customer']['kode_customer'] ? $data['tipe_customer']['kode_customer'] : '-' : '-'); ?>">
                                     </div>
                                 </div>
                             </div>
@@ -695,7 +695,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">New Bill To Code</label>
-                                        <input type="text" name="new_bill_to_code" id="new_bill_to_code" class="form-control" placeholder="Masukkan new bill to code" autocomplete="off">
+                                        <input type="text" name="new_bill_to_code" id="new_bill_to_code" class="form-control" placeholder="Masukkan new bill to code" autocomplete="off" value="<?php echo e($data['tipe_customer'] ? $data['tipe_customer']['new_bill_to_code'] : ''); ?>">
                                     </div>
                                 </div>
                             </div>
