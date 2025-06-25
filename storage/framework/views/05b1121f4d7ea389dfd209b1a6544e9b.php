@@ -160,14 +160,6 @@
         width: 100vw;
     }
 
-    .row div:first-child {
-        padding: 0;
-    }
-
-    .row div:last-child {
-        padding-left: 16px;
-    }
-
     .row div .group-column .form-group:first-child {
         padding: 0;
     }
@@ -670,6 +662,20 @@
                                 <div class="form-group">
                                     <label for="">Kode Customer</label>
                                     <input type="text" name="kode_customer" id="kode_customer" readonly autocomplete="off" class="form-control" value="<?php echo e($data['tipe_customer'] ? $data['tipe_customer']['kode_customer'] ? $data['tipe_customer']['kode_customer'] : '-' : '-'); ?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group" id="select">
+                                    <label for="">Apakah Terbaca Sebagai NPWP?</label>
+                                    <input type="text" name="npwp_perseorangan" id="npwp_perseorangan" readonly autocomplete="off" class="form-control" value="<?php echo e($data['npwp_perseorangan'] == 0 ? 'Tidak' : 'Iya'); ?>">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">New Bill To Code</label>
+                                    <input type="text" name="new_bill_to_code" id="new_bill_to_code" readonly autocomplete="off" class="form-control" value="<?php echo e($data['tipe_customer'] ? $data['tipe_customer']['new_bill_to_code'] ? $data['tipe_customer']['new_bill_to_code'] : '-' : '-'); ?>">
                                 </div>
                             </div>
                         </div>

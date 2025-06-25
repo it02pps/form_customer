@@ -439,6 +439,7 @@ class HomeController extends Controller
                 $identitas_perusahaan->nomor_ktp = null;
                 $identitas_perusahaan->foto_ktp = null;
             }
+            $identitas_perusahaan->npwp_perseorangan = $request->npwp_perseorangan;
             $identitas_perusahaan->save();
 
             // Cabang
@@ -628,6 +629,7 @@ class HomeController extends Controller
             $tipe_customer->channel_distributor = $request->channel_distributor;
             $tipe_customer->keterangan = $request->keterangan;
             $tipe_customer->kode_customer = $request->kode_customer;
+            $tipe_customer->new_bill_to_code = $request->new_bill_to_code;
             $tipe_customer->save();
 
 

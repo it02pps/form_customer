@@ -667,6 +667,20 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group" id="select">
+                                    <label for="">Apakah Terbaca Sebagai NPWP?</label>
+                                    <input type="text" name="npwp_perseorangan" id="npwp_perseorangan" readonly autocomplete="off" class="form-control" value="{{ $data['npwp_perseorangan'] == 0 ? 'Tidak' : 'Iya' }}">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="form-group">
+                                    <label for="">New Bill To Code</label>
+                                    <input type="text" name="new_bill_to_code" id="new_bill_to_code" readonly autocomplete="off" class="form-control" value="{{ $data['tipe_customer'] ? $data['tipe_customer']['new_bill_to_code'] ? $data['tipe_customer']['new_bill_to_code'] : '-' : '-' }}">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="footer">

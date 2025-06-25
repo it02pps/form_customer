@@ -446,7 +446,7 @@
                                                 <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan Nama Lengkap" autocomplete="off" class="form-control" value="{{ $data['nama_lengkap'] ? $data['nama_lengkap'] : '' }}">
                                             </div>
 
-                                            <div class="group-column p-0 mt-3">
+                                            {{-- <div class="group-column p-0 mt-3"> --}}
                                                 <div class="form-group">
                                                     <label for="">Foto KTP / NPWP <span class="text-danger">*</span></label>
                                                     <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
@@ -472,7 +472,7 @@
                                                         <p class="text-center">Belum ada file</p>
                                                     </div>
                                                 @endif
-                                            </div>
+                                            {{-- </div> --}}
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -677,9 +677,27 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="form-group d-none">
-                                        <label for="">Kode Customer</label>
+                                    <div class="form-group">
+                                        <label for="">Customer Code</label>
                                         <input type="text" name="kode_customer" id="kode_customer" class="form-control" placeholder="Masukkan kode customer" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group" id="select">
+                                        <label for="">Apakah Terbaca Sebagai NPWP?</label>
+                                        <select name="npwp_perseorangan" id="npwp_perseorangan" class="form-control">
+                                            <option value="0">Tidak</option>
+                                            <option value="1">Iya</option>
+                                        </select>
+                                        <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label for="">New Bill To Code</label>
+                                        <input type="text" name="new_bill_to_code" id="new_bill_to_code" class="form-control" placeholder="Masukkan new bill to code" autocomplete="off">
                                     </div>
                                 </div>
                             </div>
@@ -959,9 +977,11 @@
 
             $('#keterangan').on('change', function() {
                 if($(this).val() == 'New Customer') {
-                    $('#kode_customer').parent().addClass('d-none').prop('required', false);
+                    $('#kode_customer').prop('required', false).prop('readonly', true);
+                    $('#kode_customer').val('');
                 } else {
-                    $('#kode_customer').parent().removeClass('d-none').prop('required', true);
+                    $('#kode_customer').prop('required', true).prop('readonly', false);
+                    $('#kode_customer').val('');
                 }
             });
             // END: Change input properties

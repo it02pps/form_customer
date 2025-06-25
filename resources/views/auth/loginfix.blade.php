@@ -201,7 +201,7 @@
                     </div>
                     <div class="content-footer">
                         <button type="submit">Masuk</button>
-                        <a href="" onclick="lupa_password()" class="text-decoration-none" style="color: #021526;">Lupa Password?</a>
+                        {{-- <a href="" onclick="lupa_password()" class="text-decoration-none" style="color: #021526;">Lupa Password?</a> --}}
                     </div>
                 </form>
             </div>

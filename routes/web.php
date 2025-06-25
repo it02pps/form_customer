@@ -28,9 +28,6 @@ Route::get('/', function () {
     return redirect('/form-customer');
 });
 Route::get('/form-customer', [FormCustomer::class, 'menu'])->name('form_customer.menu');
-Route::get('/testing', function () {
-    return view('customer.menu2');
-});
 
 // Login
 Route::get('/form-customer/panel/login', [LoginController::class, 'index'])->name('form_customer.login');
