@@ -477,7 +477,7 @@
                                         <div class="group-column">
                                             <div class="form-group">
                                                 <label for="">Alamat Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
-                                                <textarea name="alamat_ktp" id="alamat_ktp" class="form-control" rows="6" placeholder="Masukkan alamat lengkap KTP" autocomplete="off" required><?php echo e($data['alamat_lengkap'] ? $data['alamat_lengkap'] : ''); ?></textarea>
+                                                <textarea name="alamat_ktp" id="alamat_ktp" class="form-control" rows="6" placeholder="Masukkan alamat lengkap KTP" autocomplete="off" required><?php echo e($data['alamat_ktp'] ? $data['alamat_ktp'] : ''); ?></textarea>
                                             </div>
 
                                             <div class="branch-section mt-4 p-0">
@@ -1045,6 +1045,7 @@
                         $('#status_pkp').val(res.data.status_pkp).change();
                         $('#status_rekening').val(res.data.informasi_bank.status).change();
                         $('#identitas_penanggung_jawab').val(res.data.data_identitas.identitas).change();
+                        $('#npwp_perseorangan').val(res.data.npwp_perseorangan).change();
 
                         let upperIdentitas = res.data.identitas.toUpperCase();
                         $('#identitas_perusahaan').val(upperIdentitas).change();
