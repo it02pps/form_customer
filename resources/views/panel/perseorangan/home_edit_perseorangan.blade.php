@@ -981,7 +981,6 @@
                     $('#kode_customer').val('');
                 } else {
                     $('#kode_customer').prop('required', true).prop('readonly', false);
-                    $('#kode_customer').val('');
                 }
             });
             // END: Change input properties

@@ -41,7 +41,7 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->apiKey = 'Telor-Asin-951357-Papasari';
-        $this->apiUrl = env('API_URL') . 'upload';
+        $this->apiUrl = env('API_URL');
         $this->middleware('web');
     }
 
@@ -307,6 +307,7 @@ class HomeController extends Controller
             if ($request->bentuk_usaha == 'perseorangan') {
                 $identitas_perusahaan->identitas = 'ktp';
                 $identitas_perusahaan->nama_lengkap = $request->nama_lengkap;
+                $identitas_perusahaan->alamat_ktp = $request->alamat_ktp;
 
                 if ($request->nomor_ktp == '-') {
                     return ['status' => false, 'error' => 'Nomor KTP harus diisi'];
@@ -573,12 +574,44 @@ class HomeController extends Controller
                 if (File::exists('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto)) {
                     File::delete('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto);
                 }
+                // $file = $request->file('foto_penanggung');
+                // $foto = fopen($file->getRealPath(), 'r');
+                // $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $file->getClientOriginalExtension();
+                // $response = Http::withHeaders([
+                //     'x-api-key' => $this->apiKey,
+                // ])->attach(
+                //     'image',
+                //     $foto,
+                //     $request->file('foto_penanggung')->getClientOriginalName()
+                // )->post($this->apiUrl, ['category' => 'upload_penanggung', 'filename' => $filename]);
+
+                // fclose($foto);
+
+                // if ($response->successful()) {
+                //     $filename = $response->json('filename');
+                //     $filepath = $response->json('filepath');
+                //     $identitas_penanggung_jawab->foto = $filename;
+                // }
+
                 $foto = $request->file('foto_penanggung');
                 $ext = $foto->getClientOriginalExtension();
-                $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $ext;
+                $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $foto->getClientOriginalExtension();
                 // Storage::disk('custom_path')->putFileAs($this->path, $foto, $filename);
                 $foto->move('uploads/penanggung_jawab/', $filename);
                 $identitas_penanggung_jawab->foto = $filename;
+
+                // dd(file_get_contents($foto->getRealPath()));
+
+                // $response = Http::withToken(config('services.remote_server.token'))
+                //     ->attach(
+                //         'image',
+                //         file_get_contents($foto->getRealPath()),
+                //         $foto->getClientOriginalName()
+                //     )->post(config('services.remote_server.base_uri') . '/upload_penanggung_jawab');
+
+                // if (!$response->successful()) {
+                //     return ['status' => false, 'error' => $response->body()];
+                // }
 
                 // $foto_ktp_penanggung = fopen($request->file('foto_ktp_penanggung')->getPathname(), 'r');
                 // // dd($request->file('foto_ktp_penanggung')->getClientOriginalName());
@@ -632,10 +665,10 @@ class HomeController extends Controller
             $tipe_customer->new_bill_to_code = $request->new_bill_to_code;
             $tipe_customer->save();
 
-
             $link = route('home.detail', ['id' => Crypt::encryptString($identitas_perusahaan->id)]);
             return ['status' => true, 'link' => $link];
         } catch (\Exception $e) {
+            // dd($e);
             return ['status' => false, 'error' => 'Terjadi kesalahan'];
         }
     }

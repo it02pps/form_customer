@@ -351,6 +351,7 @@
                 <form id="formCustomer" enctype="multipart/form-data">
                     <?php echo csrf_field(); ?>
                     <input type="hidden" name="update_id" id="update_id" value="<?php echo e($enkripsi); ?>">
+                    <input type="hidden" name="opsi" id="opsi" value="data_baru">
                     <input type="hidden" name="bentuk_usaha" id="bentuk_usaha" value="perseorangan">
                     <div class="section4">
                         <div class="row">

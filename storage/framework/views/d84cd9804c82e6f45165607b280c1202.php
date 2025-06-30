@@ -677,7 +677,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Customer Code</label>
-                                        <input type="text" name="kode_customer" id="kode_customer" class="form-control" placeholder="Masukkan kode customer" autocomplete="off" value="<?php echo e($data['tipe_customer'] ? $data['tipe_customer']['kode_customer'] ? $data['tipe_customer']['kode_customer'] : '-' : '-'); ?>">
+                                        <input type="text" name="kode_customer" id="kode_customer" class="form-control" placeholder="Masukkan kode customer" autocomplete="off" value="<?php echo e($data['tipe_customer'] ? $data['tipe_customer']['kode_customer'] : '-'); ?>">
                                     </div>
                                 </div>
                             </div>
@@ -979,7 +979,6 @@
                     $('#kode_customer').val('');
                 } else {
                     $('#kode_customer').prop('required', true).prop('readonly', false);
-                    $('#kode_customer').val('');
                 }
             });
             // END: Change input properties

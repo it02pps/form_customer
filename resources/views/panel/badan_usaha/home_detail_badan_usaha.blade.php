@@ -88,9 +88,9 @@
         width: 185px;
         height: 48px;
         border-radius: 8px;
-        background-color: #0063ee;
+        background-color: #ffc107;
         border: none;
-        color: #fff;
+        color: #000;
     }
 
     .btnKembali {

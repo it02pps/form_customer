@@ -140,7 +140,8 @@ class DataIdentitasServices
                     //     $identitas_penanggung_jawab->ttd = $filename;
                     // }
                 } else {
-                    $data->ttd = $oldData->ttd ? $oldData->ttd : null;
+                    // $data->ttd = null;
+                    return ['status' => false, 'error' => 'Tanda Tangan tidak boleh kosong'];
                 }
             }
 
@@ -148,6 +149,7 @@ class DataIdentitasServices
 
             return ['status' => true];
         } catch (\Exception $e) {
+            dd($e);
             return ['status' => false, 'error' => 'Terjadi Kesalahan'];
         }
     }
