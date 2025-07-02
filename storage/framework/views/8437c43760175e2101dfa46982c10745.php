@@ -243,6 +243,7 @@
                             <table id="datatable" class="table" style="border: 1px solid #cfcfd1;">
                                 <thead style="background-color: #E7E6EB;">
                                     <tr>
+                                        <th style="width: 50px; font-size: 12px;">CK</th>
                                         <th style="width: 75px; font-size: 12px;">No</th>
                                         <th style="width: 100px; font-size: 12px;">Bussiness Entity</th>
                                         <th style="width: 120px; font-size: 12px;" class="text-center align-middle">Customer Name</th>
@@ -348,6 +349,7 @@
                 autoWidth: false,
                 ajax: '<?php echo e(route('home.datatable')); ?>',
                 columns: [
+                    { data: 'checklist', name: 'checklist' },
                     { data: 'kode_customer', name: 'kode_customer' },
                     { data: 'bentuk_usaha', name: 'bentuk_usaha' },
                     { data: 'nama_perusahaan', name: 'nama_perusahaan' },
@@ -363,6 +365,11 @@
                         createdCell: function(td) {
                             $(td).css('font-size', '12px');
                         }
+                    },
+                    {
+                        width: '50px',
+                        targets: 0,
+                        className: 'text-center align-middle',
                     },
                     {
                         width: '75px',

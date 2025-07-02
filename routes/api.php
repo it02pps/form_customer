@@ -17,3 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/sync-files', function () {
+    $files = \App\Models\IdentitasPerusahaan::select('foto_ktp', 'foto_npwp', 'sppkp', 'file_customer_external');
+    return response()->json(['filenames' => $files]);
+});

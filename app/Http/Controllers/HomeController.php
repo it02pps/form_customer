@@ -102,13 +102,17 @@ class HomeController extends Controller
                 }
             })
             ->addColumn('checklist', function ($e) {
-                if ($e->tipe_customer != '') {
-                    return '<i class="fa-solid fa-square-check"></i>';
+                if ($e->tipe_customer) {
+                    if ($e->tipe_customer->new_bill_to_code != '' || $e->tipe_customer->new_bill_to_code != '-') {
+                        return '<i class="fa-solid fa-square-check text-success fs-5"></i>';
+                    } else {
+                        return '<i class="fa-solid fa-square-xmark text-danger fs-5"></i>';
+                    }
                 } else {
-                    return '<i class="fa-solid fa-square-xmark"></i>';
+                    return '<i class="fa-solid fa-square-xmark text-danger fs-5"></i>';
                 }
             })
-            ->rawColumns(['aksi', 'status'])
+            ->rawColumns(['aksi', 'status', 'checklist'])
             ->make(true);
     }
 
@@ -324,7 +328,6 @@ class HomeController extends Controller
                     $filename = uniqid() . '-' . 'KTP-' . Str::slug($request->nama_lengkap, '-') . '.' . $ext;
                     $foto->move('uploads/identitas_perusahaan/', $filename);
                     $identitas_perusahaan->foto_ktp = $filename;
-                    array_push($imageFileNames, $filename);
 
                     // $foto_ktp = fopen($request->file('foto_ktp')->getPathname(), 'r');
                     // $response = Http::withHeaders([
@@ -374,7 +377,6 @@ class HomeController extends Controller
                     $filename = uniqid() . '-' . 'NPWP-' . Str::slug($request->nama_npwp, '-') . '.' . $ext;
                     $foto->move('uploads/identitas_perusahaan/', $filename);
                     $identitas_perusahaan->foto_npwp = $filename;
-                    array_push($imageFileNames, $filename);
 
                     // $foto_npwp = fopen($request->file('foto_npwp')->getPathname(), 'r');
                     // $response = Http::withHeaders([
@@ -416,7 +418,7 @@ class HomeController extends Controller
                         $filename = uniqid() . '-SPPKP' . '.' . $ext;
                         $foto->move('uploads/identitas_perusahaan/', $filename);
                         $identitas_perusahaan->sppkp = $filename;
-                        array_push($imageFileNames, $filename);
+
 
                         // $foto_sppkp = fopen($request->file('foto_sppkp')->getPathname(), 'r');
                         // $response = Http::withHeaders([
@@ -585,7 +587,6 @@ class HomeController extends Controller
                 $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $foto->getClientOriginalExtension();
                 $foto->move('uploads/penanggung_jawab/', $filename);
                 $identitas_penanggung_jawab->foto = $filename;
-                array_push($imageFileNames, $filename);
             }
             $identitas_penanggung_jawab->save();
 
@@ -618,11 +619,10 @@ class HomeController extends Controller
             $tipe_customer->new_bill_to_code = $request->new_bill_to_code;
             $tipe_customer->save();
 
-            $imageFileNames = [];
-            dd($imageFileNames);
-            $response = Http::post(env('API_URL'), [
-                'filenames' => $imageFileNames
-            ]);
+            // dd($imageFileNames);
+            // $response = Http::post(env('API_URL'), [
+            //     'filenames' => $imageFileNames
+            // ]);
 
             $link = route('home.detail', ['id' => Crypt::encryptString($identitas_perusahaan->id)]);
             return ['status' => true, 'link' => $link];
