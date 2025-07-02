@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\UploadApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/sync-files', function () {
-    $files = \App\Models\IdentitasPerusahaan::select('foto_ktp', 'foto_npwp', 'sppkp', 'file_customer_external');
-    return response()->json(['filenames' => $files]);
+    $filenames = UploadApi::getUploadedFile();
+    return response()->json(['filenames' => $filenames]);
 });

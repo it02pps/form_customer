@@ -18,6 +18,7 @@ use App\Models\Cabang;
 use App\Models\Sales;
 use App\Models\TipeCustomer;
 use App\Models\User;
+use App\Services\UploadApi;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Hash;
@@ -623,6 +624,8 @@ class HomeController extends Controller
             // $response = Http::post(env('API_URL'), [
             //     'filenames' => $imageFileNames
             // ]);
+
+            UploadApi::getUploadedFile();
 
             $link = route('home.detail', ['id' => Crypt::encryptString($identitas_perusahaan->id)]);
             return ['status' => true, 'link' => $link];
