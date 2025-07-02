@@ -324,6 +324,7 @@ class HomeController extends Controller
                     $filename = uniqid() . '-' . 'KTP-' . Str::slug($request->nama_lengkap, '-') . '.' . $ext;
                     $foto->move('uploads/identitas_perusahaan/', $filename);
                     $identitas_perusahaan->foto_ktp = $filename;
+                    array_push($imageFileNames, $filename);
 
                     // $foto_ktp = fopen($request->file('foto_ktp')->getPathname(), 'r');
                     // $response = Http::withHeaders([
@@ -373,7 +374,7 @@ class HomeController extends Controller
                     $filename = uniqid() . '-' . 'NPWP-' . Str::slug($request->nama_npwp, '-') . '.' . $ext;
                     $foto->move('uploads/identitas_perusahaan/', $filename);
                     $identitas_perusahaan->foto_npwp = $filename;
-
+                    array_push($imageFileNames, $filename);
 
                     // $foto_npwp = fopen($request->file('foto_npwp')->getPathname(), 'r');
                     // $response = Http::withHeaders([
@@ -415,6 +416,7 @@ class HomeController extends Controller
                         $filename = uniqid() . '-SPPKP' . '.' . $ext;
                         $foto->move('uploads/identitas_perusahaan/', $filename);
                         $identitas_perusahaan->sppkp = $filename;
+                        array_push($imageFileNames, $filename);
 
                         // $foto_sppkp = fopen($request->file('foto_sppkp')->getPathname(), 'r');
                         // $response = Http::withHeaders([
@@ -547,6 +549,7 @@ class HomeController extends Controller
                     imagepng($img, $fullPath);
                     imagedestroy($img);
                     $identitas_penanggung_jawab->ttd = $imageName;
+                    array_push($imageFileNames, $imageName);
 
                     // Mengirim gambar ke API
                     // $foto_ttd = fopen($filePath, 'r');
@@ -577,65 +580,12 @@ class HomeController extends Controller
                 if (File::exists('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto)) {
                     File::delete('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto);
                 }
-                $file = $request->file('foto_penanggung');
-                $foto = fopen($file->getRealPath(), 'r');
-                $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $file->getClientOriginalExtension();
-                $response = Http::withHeaders([
-                    'x-api-key' => env('API_TOKEN'),
-                ])->attach(
-                    'image',
-                    $foto,
-                    $file->getClientOriginalName()
-                )->post(env('API_URL'), ['category' => 'upload_penanggung', 'filename' => $filename]);
-
-                dd($response->body());
-                fclose($foto);
-
-                if ($response->successful()) {
-                    $filename = $response->json('filename');
-                    $filepath = $response->json('filepath');
-                    $identitas_penanggung_jawab->foto = $filename;
-                }
-
-                // $foto = $request->file('foto_penanggung');
-                // $ext = $foto->getClientOriginalExtension();
-                // $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $foto->getClientOriginalExtension();
-                // $foto->move('uploads/penanggung_jawab/', $filename);
-                // $identitas_penanggung_jawab->foto = $filename;
-
-                // dd(file_get_contents($foto->getRealPath()));
-
-                // $response = Http::withToken(config('services.remote_server.token'))
-                //     ->attach(
-                //         'image',
-                //         file_get_contents($foto->getRealPath()),
-                //         $foto->getClientOriginalName()
-                //     )->post(config('services.remote_server.base_uri') . '/upload_penanggung_jawab');
-
-                // if (!$response->successful()) {
-                //     return ['status' => false, 'error' => $response->body()];
-                // }
-
-                // $foto_ktp_penanggung = fopen($request->file('foto_ktp_penanggung')->getPathname(), 'r');
-                // // dd($request->file('foto_ktp_penanggung')->getClientOriginalName());
-                // $response = Http::withHeaders([
-                //     'x-api-key' => $this->apiKey,
-                // ])->attach(
-                //     'file',
-                //     $foto_ktp_penanggung,
-                //     $request->file('foto_ktp_penanggung')->getClientOriginalName()
-                // )->post($this->apiUrl, [
-                //     'category' => 'ktp_responsible',
-                //     'filename' => $filename,
-                // ]);
-
-                // fclose($foto_ktp_penanggung);
-
-                // if ($response->successful()) {
-                //     $filename = $response->json('filename');
-                //     $filepath = $response->json('filepath');
-                //     $identitas_penanggung_jawab->foto = $filename;
-                // }
+                $foto = $request->file('foto_penanggung');
+                $ext = $foto->getClientOriginalExtension();
+                $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $foto->getClientOriginalExtension();
+                $foto->move('uploads/penanggung_jawab/', $filename);
+                $identitas_penanggung_jawab->foto = $filename;
+                array_push($imageFileNames, $filename);
             }
             $identitas_penanggung_jawab->save();
 
@@ -667,6 +617,12 @@ class HomeController extends Controller
             $tipe_customer->kode_customer = $request->kode_customer;
             $tipe_customer->new_bill_to_code = $request->new_bill_to_code;
             $tipe_customer->save();
+
+            $imageFileNames = [];
+            dd($imageFileNames);
+            $response = Http::post(env('API_URL'), [
+                'filenames' => $imageFileNames
+            ]);
 
             $link = route('home.detail', ['id' => Crypt::encryptString($identitas_perusahaan->id)]);
             return ['status' => true, 'link' => $link];
