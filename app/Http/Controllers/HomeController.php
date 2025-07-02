@@ -31,8 +31,6 @@ use function PHPUnit\Framework\isEmpty;
 
 class HomeController extends Controller
 {
-    public $apiKey;
-    public $apiUrl;
     /**
      * Create a new controller instance.
      *
@@ -40,8 +38,6 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->apiKey = 'Telor-Asin-951357-Papasari';
-        $this->apiUrl = env('API_URL');
         $this->middleware('web');
     }
 
@@ -58,7 +54,7 @@ class HomeController extends Controller
 
     public function datatable(Request $request)
     {
-        $data = IdentitasPerusahaan::where('status_aktif', '1')->orderBy('kode_customer', 'DESC')->orderBy('nama_group_perusahaan');
+        $data = IdentitasPerusahaan::with('tipe_customer')->where('status_aktif', '1')->orderBy('kode_customer', 'DESC')->orderBy('nama_group_perusahaan');
         return DataTables::of($data)
             ->addIndexColumn()
             ->editColumn('bentuk_usaha', function ($e) {
@@ -103,6 +99,13 @@ class HomeController extends Controller
                     return '<span class="badge bg-danger px-3 py-2">Belum Upload</span>';
                 } else {
                     return '<span class="badge bg-success px-3 py-2">Sudah Upload</span>';
+                }
+            })
+            ->addColumn('checklist', function ($e) {
+                if ($e->tipe_customer != '') {
+                    return '<i class="fa-solid fa-square-check"></i>';
+                } else {
+                    return '<i class="fa-solid fa-square-xmark"></i>';
                 }
             })
             ->rawColumns(['aksi', 'status'])
@@ -574,31 +577,31 @@ class HomeController extends Controller
                 if (File::exists('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto)) {
                     File::delete('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto);
                 }
-                // $file = $request->file('foto_penanggung');
-                // $foto = fopen($file->getRealPath(), 'r');
-                // $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $file->getClientOriginalExtension();
-                // $response = Http::withHeaders([
-                //     'x-api-key' => $this->apiKey,
-                // ])->attach(
-                //     'image',
-                //     $foto,
-                //     $request->file('foto_penanggung')->getClientOriginalName()
-                // )->post($this->apiUrl, ['category' => 'upload_penanggung', 'filename' => $filename]);
+                $file = $request->file('foto_penanggung');
+                $foto = fopen($file->getRealPath(), 'r');
+                $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $file->getClientOriginalExtension();
+                $response = Http::withHeaders([
+                    'x-api-key' => env('API_TOKEN'),
+                ])->attach(
+                    'image',
+                    $foto,
+                    $file->getClientOriginalName()
+                )->post(env('API_URL'), ['category' => 'upload_penanggung', 'filename' => $filename]);
 
-                // fclose($foto);
+                dd($response->body());
+                fclose($foto);
 
-                // if ($response->successful()) {
-                //     $filename = $response->json('filename');
-                //     $filepath = $response->json('filepath');
-                //     $identitas_penanggung_jawab->foto = $filename;
-                // }
+                if ($response->successful()) {
+                    $filename = $response->json('filename');
+                    $filepath = $response->json('filepath');
+                    $identitas_penanggung_jawab->foto = $filename;
+                }
 
-                $foto = $request->file('foto_penanggung');
-                $ext = $foto->getClientOriginalExtension();
-                $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $foto->getClientOriginalExtension();
-                // Storage::disk('custom_path')->putFileAs($this->path, $foto, $filename);
-                $foto->move('uploads/penanggung_jawab/', $filename);
-                $identitas_penanggung_jawab->foto = $filename;
+                // $foto = $request->file('foto_penanggung');
+                // $ext = $foto->getClientOriginalExtension();
+                // $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $foto->getClientOriginalExtension();
+                // $foto->move('uploads/penanggung_jawab/', $filename);
+                // $identitas_penanggung_jawab->foto = $filename;
 
                 // dd(file_get_contents($foto->getRealPath()));
 
@@ -668,7 +671,7 @@ class HomeController extends Controller
             $link = route('home.detail', ['id' => Crypt::encryptString($identitas_perusahaan->id)]);
             return ['status' => true, 'link' => $link];
         } catch (\Exception $e) {
-            // dd($e);
+            dd($e);
             return ['status' => false, 'error' => 'Terjadi kesalahan'];
         }
     }

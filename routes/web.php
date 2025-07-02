@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\PreviewPdfController;
 use App\Models\IdentitasPerusahaan;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -49,6 +50,25 @@ Route::get('/form-customer/{menu}/pdf/{id}', [FormCustomer::class, 'download_pdf
 
 // Get data select
 Route::get('/form-customer/select/{menu}/{id}', [FormCustomer::class, 'select'])->name('form_customer.select');
+
+Route::get('/api/list-uploads', function (Request $request) {
+    $providerKey = $request->header('x-api-key');
+    $expectedKey = env('API_KEY');
+
+    if ($providerKey !== $expectedKey) {
+        return response()->json(['error' => 'Unauthorized'], 400);
+    }
+
+    $path = public_path('uploads/penanggung_jawab');
+    $file = File::files($path);
+
+    return response()->json(collect($file)->map(function ($file) {
+        return [
+            'name' => $file->getFilename(),
+            'url' => url('uploads/' . $file->getFilename()),
+        ];
+    }));
+});
 
 Route::middleware('web')->group(function () {
     Route::get('/internal/panel', [HomeController::class, 'index'])->name('home');
