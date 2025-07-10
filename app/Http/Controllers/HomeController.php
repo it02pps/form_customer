@@ -32,11 +32,6 @@ use function PHPUnit\Framework\isEmpty;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('web');
@@ -295,11 +290,6 @@ class HomeController extends Controller
                 $identitas_perusahaan->bidang_usaha_lain = $request->bidang_usaha_lain;
             }
 
-            // Hitung lama usaha berdasarkan tahun berdiri dengan tahun sekarang
-            // $sekarang = Carbon::now()->format('Y');
-            // $tahun_berdiri = Carbon::parse($request->tahun_berdiri)->format('Y');
-            // $hasil = $sekarang - $tahun_berdiri;
-
             $identitas_perusahaan->tahun_berdiri = $request->tahun_berdiri;
             $identitas_perusahaan->lama_usaha = ($request->tahun_berdiri ? Str::replace(' tahun', '', $request->lama_usaha) : '');
             $identitas_perusahaan->alamat_email = $request->alamat_email_perusahaan;
@@ -321,34 +311,44 @@ class HomeController extends Controller
                     return ['status' => false, 'error' => 'Nomor KTP harus diisi'];
                 }
                 if ($request->hasFile('foto_ktp')) {
-                    if (File::exists('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_ktp)) {
-                        File::delete('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_ktp);
-                    }
                     $foto = $request->file('foto_ktp');
                     $ext = $foto->getClientOriginalExtension();
-                    $filename = uniqid() . '-' . 'KTP-' . Str::slug($request->nama_lengkap, '-') . '.' . $ext;
-                    $foto->move('uploads/identitas_perusahaan/', $filename);
-                    $identitas_perusahaan->foto_ktp = $filename;
+                    $filename = uniqid() . '-KTP-' . Str::slug($request->nama_lengkap, '-') . '.' . $ext;
 
-                    // $foto_ktp = fopen($request->file('foto_ktp')->getPathname(), 'r');
-                    // $response = Http::withHeaders([
-                    //     'x-api-key' => $this->apiKey,
-                    // ])->attach(
-                    //     'file',
-                    //     $foto_ktp,
-                    //     $request->file('foto_ktp')->getClientOriginalName()
-                    // )->post($this->apiUrl, [
-                    //     'category' => 'ktp',
-                    //     'filename' => $filename,
-                    // ]);
+                    try {
+                        $response = Http::withHeaders([
+                            'x-api-key' => config('services.service_x.api_key'),
+                            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                        ])->get(config('services.service_x.url') . '/api/checkfile', [
+                            'category' => 'FileIDCompanyOrPersonal',
+                            'filename' => $identitas_perusahaan->foto_ktp
+                        ]);
 
-                    // fclose($foto_ktp);
+                        $result = $response->json();
+                        if ($result['status'] == true) {
+                            $category = 'FileIDCompanyOrPersonal';
+                            $response = Http::withHeaders([
+                                'x-api-key' => config('services.service_x.api_key'),
+                                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                            ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$identitas_perusahaan->foto_ktp", []);
+                            $result = $response->json();
+                        }
 
-                    // if ($response->successful()) {
-                    //     $filename = $response->json('filename');
-                    //     $filepath = $response->json('filepath');
-                    //     $identitas_perusahaan->foto_ktp = $filename;
-                    // }
+                        $identitas_perusahaan->foto_ktp = $filename;
+                        $response = Http::withHeaders([
+                            'x-api-key' => config('services.service_x.api_key'),
+                            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                        ])->attach(
+                            'file',
+                            file_get_contents($foto->getRealPath()),
+                            $filename
+                        )->post(config('services.service_x.url') . '/api/uploadfile', [
+                            'category' => 'FileIDCompanyOrPersonal',
+                            'filename' => substr($filename, 0, strrpos($filename, '.'))
+                        ]);
+                    } catch (\Illuminate\Http\Client\ConnectionException) {
+                        abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+                    }
                 }
                 // Clear NPWP column
                 $identitas_perusahaan->badan_usaha = null;
@@ -370,33 +370,44 @@ class HomeController extends Controller
                 }
                 $identitas_perusahaan->nomor_npwp = $request->nomor_npwp;
                 if ($request->hasFile('foto_npwp')) {
-                    if (File::exists('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_npwp)) {
-                        File::delete('uploads/identitas_perusahaan/' . $identitas_perusahaan->foto_npwp);
-                    }
                     $foto = $request->file('foto_npwp');
                     $ext = $foto->getClientOriginalExtension();
-                    $filename = uniqid() . '-' . 'NPWP-' . Str::slug($request->nama_npwp, '-') . '.' . $ext;
-                    $foto->move('uploads/identitas_perusahaan/', $filename);
-                    $identitas_perusahaan->foto_npwp = $filename;
+                    $filename = uniqid() . '-NPWP-' . Str::slug($request->nama_npwp, '-') . '.' . $ext;
 
-                    // $foto_npwp = fopen($request->file('foto_npwp')->getPathname(), 'r');
-                    // $response = Http::withHeaders([
-                    //     'x-api-key' => $this->apiKey,
-                    // ])->attach(
-                    //     'file',
-                    //     $foto_npwp,
-                    //     $request->file('foto_npwp')->getClientOriginalName()
-                    // )->post($this->apiUrl, [
-                    //     'category' => 'npwp',
-                    //     'filename' => $filename,
-                    // ]);
+                    try {
+                        $response = Http::withHeaders([
+                            'x-api-key' => config('services.service_x.api_key'),
+                            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                        ])->get(config('services.service_x.url') . '/api/checkfile', [
+                            'category' => 'FileIDCompanyOrPersonal',
+                            'filename' => $identitas_perusahaan->foto_npwp
+                        ]);
 
-                    // fclose($foto_npwp);
-                    // if ($response->successful()) {
-                    //     $filename = $response->json('filename');
-                    //     $filepath = $response->json('filepath');
-                    //     $identitas_perusahaan->foto_npwp = $filename;
-                    // }
+                        $result = $response->json();
+                        if ($result['status'] == true) {
+                            $category = 'FileIDCompanyOrPersonal';
+                            $response = Http::withHeaders([
+                                'x-api-key' => config('services.service_x.api_key'),
+                                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                            ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$identitas_perusahaan->foto_npwp", []);
+                            $result = $response->json();
+                        }
+
+                        $identitas_perusahaan->foto_npwp = $filename;
+                        $response = Http::withHeaders([
+                            'x-api-key' => config('services.service_x.api_key'),
+                            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                        ])->attach(
+                            'file',
+                            file_get_contents($foto->getRealPath()),
+                            $filename
+                        )->post(config('services.service_x.url') . '/api/uploadfile', [
+                            'category' => 'FileIDCompanyOrPersonal',
+                            'filename' => substr($filename, 0, strrpos($filename, '.'))
+                        ]);
+                    } catch (\Illuminate\Http\Client\ConnectionException) {
+                        abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+                    }
                 }
 
                 // Validasi email faktur pajak
@@ -416,30 +427,42 @@ class HomeController extends Controller
                         }
                         $foto = $request->file('foto_sppkp');
                         $ext = $foto->getClientOriginalExtension();
-                        $filename = uniqid() . '-SPPKP' . '.' . $ext;
-                        $foto->move('uploads/identitas_perusahaan/', $filename);
-                        $identitas_perusahaan->sppkp = $filename;
+                        $filename = uniqid() . '-SPPKP-' . Str::slug($identitas_perusahaan->nama_group, '-') . '.' . $ext;
 
+                        try {
+                            $response = Http::withHeaders([
+                                'x-api-key' => config('services.service_x.api_key'),
+                                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                            ])->get(config('services.service_x.url') . '/api/checkfile', [
+                                'category' => 'FileSPPKPCompany',
+                                'filename' => $identitas_perusahaan->sppkp
+                            ]);
 
-                        // $foto_sppkp = fopen($request->file('foto_sppkp')->getPathname(), 'r');
-                        // $response = Http::withHeaders([
-                        //     'x-api-key' => $this->apiKey,
-                        // ])->attach(
-                        //     'file',
-                        //     $foto_sppkp,
-                        //     $request->file('foto_sppkp')->getClientOriginalName()
-                        // )->post($this->apiUrl, [
-                        //     'category' => 'sppkp',
-                        //     'filename' => $filename,
-                        // ]);
+                            $result = $response->json();
+                            if ($result['status'] == true) {
+                                $category = 'FileSPPKPCompany';
+                                $response = Http::withHeaders([
+                                    'x-api-key' => config('services.service_x.api_key'),
+                                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                                ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$identitas_perusahaan->sppkp", []);
+                                $result = $response->json();
+                            }
 
-                        // fclose($foto_sppkp);
-
-                        // if ($response->successful()) {
-                        //     $filename = $response->json('filename');
-                        //     $filepath = $response->json('filepath');
-                        //     $identitas_perusahaan->sppkp = $filename;
-                        // }
+                            $identitas_perusahaan->sppkp = $filename;
+                            $response = Http::withHeaders([
+                                'x-api-key' => config('services.service_x.api_key'),
+                                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                            ])->attach(
+                                'file',
+                                file_get_contents($foto->getRealPath()),
+                                $filename
+                            )->post(config('services.service_x.url') . '/api/uploadfile', [
+                                'category' => 'FileSPPKPCompany',
+                                'filename' => substr($filename, 0, strrpos($filename, '.'))
+                            ]);
+                        } catch (\Illuminate\Http\Client\ConnectionException) {
+                            abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+                        }
                     }
                 }
 
@@ -499,95 +522,46 @@ class HomeController extends Controller
             $identitas_penanggung_jawab->jabatan = $request->jabatan;
             $identitas_penanggung_jawab->identitas = $request->identitas_penanggung_jawab;
             $identitas_penanggung_jawab->no_hp = $request->nomor_hp_penanggung_jawab;
-
-            if ($request->bentuk_usaha == 'perseorangan') {
-                if ($request->hasil_ttd) {
-                    // Konversi base30 menjadi koordinat asli
-                    $JSignatureTools = new base30ToImage;
-                    $rawData = $JSignatureTools->base64ToNative($request->hasil_ttd);
-
-                    // Membuat canvas gambar
-                    $img = imagecreatetruecolor(367.2, 198);
-                    $white = imagecolorallocate($img, 255, 255, 255);
-                    $black = imagecolorallocate($img, 0, 0, 0);
-                    imagefill($img, 0, 0, $white);
-
-                    // Membuat fungsi untuk menggambar garis yang lebih tebal (bold)
-                    function drawBoldLine($image, $x1, $y1, $x2, $y2, $penColor, $thickness = 3)
-                    {
-                        // Loop untuk menggambar garis dengan ketebalan
-                        for ($i = -$thickness; $i <= $thickness; $i++) {
-                            for ($j = -$thickness; $j <= $thickness; $j++) {
-                                imageline($image, $x1 + $i, $y1 + $j, $x2 + $i, $y2 + $j, $penColor);
-                            }
-                        }
-                    }
-
-                    // Menggambar tanda tangan ke canvas
-                    foreach ($rawData as $stroke) {
-                        for ($i = 0; $i < count($stroke['x']); $i++) {
-                            if ($i > 0) {
-                                drawBoldLine(
-                                    $img,
-                                    $stroke['x'][$i - 1],
-                                    $stroke['y'][$i - 1],
-                                    $stroke['x'][$i],
-                                    $stroke['y'][$i],
-                                    $black,
-                                    0.5 // ketebalan garis
-                                );
-                            }
-                        }
-                    }
-                    if (!is_dir('uploads/ttd')) {
-                        mkdir('uploads/ttd/', 0777, true);
-                    }
-
-                    // Nama file untuk menyimpan gambar
-                    $imageName = str_replace(' ', '-', $request->nama_penanggung_jawab) . '.png';
-                    $filePath = 'uploads/ttd/' . $imageName;
-
-                    // Menyimpan gambar ke storage
-                    $fullPath = public_path($filePath);
-                    imagepng($img, $fullPath);
-                    imagedestroy($img);
-                    $identitas_penanggung_jawab->ttd = $imageName;
-                    array_push($imageFileNames, $imageName);
-
-                    // Mengirim gambar ke API
-                    // $foto_ttd = fopen($filePath, 'r');
-                    // // dd($foto_ttd);
-                    // $response = Http::withHeaders([
-                    //     'x-api-key' => $this->apiKey,
-                    // ])->attach(
-                    //     'file',
-                    //     $foto_ttd,
-                    //     $imageName
-                    // )->post($this->apiUrl, [
-                    //     'category' => 'sign',
-                    //     'filename' => $imageName,
-                    // ]);
-
-                    // fclose($foto_ttd);
-
-                    // // dd($response);
-                    // if ($response->successful()) {
-                    //     $filename = $response->json('filename');
-                    //     $filepath = $response->json('filepath');
-                    //     $identitas_penanggung_jawab->ttd = $filename;
-                    // }
-                }
-            }
-
             if ($request->hasFile('foto_penanggung')) {
-                if (File::exists('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto)) {
-                    File::delete('uploads/penanggung_jawab/' . $identitas_penanggung_jawab->foto);
-                }
                 $foto = $request->file('foto_penanggung');
                 $ext = $foto->getClientOriginalExtension();
-                $filename = uniqid() . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $foto->getClientOriginalExtension();
-                $foto->move('uploads/penanggung_jawab/', $filename);
-                $identitas_penanggung_jawab->foto = $filename;
+                $filename = uniqid() . '-' . strtoupper($request->identitas_penanggung_jawab) . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $ext;
+                // $foto->move('uploads/penanggung_jawab/', $filename);
+
+                try {
+                    $response = Http::withHeaders([
+                        'x-api-key' => config('services.service_x.api_key'),
+                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                    ])->get(config('services.service_x.url') . '/api/checkfile', [
+                        'category' => 'FileIDPersonCharge',
+                        'filename' => $identitas_penanggung_jawab->foto
+                    ]);
+
+                    $result = $response->json();
+                    if ($result['status'] == true) {
+                        $category = 'FileIDPersonCharge';
+                        $response = Http::withHeaders([
+                            'x-api-key' => config('services.service_x.api_key'),
+                            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                        ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$identitas_penanggung_jawab->foto", []);
+                        $result = $response->json();
+                    }
+
+                    $identitas_penanggung_jawab->foto = $filename;
+                    $response = Http::withHeaders([
+                        'x-api-key' => config('services.service_x.api_key'),
+                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                    ])->attach(
+                        'file',
+                        file_get_contents($foto->getRealPath()),
+                        $filename
+                    )->post(config('services.service_x.url') . '/api/uploadfile', [
+                        'category' => 'FileIDPersonCharge',
+                        'filename' => substr($filename, 0, strrpos($filename, '.'))
+                    ]);
+                } catch (\Illuminate\Http\Client\ConnectionException) {
+                    abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+                }
             }
             $identitas_penanggung_jawab->save();
 
@@ -620,17 +594,9 @@ class HomeController extends Controller
             $tipe_customer->new_bill_to_code = $request->new_bill_to_code;
             $tipe_customer->save();
 
-            // dd($imageFileNames);
-            // $response = Http::post(env('API_URL'), [
-            //     'filenames' => $imageFileNames
-            // ]);
-
-            UploadApi::getUploadedFile();
-
             $link = route('home.detail', ['id' => Crypt::encryptString($identitas_perusahaan->id)]);
             return ['status' => true, 'link' => $link];
         } catch (\Exception $e) {
-            dd($e);
             return ['status' => false, 'error' => 'Terjadi kesalahan'];
         }
     }

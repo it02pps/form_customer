@@ -11,6 +11,7 @@ use App\Models\IdentitasPerusahaan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,7 @@ Route::get('/form-customer/{menu}/pdf/{id}', [FormCustomer::class, 'download_pdf
 
 // Get data select
 Route::get('/form-customer/select/{menu}/{id}', [FormCustomer::class, 'select'])->name('form_customer.select');
+Route::get('/form-customer/getFiles/{category}/{filename}', [FormCustomer::class, 'getFiles'])->name('form_customer.getFiles');
 
 Route::middleware('web')->group(function () {
     Route::get('/internal/panel', [HomeController::class, 'index'])->name('home');

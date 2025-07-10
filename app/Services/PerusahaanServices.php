@@ -48,15 +48,6 @@ class perusahaanServices
                 }
             }
 
-            // $condition = [];
-
-            // if (!empty($request->update_id)) {
-            //     $index = Crypt::decryptString($request->update_id);
-            //     $condition = ['id' => $index];
-            // } else {
-            //     $condition = ['kode_customer' => $kode_cust];
-            // }
-
             // Non-aktif old customer
             if ($request->bentuk_usaha == 'perseorangan') {
                 if ($request->update_id) {
@@ -127,64 +118,117 @@ class perusahaanServices
             // Store image
             if ($request->bentuk_usaha == 'perseorangan') {
                 if ($request->hasFile('foto_ktp')) {
-                    if (File::exists('uploads/identitas_perusahaan/' . $data->foto_ktp)) {
-                        File::delete('uploads/identitas_perusahaan/' . $data->foto_ktp);
+                    $foto = $request->file('foto_ktp');
+                    $filename = uniqid() . '-KTP-' . Str::slug($request->nama_lengkap, '-') . '.' . $foto->getClientOriginalExtension();
+                    // $foto->storeAs('uploads/identitas_perusahaan', $filename, 'custom_path');
+
+                    $response = Http::withHeaders([
+                        'x-api-key' => config('services.service_x.api_key'),
+                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                    ])->get(config('services.service_x.url') . '/api/checkfile', [
+                        'category' => 'FileIDCompanyOrPersonal',
+                        'filename' => $data->foto_ktp
+                    ]);
+
+                    $result = $response->json();
+                    if ($result['status'] == true) {
+                        $category = 'FileIDCompanyOrPersonal';
+                        $response = Http::withHeaders([
+                            'x-api-key' => config('services.service_x.api_key'),
+                            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                        ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->foto_ktp", []);
+                        $result = $response->json();
                     }
 
-                    $foto = $request->file('foto_ktp');
-                    $filename = uniqid() . '-' . 'KTP-' . Str::slug($request->nama_lengkap, '-') . '.' . $foto->getClientOriginalExtension();
-                    $foto->storeAs('uploads/identitas_perusahaan', $filename, 'custom_path');
                     $data->foto_ktp = $filename;
-
-                    // Mengirim gambar ke API
-                    // $foto_ttd = fopen($filePath, 'r');
-                    // // dd($foto_ttd);
-                    // $response = Http::withHeaders([
-                    //     'x-api-key' => $this->apiKey,
-                    // ])->attach(
-                    //     'file',
-                    //     $foto_ttd,
-                    //     $imageName
-                    // )->post($this->apiUrl, [
-                    //     'category' => 'sign',
-                    //     'filename' => $imageName,
-                    // ]);
-
-                    // fclose($foto_ttd);
-
-                    // // dd($response);
-                    // if ($response->successful()) {
-                    //     $filename = $response->json('filename');
-                    //     $filepath = $response->json('filepath');
-                    //     $identitas_penanggung_jawab->ttd = $filename;
-                    // }
+                    $response = Http::withHeaders([
+                        'x-api-key' => config('services.service_x.api_key'),
+                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                    ])->attach(
+                        'file',
+                        file_get_contents($foto->getRealPath()),
+                        $filename
+                    )->post(config('services.service_x.url') . '/api/uploadfile', [
+                        'category' => 'FileIDCompanyOrPersonal',
+                        'filename' => substr($filename, 0, strrpos($filename, '.'))
+                    ]);
                 } else {
                     $data->foto_ktp = $oldData->foto_ktp;
                 }
             } else {
                 if ($request->hasFile('foto_npwp')) {
-                    if (File::exists('uploads/identitas_perusahaan/' . $data->foto_npwp)) {
-                        File::delete('uploads/identitas_perusahaan/' . $data->foto_npwp);
+                    $foto = $request->file('foto_npwp');
+                    $filename = uniqid() . '-NPWP-' . Str::slug($request->nama_npwp, '-') . '.' . $foto->getClientOriginalExtension();
+
+                    $response = Http::withHeaders([
+                        'x-api-key' => config('services.service_x.api_key'),
+                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                    ])->get(config('services.service_x.url') . '/api/checkfile', [
+                        'category' => 'FileIDCompanyOrPersonal',
+                        'filename' => $data->foto_npwp
+                    ]);
+
+                    $result = $response->json();
+                    if ($result['status'] == true) {
+                        $category = 'FileIDCompanyOrPersonal';
+                        $response = Http::withHeaders([
+                            'x-api-key' => config('services.service_x.api_key'),
+                            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                        ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->foto_npwp", []);
+                        $result = $response->json();
                     }
 
-                    $foto = $request->file('foto_npwp');
-                    $filename = uniqid() . '-' . 'NPWP-' . Str::slug($request->nama_npwp, '-') . '.' . $foto->getClientOriginalExtension();
-                    $foto->storeAs('uploads/identitas_perusahaan', $filename, 'custom_path');
                     $data->foto_npwp = $filename;
+                    $response = Http::withHeaders([
+                        'x-api-key' => config('services.service_x.api_key'),
+                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                    ])->attach(
+                        'file',
+                        file_get_contents($foto->getRealPath()),
+                        $filename
+                    )->post(config('services.service_x.url') . '/api/uploadfile', [
+                        'category' => 'FileIDCompanyOrPersonal',
+                        'filename' => substr($filename, 0, strrpos($filename, '.'))
+                    ]);
                 } else {
                     $data->foto_npwp = $oldData->foto_npwp;
                 }
 
                 if ($request->status_pkp == 'pkp') {
                     if ($request->hasFile('foto_sppkp')) {
-                        if (File::exists('uploads/identitas_perusahaan/' . $data->sppkp)) {
-                            File::delete('uploads/identitas_perusahaan/' . $data->sppkp);
-                        }
-
                         $foto = $request->file('foto_sppkp');
                         $filename = uniqid() . '-SPPKP-' . Str::slug($request->nama_npwp, '-') . '.' . $foto->getClientOriginalExtension();
-                        $foto->storeAs('uploads/identitas_perusahaan', $filename, 'custom_path');
+
+                        $response = Http::withHeaders([
+                            'x-api-key' => config('services.service_x.api_key'),
+                            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                        ])->get(config('services.service_x.url') . '/api/checkfile', [
+                            'category' => 'FileSPPKPCompany',
+                            'filename' => $data->sppkp
+                        ]);
+
+                        $result = $response->json();
+                        if ($result['status'] == true) {
+                            $category = 'FileSPPKPCompany';
+                            $response = Http::withHeaders([
+                                'x-api-key' => config('services.service_x.api_key'),
+                                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                            ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->sppkp", []);
+                            $result = $response->json();
+                        }
+
                         $data->sppkp = $filename;
+                        $response = Http::withHeaders([
+                            'x-api-key' => config('services.service_x.api_key'),
+                            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                        ])->attach(
+                            'file',
+                            file_get_contents($foto->getRealPath()),
+                            $filename
+                        )->post(config('services.service_x.url') . '/api/uploadfile', [
+                            'category' => 'FileSPPKPCompany',
+                            'filename' => substr($filename, 0, strrpos($filename, '.'))
+                        ]);
                     } else {
                         $data->sppkp = $oldData->sppkp;
                     }

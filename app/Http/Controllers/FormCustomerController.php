@@ -53,7 +53,20 @@ class FormCustomerController extends Controller
 
     public function menu()
     {
-        return view('customer.menu');
+        try {
+            $response = Http::withHeaders([
+                'x-api-key' => config('services.service_x.api_key'),
+                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+            ])->get(config('services.service_x.url') . '/api/checkstatus');
+
+            if ($response->json()['status'] == false) {
+                abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+            }
+
+            return view('customer.menu');
+        } catch (\Illuminate\Http\Client\ConnectionException $e) {
+            abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+        }
     }
 
     public function view_badan_usaha($menu, $status = NULL, $status2 = NULL, $param = NULL)
@@ -268,10 +281,42 @@ class FormCustomerController extends Controller
 
                 $file = $request->file('file_pdf');
                 $ext = $file->getClientOriginalExtension();
-                $filename = uniqid() . '-' . $data->nama_perusahaan . '.' . $ext;
-                $file->move('uploads/identitas_perusahaan/final/', $filename);
+                $filename = uniqid() . '-PDFCust-' . $data->nama_perusahaan . '.' . $ext;
 
-                $data->file_customer_external = $filename;
+                try {
+                    $response = Http::withHeaders([
+                        'x-api-key' => config('services.service_x.api_key'),
+                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                    ])->get(config('services.service_x.url') . '/api/checkfile', [
+                        'category' => 'FilePDFCustomer',
+                        'filename' => $data->file_customer_external
+                    ]);
+
+                    $result = $response->json();
+                    if ($result['status'] == true) {
+                        $category = 'FilePDFCustomer';
+                        $response = Http::withHeaders([
+                            'x-api-key' => config('services.service_x.api_key'),
+                            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                        ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->file_customer_external", []);
+                        $result = $response->json();
+                    }
+
+                    $data->file_customer_external = $filename;
+                    $response = Http::withHeaders([
+                        'x-api-key' => config('services.service_x.api_key'),
+                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                    ])->attach(
+                        'file',
+                        file_get_contents($file->getRealPath()),
+                        $filename
+                    )->post(config('services.service_x.url') . '/api/uploadfile', [
+                        'category' => 'FilePDFCustomer',
+                        'filename' => substr($filename, 0, strrpos($filename, '.'))
+                    ]);
+                } catch (\Illuminate\Http\Client\ConnectionException $e) {
+                    abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+                }
                 $data->status_upload = '1';
             }
             $data->save();
@@ -423,6 +468,20 @@ class FormCustomerController extends Controller
             } else {
                 return ['status' => false, 'error' => 'Data tidak ditemukan'];
             }
+        }
+    }
+
+    public function getFiles($category, $filename)
+    {
+        try {
+            $response = Http::withHeaders([
+                'x-api-key' => config('services.service_x.api_key'),
+                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+            ])->get(config('services.service_x.url') . "/api/getfile/$category/$filename", []);
+            return response($response->body(), 200)
+                ->header('Content-Type', $response->header('Content-Type'));
+        } catch (\Illuminate\Http\Client\ConnectionException) {
+            abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
         }
     }
 }

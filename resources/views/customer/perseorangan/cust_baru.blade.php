@@ -503,14 +503,6 @@
                                         <textarea name="alamat_ktp" id="alamat_ktp" class="form-control" placeholder="Masukkan alamat lengkap KTP" autocomplete="off" required></textarea>
                                     </div>
                                     <div class="group-column">
-                                        {{-- <div class="row">
-                                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
-
-                                            </div>
-                                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
-                                                
-                                            </div>
-                                        </div> --}}
                                         <div class="branch-section mt-4 p-0">
                                             <div>
                                                 <span class="text-danger">*Jika terdapat cabang, silahkan tekan tombol disamping. Apabila tidak ada, dapat diabaikan</span>
