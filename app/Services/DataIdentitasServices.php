@@ -52,38 +52,39 @@ class DataIdentitasServices
 
             if ($request->hasFile('foto_penanggung')) {
                 $foto = $request->file('foto_penanggung');
-                $filename = uniqid() . '-PIC-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $foto->getClientOriginalExtension();
+                $filename = uniqid() . '-PIC-' . strtoupper($request->identitas_penanggung_jawab) . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $foto->getClientOriginalExtension();
+                $foto->storeAs('uploads/penanggung_jawab', $filename, 'custom_path');
 
-                $response = Http::withHeaders([
-                    'x-api-key' => config('services.service_x.api_key'),
-                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                ])->get(config('services.service_x.url') . '/api/checkfile', [
-                    'category' => 'FileIDPersonCharge',
-                    'filename' => $data->foto
-                ]);
+                // $response = Http::withHeaders([
+                //     'x-api-key' => config('services.service_x.api_key'),
+                //     'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                // ])->get(config('services.service_x.url') . '/api/checkfile', [
+                //     'category' => 'FileIDPersonCharge',
+                //     'filename' => $data->foto
+                // ]);
 
-                $result = $response->json();
-                if ($result['status'] == true) {
-                    $category = 'FileIDPersonCharge';
-                    $response = Http::withHeaders([
-                        'x-api-key' => config('services.service_x.api_key'),
-                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                    ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->foto", []);
-                    $result = $response->json();
-                }
+                // $result = $response->json();
+                // if ($result['status'] == true) {
+                //     $category = 'FileIDPersonCharge';
+                //     $response = Http::withHeaders([
+                //         'x-api-key' => config('services.service_x.api_key'),
+                //         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                //     ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->foto", []);
+                //     $result = $response->json();
+                // }
 
                 $data->foto = $filename;
-                $response = Http::withHeaders([
-                    'x-api-key' => config('services.service_x.api_key'),
-                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                ])->attach(
-                    'file',
-                    file_get_contents($foto->getRealPath()),
-                    $filename
-                )->post(config('services.service_x.url') . '/api/uploadfile', [
-                    'category' => 'FileIDPersonCharge',
-                    'filename' => substr($filename, 0, strrpos($filename, '.'))
-                ]);
+                // $response = Http::withHeaders([
+                //     'x-api-key' => config('services.service_x.api_key'),
+                //     'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                // ])->attach(
+                //     'file',
+                //     file_get_contents($foto->getRealPath()),
+                //     $filename
+                // )->post(config('services.service_x.url') . '/api/uploadfile', [
+                //     'category' => 'FileIDPersonCharge',
+                //     'filename' => substr($filename, 0, strrpos($filename, '.'))
+                // ]);
             } else {
                 $data->foto = $oldData->foto;
             }
@@ -133,48 +134,48 @@ class DataIdentitasServices
 
                     // Nama file untuk menyimpan gambar
                     $imageName = str_replace(' ', '-', $request->nama_penanggung_jawab) . '.png';
-                    // $filePath = 'uploads/ttd/' . $imageName;
+                    $filePath = 'uploads/ttd/' . $imageName;
 
                     // Menyimpan gambar ke storage
-                    // $fullPath = public_path($filePath);
-                    // imagepng($img, $fullPath);
-                    // imagedestroy($img);
-                    // $data->ttd = $imageName;
-
-                    ob_start();
-                    imagepng($img);
-                    $imageBinary = ob_get_clean();
+                    $fullPath = public_path($filePath);
+                    imagepng($img, $fullPath);
                     imagedestroy($img);
-                    $response = Http::withHeaders([
-                        'x-api-key' => config('services.service_x.api_key'),
-                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                    ])->get(config('services.service_x.url') . '/api/checkfile', [
-                        'category' => 'FileIDSignature',
-                        'filename' => $data->ttd
-                    ]);
-
-                    $result = $response->json();
-                    if ($result['status'] == true) {
-                        $category = 'FileIDSignature';
-                        $response = Http::withHeaders([
-                            'x-api-key' => config('services.service_x.api_key'),
-                            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                        ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->ttd", []);
-                        $result = $response->json();
-                    }
-
                     $data->ttd = $imageName;
-                    $response = Http::withHeaders([
-                        'x-api-key' => config('services.service_x.api_key'),
-                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                    ])->attach(
-                        'file',
-                        $imageBinary,
-                        $imageName
-                    )->post(config('services.service_x.url') . '/api/uploadfile', [
-                        'category' => 'FileIDSignature',
-                        'filename' => substr($imageName, 0, strrpos($imageName, '.'))
-                    ]);
+
+                    // ob_start();
+                    // imagepng($img);
+                    // $imageBinary = ob_get_clean();
+                    // imagedestroy($img);
+                    // $response = Http::withHeaders([
+                    //     'x-api-key' => config('services.service_x.api_key'),
+                    //     'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                    // ])->get(config('services.service_x.url') . '/api/checkfile', [
+                    //     'category' => 'FileIDSignature',
+                    //     'filename' => $data->ttd
+                    // ]);
+
+                    // $result = $response->json();
+                    // if ($result['status'] == true) {
+                    //     $category = 'FileIDSignature';
+                    //     $response = Http::withHeaders([
+                    //         'x-api-key' => config('services.service_x.api_key'),
+                    //         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                    //     ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->ttd", []);
+                    //     $result = $response->json();
+                    // }
+
+                    // $data->ttd = $imageName;
+                    // $response = Http::withHeaders([
+                    //     'x-api-key' => config('services.service_x.api_key'),
+                    //     'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                    // ])->attach(
+                    //     'file',
+                    //     $imageBinary,
+                    //     $imageName
+                    // )->post(config('services.service_x.url') . '/api/uploadfile', [
+                    //     'category' => 'FileIDSignature',
+                    //     'filename' => substr($imageName, 0, strrpos($imageName, '.'))
+                    // ]);
                 } else {
                     // $data->ttd = null;
                     return ['status' => false, 'error' => 'Tanda Tangan tidak boleh kosong'];

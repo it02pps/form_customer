@@ -41,10 +41,6 @@ class FormCustomerController extends Controller
 
     public function __construct(perusahaanServices $perusahaanServices, DataIdentitasServices $dataIdentitasServices, InformasiBankServices $informasiBankServices, CabangServices $cabangServices)
     {
-        $this->apiKey = 'Telor-Asin-951357-Papasari';
-        $this->apiUrl = env('API_URL') . 'upload';
-        $this->path = 'penanggung_jawab/';
-
         $this->perusahaanServices = $perusahaanServices;
         $this->dataIdentitasServices = $dataIdentitasServices;
         $this->informasiBankServices = $informasiBankServices;
@@ -53,20 +49,21 @@ class FormCustomerController extends Controller
 
     public function menu()
     {
-        try {
-            $response = Http::withHeaders([
-                'x-api-key' => config('services.service_x.api_key'),
-                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-            ])->get(config('services.service_x.url') . '/api/checkstatus');
+        // try {
+        //     $response = Http::withHeaders([
+        //         'x-api-key' => config('services.service_x.api_key'),
+        //         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+        //     ])->get(config('services.service_x.url') . '/api/checkstatus');
 
-            if ($response->json()['status'] == false) {
-                abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
-            }
+        //     if ($response->json()['status'] == false) {
+        //         abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+        //     }
 
-            return view('customer.menu');
-        } catch (\Illuminate\Http\Client\ConnectionException $e) {
-            abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
-        }
+        return view('customer.menu');
+        // } catch (\Illuminate\Http\Client\ConnectionException $e) {
+        //     // dd($e);
+        //     abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+        // }
     }
 
     public function view_badan_usaha($menu, $status = NULL, $status2 = NULL, $param = NULL)
@@ -282,41 +279,42 @@ class FormCustomerController extends Controller
                 $file = $request->file('file_pdf');
                 $ext = $file->getClientOriginalExtension();
                 $filename = uniqid() . '-PDFCust-' . $data->nama_perusahaan . '.' . $ext;
+                $file->move('uploads/pdf/', $filename);
 
-                try {
-                    $response = Http::withHeaders([
-                        'x-api-key' => config('services.service_x.api_key'),
-                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                    ])->get(config('services.service_x.url') . '/api/checkfile', [
-                        'category' => 'FilePDFCustomer',
-                        'filename' => $data->file_customer_external
-                    ]);
+                // try {
+                //     $response = Http::withHeaders([
+                //         'x-api-key' => config('services.service_x.api_key'),
+                //         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                //     ])->get(config('services.service_x.url') . '/api/checkfile', [
+                //         'category' => 'FilePDFCustomer',
+                //         'filename' => $data->file_customer_external
+                //     ]);
 
-                    $result = $response->json();
-                    if ($result['status'] == true) {
-                        $category = 'FilePDFCustomer';
-                        $response = Http::withHeaders([
-                            'x-api-key' => config('services.service_x.api_key'),
-                            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                        ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->file_customer_external", []);
-                        $result = $response->json();
-                    }
+                //     $result = $response->json();
+                //     if ($result['status'] == true) {
+                //         $category = 'FilePDFCustomer';
+                //         $response = Http::withHeaders([
+                //             'x-api-key' => config('services.service_x.api_key'),
+                //             'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                //         ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->file_customer_external", []);
+                //         $result = $response->json();
+                //     }
 
-                    $data->file_customer_external = $filename;
-                    $response = Http::withHeaders([
-                        'x-api-key' => config('services.service_x.api_key'),
-                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                    ])->attach(
-                        'file',
-                        file_get_contents($file->getRealPath()),
-                        $filename
-                    )->post(config('services.service_x.url') . '/api/uploadfile', [
-                        'category' => 'FilePDFCustomer',
-                        'filename' => substr($filename, 0, strrpos($filename, '.'))
-                    ]);
-                } catch (\Illuminate\Http\Client\ConnectionException $e) {
-                    abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
-                }
+                //     $data->file_customer_external = $filename;
+                //     $response = Http::withHeaders([
+                //         'x-api-key' => config('services.service_x.api_key'),
+                //         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                //     ])->attach(
+                //         'file',
+                //         file_get_contents($file->getRealPath()),
+                //         $filename
+                //     )->post(config('services.service_x.url') . '/api/uploadfile', [
+                //         'category' => 'FilePDFCustomer',
+                //         'filename' => substr($filename, 0, strrpos($filename, '.'))
+                //     ]);
+                // } catch (\Illuminate\Http\Client\ConnectionException $e) {
+                //     abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+                // }
                 $data->status_upload = '1';
             }
             $data->save();
