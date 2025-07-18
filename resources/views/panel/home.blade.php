@@ -239,21 +239,21 @@
                             </select>
                         </div>
                     </div>
-                    <div class="table-responsive" style="overflow-x: hidden;">
+                    <div class="table-responsive" style="width: 100%;">
                         <div class="mt-3">
-                            <span class="text-danger">*Note: U = Badan Usaha | O = Perseorangan</span>
-                            <table id="datatable" class="table" style="border: 1px solid #cfcfd1;">
+                            <span class="text-danger">*Note: U = Badan Usaha | O = Perseorangan | CK = CheckList</span>
+                            <table id="datatable" class="table" style="border: 1px solid #cfcfd1; min-width: 100%;">
                                 <thead style="background-color: #E7E6EB;">
                                     <tr>
-                                        <th style="width: 50px; font-size: 12px;">CK</th>
-                                        <th style="width: 75px; font-size: 12px;">No</th>
-                                        <th style="width: 100px; font-size: 12px;">Bussiness Entity</th>
-                                        <th style="width: 120px; font-size: 12px;" class="text-center align-middle">Customer Name</th>
-                                        <th style="width: 120px; font-size: 12px;" class="text-center align-middle">Bill to Name</th>
-                                        <th style="width: 150px; font-size: 12px;" class="text-center align-middle">Bill to Address</th>
-                                        <th style="width: 120px; font-size: 12px;" class="text-center align-middle">Sales Person</th>
-                                        <th style="width: 50px; font-size: 12px;">Upload Status</th>
-                                        <th style="width: 310px; font-size: 12px;">Update</th>
+                                        <th style="min-width: 50px; font-size: 12px;">CK</th>
+                                        <th style="min-width: 80px; font-size: 12px;">No</th>
+                                        <th style="min-width: 140px; font-size: 12px;">Bussiness Entity</th>
+                                        <th style="min-width: 200px; font-size: 12px;" class="text-center align-middle">Customer Name</th>
+                                        <th style="min-width: 200px; font-size: 12px;" class="text-center align-middle">Bill to Name</th>
+                                        <th style="min-width: 250px; font-size: 12px;" class="text-center align-middle">Bill to Address</th>
+                                        <th style="min-width: 180px; font-size: 12px;" class="text-center align-middle">Sales Person</th>
+                                        <th style="min-width: 50px; font-size: 12px;">Upload Status</th>
+                                        <th style="min-width: 350px; font-size: 12px;">Update</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -369,43 +369,14 @@
                         }
                     },
                     {
-                        width: '50px',
-                        targets: 0,
+                        targets: [0, 1, 2, 6, 7, 8],
                         className: 'text-center align-middle',
                     },
                     {
-                        width: '75px',
-                        targets: 0,
-                        className: 'text-center align-middle',
-                    },
-                    {
-                        width: '120px',
-                        targets: 1,
-                        className: 'text-center align-middle'
-                    },
-                    {
-                        width: '150px',
-                        targets: 4,
+                        targets: [2, 3, 4, 5],
                         createdCell: function(td) {
                             $(td).css('text-align', 'left');
                         }
-                    },
-                    {
-                        width: '120px',
-                        targets: [2, 3, 5],
-                        createdCell: function(td) {
-                            $(td).css('text-align', 'left');
-                        }
-                    },
-                    {
-                        width: '50px',
-                        targets: 6,
-                        className: 'text-center align-middle'
-                    },
-                    {
-                        width: '310px',
-                        targets: 7,
-                        className: 'text-center align-middle'
                     },
                 ],
                 pagingType: 'simple_numbers',
@@ -425,19 +396,19 @@
 
             // START: Search
             $('#searchCustomerName').on('keyup', function() {
-                table.column(2).search(this.value).draw();
+                table.column(3).search(this.value).draw();
             });
 
             $('#searchBillToAddress').on('keyup', function() {
-                table.column(4).search(this.value).draw();
-            });
-
-            $('#searchSalesPerson').on('keyup', function() {
                 table.column(5).search(this.value).draw();
             });
 
-            $('#filter_status').on('change', function() {
+            $('#searchSalesPerson').on('keyup', function() {
                 table.column(6).search(this.value).draw();
+            });
+
+            $('#filter_status').on('change', function() {
+                table.column(7).search(this.value).draw();
             })
             // END: Search
 

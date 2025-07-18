@@ -268,6 +268,7 @@ class HomeController extends Controller
 
             // Cek id
             $dekripsi = $request->update_id ? Crypt::decryptString($request->update_id) : '';
+            // dd($dekripsi);
 
             // Identitas perusahaan
             $identitas_perusahaan = IdentitasPerusahaan::findOrNew($dekripsi);

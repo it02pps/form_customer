@@ -481,7 +481,7 @@
                                                 <?php else: ?>
                                                     <div id="preview_ktp" class="form-group">
                                                         
-                                                        <img id="preview_foto_ktp" src="<?php echo e(url('/uploads/identitas_perusahaan/' . $perusahaan['foto_ktp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                        <img id="preview_foto_ktp" src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_ktp'])); ?>" alt="Belum ada file" data-action="zoom">
                                                     </div>
                                                 <?php endif; ?>
                                             </div>
