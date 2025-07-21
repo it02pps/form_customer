@@ -453,15 +453,21 @@
                                                 </div>
                         
                                                 @if($data)
-                                                    @if($data['foto_ktp'] && File::extension($data['foto_ktp']) == 'pdf')
-                                                        <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
-                                                            <p style="font-size: 18px;">Preview file KTP</p>
-                                                            <a href="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                        </div>
-                                                    @elseif($data['foto_ktp'] && File::extension($data['foto_ktp']) != 'pdf')
-                                                        <div class="form-group" id="preview_ktp">
-                                                            <img id="preview_foto_ktp" src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
-                                                        </div>
+                                                    @if ($data['foto_ktp'])
+                                                        @if( && File::extension($data['foto_ktp']) == 'pdf')
+                                                            <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
+                                                                <p style="font-size: 18px;">Preview file KTP</p>
+                                                                <a href="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                            </div>
+                                                        @elseif($data['foto_ktp'] && File::extension($data['foto_ktp']) != 'pdf')
+                                                            <div class="form-group" id="preview_ktp">
+                                                                <img id="preview_foto_ktp" src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
+                                                            </div>
+                                                        @else
+                                                            <div class="form-group" id="preview_ktp">
+                                                                <p class="text-center">Belum ada file</p>
+                                                            </div>
+                                                        @endif
                                                     @else
                                                         <div class="form-group" id="preview_ktp">
                                                             <p class="text-center">Belum ada file</p>
@@ -578,15 +584,21 @@
                                     </div>
         
                                     @if($data)
-                                        @if($data['data_identitas']['foto'] && File::extension($data['data_identitas']['foto']) == 'pdf')
-                                            <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
-                                                <p style="font-size: 18px">Preview file identitas</p>
-                                                <a href="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                            </div>
-                                        @elseif($data['data_identitas']['foto'] && File::extension($data['data_identitas']['foto']) != 'pdf')
-                                            <div id="preview_penanggung" class="form-group">
-                                                <img id="preview_foto_penanggung" src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
-                                            </div>
+                                        @if ($data['data_identitas']['foto'])
+                                            @if(File::extension($data['data_identitas']['foto']) == 'pdf')
+                                                <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                                    <p style="font-size: 18px">Preview file identitas</p>
+                                                    <a href="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                </div>
+                                            @elseif(File::extension($data['data_identitas']['foto']) != 'pdf')
+                                                <div id="preview_penanggung" class="form-group">
+                                                    <img id="preview_foto_penanggung" src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
+                                                </div>
+                                            @else
+                                                <div id="preview_penanggung" class="form-group">
+                                                    <p class="text-center">Belum ada file</p>
+                                                </div>
+                                            @endif
                                         @else
                                             <div id="preview_penanggung" class="form-group">
                                                 <p class="text-center">Belum ada file</p>
