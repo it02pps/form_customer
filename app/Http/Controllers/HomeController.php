@@ -165,7 +165,7 @@ class HomeController extends Controller
             'nomor_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'nama_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'badan_usaha' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
-            'email_faktur' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required|email' : '',
+            // 'email_faktur' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required|email' : '',
             'foto_npwp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : ($data['bentuk_usaha'] == 'badan_usaha' ? 'required|mimes:jpg,jpeg,pdf' : ''),
             'foto_sppkp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf' : ($data['bentuk_usaha'] == 'badan_usaha' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,jpeg,pdf' : '') : ''),
             'alamat_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
@@ -175,7 +175,7 @@ class HomeController extends Controller
             'badan_usaha_lain' => $data['bentuk_usaha'] == 'badan_usaha' ? ($data['badan_usaha'] == 'lainnya' ? 'required' : '') : '',
 
             // Informasi Bank
-            'nomor_rekening' => 'required|numeric',
+            'nomor_rekening' => 'required|numeric|digits_between:10,16',
             'nama_rekening' => 'required',
             'status_rekening' => 'required',
             'nama_bank' => 'required',
