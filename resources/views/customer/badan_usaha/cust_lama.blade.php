@@ -387,7 +387,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Alamat Group Perusahaan <span class="text-danger">*</span></label>
-                                        <textarea name="alamat_group_lengkap" id="alamat_group_lengkap" class="form-control" rows="6" placeholder="Masukkan alamat group perusahaan" autocomplete="off" required>{{ $data ? $data['alamat_lengkap'] : '' }}</textarea>
+                                        <textarea name="alamat_group_lengkap" id="alamat_group_lengkap" class="form-control" rows="6" placeholder="Masukkan alamat group perusahaan" autocomplete="off" required>{{ $data ? $data['alamat_group_lengkap'] : '' }}</textarea>
                                     </div>
                                 </div>
                             </div>

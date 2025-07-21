@@ -175,7 +175,7 @@ class HomeController extends Controller
             'badan_usaha_lain' => $data['bentuk_usaha'] == 'badan_usaha' ? ($data['badan_usaha'] == 'lainnya' ? 'required' : '') : '',
 
             // Informasi Bank
-            'nomor_rekening' => 'required|numeric|digits_between:10,16',
+            'nomor_rekening' => 'required|numeric',
             'nama_rekening' => 'required',
             'status_rekening' => 'required',
             'nama_bank' => 'required',

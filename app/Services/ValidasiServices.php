@@ -24,7 +24,7 @@ class ValidasiServices
             'nomor_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'nama_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
             'badan_usaha' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
-            'email_faktur' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required|email' : '',
+            // 'email_faktur' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required|email' : '',
             'foto_npwp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf,png' : ($data['bentuk_usaha'] == 'badan_usaha' ? 'required|mimes:jpg,jpeg,pdf,png' : ''),
             'foto_sppkp' => $data['update_id'] ? 'mimes:jpg,jpeg,pdf,png' : ($data['bentuk_usaha'] == 'badan_usaha' ? ($data['status_pkp'] == 'pkp' ? 'required|mimes:jpg,jpeg,pdf,png' : '') : ''),
             'alamat_npwp' => $data['bentuk_usaha'] == 'badan_usaha' ? 'required' : '',
@@ -75,7 +75,7 @@ class ValidasiServices
     public function validationInformasiBank($data)
     {
         $rules = [
-            'nomor_rekening' => 'required|numeric|digits_between:10,16',
+            'nomor_rekening' => 'required|numeric',
             'nama_rekening' => 'required',
             'status_rekening' => 'required',
             'nama_bank' => 'required',
