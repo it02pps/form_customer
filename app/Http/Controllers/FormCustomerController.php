@@ -49,21 +49,20 @@ class FormCustomerController extends Controller
 
     public function menu()
     {
-        // try {
-        //     $response = Http::withHeaders([
-        //         'x-api-key' => config('services.service_x.api_key'),
-        //         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-        //     ])->get(config('services.service_x.url') . '/api/checkstatus');
+        try {
+            $response = Http::withHeaders([
+                'x-api-key' => config('services.service_x.api_key'),
+                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+            ])->get(config('services.service_x.url') . '/api/checkstatus');
 
-        //     if ($response->json()['status'] == false) {
-        //         abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
-        //     }
-
-        return view('customer.menu');
-        // } catch (\Illuminate\Http\Client\ConnectionException $e) {
-        //     // dd($e);
-        //     abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
-        // }
+            if ($response->json()['status'] == false) {
+                abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+            }
+            return view('customer.menu');
+        } catch (\Illuminate\Http\Client\ConnectionException $e) {
+            // dd($e);
+            abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+        }
     }
 
     public function view_badan_usaha($menu, $status = NULL, $status2 = NULL, $param = NULL)

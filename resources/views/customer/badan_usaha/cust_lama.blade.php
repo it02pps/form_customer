@@ -540,13 +540,13 @@
                                                     @if(File::extension($data['sppkp']) == 'pdf')
                                                         <div id="preview_sppkp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                                             <p style="font-size: 18px;">Preview file SPPKP</p>
-                                                            {{-- <a href="{{ url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp']) }}" target="_blank" id="previewPDF">Preview PDF</a> --}}
-                                                            <a href="{{ asset('/uploads/identitas_perusahaan/' . $data['sppkp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                            <a href="{{ url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                            {{-- <a href="{{ asset('/uploads/identitas_perusahaan/' . $data['sppkp']) }}" target="_blank" id="previewPDF">Preview PDF</a> --}}
                                                         </div>
                                                     @elseif(File::extension($data['sppkp']) != 'pdf')
                                                         <div id="preview_sppkp" class="form-group">
-                                                            {{-- <img id="preview_foto_sppkp" src="{{ url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp']) }}" alt="Belum ada file" data-action="zoom"> --}}
-                                                            <img id="preview_foto_sppkp" src="{{ asset('/uploads/identitas_perusahaan/' . $data['sppkp']) }}" alt="Belum ada file" data-action="zoom">
+                                                            <img id="preview_foto_sppkp" src="{{ url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp']) }}" alt="Belum ada file" data-action="zoom">
+                                                            {{-- <img id="preview_foto_sppkp" src="{{ asset('/uploads/identitas_perusahaan/' . $data['sppkp']) }}" alt="Belum ada file" data-action="zoom"> --}}
                                                         </div>
                                                     @else
                                                         <div id="preview_sppkp" class="form-group">
@@ -578,13 +578,13 @@
                                                 @if(File::extension($data['foto_npwp']) == 'pdf')
                                                     <div id="preview_npwp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                                         <p style="font-size: 18px;">Preview file NPWP</p>
-                                                        {{-- <a href="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp']) }}" target="_blank" id="previewPDF">Preview PDF</a> --}}
-                                                        <a href="{{ asset('/uploads/identitas_perusahaan/' . $data['foto_npwp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                        <a href="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                        {{-- <a href="{{ asset('/uploads/identitas_perusahaan/' . $data['foto_npwp']) }}" target="_blank" id="previewPDF">Preview PDF</a> --}}
                                                     </div>
                                                 @elseif(File::extension($data['foto_npwp']) != 'pdf')
                                                     <div id="preview_npwp" class="form-group">
-                                                        {{-- <img id="preview_foto_npwp" src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp']) }}" alt="Belum ada file" data-action="zoom"> --}}
-                                                        <img id="preview_foto_npwp" src="{{ asset('/uploads/identitas_perusahaan/' . $data['foto_npwp']) }}" alt="Belum ada file" data-action="zoom">
+                                                        <img id="preview_foto_npwp" src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp']) }}" alt="Belum ada file" data-action="zoom">
+                                                        {{-- <img id="preview_foto_npwp" src="{{ asset('/uploads/identitas_perusahaan/' . $data['foto_npwp']) }}" alt="Belum ada file" data-action="zoom"> --}}
                                                     </div>
                                                 @else
                                                     <div id="preview_npwp" class="form-group">
@@ -704,13 +704,13 @@
                                                 @if(File::extension($data['data_identitas']['foto']) == 'pdf')
                                                     <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                                         <p style="font-size: 18px;">Preview file identitas</p>
-                                                        {{-- <a href="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a> --}}
-                                                        <a href="{{ asset('/uploads/penanggung_jawab/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                        <a href="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                        {{-- <a href="{{ asset('/uploads/penanggung_jawab/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a> --}}
                                                     </div>
                                                 @elseif($data['data_identitas']['foto'] && File::extension($data['data_identitas']['foto']) != 'pdf')
                                                     <div id="preview_penanggung" class="form-group">
-                                                        {{-- <img id="preview_foto_penanggung" src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom"> --}}
-                                                        <img id="preview_foto_penanggung" src="{{ asset('/uploads/penanggung_jawab/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
+                                                        <img id="preview_foto_penanggung" src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
+                                                        {{-- <img id="preview_foto_penanggung" src="{{ asset('/uploads/penanggung_jawab/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom"> --}}
                                                     </div>
                                                 @else
                                                     <div id="preview_penanggung" class="form-group">
