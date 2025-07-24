@@ -322,9 +322,9 @@
 @endsection
 
 @section('content')
-    <div class="container">
-        <div class="container-fluid">
-            <div class="content">
+<div class="container">
+    <div class="container-fluid">
+        <div class="content">
                 <div class="header d-flex justify-content-between align-items-center">
                     <div class="logo">
                         <img src="{{ asset('../../../images/PNG 4125 x 913.png') }}" alt="Logo">
@@ -336,6 +336,12 @@
                 <div class="title">
                     <h1>Formulir Data Customer</h1>
                     <h5>Silahkan isi data terkini anda, kemudian tanda tangan.</h5>
+                    <div class="alert alert-danger fade show" role="alert">
+                        Mohon untuk mengisi data dengan lengkap dan sebenar-benarnya sesuai dengan dokumen <strong> identitas resmi </strong> yang digunakan.
+                        Data yang Anda berikan akan digunakan untuk keperluan <strong> verifikasi dan kelancaran proses transaksi</strong>.
+                        Segala bentuk ketidaksesuaian atau ketidakakuratan data menjadi tanggung jawab pihak yang mengisi.
+                        PT PAPASARI berkomitmen untuk menjaga kerahasiaan dan keamanan seluruh data pribadi pelanggan sesuai dengan ketentuan yang berlaku.
+                    </div>
                 </div>
                 <form id="formCustomer" enctype="multipart/form-data">
                     @csrf

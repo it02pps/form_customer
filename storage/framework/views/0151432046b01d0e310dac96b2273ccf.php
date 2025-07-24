@@ -320,9 +320,9 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
-    <div class="container">
-        <div class="container-fluid">
-            <div class="content">
+<div class="container">
+    <div class="container-fluid">
+        <div class="content">
                 <div class="header d-flex justify-content-between align-items-center">
                     <div class="logo">
                         <img src="<?php echo e(asset('../../../images/PNG 4125 x 913.png')); ?>" alt="Logo">
@@ -334,10 +334,17 @@
                 <div class="title">
                     <h1>Formulir Data Customer</h1>
                     <h5>Silahkan isi data terkini anda, kemudian tanda tangan.</h5>
+                    <div class="alert alert-danger fade show" role="alert">
+                        Mohon untuk mengisi data dengan lengkap dan sebenar-benarnya sesuai dengan dokumen <strong> identitas resmi </strong> yang digunakan.
+                        Data yang Anda berikan akan digunakan untuk keperluan <strong> verifikasi dan kelancaran proses transaksi</strong>.
+                        Segala bentuk ketidaksesuaian atau ketidakakuratan data menjadi tanggung jawab pihak yang mengisi.
+                        PT PAPASARI berkomitmen untuk menjaga kerahasiaan dan keamanan seluruh data pribadi pelanggan sesuai dengan ketentuan yang berlaku.
+                    </div>
                 </div>
                 <form id="formCustomer" enctype="multipart/form-data">
                     <?php echo csrf_field(); ?>
                     <input type="hidden" name="update_id" id="update_id" value="<?php echo e($enkripsi); ?>">
+                    <input type="hidden" name="opsi" id="opsi" value="data_baru">
                     <input type="hidden" name="bentuk_usaha" id="bentuk_usaha" value="badan_usaha">
                     <div class="section4">
                         <div class="row">
@@ -533,15 +540,21 @@
                                             </div>
                 
                                             <?php if($data): ?>
-                                                <?php if($data['sppkp'] && File::extension($data['sppkp']) == 'pdf'): ?>
-                                                    <div id="preview_sppkp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
-                                                        <p style="font-size: 18px;">Preview file SPPKP</p>
-                                                        <a href="" target="_blank" id="previewPDF">Preview PDF</a>
-                                                    </div>
-                                                <?php elseif($data['sppkp'] && File::extension($data['sppkp']) != 'pdf'): ?>
-                                                    <div id="preview_sppkp" class="form-group">
-                                                        <img id="preview_foto_sppkp" src="" alt="Belum ada file" data-action="zoom">
-                                                    </div>
+                                                <?php if($data['sppkp']): ?>
+                                                    <?php if(File::extension($data['sppkp']) == 'pdf'): ?>
+                                                        <div id="preview_sppkp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                                            <p style="font-size: 18px;">Preview file SPPKP</p>
+                                                            <a href="" target="_blank" id="previewPDF">Preview PDF</a>
+                                                        </div>
+                                                    <?php elseif(File::extension($data['sppkp']) != 'pdf'): ?>
+                                                        <div id="preview_sppkp" class="form-group">
+                                                            <img id="preview_foto_sppkp" src="" alt="Belum ada file" data-action="zoom">
+                                                        </div>
+                                                    <?php else: ?>
+                                                        <div id="preview_sppkp" class="form-group">
+                                                            <p class="text-center">Belum ada file</p>
+                                                        </div>
+                                                    <?php endif; ?>
                                                 <?php else: ?>
                                                     <div id="preview_sppkp" class="form-group">
                                                         <p class="text-center">Belum ada file</p>
@@ -563,15 +576,21 @@
                                         </div>
                 
                                         <?php if($data): ?>
-                                            <?php if($data['foto_npwp'] && File::extension($data['foto_npwp']) == 'pdf'): ?>
-                                                <div id="preview_npwp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
-                                                    <p style="font-size: 18px;">Preview file NPWP</p>
-                                                    <a href="" target="_blank" id="previewPDF">Preview PDF</a>
-                                                </div>
-                                            <?php elseif($data['foto_npwp'] && File::extension($data['foto_npwp']) != 'pdf'): ?>
-                                                <div id="preview_npwp" class="form-group">
-                                                    <img id="preview_foto_npwp" src="" alt="Belum ada file" data-action="zoom">
-                                                </div>
+                                            <?php if($data['foto_npwp']): ?>
+                                                <?php if(File::extension($data['foto_npwp']) == 'pdf'): ?>
+                                                    <div id="preview_npwp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                                        <p style="font-size: 18px;">Preview file NPWP</p>
+                                                        <a href="" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    </div>
+                                                <?php elseif(File::extension($data['foto_npwp']) != 'pdf'): ?>
+                                                    <div id="preview_npwp" class="form-group">
+                                                        <img id="preview_foto_npwp" src="" alt="Belum ada file" data-action="zoom">
+                                                    </div>
+                                                <?php else: ?>
+                                                    <div id="preview_npwp" class="form-group">
+                                                        <p class="text-center">Belum ada file</p>
+                                                    </div>
+                                                <?php endif; ?>
                                             <?php else: ?>
                                                 <div id="preview_npwp" class="form-group">
                                                     <p class="text-center">Belum ada file</p>
@@ -681,15 +700,21 @@
                                         </div>
             
                                         <?php if($data): ?>
-                                            <?php if($data['data_identitas']['foto'] && File::extension($data['data_identitas']['foto']) == 'pdf'): ?>
-                                                <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
-                                                    <p style="font-size: 18px;">Preview file identitas</p>
-                                                    <a href="" target="_blank" id="previewPDF">Preview PDF</a>
-                                                </div>
-                                            <?php elseif($data['data_identitas']['foto'] && File::extension($data['data_identitas']['foto']) != 'pdf'): ?>
-                                                <div id="preview_penanggung" class="form-group">
-                                                    <img id="preview_foto_penanggung" src="" alt="Belum ada file" data-action="zoom">
-                                                </div>
+                                            <?php if($data['data_identitas']['foto']): ?>
+                                                <?php if(File::extension($data['data_identitas']['foto']) == 'pdf'): ?>
+                                                    <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                                        <p style="font-size: 18px;">Preview file identitas</p>
+                                                        <a href="" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    </div>
+                                                <?php elseif(File::extension($data['data_identitas']['foto']) != 'pdf'): ?>
+                                                    <div id="preview_penanggung" class="form-group">
+                                                        <img id="preview_foto_penanggung" src="" alt="Belum ada file" data-action="zoom">
+                                                    </div>
+                                                <?php else: ?>
+                                                    <div id="preview_penanggung" class="form-group">
+                                                        <p class="text-center">Belum ada file</p>
+                                                    </div>
+                                                <?php endif; ?>
                                             <?php else: ?>
                                                 <div id="preview_penanggung" class="form-group">
                                                     <p class="text-center">Belum ada file</p>
