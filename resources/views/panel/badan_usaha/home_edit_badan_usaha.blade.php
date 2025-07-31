@@ -151,6 +151,9 @@
     }
 
     .profile {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
         cursor: pointer;
     }
 
@@ -300,7 +303,7 @@
                 </div>
                 <div class="title">
                     <h1>Formulir Data Customer</h1>
-                    <h5>Silahkan isi data terkini anda, kemudian tanda tangan. Testing123</h5>
+                    <h5>Silahkan isi data terkini anda, kemudian tanda tangan.</h5>
                 </div>
                 <form id="formCustomer" enctype="multipart/form-data">
                     @csrf
@@ -488,7 +491,7 @@
                                             <input type="text" name="no_wa" id="no_wa" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" maxlength="14" class="form-control" autocomplete="off" placeholder="Contoh: 012345678910" value="{{ $data ? $data['nomor_whatsapp'] : '' }}">
                                         </div>
 
-                                        <div class="form-group pt-3" id="select">
+                                        <div class="form-group mt-4 pb-0" id="select">
                                             <label for="">Status Pengusaha Kena Pajak (PKP) <span class="text-danger">*</span></label>
                                             <select name="status_pkp" id="status_pkp" class="form-control" required>
                                                 <option value="non_pkp">Non PKP</option>
@@ -1190,24 +1193,6 @@
                         
                         let upperIdentitas = res.data.identitas.toUpperCase();
                         $('#identitas_perusahaan').val(upperIdentitas).change();
-
-                        if(res.data.bidang_usaha == 'lainnya') {
-                            $('#bidang_usaha_lain').removeClass('d-none');
-                        } else {
-                            $('#bidang_usaha_lain').addClass('d-none');
-                        }
-
-                        if(res.data.status_kepemilikan == 'lainnya') {
-                            $('#nama_group').removeClass('d-none');
-                        } else {
-                            $('#nama_group').addClass('d-none');
-                        }
-
-                        if(res.data.informasi_bank.status == 'lainnya') {
-                            $('#rekening_lain').removeClass('d-none');
-                        } else {
-                            $('#rekening_lain').addClass('d-none');
-                        }
                     } else {
                         $('input[name="jenis_cust"]').val('lama').prop('checked', true);
                         $('#bidang_usaha').val('').change();

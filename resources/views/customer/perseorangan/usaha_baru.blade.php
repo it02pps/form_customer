@@ -349,9 +349,9 @@
                 <div class="title">
                     <h1>Formulir Data Customer</h1>
                     <h5>Silahkan isi data terkini anda, kemudian tanda tangan.</h5>
-                    <div class="alert alert-danger fade show" role="alert">
-                        Mohon untuk mengisi data dengan lengkap dan sebenar-benarnya sesuai dengan dokumen <strong> identitas resmi </strong> yang digunakan.
-                        Data yang Anda berikan akan digunakan untuk keperluan <strong> verifikasi dan kelancaran proses transaksi</strong>.
+                    <div class="alert alert-primary fade show" role="alert">
+                        Mohon untuk mengisi data dengan lengkap dan sebenar-benarnya sesuai dengan dokumen identitas resmi yang digunakan.
+                        Data yang Anda berikan akan digunakan untuk keperluan verifikasi dan kelancaran proses transaksi.
                         Segala bentuk ketidaksesuaian atau ketidakakuratan data menjadi tanggung jawab pihak yang mengisi.
                         PT PAPASARI berkomitmen untuk menjaga kerahasiaan dan keamanan seluruh data pribadi pelanggan sesuai dengan ketentuan yang berlaku.
                     </div>

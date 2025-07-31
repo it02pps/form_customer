@@ -172,6 +172,9 @@
     }
 
     .profile {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
         cursor: pointer;
     }
 
@@ -446,7 +449,7 @@
                                                 <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan Nama Lengkap" autocomplete="off" class="form-control" value="{{ $data['nama_lengkap'] ? $data['nama_lengkap'] : '' }}">
                                             </div>
 
-                                            {{-- <div class="group-column p-0 mt-3"> --}}
+                                            <div class="group-column p-0 mt-3">
                                                 <div class="form-group">
                                                     <label for="">Foto KTP / NPWP <span class="text-danger">*</span></label>
                                                     <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
@@ -480,7 +483,7 @@
                                                         <p class="text-center">Belum ada file</p>
                                                     </div>
                                                 @endif
-                                            {{-- </div> --}}
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -1067,24 +1070,6 @@
 
                         let upperIdentitas = res.data.identitas.toUpperCase();
                         $('#identitas_perusahaan').val(upperIdentitas).change();
-
-                        if(res.data.bidang_usaha == 'lainnya') {
-                            $('#bidang_usaha_lain').removeClass('d-none');
-                        } else {
-                            $('#bidang_usaha_lain').addClass('d-none');
-                        }
-
-                        if(res.data.status_kepemilikan == 'lainnya') {
-                            $('#nama_group').removeClass('d-none');
-                        } else {
-                            $('#nama_group').addClass('d-none');
-                        }
-
-                        if(res.data.informasi_bank.status == 'lainnya') {
-                            $('#rekening_lain').removeClass('d-none');
-                        } else {
-                            $('#rekening_lain').addClass('d-none');
-                        }
                     } else {
                         $('#jenis_cust').val('').change();
                         $('#bidang_usaha').val('').change();

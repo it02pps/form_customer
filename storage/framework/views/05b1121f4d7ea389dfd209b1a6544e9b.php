@@ -117,6 +117,9 @@
     }
 
     .profile {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
         cursor: pointer;
     }
 
@@ -446,7 +449,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 p-0">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Status Kepemilkan Tempat Usaha</label>
                                     <input type="text" name="status_kepemilikan" id="status_kepemilikan" autocomplete="off" class="form-control" readonly value="<?php echo e(ucwords(str_replace('_', ' ', $data['status_kepemilikan']))); ?>">
@@ -478,10 +481,12 @@
                                                     <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
                                                         <p style="font-size: 18px;">Preview file KTP</p>
                                                         <a href="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                        
                                                     </div>
                                                 <?php else: ?>
                                                     <div class="form-group" id="preview_ktp">
                                                         <img id="preview_foto_ktp" src="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                        
                                                     </div>
                                                 <?php endif; ?>
                                             </div>
@@ -579,10 +584,12 @@
                                         <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                             <p style="font-size: 18px;">Preview file identitas</p>
                                             <a href="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                            
                                         </div>
                                     <?php else: ?>
                                         <div id="preview_penanggung" class="form-group">
                                             <img id="preview_foto_penanggung" src="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
+                                            
                                         </div>
                                     <?php endif; ?>
                                 </div>
@@ -593,6 +600,7 @@
                                     <label for="">Tanda Tangan</label>
                                     <div id="signature">
                                         <img src="<?php echo e(url('/form-customer/getFiles/FileIDSignature/' . $data['data_identitas']['ttd'])); ?>" alt="Belum ada tanda tangan" data-action="zoom">
+                                        
                                     </div>
                                 </div>
                             </div>

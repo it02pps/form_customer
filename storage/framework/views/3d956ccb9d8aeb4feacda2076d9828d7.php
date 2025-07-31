@@ -298,7 +298,7 @@
                 </div>
                 <div class="title">
                     <h1>Formulir Data Customer</h1>
-                    <h5>Silahkan isi data terkini anda, kemudian tanda tangan. Testing123</h5>
+                    <h5>Silahkan isi data terkini anda, kemudian tanda tangan.</h5>
                 </div>
                 <form id="formCustomer" enctype="multipart/form-data">
                     <?php echo csrf_field(); ?>
@@ -352,7 +352,7 @@
                                     <div class="group-column">
                                         <div class="form-group">
                                             <label for="">Alamat Group Perusahaan <span class="text-danger">*</span></label>
-                                            <textarea name="alamat_group_lengkap" id="alamat_group_lengkap" class="form-control" rows="6" placeholder="Masukkan alamat group perusahaan" autocomplete="off" required><?php echo e($data ? $data['alamat_lengkap'] : ''); ?></textarea>
+                                            <textarea name="alamat_group_lengkap" id="alamat_group_lengkap" class="form-control" rows="6" placeholder="Masukkan alamat group perusahaan" autocomplete="off" required><?php echo e($data ? $data['alamat_group_lengkap'] : ''); ?></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -486,7 +486,7 @@
                                             <input type="text" name="no_wa" id="no_wa" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" maxlength="14" class="form-control" autocomplete="off" placeholder="Contoh: 012345678910" value="<?php echo e($data ? $data['nomor_whatsapp'] : ''); ?>">
                                         </div>
 
-                                        <div class="form-group pt-3" id="select">
+                                        <div class="form-group mt-4 pb-0" id="select">
                                             <label for="">Status Pengusaha Kena Pajak (PKP) <span class="text-danger">*</span></label>
                                             <select name="status_pkp" id="status_pkp" class="form-control" required>
                                                 <option value="non_pkp">Non PKP</option>
@@ -500,15 +500,23 @@
                                             </div>
                 
                                             <?php if($data): ?>
-                                                <?php if($data['sppkp'] && File::extension($data['sppkp']) == 'pdf'): ?>
-                                                    <div id="preview_sppkp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
-                                                        <p style="font-size: 18px;">Preview file SPPKP</p>
-                                                        <a href="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['sppkp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
-                                                    </div>
-                                                <?php elseif($data['sppkp'] && File::extension($data['sppkp']) != 'pdf'): ?>
-                                                    <div id="preview_sppkp" class="form-group">
-                                                        <img id="preview_foto_sppkp" src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['sppkp'])); ?>" alt="Belum ada file" data-action="zoom">
-                                                    </div>
+                                                <?php if($data['sppkp']): ?>
+                                                    <?php if(File::extension($data['sppkp']) == 'pdf'): ?>
+                                                        <div id="preview_sppkp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                                            <p style="font-size: 18px;">Preview file SPPKP</p>
+                                                            <a href="<?php echo e(url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                            
+                                                        </div>
+                                                    <?php elseif(File::extension($data['sppkp']) != 'pdf'): ?>
+                                                        <div id="preview_sppkp" class="form-group">
+                                                            <img id="preview_foto_sppkp" src="<?php echo e(url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                            
+                                                        </div>
+                                                    <?php else: ?>
+                                                        <div id="preview_sppkp" class="form-group">
+                                                            <p class="text-center">Belum ada file</p>
+                                                        </div>
+                                                    <?php endif; ?>
                                                 <?php else: ?>
                                                     <div id="preview_sppkp" class="form-group">
                                                         <p class="text-center">Belum ada file</p>
@@ -533,11 +541,13 @@
                                             <?php if($data['foto_npwp'] && File::extension($data['foto_npwp']) == 'pdf'): ?>
                                                 <div id="preview_npwp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                                     <p style="font-size: 18px;">Preview file NPWP</p>
-                                                    <a href="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    <a href="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    
                                                 </div>
                                             <?php elseif($data['foto_npwp'] && File::extension($data['foto_npwp']) != 'pdf'): ?>
                                                 <div id="preview_npwp" class="form-group">
-                                                    <img id="preview_foto_npwp" src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                    <img id="preview_foto_npwp" src="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                    
                                                 </div>
                                             <?php else: ?>
                                                 <div id="preview_npwp" class="form-group">
@@ -648,15 +658,23 @@
                                         </div>
             
                                         <?php if($data): ?>
-                                            <?php if($data['data_identitas']['foto'] && File::extension($data['data_identitas']['foto']) == 'pdf'): ?>
-                                                <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
-                                                    <p style="font-size: 18px;">Preview file identitas</p>
-                                                    <a href="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
-                                                </div>
-                                            <?php elseif($data['data_identitas']['foto'] && File::extension($data['data_identitas']['foto']) != 'pdf'): ?>
-                                                <div id="preview_penanggung" class="form-group">
-                                                    <img id="preview_foto_penanggung" src="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
-                                                </div>
+                                            <?php if($data['data_identitas']['foto']): ?>
+                                                <?php if(File::extension($data['data_identitas']['foto']) == 'pdf'): ?>
+                                                    <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                                        <p style="font-size: 18px;">Preview file identitas</p>
+                                                        <a href="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                        
+                                                    </div>
+                                                <?php elseif(File::extension($data['data_identitas']['foto']) != 'pdf'): ?>
+                                                    <div id="preview_penanggung" class="form-group">
+                                                        <img id="preview_foto_penanggung" src="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto_npwp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                        
+                                                    </div>
+                                                <?php else: ?>
+                                                    <div id="preview_penanggung" class="form-group">
+                                                        <p class="text-center">Belum ada file</p>
+                                                    </div>
+                                                <?php endif; ?>
                                             <?php else: ?>
                                                 <div id="preview_penanggung" class="form-group">
                                                     <p class="text-center">Belum ada file</p>
@@ -1070,7 +1088,6 @@
                     $('#kode_customer').val('');
                 } else {
                     $('#kode_customer').prop('required', true).prop('readonly', false);
-                    $('#kode_customer').val('');
                 }
             });
             // END: Change input properties
@@ -1171,24 +1188,6 @@
                         
                         let upperIdentitas = res.data.identitas.toUpperCase();
                         $('#identitas_perusahaan').val(upperIdentitas).change();
-
-                        if(res.data.bidang_usaha == 'lainnya') {
-                            $('#bidang_usaha_lain').removeClass('d-none');
-                        } else {
-                            $('#bidang_usaha_lain').addClass('d-none');
-                        }
-
-                        if(res.data.status_kepemilikan == 'lainnya') {
-                            $('#nama_group').removeClass('d-none');
-                        } else {
-                            $('#nama_group').addClass('d-none');
-                        }
-
-                        if(res.data.informasi_bank.status == 'lainnya') {
-                            $('#rekening_lain').removeClass('d-none');
-                        } else {
-                            $('#rekening_lain').addClass('d-none');
-                        }
                     } else {
                         $('input[name="jenis_cust"]').val('lama').prop('checked', true);
                         $('#bidang_usaha').val('').change();

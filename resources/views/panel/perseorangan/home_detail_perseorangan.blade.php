@@ -119,6 +119,9 @@
     }
 
     .profile {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
         cursor: pointer;
     }
 
@@ -448,7 +451,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 p-0">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Status Kepemilkan Tempat Usaha</label>
                                     <input type="text" name="status_kepemilikan" id="status_kepemilikan" autocomplete="off" class="form-control" readonly value="{{ ucwords(str_replace('_', ' ', $data['status_kepemilikan'])) }}">

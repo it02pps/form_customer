@@ -357,7 +357,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Alamat Group Usaha <span class="text-danger">*</span></label>
-                                        <textarea name="alamat_group_lengkap" id="alamat_group_lengkap" class="form-control" rows="6" placeholder="Masukkan alamat group usaha" autocomplete="off" required><?php echo e($data['alamat_lengkap'] ? $data['alamat_lengkap'] : ''); ?></textarea>
+                                        <textarea name="alamat_group_lengkap" id="alamat_group_lengkap" class="form-control" rows="6" placeholder="Masukkan alamat group usaha" autocomplete="off" required><?php echo e($data['alamat_group_lengkap'] ? $data['alamat_group_lengkap'] : ''); ?></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -444,22 +444,30 @@
                                                 <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan Nama Lengkap" autocomplete="off" class="form-control" value="<?php echo e($data['nama_lengkap'] ? $data['nama_lengkap'] : ''); ?>">
                                             </div>
 
-                                            
+                                            <div class="group-column p-0 mt-3">
                                                 <div class="form-group">
                                                     <label for="">Foto KTP / NPWP <span class="text-danger">*</span></label>
                                                     <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
                                                 </div>
                         
                                                 <?php if($data): ?>
-                                                    <?php if($data['foto_ktp'] && File::extension($data['foto_ktp']) == 'pdf'): ?>
-                                                        <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
-                                                            <p style="font-size: 18px;">Preview file KTP</p>
-                                                            <a href="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
-                                                        </div>
-                                                    <?php elseif($data['foto_ktp'] && File::extension($data['foto_ktp']) != 'pdf'): ?>
-                                                        <div class="form-group" id="preview_ktp">
-                                                            <img id="preview_foto_ktp" src="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp'])); ?>" alt="Belum ada file" data-action="zoom">
-                                                        </div>
+                                                    <?php if($data['foto_ktp']): ?>
+                                                        <?php if(File::extension($data['foto_ktp']) == 'pdf'): ?>
+                                                            <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
+                                                                <p style="font-size: 18px;">Preview file KTP</p>
+                                                                <a href="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                                
+                                                            </div>
+                                                        <?php elseif($data['foto_ktp'] && File::extension($data['foto_ktp']) != 'pdf'): ?>
+                                                            <div class="form-group" id="preview_ktp">
+                                                                <img id="preview_foto_ktp" src="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                                
+                                                            </div>
+                                                        <?php else: ?>
+                                                            <div class="form-group" id="preview_ktp">
+                                                                <p class="text-center">Belum ada file</p>
+                                                            </div>
+                                                        <?php endif; ?>
                                                     <?php else: ?>
                                                         <div class="form-group" id="preview_ktp">
                                                             <p class="text-center">Belum ada file</p>
@@ -470,7 +478,7 @@
                                                         <p class="text-center">Belum ada file</p>
                                                     </div>
                                                 <?php endif; ?>
-                                            
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -576,15 +584,23 @@
                                     </div>
         
                                     <?php if($data): ?>
-                                        <?php if($data['data_identitas']['foto'] && File::extension($data['data_identitas']['foto']) == 'pdf'): ?>
-                                            <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
-                                                <p style="font-size: 18px">Preview file identitas</p>
-                                                <a href="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
-                                            </div>
-                                        <?php elseif($data['data_identitas']['foto'] && File::extension($data['data_identitas']['foto']) != 'pdf'): ?>
-                                            <div id="preview_penanggung" class="form-group">
-                                                <img id="preview_foto_penanggung" src="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
-                                            </div>
+                                        <?php if($data['data_identitas']['foto']): ?>
+                                            <?php if(File::extension($data['data_identitas']['foto']) == 'pdf'): ?>
+                                                <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                                    <p style="font-size: 18px">Preview file identitas</p>
+                                                    <a href="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    
+                                                </div>
+                                            <?php elseif(File::extension($data['data_identitas']['foto']) != 'pdf'): ?>
+                                                <div id="preview_penanggung" class="form-group">
+                                                    <img id="preview_foto_penanggung" src="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                    
+                                                </div>
+                                            <?php else: ?>
+                                                <div id="preview_penanggung" class="form-group">
+                                                    <p class="text-center">Belum ada file</p>
+                                                </div>
+                                            <?php endif; ?>
                                         <?php else: ?>
                                             <div id="preview_penanggung" class="form-group">
                                                 <p class="text-center">Belum ada file</p>
@@ -1049,24 +1065,6 @@
 
                         let upperIdentitas = res.data.identitas.toUpperCase();
                         $('#identitas_perusahaan').val(upperIdentitas).change();
-
-                        if(res.data.bidang_usaha == 'lainnya') {
-                            $('#bidang_usaha_lain').removeClass('d-none');
-                        } else {
-                            $('#bidang_usaha_lain').addClass('d-none');
-                        }
-
-                        if(res.data.status_kepemilikan == 'lainnya') {
-                            $('#nama_group').removeClass('d-none');
-                        } else {
-                            $('#nama_group').addClass('d-none');
-                        }
-
-                        if(res.data.informasi_bank.status == 'lainnya') {
-                            $('#rekening_lain').removeClass('d-none');
-                        } else {
-                            $('#rekening_lain').addClass('d-none');
-                        }
                     } else {
                         $('#jenis_cust').val('').change();
                         $('#bidang_usaha').val('').change();

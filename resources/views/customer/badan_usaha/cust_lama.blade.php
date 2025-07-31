@@ -336,9 +336,9 @@
                 <div class="title">
                     <h1>Formulir Data Customer</h1>
                     <h5>Silahkan isi data terkini anda, kemudian tanda tangan.</h5>
-                    <div class="alert alert-danger fade show" role="alert">
-                        Mohon untuk mengisi data dengan lengkap dan sebenar-benarnya sesuai dengan dokumen <strong> identitas resmi </strong> yang digunakan.
-                        Data yang Anda berikan akan digunakan untuk keperluan <strong> verifikasi dan kelancaran proses transaksi</strong>.
+                    <div class="alert alert-primary fade show" role="alert">
+                        Mohon untuk mengisi data dengan lengkap dan sebenar-benarnya sesuai dengan dokumen identitas resmi yang digunakan.
+                        Data yang Anda berikan akan digunakan untuk keperluan verifikasi dan kelancaran proses transaksi.
                         Segala bentuk ketidaksesuaian atau ketidakakuratan data menjadi tanggung jawab pihak yang mengisi.
                         PT PAPASARI berkomitmen untuk menjaga kerahasiaan dan keamanan seluruh data pribadi pelanggan sesuai dengan ketentuan yang berlaku.
                     </div>
@@ -698,7 +698,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 p-0">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="group-column">
                                         <div class="form-group">
                                             <label for="">Foto Identitas (KTP / NPWP) <span class="text-danger">*</span></label>
@@ -983,6 +983,16 @@
                 } else {
                     $('.bidang_lain').addClass('d-none').prop('required', false);
                     $('.bidang_lain').find('input').val('').prop('required', false);
+                }
+            });
+
+            $('#badan_usaha').on('change', function() {
+                if($(this).val() == 'lainnya') {
+                    $('.badan_usaha_lain').removeClass('d-none').prop('required', true);
+                    $('.badan_usaha_lain').find('input').prop('required', true);
+                } else {
+                    $('.badan_usaha_lain').addClass('d-none').prop('required', false);
+                    $('.badan_usaha_lain').find('input').val('').prop('required', false);
                 }
             });
 

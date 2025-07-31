@@ -86,9 +86,9 @@
         width: 185px;
         height: 48px;
         border-radius: 8px;
-        background-color: #0063ee;
+        background-color: #ffc107;
         border: none;
-        color: #fff;
+        color: #000;
     }
 
     .btnKembali {
@@ -478,15 +478,16 @@
 
                                     <div class="form-group">
                                         <label for="">Foto NPWP</label>
-                                        
                                         <?php if(File::extension($data['foto_npwp']) == 'pdf'): ?>
                                             <div id="preview_npwp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                                 <p style="font-size: 18px;">Preview file NPWP</p>
-                                                <a href="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                <a href="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                
                                             </div>
                                         <?php else: ?>
                                             <div id="preview_npwp" class="form-group">
-                                                <img id="preview_foto_npwp" src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['foto_npwp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                <img id="preview_foto_npwp" src="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                
                                             </div>
                                         <?php endif; ?>
                                     </div>
@@ -509,11 +510,13 @@
                                             <?php if(File::extension($data['sppkp']) == 'pdf'): ?>
                                                 <div id="preview_sppkp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                                     <p style="font-size: 18px;">Preview file SPPKP</p>
-                                                    <a href="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $data['sppkp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    <a href="<?php echo e(url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    
                                                 </div>
                                             <?php else: ?>
                                                 <div id="preview_sppkp" class="form-group">
-                                                    <img id="preview_foto_sppkp" src="<?php echo e($data['sppkp'] ? asset('../../../uploads/identitas_perusahaan/' . $data['sppkp']) : ''); ?>" alt="Belum ada file" data-action="zoom">
+                                                    <img id="preview_foto_sppkp" src="<?php echo e(url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                    
                                                 </div>
                                             <?php endif; ?>
                                         </div>
@@ -597,11 +600,13 @@
                                     <?php if(File::extension($data['data_identitas']['foto']) == 'pdf'): ?>
                                         <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                             <p style="font-size: 18px;">Preview file identitas</p>
-                                            <a href="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                            <a href="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                            
                                         </div>
                                     <?php else: ?>
                                         <div id="preview_penanggung" class="form-group">
-                                            <img id="preview_foto_penanggung" src="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
+                                            <img id="preview_foto_penanggung" src="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
+                                            
                                         </div>
                                     <?php endif; ?>
                                 </div>

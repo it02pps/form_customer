@@ -172,14 +172,6 @@
         width: 100vw;
     }
 
-    .row div:first-child {
-        padding: 0;
-    }
-
-    .row div:last-child {
-        padding-left: 16px;
-    }
-
     .row div .group-column .form-group:last-child {
         padding-top: 16px;
         padding-left: 0;
@@ -344,10 +336,17 @@
                 <div class="title">
                     <h1>Formulir Data Customer</h1>
                     <h5>Silahkan isi data terkini anda, kemudian tanda tangan.</h5>
+                    <div class="alert alert-primary fade show" role="alert">
+                        Mohon untuk mengisi data dengan lengkap dan sebenar-benarnya sesuai dengan dokumen identitas resmi yang digunakan.
+                        Data yang Anda berikan akan digunakan untuk keperluan verifikasi dan kelancaran proses transaksi.
+                        Segala bentuk ketidaksesuaian atau ketidakakuratan data menjadi tanggung jawab pihak yang mengisi.
+                        PT PAPASARI berkomitmen untuk menjaga kerahasiaan dan keamanan seluruh data pribadi pelanggan sesuai dengan ketentuan yang berlaku.
+                    </div>
                 </div>
                 <form id="formCustomer" enctype="multipart/form-data">
                     <?php echo csrf_field(); ?>
                     <input type="hidden" name="update_id" id="update_id" value="<?php echo e($enkripsi); ?>">
+                    <input type="hidden" name="opsi" id="opsi" value="cabang_baru">
                     <input type="hidden" name="bentuk_usaha" id="bentuk_usaha" value="badan_usaha">
                     <div class="section4">
                         <div class="row">
@@ -473,7 +472,13 @@
                                             <option value="pt">PT</option>
                                             <option value="cv">CV</option>
                                             <option value="pd">PD</option>
+                                            <option value="pribadi">PRIBADI</option>
+                                            <option value="yayasan">YAYASAN</option>
+                                            <option value="lainnya">LAINNYA</option>
                                         </select>
+                                        <div class="badan_usaha_lain d-none">
+                                            <input type="text" class="form-control" name="badan_usaha_lain" id="badan_usaha_lain" placeholder="Masukkan badan usaha lain" autocomplete="off">
+                                        </div>
                                         <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                     </div>
                                 </div>
@@ -523,7 +528,7 @@
                                             <input type="text" name="no_wa" id="no_wa" oninput="this.value = this.value.replace(/[^0-9+-]/g, '')" maxlength="14" class="form-control" autocomplete="off" placeholder="Contoh: 012345678910">
                                         </div>
 
-                                        <div class="form-group mt-4" id="select">
+                                        <div class="form-group mt-4 pb-0" id="select">
                                             <label for="">Status Pengusaha Kena Pajak (PKP) <span class="text-danger">*</span></label>
                                             <select name="status_pkp" id="status_pkp" class="form-control" required>
                                                 <option value="non_pkp">Non PKP</option>
@@ -641,7 +646,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 p-0">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="group-column">
                                         <div class="form-group">
                                             <label for="">Foto Identitas (KTP / NPWP) <span class="text-danger">*</span></label>
@@ -657,11 +662,7 @@
                     </div>
                     <div class="footer">
                         <div class="button1">
-                            <?php if($enkripsi): ?>
-                                <button type="button" class="btnKembali" id="btnKembaliDetail" title="Kembali" data-url="<?php echo e($url); ?>">Kembali</button>
-                            <?php else: ?>
-                                <button type="button" class="btnKembali" title="Kembali">Kembali</button>
-                            <?php endif; ?>
+                            <button type="button" class="btnKembali" title="Kembali">Kembali</button>
                         </div>
                         <div class="button2">
                             <button type="submit" class="btnSubmit" title="Submit">Submit</button>
@@ -907,6 +908,16 @@
                 }
             });
 
+            $('#badan_usaha').on('change', function() {
+                if($(this).val() == 'lainnya') {
+                    $('.badan_usaha_lain').removeClass('d-none').prop('required', true);
+                    $('.badan_usaha_lain').find('input').prop('required', true);
+                } else {
+                    $('.badan_usaha_lain').addClass('d-none').prop('required', false);
+                    $('.badan_usaha_lain').find('input').val('').prop('required', false);
+                }
+            });
+
             $('#status_kepemilikan').on('change', function() {
                 if($(this).val() == 'group') {
                     $('.group').removeClass('d-none').prop('required', true);
@@ -998,48 +1009,7 @@
                 }
             });
             // END: Tahun berdiri
-
-            // START: Get data untuk select
-            // var enkripsi = $('#update_id').val();
-            // if(enkripsi != '') {
-            //     let url = '/form-customer/select/badan-usaha/' + enkripsi;
-            //     $.ajax({
-            //         url: url,
-            //         type: 'GET',
-            //         success: res => {
-            //             if(res.status == true) {
-            //                 $('#status_kepemilikan').val(res.data.status_kepemilikan).change();
-            //                 $('#badan_usaha').val(res.data.badan_usaha).change();
-            //                 $('#bidang_usaha').val(res.data.bidang_usaha).change();
-            //                 $('#status_pkp').val(res.data.status_pkp).change();
-            //                 $('#status_rekening').val(res.data.informasi_bank.status).change();
-            //                 if(res.data.data_identitas) {
-            //                     $('#identitas_penanggung_jawab').val(res.data.data_identitas.identitas).change();
-            //                 }
-                            
-            //                 let upperIdentitas = res.data.identitas.toUpperCase();
-            //                 $('#identitas_perusahaan').val(upperIdentitas).change();
-            //                 $('#jenis_cust').val(res.data.status_cust).change();
-            //                 $('#status_cabang').val(res.data.status_cabang).change();
-            //                 $('#sales').val(res.data.nama_sales).change();
-            //             } else {
-            //                 $('#status_kepemilikan').val('').change();
-            //                 $('#badan_usaha').val('').change();
-            //                 $('#bidang_usaha').val('').change();
-            //                 $('#identitas_perusahaan').val('ktp').change();
-            //                 $('#status_pkp').val('non_pkp').change();
-            //                 $('#status_rekening').val('').change();
-            //                 $('#identitas_penanggung_jawab').val('').change();
-            //                 $('#cust_lama').prop('checked', true);
-            //                 $('#status_cabang').val('').change();
-            //                 $('#jenis_cust').val('').change();
-            //                 $('#sales').val('').change();
-            //             }
-            //         }
-            //     });
-            // }
-            // END: Get data untuk select
-
+            
             // START: Dynamic row
             let counter = 1;
             $('#addRow').on('click', function() {
