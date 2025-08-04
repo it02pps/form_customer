@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\InformasiBank;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class InformasiBankServices
@@ -29,6 +30,7 @@ class InformasiBankServices
                     'status' => $request->status_rekening,
                     'nama_bank' => $request->nama_bank,
                     'rekening_lain' => $request->status_rekening == 'lainnya' ? $request->rekening_lain : null,
+                    'created_at' => Carbon::now()
                 ]
             );
 

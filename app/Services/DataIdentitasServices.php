@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use App\Helper\base30ToImage;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 
 class DataIdentitasServices
@@ -47,6 +48,7 @@ class DataIdentitasServices
                     'jabatan' => $request->jabatan,
                     'identitas' => $request->identitas_penanggung_jawab,
                     'no_hp' => $request->nomor_hp_penanggung_jawab,
+                    'created_at' => Carbon::now()
                 ]
             );
 

@@ -101,6 +101,9 @@ class HomeController extends Controller
                     return '<i class="fa-solid fa-square-xmark text-danger fs-5"></i>';
                 }
             })
+            ->addColumn('created_date', function ($e) {
+                return Carbon::parse($e->created_at)->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y H:i');
+            })
             ->rawColumns(['aksi', 'status', 'checklist'])
             ->make(true);
     }

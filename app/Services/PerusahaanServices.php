@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\IdentitasPerusahaan;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
@@ -112,6 +113,7 @@ class perusahaanServices
                     'alamat_npwp' => $request->bentuk_usaha == 'badan_usaha' ? $request->alamat_npwp : null,
                     'kota_npwp' => $request->bentuk_usaha == 'badan_usaha' ? $request->kota_npwp : null,
                     'badan_usaha_lain' => $request->bentuk_usaha == 'badan_usaha' ? ($request->badan_usaha == 'lainnya' ? $request->badan_usaha_lain : null) : '',
+                    'created_at' => Carbon::now()
                 ]
             );
 

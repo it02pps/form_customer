@@ -119,7 +119,7 @@
     .profile {
         display: flex;
         flex-wrap: wrap;
-        gap: 24px;
+        gap: 16px;
         cursor: pointer;
     }
 

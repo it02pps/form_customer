@@ -17,10 +17,10 @@ class UserSeeder extends Seeder
     {
         $user = [
             [
-                'name' => 'User 1',
-                'username' => 'admin',
-                'email' => 'user1@gmail.com',
-                'password' => Hash::make('12345678'),
+                'name' => 'Admin Papasari',
+                'username' => 'papasari',
+                'email' => 'papasari@gmail.com',
+                'password' => Hash::make('adminpapasari888'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],

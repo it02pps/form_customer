@@ -253,6 +253,7 @@
                                         <th style="min-width: 250px; font-size: 12px;" class="text-center align-middle">Bill to Address</th>
                                         <th style="min-width: 180px; font-size: 12px;" class="text-center align-middle">Sales Person</th>
                                         <th style="min-width: 50px; font-size: 12px;">Upload Status</th>
+                                        <th style="min-width: 180px; font-size: 12px;">Created Date</th>
                                         <th style="min-width: 350px; font-size: 12px;">Update</th>
                                     </tr>
                                 </thead>
@@ -359,6 +360,7 @@
                     { data: 'bill_to_address', name: 'bill_to_address'},
                     { data: 'sales', name: 'nama_sales' },
                     { data: 'status', name: 'status_upload' },
+                    { data: 'created_date', name: 'created_date' },
                     { data: 'aksi', name: 'aksi', searchable: false, orderable: false },
                 ],
                 columnDefs: [
@@ -369,7 +371,7 @@
                         }
                     },
                     {
-                        targets: [0, 1, 2, 6, 7, 8],
+                        targets: [0, 1, 2, 6, 7, 8, 9],
                         className: 'text-center align-middle',
                     },
                     {
