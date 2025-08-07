@@ -263,7 +263,8 @@
                         <p>Penanggung Jawab</p>
                         
                         <?php if($data['data_identitas']['ttd']): ?>
-                            <img src="<?php echo e(public_path('uploads/ttd/'.$data['data_identitas']['ttd'])); ?>" alt="" style="width: 70%;">
+                            
+                            <img src="<?php echo e(url('/form-customer/getFiles/FileIDSignature/' . $data['data_identitas']['ttd'])); ?>" alt="Preview" style="width: 70%;">
                         <?php else: ?>
                             <br><br><br><br>
                         <?php endif; ?>
@@ -273,6 +274,38 @@
             </div>
         </div>
     </div>
-    
+    <div class="break"></div>
+    <div class="lampiran container">
+        <div class="content-header">
+            <h2>Lampiran</h2>
+        </div>
+        <div class="content-body">
+            <?php if($data['foto_ktp']): ?>
+                <div class="lampiranKtp">
+                    <h3>Lampiran KTP</h3>
+                    
+                    <img src="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp'])); ?>" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                </div>
+            <?php endif; ?>
+
+            <?php if($data['status_pkp'] == 'pkp'): ?>
+                <div class="lampiranSppkp">
+                    <h3>Lampiran SPPKP</h3>
+                    
+                    <img src="<?php echo e(url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp'])); ?>" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                </div>
+            <?php endif; ?>
+
+            <?php if($data['data_identitas']): ?>
+                <?php if($data['data_identitas']->foto): ?>
+                    <div class="lampiranPenanggungJawab">
+                        <h3>Lampiran Penanggung Jawab</h3>
+                        
+                        <img src="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
+    </div>
 </body>
 </html><?php /**PATH D:\laragon\www\form_customer\resources\views/pdf/perseorangan_pdf.blade.php ENDPATH**/ ?>

@@ -817,7 +817,10 @@
                         });
                     }
                 } else {
-                    $("#preview_npwp").css('height', '271px');
+                    $("#preview_npwp").css({
+                        'height': '271px',
+                        'padding-top': '0'
+                    });
                     $('#preview_npwp').html('<img id="preview_foto_npwp" src="" alt="Preview" data-action="zoom">');
                     reader.onload = function() {
                         $("#preview_foto_npwp").attr("src", reader.result);
@@ -846,7 +849,10 @@
                         });
                     }
                 } else {
-                    $("#preview_sppkp").css('height', '271px');
+                    $("#preview_sppkp").css({
+                        'height': '271px',
+                        'padding-top': '0'
+                    });
                     $('#preview_sppkp').html('<img id="preview_foto_sppkp" src="" alt="Preview" data-action="zoom">');
                     reader.onload = function() {
                         $("#preview_foto_sppkp").attr("src", reader.result);
@@ -875,7 +881,10 @@
                         });
                     }
                 } else {
-                    $("#preview_penanggung").css('height', '271px');
+                    $("#preview_penanggung").css({
+                        'height': '271px',
+                        'padding-top': '0'
+                    });
                     $('#preview_penanggung').html('<img id="preview_foto_penanggung" src="" alt="Preview" data-action="zoom">');
                     reader.onload = function() {
                         $("#preview_foto_penanggung").attr("src", reader.result);

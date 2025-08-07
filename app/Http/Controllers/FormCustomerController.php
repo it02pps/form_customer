@@ -271,49 +271,49 @@ class FormCustomerController extends Controller
             $data = IdentitasPerusahaan::find(Crypt::decryptString($id));
 
             if ($request->hasFile('file_pdf')) {
-                if (File::exists('uploads/identitas_perusahaan/final/' . $data->file_customer_external)) {
-                    File::delete('uploads/identitas_perusahaan/final/' . $data->file_customer_external);
-                }
+                // if (File::exists('uploads/identitas_perusahaan/final/' . $data->file_customer_external)) {
+                //     File::delete('uploads/identitas_perusahaan/final/' . $data->file_customer_external);
+                // }
 
                 $file = $request->file('file_pdf');
                 $ext = $file->getClientOriginalExtension();
                 $filename = uniqid() . '-PDFCust-' . $data->nama_perusahaan . '.' . $ext;
-                $file->move('uploads/pdf/', $filename);
+                // $file->move('uploads/pdf/', $filename);
 
-                // try {
-                //     $response = Http::withHeaders([
-                //         'x-api-key' => config('services.service_x.api_key'),
-                //         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                //     ])->get(config('services.service_x.url') . '/api/checkfile', [
-                //         'category' => 'FilePDFCustomer',
-                //         'filename' => $data->file_customer_external
-                //     ]);
+                try {
+                    $response = Http::withHeaders([
+                        'x-api-key' => config('services.service_x.api_key'),
+                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                    ])->get(config('services.service_x.url') . '/api/checkfile', [
+                        'category' => 'FilePDFCustomer',
+                        'filename' => $data->file_customer_external
+                    ]);
 
-                //     $result = $response->json();
-                //     if ($result['status'] == true) {
-                //         $category = 'FilePDFCustomer';
-                //         $response = Http::withHeaders([
-                //             'x-api-key' => config('services.service_x.api_key'),
-                //             'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                //         ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->file_customer_external", []);
-                //         $result = $response->json();
-                //     }
+                    $result = $response->json();
+                    if ($result['status'] == true) {
+                        $category = 'FilePDFCustomer';
+                        $response = Http::withHeaders([
+                            'x-api-key' => config('services.service_x.api_key'),
+                            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                        ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->file_customer_external", []);
+                        $result = $response->json();
+                    }
 
-                //     $data->file_customer_external = $filename;
-                //     $response = Http::withHeaders([
-                //         'x-api-key' => config('services.service_x.api_key'),
-                //         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                //     ])->attach(
-                //         'file',
-                //         file_get_contents($file->getRealPath()),
-                //         $filename
-                //     )->post(config('services.service_x.url') . '/api/uploadfile', [
-                //         'category' => 'FilePDFCustomer',
-                //         'filename' => substr($filename, 0, strrpos($filename, '.'))
-                //     ]);
-                // } catch (\Illuminate\Http\Client\ConnectionException $e) {
-                //     abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
-                // }
+                    $data->file_customer_external = $filename;
+                    $response = Http::withHeaders([
+                        'x-api-key' => config('services.service_x.api_key'),
+                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                    ])->attach(
+                        'file',
+                        file_get_contents($file->getRealPath()),
+                        $filename
+                    )->post(config('services.service_x.url') . '/api/uploadfile', [
+                        'category' => 'FilePDFCustomer',
+                        'filename' => substr($filename, 0, strrpos($filename, '.'))
+                    ]);
+                } catch (\Illuminate\Http\Client\ConnectionException $e) {
+                    abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+                }
                 $data->status_upload = '1';
             }
             $data->save();
@@ -329,6 +329,29 @@ class FormCustomerController extends Controller
         $decrypt = Crypt::decryptString($request->id);
         $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank')->where('id', $decrypt)->first();
 
+        try {
+            // $getFilePenanggung = Http::withHeaders([
+            //     'x-api-key' => config('services.service_x.api_key'),
+            //     'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+            // ])->get(config('services.service_x.url') . "/api/getfile/FileIDPersonCharge/" . $data->data_identitas->foto, []);
+            $filePenanggung = rtrim(config('services.services_x.url'), '/') . "/api/getFile/FileIDPersonCharge/" . $data->data_identitas->foto;
+            // dd($getFilePenanggung->transferStats('uri'));
+            // $contentDisposition = $getFilePenanggung->header('Content-Disposition');
+            // dd($contentDisposition);
+            // if ($contentDisposition && preg_match('/filename="?([^"]+)"?/', $contentDisposition, $matches)) {
+            //     $filePenanggung = $matches[1];
+            // } else {
+            //     $filePenanggung = '';
+            // }
+            // $filePenanggung = response($getFilePenanggung->body())->header('Content-Type', $getFilePenanggung->header('Content-Type'));
+            // return response($filePenanggung->body(), 200)
+            //     ->header('Content-Type', $filePenanggung->header('Content-Type'));
+        } catch (\Illuminate\Http\Client\ConnectionException) {
+            abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+        }
+
+        // dd($filePenanggung);
+
         if ($menu == 'badan_usaha' || $menu == 'badan-usaha') {
             $pdf = Pdf::loadView('pdf.badan_usaha_pdf', [
                 'data' => $data
@@ -341,11 +364,34 @@ class FormCustomerController extends Controller
             file_put_contents($temp_pdf, $pdf->output());
 
             // Merging pdf
+            try {
+                $getFileNpwp = Http::withHeaders([
+                    'x-api-key' => config('services.service_x.api_key'),
+                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                ])->get(config('services.service_x.url') . "/api/getfile/FileIDCompanyOrPersonal/" . $data->foto_npwp, []);
+                $fileNpwp = response($getFileNpwp->body())->header('Content-Type', $getFileNpwp->header('Content-Type'));
+                // return response($fileNpwp->body(), 200)
+                //     ->header('Content-Type', $fileNpwp->header('Content-Type'));
+            } catch (\Illuminate\Http\Client\ConnectionException) {
+                abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+            }
+
+            try {
+                $getFileSppkp = Http::withHeaders([
+                    'x-api-key' => config('services.service_x.api_key'),
+                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                ])->get(config('services.service_x.url') . "/api/getfile/FileSPPKPCompany/" . $data->sppkp, []);
+                $fileSppkp = response($getFileSppkp->body())->header('Content-Type', $getFileSppkp->header('Content-Type'));
+                // return response($fileSppkp->body(), 200)
+                //     ->header('Content-Type', $fileSppkp->header('Content-Type'));
+            } catch (\Illuminate\Http\Client\ConnectionException) {
+                abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+            }
+
             $files = [
-                $data->foto_npwp ? public_path('uploads/identitas_perusahaan/' . $data->foto_npwp) : '',
-                $data->foto_ktp ? public_path('uploads/identitas_perusahaan/' . $data->foto_ktp) : '',
-                $data->sppkp ? public_path('uploads/identitas_perusahaan/' . $data->sppkp) : '',
-                public_path('uploads/penanggung_jawab/' . $data->data_identitas->foto),
+                $fileNpwp,
+                $fileSppkp,
+                $filePenanggung,
             ];
 
             $all_files = array_merge([$temp_pdf], $files);
@@ -366,14 +412,35 @@ class FormCustomerController extends Controller
             file_put_contents($temp_pdf, $pdf->output());
 
             // Merging pdf
+            // try {
+            //     $getFileKtp = Http::withHeaders([
+            //         'x-api-key' => config('services.service_x.api_key'),
+            //         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+            //     ])->get(config('services.service_x.url') . "/api/getfile/FileIDCompanyOrPersonal/" . $data->foto_ktp, []);
+            //     $contentDisposition = $getFileKtp->header('Content-Disposition');
+            //     if ($contentDisposition && preg_match('/filename="?([^"]+)"?/', $contentDisposition, $matches)) {
+            //         $fileKtp = $matches[1];
+            //     } else {
+            //         $fileKtp = '';
+            //     }
+            //     // $fileKtp = response($getFileKtp->body())->header('Content-Type', $getFileKtp->header('Content-Type'));
+            //     // return response($fileKtp->body(), 200)
+            //     //     ->header('Content-Type', $fileKtp->header('Content-Type'));
+            // } catch (\Illuminate\Http\Client\ConnectionException) {
+            //     abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+            // }
+            $fileKtp = rtrim(config('services.services_x.url'), '/') . "/api/getFile/FileIDCompanyOrPersonal/" . $data->foto_ktp;
+
+
             $files = [
-                $data->foto_npwp ? public_path('uploads/identitas_perusahaan/' . $data->foto_npwp) : NULL,
-                $data->foto_ktp ? public_path('uploads/identitas_perusahaan/' . $data->foto_ktp) : NULL,
-                $data->sppkp ? public_path('uploads/identitas_perusahaan/' . $data->sppkp) : NULL,
-                public_path('uploads/penanggung_jawab/' . $data->data_identitas->foto),
+                // $data->foto_ktp ? public_path('/uploads/identitas_perusahaan/' . $data->foto_ktp) : null,
+                $fileKtp,
+                $filePenanggung,
             ];
 
             $all_files = array_merge([$temp_pdf], $files);
+
+            // dd($files, $all_files);
             $mergePdfPath = $this->mergingPdf($all_files, $data['nama_perusahaan'] . '.pdf');
 
             File::delete($temp_pdf);

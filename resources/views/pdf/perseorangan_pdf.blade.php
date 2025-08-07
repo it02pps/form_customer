@@ -263,7 +263,8 @@
                         <p>Penanggung Jawab</p>
                         {{-- <br><br><br><br> --}}
                         @if($data['data_identitas']['ttd'])
-                            <img src="{{ public_path('uploads/ttd/'.$data['data_identitas']['ttd']) }}" alt="" style="width: 70%;">
+                            {{-- <img src="{{ public_path('uploads/ttd/'.$data['data_identitas']['ttd']) }}" alt="" style="width: 70%;"> --}}
+                            <img src="{{ url('/form-customer/getFiles/FileIDSignature/' . $data['data_identitas']['ttd']) }}" alt="Preview" style="width: 70%;">
                         @else
                             <br><br><br><br>
                         @endif
@@ -273,7 +274,7 @@
             </div>
         </div>
     </div>
-    {{-- <div class="break"></div>
+    <div class="break"></div>
     <div class="lampiran container">
         <div class="content-header">
             <h2>Lampiran</h2>
@@ -282,21 +283,16 @@
             @if($data['foto_ktp'])
                 <div class="lampiranKtp">
                     <h3>Lampiran KTP</h3>
-                    <img id="preview_foto_ktp" src="uploads/identitas_perusahaan/{{ $data['foto_ktp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
-                </div>
-            @endif
-
-            @if($data['foto_npwp'])
-                <div class="lampiranNpwp">
-                    <h3>Lampiran NPWP</h3>
-                    <img src="uploads/identitas_perusahaan/{{ $data['foto_npwp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                    {{-- <img id="preview_foto_ktp" src="uploads/identitas_perusahaan/{{ $data['foto_ktp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9"> --}}
+                    <img src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp']) }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
                 </div>
             @endif
 
             @if($data['status_pkp'] == 'pkp')
                 <div class="lampiranSppkp">
                     <h3>Lampiran SPPKP</h3>
-                    <img id="preview_foto_sppkp" src="uploads/identitas_perusahaan/{{ $data['sppkp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                    {{-- <img id="preview_foto_sppkp" src="uploads/identitas_perusahaan/{{ $data['sppkp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9"> --}}
+                    <img src="{{ url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp']) }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
                 </div>
             @endif
 
@@ -304,11 +300,12 @@
                 @if($data['data_identitas']->foto)
                     <div class="lampiranPenanggungJawab">
                         <h3>Lampiran Penanggung Jawab</h3>
-                        <img src="uploads/penanggung_jawab/{{ $data['data_identitas']['foto'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
+                        {{-- <img src="uploads/penanggung_jawab/{{ $data['data_identitas']['foto'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9"> --}}
+                        <img src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
                     </div>
                 @endif
             @endif
         </div>
-    </div> --}}
+    </div>
 </body>
 </html>

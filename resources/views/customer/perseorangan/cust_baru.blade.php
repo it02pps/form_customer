@@ -491,17 +491,15 @@
                                         <label for="">Nama Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
                                         <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan Nama Lengkap" autocomplete="off" class="form-control">
                                     </div>
-                                    {{-- <div class="group-column"> --}}
-                                        <div class="group-column p-0 mt-3">
-                                            <div class="form-group">
-                                                <label for="">Foto KTP / NPWP <span class="text-danger">*</span></label>
-                                                <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
-                                            </div>
-                                            <div class="form-group" id="preview_ktp">
-                                                <p class="text-center">Belum ada file</p>
-                                            </div>
+                                    <div class="group-column p-0 mt-3">
+                                        <div class="form-group">
+                                            <label for="">Foto KTP / NPWP <span class="text-danger">*</span></label>
+                                            <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
                                         </div>
-                                    {{-- </div> --}}
+                                        <div class="form-group" id="preview_ktp">
+                                            <p class="text-center">Belum ada file</p>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
@@ -706,7 +704,10 @@
                         });
                     }
                 } else {
-                    $("#preview_ktp").css('height', '271px');
+                    $("#preview_ktp").css({
+                        'height': '271px',
+                        'padding-top': '0'
+                    });
                     $('#preview_ktp').html('<img id="preview_foto_ktp" src="" alt="Preview" data-action="zoom">');
                     reader.onload = function() {
                         $("#preview_foto_ktp").attr("src", reader.result);
@@ -735,7 +736,10 @@
                         });
                     }
                 } else {
-                    $("#preview_penanggung").css('height', '271px');
+                    $("#preview_penanggung").css({
+                        'height': '271px',
+                        'padding-top': '0'
+                    });
                     $('#preview_penanggung').html('<img id="preview_foto_penanggung" src="" alt="Preview" data-action="zoom">');
                     reader.onload = function() {
                         $("#preview_foto_penanggung").attr("src", reader.result);

@@ -475,13 +475,13 @@
                                                 <?php if(File::extension($perusahaan['foto_ktp']) == 'pdf'): ?>
                                                     <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
                                                         <p style="font-size: 18px;">Preview file KTP</p>
+                                                        <a href="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $perusahaan['foto_ktp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                                         
-                                                        <a href="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_ktp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                                     </div>
                                                 <?php else: ?>
                                                     <div id="preview_ktp" class="form-group">
+                                                        <img id="preview_foto_ktp" src="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $perusahaan['foto_ktp'])); ?>" alt="Belum ada file" data-action="zoom">
                                                         
-                                                        <img id="preview_foto_ktp" src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_ktp'])); ?>" alt="Belum ada file" data-action="zoom">
                                                     </div>
                                                 <?php endif; ?>
                                             </div>
@@ -578,13 +578,13 @@
                                     <?php if(File::extension($perusahaan['data_identitas']['foto']) == 'pdf'): ?>
                                         <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                             <p style="font-size: 18px;">Preview file identitas</p>
+                                            <a href="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $perusahaan['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                             
-                                            <a href="<?php echo e(asset('/uploads/penanggung_jawab/' . $perusahaan['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                         </div>
                                     <?php else: ?>
                                         <div id="preview_penanggung" class="form-group">
+                                            <img id="preview_foto_penanggung" src="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $perusahaan['data_identitas']['foto'])); ?>" alt="Preview" data-action="zoom">
                                             
-                                            <img id="preview_foto_penanggung" src="<?php echo e(asset('/uploads/penanggung_jawab/' . $perusahaan['data_identitas']['foto'])); ?>" alt="Preview" data-action="zoom">
                                         </div>
                                     <?php endif; ?>
                                 </div>
@@ -594,8 +594,8 @@
                                 <div class="form-group" id="ttd_credit">
                                     <label for="">Tanda Tangan</label>
                                     <div id="signature">
+                                        <img src="<?php echo e(url('/form-customer/getFiles/FileIDSignature/' . $perusahaan['data_identitas']['ttd'])); ?>" alt="Preview" data-action="zoom">
                                         
-                                        <img src="<?php echo e(url('/uploads/ttd/' . $perusahaan['data_identitas']['ttd'])); ?>" alt="Preview" data-action="zoom">
                                     </div>
                                 </div>
                             </div>
