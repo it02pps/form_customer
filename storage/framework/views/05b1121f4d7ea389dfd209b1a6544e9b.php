@@ -699,11 +699,11 @@
                     <div class="button3">
                         <button type="button" class="btnUploadFile" title="Upload File" data-bs-toggle="modal" data-bs-target="#modalUpload">Upload File</button>
                     </div>
-                    <?php if($data['file_customer_external'] != ''): ?>
+                    
                         <div class="button4">
                             <a type="button" href="<?php echo e(route('home.getPdf', ['id' => $enkripsi])); ?>" target="_blank" class="btnDownloadPdf" title="Download PDF">Download PDF</a>
                         </div>
-                    <?php endif; ?>
+                    
                 </div>
             </div>
         </div>

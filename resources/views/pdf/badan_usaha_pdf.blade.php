@@ -58,7 +58,7 @@
         }
 
         .content-ttd {
-            margin-top: 30px;
+            margin-top: 6rem;
             text-align: center;
         }
 
@@ -77,7 +77,7 @@
             <div class="row" style="margin-bottom: 20px;">
                 <div class="column">
                     <p class="label">Sales Person</p>
-                    <p>{{ $data['nama_sales'] }}</p>
+                    <p>{{ $data['nama_sales'] ? $data['nama_sales'] : '-' }}</p>
 
                     <p class="label">Nama Perusahaan</p>
                     <p>{{ $data['nama_group_perusahaan'] }}</p>
@@ -108,7 +108,7 @@
                     <p>{{ $data['alamat_npwp'] }}</p>
                     
                     <p class="label">Email Khusus Untuk Faktur Pajak</p>
-                    <p>{{ $data['email_khusus_faktur_pajak'] }}</p>
+                    <p>{{ $data['email_khusus_faktur_pajak'] ? $data['email_khusus_faktur_pajak'] : '-' }}</p>
                 </div>
                 <div class="column">
                     <p class="label">Nama Group Perusahaan</p>
@@ -136,27 +136,14 @@
                     <p class="label">Nama NPWP</p>
                     <p>{{ $data['nama_npwp'] }}</p>
 
-                    <p class="label">Foto NPWP</p>
-                    @if(!$data['foto_npwp'])
-                        <p>-</p>
-                    @else
-                        <p>Lampiran NPWP</p>
-                    @endif
-
                     <p class="label">Kota Sesuai NPWP</p>
                     <p>{{ $data['kota_npwp'] }}</p>
 
                     <p class="label">Status Pengusaha Kena Pajak (PKP)</p>
                     <p>{{ str_replace("_", " ", strtoupper($data['status_pkp'])) }}</p>
 
-                    @if($data['status_pkp'] == 'pkp')
-                        <p class="label">Foto SPPKP</p>
-                        @if(!$data['sppkp'])
-                            <p>-</p>
-                        @else
-                            <p>Lampiran SPPKP</p>
-                        @endif
-                    @endif
+                    <p class="label">Nomor Aktif Untuk Faktur Pajak</p>
+                    <p>{{ $data['nomor_whatsapp'] ? $data['nomor_whatsapp'] : '-' }}</p>
                 </div>
             </div>
 
@@ -228,18 +215,8 @@
                     <p class="label">Jabatan</p>
                     <p>{{ $data['data_identitas'] ? $data['data_identitas']['jabatan'] : '-' }}</p>
 
-                    @if($data['data_identitas'])
-                        <p class="label">Foto Identitas</p>
-                        <p>Lampiran Penanggung Jawab</p>
-                    @else
-                        <p class="label">Foto</p>
-                        <p>-</p>
-                    @endif
-
-                    {{-- <p class="label">Tanda Tangan</p> --}}
-                    {{-- <img src="data:{{ $data['data_identitas']['ttd'] }}" alt="" style="width: 70%;"> --}}
                     <div class="content-ttd">
-                        <p>Penanggung Jawab</p>
+                        <p class="label">Penanggung Jawab</p>
                         <br><br><br><br>
                         <p>______________________</p>
                     </div>
@@ -251,31 +228,6 @@
     <div class="lampiran container">
         <div class="content-header">
             <h2>Lampiran</h2>
-        </div>
-        <div class="content-body">
-            <div class="lampiranNpwp">
-                <h3>Lampiran NPWP</h3>
-                {{-- <img src="uploads/identitas_perusahaan/{{ $data['foto_npwp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9"> --}}
-                <img src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp']) }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
-            </div>
-
-            @if($data['status_pkp'] == 'pkp')
-                <div class="lampiranSppkp">
-                    <h3>Lampiran SPPKP</h3>
-                    {{-- <img id="preview_foto_sppkp" src="uploads/identitas_perusahaan/{{ $data['sppkp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9"> --}}
-                    <img src="{{ url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp']) }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
-                </div>
-            @endif
-            
-            @if($data['data_identitas'])
-                @if($data['data_identitas']->foto)
-                    <div class="lampiranPenanggungJawab">
-                        <h3>Lampiran Penanggung Jawab</h3>
-                        {{-- <img src="uploads/penanggung_jawab/{{ $data['data_identitas']['foto'] }}" alt="" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9"> --}}
-                        <img src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
-                    </div>
-                @endif
-            @endif
         </div>
     </div>
 </body>

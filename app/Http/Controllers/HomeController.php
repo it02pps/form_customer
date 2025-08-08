@@ -686,22 +686,112 @@ class HomeController extends Controller
     public function getPdf($id)
     {
         $data = IdentitasPerusahaan::find(Crypt::decryptString($id));
-        $path = public_path() . '/uploads/identitas_perusahaan/final/' . $data->file_customer_external;
-        $headers = array(
-            'Content-Type: application/pdf',
-        );
+        try {
+            $response = Http::withHeaders([
+                'x-api-key' => config('services.service_x.api_key'),
+                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+            ])->get(config('services.service_x.url') . "/api/getfile/FilePDFCustomer/" . $data->file_customer_external, []);
 
-        return Response::download($path, $data->file_customer_external, $headers);
+            $filename = basename($data->file_customer_external);
+            return response($response->body(), 200)
+                ->header('Content-Type', $response->header('Content-Type'))
+                ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+        } catch (\Illuminate\Http\Client\ConnectionException) {
+            abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+        }
     }
 
     public function hapusCustomer(Request $request)
     {
         try {
             $dekripsi = Crypt::decryptString($request->id);
-            IdentitasPerusahaan::where('id', $dekripsi)->delete();
-            DataIdentitas::where('identitas_perusahaan_id', $dekripsi)->delete();
+            $delPerusahaan = IdentitasPerusahaan::where('id', $dekripsi)->first();
+            $delPenanggung = DataIdentitas::where('identitas_perusahaan_id', $dekripsi)->first();
             InformasiBank::where('identitas_perusahaan_id', $dekripsi)->delete();
             TipeCustomer::where('identitas_perusahaan_id', $dekripsi)->delete();
+
+            if ($delPerusahaan->bentuk_usaha == 'perseorangan') {
+                $companyIdentity = $delPerusahaan->foto_ktp;
+                $companySppkp = null;
+            } else {
+                $companyIdentity = $delPerusahaan->foto_npwp;
+                $companySppkp = $delPerusahaan->sppkp;
+            }
+
+            // START:DELETE FILE PERUSAHAAN
+            try {
+                $response = Http::withHeaders([
+                    'x-api-key' => config('services.service_x.api_key'),
+                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                ])->get(config('services.service_x.url') . '/api/checkfile', [
+                    'category' => 'FileIDCompanyOrPersonal',
+                    'filename' => $companyIdentity
+                ]);
+
+                $result = $response->json();
+                if ($result['status'] == true) {
+                    $category = 'FileIDCompanyOrPersonal';
+                    $response = Http::withHeaders([
+                        'x-api-key' => config('services.service_x.api_key'),
+                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                    ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$companyIdentity", []);
+                    $result = $response->json();
+                }
+            } catch (\Illuminate\Http\Client\ConnectionException) {
+                abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+            }
+            // END:DELETE FILE PERUSAHAAN
+
+            // START:DELETE FILE SPPKP
+            try {
+                $response = Http::withHeaders([
+                    'x-api-key' => config('services.service_x.api_key'),
+                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                ])->get(config('services.service_x.url') . '/api/checkfile', [
+                    'category' => 'FileSPPKPCompany',
+                    'filename' => $companySppkp
+                ]);
+
+                $result = $response->json();
+                if ($result['status'] == true) {
+                    $category = 'FileSPPKPCompany';
+                    $response = Http::withHeaders([
+                        'x-api-key' => config('services.service_x.api_key'),
+                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                    ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$companySppkp", []);
+                    $result = $response->json();
+                }
+            } catch (\Illuminate\Http\Client\ConnectionException) {
+                abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+            }
+            // END:DELETE FILE SPPKP
+
+            // START:DELETE FILE PENANGGUNG
+            try {
+                $response = Http::withHeaders([
+                    'x-api-key' => config('services.service_x.api_key'),
+                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                ])->get(config('services.service_x.url') . '/api/checkfile', [
+                    'category' => 'FileIDPersonCharge',
+                    'filename' => $delPenanggung->foto
+                ]);
+
+                $result = $response->json();
+                if ($result['status'] == true) {
+                    $category = 'FileIDPersonCharge';
+                    $response = Http::withHeaders([
+                        'x-api-key' => config('services.service_x.api_key'),
+                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                    ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$delPenanggung->foto", []);
+                    $result = $response->json();
+                }
+            } catch (\Illuminate\Http\Client\ConnectionException) {
+                abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+            }
+            // END:DELETE FILE PENANGGUNG
+
+            $delPerusahaan->delete();
+            $delPenanggung->delete();
 
             $cabangCount = Cabang::where('identitas_perusahaan_id', $dekripsi)->count();
             if ($cabangCount > 0) {

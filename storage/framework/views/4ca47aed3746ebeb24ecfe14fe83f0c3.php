@@ -58,7 +58,7 @@
         }
 
         .content-ttd {
-            margin-top: 30px;
+            margin-top: 6rem;
             text-align: center;
         }
 
@@ -100,23 +100,6 @@
                     <?php else: ?>
                         <p><?php echo e(strtoupper(str_replace('_', ' ', $data['bidang_usaha']))); ?></p>
                     <?php endif; ?>
-
-                    <?php if($data['identitas'] == 'ktp'): ?>
-                        <p class="label">Foto KTP</p>
-                        <p>Lampiran KTP</p>
-                    <?php else: ?>
-                        <p class="label">Nomor NPWP</p>
-                        <p><?php echo e($data['nomor_npwp']); ?></p>
-
-                        <p class="label">NITKU untuk penerbitan Faktur Pajak</p>
-                        <p><?php echo e($data['nitku'] ? $data['nitku'] : '-'); ?></p>
-    
-                        <p class="label">Alamat NPWP</p>
-                        <p><?php echo e($data['alamat_npwp']); ?></p>
-                        
-                        <p class="label">Email Khusus Untuk Faktur Pajak</p>
-                        <p><?php echo e($data['email_khusus_faktur_pajak']); ?></p>
-                    <?php endif; ?>
                 </div>
                 <div class="column">
                     <p class="label">Nama Group Usaha</p>
@@ -138,38 +121,11 @@
                         <p><?php echo e(str_replace("_", ' ', ucfirst($data['status_kepemilikan']))); ?></p>
                     <?php endif; ?>
 
-                    <?php if($data['identitas'] == 'ktp'): ?>
-                        <p class="label">Nomor KTP</p>
-                        <p><?php echo e($data['nomor_ktp']); ?></p>
+                    <p class="label">Nomor KTP</p>
+                    <p><?php echo e($data['nomor_ktp']); ?></p>
 
-                        <p class="label">Nama Lengkap Sesuai Identitas</p>
-                        <p><?php echo e($data['nama_lengkap']); ?></p>
-                    <?php else: ?>
-                        <p class="label">Nama NPWP</p>
-                        <p><?php echo e($data['nama_npwp']); ?></p>
-
-                        <p class="label">Foto NPWP</p>
-                        <?php if(!$data['foto_npwp']): ?>
-                            <p>-</p>
-                        <?php else: ?>
-                            <p>Lampiran NPWP</p>
-                        <?php endif; ?>
-
-                        <p class="label">Kota Sesuai NPWP</p>
-                        <p><?php echo e($data['kota_npwp']); ?></p>
-
-                        <p class="label">Status Pengusaha Kena Pajak (PKP)</p>
-                        <p><?php echo e(str_replace("_", " ", strtoupper($data['status_pkp']))); ?></p>
-
-                        <?php if($data['status_pkp'] == 'pkp'): ?>
-                            <p class="label">Foto SPPKP</p>
-                            <?php if(!$data['sppkp']): ?>
-                                <p>-</p>
-                            <?php else: ?>
-                                <p>Lampiran SPPKP</p>
-                            <?php endif; ?>
-                        <?php endif; ?>
-                    <?php endif; ?>
+                    <p class="label">Nama Lengkap Sesuai Identitas</p>
+                    <p><?php echo e($data['nama_lengkap']); ?></p>
                 </div>
             </div>
 
@@ -241,30 +197,11 @@
                     <p class="label">Jabatan</p>
                     <p><?php echo e($data['data_identitas'] ? ($data['data_identitas']['jabatan'] ? $data['data_identitas']['jabatan'] : '-') : '-'); ?></p>
 
-                    <?php if($data['data_identitas']): ?>
-                        <?php if($data['data_identitas']['identitas'] == 'ktp'): ?>
-                            <p class="label">Foto KTP</p>
-                        <?php else: ?>
-                            <p class="label">Foto NPWP</p>
-                        <?php endif; ?>
-
-                        <?php if($data['data_identitas']['foto']): ?>
-                            <p>Lampiran Penanggung Jawab</p>
-                        <?php else: ?>
-                            <p>-</p>
-                        <?php endif; ?>
-                    <?php else: ?>
-                        <p class="label">Foto</p>
-                        <p>-</p>
-                    <?php endif; ?>
-
-                    
                     <div class="content-ttd">
-                        <p>Penanggung Jawab</p>
+                        <p  class="label">Penanggung Jawab</p>
                         
                         <?php if($data['data_identitas']['ttd']): ?>
-                            
-                            <img src="<?php echo e(url('/form-customer/getFiles/FileIDSignature/' . $data['data_identitas']['ttd'])); ?>" alt="Preview" style="width: 70%;">
+                            <img src="<?php echo e($signatureImage); ?>" alt="" style="width: 100%;">
                         <?php else: ?>
                             <br><br><br><br>
                         <?php endif; ?>
@@ -279,33 +216,7 @@
         <div class="content-header">
             <h2>Lampiran</h2>
         </div>
-        <div class="content-body">
-            <?php if($data['foto_ktp']): ?>
-                <div class="lampiranKtp">
-                    <h3>Lampiran KTP</h3>
-                    
-                    <img src="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp'])); ?>" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
-                </div>
-            <?php endif; ?>
-
-            <?php if($data['status_pkp'] == 'pkp'): ?>
-                <div class="lampiranSppkp">
-                    <h3>Lampiran SPPKP</h3>
-                    
-                    <img src="<?php echo e(url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp'])); ?>" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
-                </div>
-            <?php endif; ?>
-
-            <?php if($data['data_identitas']): ?>
-                <?php if($data['data_identitas']->foto): ?>
-                    <div class="lampiranPenanggungJawab">
-                        <h3>Lampiran Penanggung Jawab</h3>
-                        
-                        <img src="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
-                    </div>
-                <?php endif; ?>
-            <?php endif; ?>
-        </div>
+        
     </div>
 </body>
 </html><?php /**PATH D:\laragon\www\form_customer\resources\views/pdf/perseorangan_pdf.blade.php ENDPATH**/ ?>

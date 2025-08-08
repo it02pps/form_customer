@@ -58,7 +58,7 @@
         }
 
         .content-ttd {
-            margin-top: 30px;
+            margin-top: 6rem;
             text-align: center;
         }
 
@@ -100,23 +100,6 @@
                     @else
                         <p>{{ strtoupper(str_replace('_', ' ', $data['bidang_usaha'])) }}</p>
                     @endif
-
-                    @if($data['identitas'] == 'ktp')
-                        <p class="label">Foto KTP</p>
-                        <p>Lampiran KTP</p>
-                    @else
-                        <p class="label">Nomor NPWP</p>
-                        <p>{{ $data['nomor_npwp'] }}</p>
-
-                        <p class="label">NITKU untuk penerbitan Faktur Pajak</p>
-                        <p>{{ $data['nitku'] ? $data['nitku'] : '-' }}</p>
-    
-                        <p class="label">Alamat NPWP</p>
-                        <p>{{ $data['alamat_npwp'] }}</p>
-                        
-                        <p class="label">Email Khusus Untuk Faktur Pajak</p>
-                        <p>{{ $data['email_khusus_faktur_pajak'] }}</p>
-                    @endif
                 </div>
                 <div class="column">
                     <p class="label">Nama Group Usaha</p>
@@ -138,38 +121,11 @@
                         <p>{{ str_replace("_", ' ', ucfirst($data['status_kepemilikan'])) }}</p>
                     @endif
 
-                    @if($data['identitas'] == 'ktp')
-                        <p class="label">Nomor KTP</p>
-                        <p>{{ $data['nomor_ktp'] }}</p>
+                    <p class="label">Nomor KTP</p>
+                    <p>{{ $data['nomor_ktp'] }}</p>
 
-                        <p class="label">Nama Lengkap Sesuai Identitas</p>
-                        <p>{{ $data['nama_lengkap'] }}</p>
-                    @else
-                        <p class="label">Nama NPWP</p>
-                        <p>{{ $data['nama_npwp'] }}</p>
-
-                        <p class="label">Foto NPWP</p>
-                        @if(!$data['foto_npwp'])
-                            <p>-</p>
-                        @else
-                            <p>Lampiran NPWP</p>
-                        @endif
-
-                        <p class="label">Kota Sesuai NPWP</p>
-                        <p>{{ $data['kota_npwp'] }}</p>
-
-                        <p class="label">Status Pengusaha Kena Pajak (PKP)</p>
-                        <p>{{ str_replace("_", " ", strtoupper($data['status_pkp'])) }}</p>
-
-                        @if($data['status_pkp'] == 'pkp')
-                            <p class="label">Foto SPPKP</p>
-                            @if(!$data['sppkp'])
-                                <p>-</p>
-                            @else
-                                <p>Lampiran SPPKP</p>
-                            @endif
-                        @endif
-                    @endif
+                    <p class="label">Nama Lengkap Sesuai Identitas</p>
+                    <p>{{ $data['nama_lengkap'] }}</p>
                 </div>
             </div>
 
@@ -241,30 +197,11 @@
                     <p class="label">Jabatan</p>
                     <p>{{ $data['data_identitas'] ? ($data['data_identitas']['jabatan'] ? $data['data_identitas']['jabatan'] : '-') : '-' }}</p>
 
-                    @if($data['data_identitas'])
-                        @if($data['data_identitas']['identitas'] == 'ktp')
-                            <p class="label">Foto KTP</p>
-                        @else
-                            <p class="label">Foto NPWP</p>
-                        @endif
-
-                        @if($data['data_identitas']['foto'])
-                            <p>Lampiran Penanggung Jawab</p>
-                        @else
-                            <p>-</p>
-                        @endif
-                    @else
-                        <p class="label">Foto</p>
-                        <p>-</p>
-                    @endif
-
-                    {{-- <p class="label">Tanda Tangan</p> --}}
                     <div class="content-ttd">
-                        <p>Penanggung Jawab</p>
+                        <p  class="label">Penanggung Jawab</p>
                         {{-- <br><br><br><br> --}}
                         @if($data['data_identitas']['ttd'])
-                            {{-- <img src="{{ public_path('uploads/ttd/'.$data['data_identitas']['ttd']) }}" alt="" style="width: 70%;"> --}}
-                            <img src="{{ url('/form-customer/getFiles/FileIDSignature/' . $data['data_identitas']['ttd']) }}" alt="Preview" style="width: 70%;">
+                            <img src="{{ $signatureImage }}" alt="" style="width: 100%;">
                         @else
                             <br><br><br><br>
                         @endif
@@ -278,33 +215,6 @@
     <div class="lampiran container">
         <div class="content-header">
             <h2>Lampiran</h2>
-        </div>
-        <div class="content-body">
-            @if($data['foto_ktp'])
-                <div class="lampiranKtp">
-                    <h3>Lampiran KTP</h3>
-                    {{-- <img id="preview_foto_ktp" src="uploads/identitas_perusahaan/{{ $data['foto_ktp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9"> --}}
-                    <img src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp']) }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
-                </div>
-            @endif
-
-            @if($data['status_pkp'] == 'pkp')
-                <div class="lampiranSppkp">
-                    <h3>Lampiran SPPKP</h3>
-                    {{-- <img id="preview_foto_sppkp" src="uploads/identitas_perusahaan/{{ $data['sppkp'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9"> --}}
-                    <img src="{{ url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp']) }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
-                </div>
-            @endif
-
-            @if($data['data_identitas'])
-                @if($data['data_identitas']->foto)
-                    <div class="lampiranPenanggungJawab">
-                        <h3>Lampiran Penanggung Jawab</h3>
-                        {{-- <img src="uploads/penanggung_jawab/{{ $data['data_identitas']['foto'] }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9"> --}}
-                        <img src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" alt="Preview" width="60%" style="margin-top: 5px; aspect-ratio: 16 / 9">
-                    </div>
-                @endif
-            @endif
         </div>
     </div>
 </body>

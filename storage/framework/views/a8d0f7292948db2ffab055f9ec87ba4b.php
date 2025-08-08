@@ -58,7 +58,7 @@
         }
 
         .content-ttd {
-            margin-top: 30px;
+            margin-top: 6rem;
             text-align: center;
         }
 
@@ -77,7 +77,7 @@
             <div class="row" style="margin-bottom: 20px;">
                 <div class="column">
                     <p class="label">Sales Person</p>
-                    <p><?php echo e($data['nama_sales']); ?></p>
+                    <p><?php echo e($data['nama_sales'] ? $data['nama_sales'] : '-'); ?></p>
 
                     <p class="label">Nama Perusahaan</p>
                     <p><?php echo e($data['nama_group_perusahaan']); ?></p>
@@ -108,7 +108,7 @@
                     <p><?php echo e($data['alamat_npwp']); ?></p>
                     
                     <p class="label">Email Khusus Untuk Faktur Pajak</p>
-                    <p><?php echo e($data['email_khusus_faktur_pajak']); ?></p>
+                    <p><?php echo e($data['email_khusus_faktur_pajak'] ? $data['email_khusus_faktur_pajak'] : '-'); ?></p>
                 </div>
                 <div class="column">
                     <p class="label">Nama Group Perusahaan</p>
@@ -136,27 +136,14 @@
                     <p class="label">Nama NPWP</p>
                     <p><?php echo e($data['nama_npwp']); ?></p>
 
-                    <p class="label">Foto NPWP</p>
-                    <?php if(!$data['foto_npwp']): ?>
-                        <p>-</p>
-                    <?php else: ?>
-                        <p>Lampiran NPWP</p>
-                    <?php endif; ?>
-
                     <p class="label">Kota Sesuai NPWP</p>
                     <p><?php echo e($data['kota_npwp']); ?></p>
 
                     <p class="label">Status Pengusaha Kena Pajak (PKP)</p>
                     <p><?php echo e(str_replace("_", " ", strtoupper($data['status_pkp']))); ?></p>
 
-                    <?php if($data['status_pkp'] == 'pkp'): ?>
-                        <p class="label">Foto SPPKP</p>
-                        <?php if(!$data['sppkp']): ?>
-                            <p>-</p>
-                        <?php else: ?>
-                            <p>Lampiran SPPKP</p>
-                        <?php endif; ?>
-                    <?php endif; ?>
+                    <p class="label">Nomor Aktif Untuk Faktur Pajak</p>
+                    <p><?php echo e($data['nomor_whatsapp'] ? $data['nomor_whatsapp'] : '-'); ?></p>
                 </div>
             </div>
 
@@ -228,18 +215,8 @@
                     <p class="label">Jabatan</p>
                     <p><?php echo e($data['data_identitas'] ? $data['data_identitas']['jabatan'] : '-'); ?></p>
 
-                    <?php if($data['data_identitas']): ?>
-                        <p class="label">Foto Identitas</p>
-                        <p>Lampiran Penanggung Jawab</p>
-                    <?php else: ?>
-                        <p class="label">Foto</p>
-                        <p>-</p>
-                    <?php endif; ?>
-
-                    
-                    
                     <div class="content-ttd">
-                        <p>Penanggung Jawab</p>
+                        <p class="label">Penanggung Jawab</p>
                         <br><br><br><br>
                         <p>______________________</p>
                     </div>
@@ -247,6 +224,11 @@
             </div>
         </div>
     </div>
-    
+    <div class="break"></div>
+    <div class="lampiran container">
+        <div class="content-header">
+            <h2>Lampiran</h2>
+        </div>
+    </div>
 </body>
 </html><?php /**PATH D:\laragon\www\form_customer\resources\views/pdf/badan_usaha_pdf.blade.php ENDPATH**/ ?>

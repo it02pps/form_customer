@@ -40,6 +40,7 @@ class CabangServices
 
             return ['status' => true];
         } catch (\Exception $e) {
+            // dd($e);
             return ['status' => false, 'error' => 'Terjadi kesalahan'];
         }
     }

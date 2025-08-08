@@ -232,14 +232,14 @@
         padding: 12px 24px;
         height: 48px;
         border-radius: 8px;
-        background-color: #ffc107;
+        background-color: #424242;
         border: none;
-        color: #000;
+        color: #fff;
         text-decoration: none;
     }
 
     .btnDownloadPdf:hover {
-        color: #000;
+        color: #fff;
         text-decoration: none;
     }
 

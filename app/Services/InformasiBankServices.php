@@ -36,6 +36,7 @@ class InformasiBankServices
 
             return ['status' => true];
         } catch (\Exception $e) {
+            // dd($e);
             return ['status' => false, 'error' => 'Terjadi Kesalahaan'];
         }
     }

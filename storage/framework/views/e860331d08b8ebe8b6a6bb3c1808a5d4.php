@@ -208,14 +208,6 @@
         width: 100vw;
     }
 
-    .row div:first-child {
-        padding: 0;
-    }
-
-    .row div:last-child {
-        padding-left: 16px;
-    }
-
     .row div .group-column .form-group:last-child {
         padding-top: 16px;
         padding-left: 0;
@@ -448,6 +440,9 @@
                                 <div class="form-group" >
                                     <label for="">Jenis Badan Usaha</label>
                                     <input type="text" name="badan_usaha" id="badan_usaha" class="form-control" autocomplete="off" readonly value="<?php echo e(strtoupper($perusahaan['badan_usaha'])); ?>">
+                                    <div class="badan_usaha_lain p-0 <?php if($perusahaan['badan_usaha'] != 'lainnya'): ?> d-none <?php endif; ?>">
+                                        <input type="text" class="form-control" name="badan_usaha_lain" id="badan_usaha_lain" readonly autocomplete="off" value="<?php echo e($perusahaan['badan_usaha_lain'] ? $perusahaan['badan_usaha_lain'] : '-'); ?>">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -497,15 +492,16 @@
     
                                     <div class="form-group">
                                         <label for="">Foto NPWP</label>
-                                        
                                         <?php if(File::extension($perusahaan['foto_npwp']) == 'pdf'): ?>
                                             <div id="preview_npwp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                                 <p style="font-size: 18px;">Preview file NPWP</p>
-                                                <a href="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                <a href="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $perusahaan['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                
                                             </div>
                                         <?php else: ?>
                                             <div id="preview_npwp" class="form-group">
-                                                <img id="preview_foto_npwp" src="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $perusahaan['foto_npwp'])); ?>" alt="Preview" data-action="zoom">
+                                                <img id="preview_foto_npwp" src="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $perusahaan['foto_npwp'])); ?>" alt="Preview" data-action="zoom">
+                                                
                                             </div>
                                         <?php endif; ?>
                                     </div>
@@ -528,11 +524,13 @@
                                             <?php if(File::extension($perusahaan['sppkp']) == 'pdf'): ?>
                                                 <div id="preview_sppkp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                                     <p style="font-size: 18px;">Preview file SPPKP</p>
-                                                    <a href="<?php echo e(asset('../../../uploads/identitas_perusahaan/' . $perusahaan['sppkp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    <a href="<?php echo e(url('/form-customer/getFiles/FileSPPKPCompany/' . $perusahaan['sppkp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    
                                                 </div>
                                             <?php else: ?>
                                                 <div id="preview_sppkp" class="form-group">
-                                                    <img id="preview_foto_sppkp" src="<?php echo e($perusahaan['sppkp'] ? asset('../../../uploads/identitas_perusahaan/' . $perusahaan['sppkp']) : ''); ?>" alt="Preview" data-action="zoom">
+                                                    <img id="preview_foto_sppkp" src="<?php echo e(url('/form-customer/getFiles/FileSPPKPCompany/' . $perusahaan['sppkp'])); ?>" alt="Preview" data-action="zoom">
+                                                    
                                                 </div>
                                             <?php endif; ?>
                                         </div>
@@ -616,11 +614,13 @@
                                     <?php if(File::extension($perusahaan['data_identitas']['foto']) == 'pdf'): ?>
                                         <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                             <p style="font-size: 18px;">Preview file identitas</p>
-                                            <a href="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $perusahaan['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                            <a href="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $perusahaan['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                            
                                         </div>
                                     <?php else: ?>
                                         <div id="preview_penanggung" class="form-group">
-                                            <img id="preview_foto_penanggung" src="<?php echo e(asset('../../../uploads/penanggung_jawab/' . $perusahaan['data_identitas']['foto'])); ?>" alt="Preview" data-action="zoom">
+                                            <img id="preview_foto_penanggung" src="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $perusahaan['data_identitas']['foto'])); ?>" alt="Preview" data-action="zoom">
+                                            
                                         </div>
                                     <?php endif; ?>
                                 </div>
