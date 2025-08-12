@@ -271,14 +271,9 @@ class FormCustomerController extends Controller
             $data = IdentitasPerusahaan::find(Crypt::decryptString($id));
 
             if ($request->hasFile('file_pdf')) {
-                // if (File::exists('uploads/identitas_perusahaan/final/' . $data->file_customer_external)) {
-                //     File::delete('uploads/identitas_perusahaan/final/' . $data->file_customer_external);
-                // }
-
                 $file = $request->file('file_pdf');
                 $ext = $file->getClientOriginalExtension();
                 $filename = uniqid() . '-PDFCust-' . $data->nama_perusahaan . '.' . $ext;
-                // $file->move('uploads/pdf/', $filename);
 
                 try {
                     $response = Http::withHeaders([

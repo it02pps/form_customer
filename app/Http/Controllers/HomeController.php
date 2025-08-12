@@ -301,6 +301,7 @@ class HomeController extends Controller
             // Kondisi jika identitas perusahaan yang dipakai KTP / NPWP
             if ($request->bentuk_usaha == 'perseorangan') {
                 $identitas_perusahaan->identitas = 'ktp';
+                $identitas_perusahaan->nomor_ktp = $request->nomor_ktp;
                 $identitas_perusahaan->nama_lengkap = $request->nama_lengkap;
                 $identitas_perusahaan->alamat_ktp = $request->alamat_ktp;
 

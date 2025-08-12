@@ -216,7 +216,6 @@
         <div class="content-header">
             <h2>Lampiran</h2>
         </div>
-        
     </div>
 </body>
 </html><?php /**PATH D:\laragon\www\form_customer\resources\views/pdf/perseorangan_pdf.blade.php ENDPATH**/ ?>

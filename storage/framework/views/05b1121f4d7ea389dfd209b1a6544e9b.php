@@ -235,14 +235,14 @@
         padding: 12px 24px;
         height: 48px;
         border-radius: 8px;
-        background-color: #ffc107;
+        background-color: #424242;
         border: none;
-        color: #000;
+        color: #fff;
         text-decoration: none;
     }
 
     .btnDownloadPdf:hover {
-        color: #000;
+        color: #fff;
         text-decoration: none;
     }
 
@@ -699,11 +699,11 @@
                     <div class="button3">
                         <button type="button" class="btnUploadFile" title="Upload File" data-bs-toggle="modal" data-bs-target="#modalUpload">Upload File</button>
                     </div>
-                    
+                    <?php if($data['file_customer_external'] != '' && $data['status_upload'] == '1'): ?>
                         <div class="button4">
                             <a type="button" href="<?php echo e(route('home.getPdf', ['id' => $enkripsi])); ?>" target="_blank" class="btnDownloadPdf" title="Download PDF">Download PDF</a>
                         </div>
-                    
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

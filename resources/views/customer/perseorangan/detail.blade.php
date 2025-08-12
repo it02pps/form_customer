@@ -244,7 +244,7 @@
         padding: 0 24px;
         height: 48px;
         border-radius: 8px;
-        background-color: #0063ee;
+        background-color: #424242;
         border: none;
         color: #fff;
     }
