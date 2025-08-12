@@ -199,7 +199,6 @@
 
                     <div class="content-ttd">
                         <p  class="label">Penanggung Jawab</p>
-                        {{-- <br><br><br><br> --}}
                         @if($data['data_identitas']['ttd'])
                             <img src="{{ $signatureImage }}" alt="" style="width: 100%;">
                         @else
@@ -209,12 +208,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="break"></div>
-    <div class="lampiran container">
-        <div class="content-header">
-            <h2>Lampiran</h2>
         </div>
     </div>
 </body>

@@ -20,6 +20,7 @@ class perusahaanServices
 
     public function handleFormPerusahaan(Request $request)
     {
+        // sleep(15);
         // dd($request->all(), Crypt::decryptString($request->update_id));
         try {
             $validator = $this->validasiServices->validationPerusahaan($request->all());
@@ -80,19 +81,19 @@ class perusahaanServices
             $data = IdentitasPerusahaan::create(
                 [
                     'kode_customer' => $kode_cust,
-                    'nama_perusahaan' => $request->nama_perusahaan,
-                    'nama_group_perusahaan' => $request->nama_group_perusahaan,
-                    'alamat_lengkap' => $request->alamat_lengkap,
-                    'alamat_group_lengkap' => $request->alamat_group_lengkap,
-                    'kota_kabupaten' => $request->kota_kabupaten,
+                    'nama_perusahaan' => strtoupper($request->nama_perusahaan),
+                    'nama_group_perusahaan' => strtoupper($request->nama_group_perusahaan),
+                    'alamat_lengkap' => strtoupper($request->alamat_lengkap),
+                    'alamat_group_lengkap' => strtoupper($request->alamat_group_lengkap),
+                    'kota_kabupaten' => strtoupper($request->kota_kabupaten),
                     'alamat_email' => $request->alamat_email_perusahaan,
                     'nomor_handphone' => $request->no_hp,
                     'tahun_berdiri' => $request->tahun_berdiri,
                     'lama_usaha' => $request->lama_usaha,
                     'bidang_usaha' => $request->bidang_usaha,
-                    'bidang_usaha_lain' => $request->bidang_usaha == 'lainnya' ? $request->bidang_usaha_lain : null,
+                    'bidang_usaha_lain' => $request->bidang_usaha == 'lainnya' ? strtoupper($request->bidang_usaha_lain) : null,
                     'status_kepemilikan' => $request->status_kepemilikan,
-                    'nama_group' => $request->status_kepemilikan == 'group' ? $request->nama_group : null,
+                    'nama_group' => $request->status_kepemilikan == 'group' ? strtoupper($request->nama_group) : null,
                     'nama_sales' => $request->sales,
                     'status_aktif' => '1',
                     'bentuk_usaha' => $request->bentuk_usaha,
@@ -100,19 +101,19 @@ class perusahaanServices
 
                     // Perseorangan
                     'nomor_ktp' => $request->bentuk_usaha == 'perseorangan' ? $request->nomor_ktp : null,
-                    'nama_lengkap' => $request->bentuk_usaha == 'perseorangan' ? $request->nama_lengkap : null,
-                    'alamat_ktp' => $request->bentuk_usaha == 'perseorangan' ? $request->alamat_ktp : null,
+                    'nama_lengkap' => $request->bentuk_usaha == 'perseorangan' ? strtoupper($request->nama_lengkap) : null,
+                    'alamat_ktp' => $request->bentuk_usaha == 'perseorangan' ? strtoupper($request->alamat_ktp) : null,
 
                     // Badan Usaha
                     'nomor_npwp' => $request->bentuk_usaha == 'badan_usaha' ? $request->nomor_npwp : null,
-                    'nama_npwp' => $request->bentuk_usaha == 'badan_usaha' ? $request->nama_npwp : null,
+                    'nama_npwp' => $request->bentuk_usaha == 'badan_usaha' ? strtoupper($request->nama_npwp) : null,
                     'badan_usaha' => $request->bentuk_usaha == 'badan_usaha' ? $request->badan_usaha : null,
                     'email_khusus_faktur_pajak' => $request->bentuk_usaha == 'badan_usaha' ? $request->email_faktur : null,
                     'nomor_whatsapp' => $request->bentuk_usaha == 'badan_usaha' ? $request->no_wa : null,
                     'status_pkp' => $request->bentuk_usaha == 'badan_usaha' ? $request->status_pkp : null,
-                    'alamat_npwp' => $request->bentuk_usaha == 'badan_usaha' ? $request->alamat_npwp : null,
-                    'kota_npwp' => $request->bentuk_usaha == 'badan_usaha' ? $request->kota_npwp : null,
-                    'badan_usaha_lain' => $request->bentuk_usaha == 'badan_usaha' ? ($request->badan_usaha == 'lainnya' ? $request->badan_usaha_lain : null) : '',
+                    'alamat_npwp' => $request->bentuk_usaha == 'badan_usaha' ? strtoupper($request->alamat_npwp) : null,
+                    'kota_npwp' => $request->bentuk_usaha == 'badan_usaha' ? strtoupper($request->kota_npwp) : null,
+                    'badan_usaha_lain' => $request->bentuk_usaha == 'badan_usaha' ? ($request->badan_usaha == 'lainnya' ? strtoupper($request->badan_usaha_lain) : null) : '',
                     'created_at' => Carbon::now()
                 ]
             );

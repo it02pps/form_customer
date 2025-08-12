@@ -224,11 +224,5 @@
             </div>
         </div>
     </div>
-    <div class="break"></div>
-    <div class="lampiran container">
-        <div class="content-header">
-            <h2>Lampiran</h2>
-        </div>
-    </div>
 </body>
 </html><?php /**PATH D:\laragon\www\form_customer\resources\views/pdf/badan_usaha_pdf.blade.php ENDPATH**/ ?>

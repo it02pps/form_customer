@@ -701,6 +701,7 @@
                     </div>
                     <div class="button3">
                         <button type="button" class="btnUploadFile" title="Upload File" data-bs-toggle="modal" data-bs-target="#modalUpload">Upload File</button>
+                        <a type="button" href="{{ route('form_customer.pdf', ['menu' => str_replace('_', '-', $data['bentuk_usaha']), 'id' => $enkripsi]) }}" target="_blank" class="btnDownloadPdf" title="Download PDF">Download PDF</a>
                     </div>
                     @if($data['file_customer_external'] != '' && $data['status_upload'] == '1')
                         <div class="button4">

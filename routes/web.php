@@ -38,10 +38,6 @@ Route::get('/form-customer/panel/lupa-password', [LoginController::class, 'lupa_
 
 // View Badan Usaha
 Route::get('/form-customer/{menu}/{status}/{status2?}/{param?}', [FormCustomer::class, 'view_badan_usaha'])->where('menu', 'badan-usaha|perseorangan')->where('status', 'customer-baru|customer-lama')->where('status2', 'pengkinian-data|cabang-baru')->name('form_customer.view_badan_usaha');
-
-// View Perseorangan
-// Route::get('/form-customer/{menu}/{status}/{status2?}/{param?}', [FormCustomer::class, 'view_perseorangan'])->where('menu', 'perseorangan')->where('status', 'customer-baru|customer-lama')->where('status2', 'pengkinian-data|cabang-baru')->name('form_customer.view_perseorangan');
-
 Route::get('/form-customer/{menu}/{status}/{status2?}/{param?}/check', [FormCustomer::class, 'pengkinian'])->where('menu', 'badan-usaha|perseorangan')->where('status', 'customer-baru|customer-lama')->where('status2', 'pengkinian-data|cabang-baru')->name('form_customer.pengkinian');
 
 Route::post('/form-customer/{menu}/store', [FormCustomer::class, 'store'])->name('form_customer.store');

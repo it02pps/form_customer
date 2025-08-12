@@ -1011,6 +1011,7 @@
                 $.ajax({
                     url: '/internal/panel/edit-store',
                     type: 'POST',
+                    timout: 8000,
                     data: new FormData(this),
                     cache: false,
                     contentType: false,
@@ -1039,6 +1040,13 @@
                                 icon: 'error'
                             });
                         }
+                    },
+                    error: function(textStatus) {
+                        Swal.fire({
+                            title: 'Gagal',
+                            text: 'Terjadi kesalahan. Silahkan dicoba lagi',
+                            icon: 'error'
+                        });
                     }
                 })
             });
@@ -1154,6 +1162,12 @@
                 }
             });
             // END: Tahun berdiri
+
+            // START: AUTO CAPITAL TEXT
+            $(document).on('keyup', '#nama_perusahaan, #nama_group_perusahaan, #alamat_lengkap, #alamat_group_lengkap, #bidang_usaha_lain, #nama_group, #nama_lengkap, #alamat_ktp, #nama_rekening, #nama_bank, #rekening_lain, #nama_penanggung_jawab, #jabatan, #kota_kabupaten, #nama_cabang, #alamat_nitku, #payment_term', function() {
+                $(this).val($(this).val().toUpperCase());
+            });
+            // END: AUTO CAPITAL TEXT
         });
     </script>
 @endsection

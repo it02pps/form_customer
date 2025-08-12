@@ -982,6 +982,7 @@
                 const badan_usaha = $('#bentuk_usaha').val();
                 $.ajax({
                     url: '/form-customer/'+badan_usaha+'/store',
+                    timeout: 8000,
                     type: 'POST',
                     data: new FormData(this),
                     cache: false,
@@ -1013,6 +1014,13 @@
                                 icon: 'error'
                             });
                         }
+                    },
+                    error: function(textStatus) {
+                        Swal.fire({
+                            title: 'Gagal',
+                            text: 'Terjadi kesalahan. Silahkan dicoba lagi',
+                            icon: 'error'
+                        });
                     }
                 })
             });
@@ -1036,47 +1044,6 @@
                 }
             });
             // END: Tahun berdiri
-
-            // START: Get data untuk select
-            // var enkripsi = $('#update_id').val();
-            // if(enkripsi != '') {
-            //     let url = '/form-customer/select/badan-usaha/' + enkripsi;
-            //     $.ajax({
-            //         url: url,
-            //         type: 'GET',
-            //         success: res => {
-            //             if(res.status == true) {
-            //                 $('#status_kepemilikan').val(res.data.status_kepemilikan).change();
-            //                 $('#badan_usaha').val(res.data.badan_usaha).change();
-            //                 $('#bidang_usaha').val(res.data.bidang_usaha).change();
-            //                 $('#status_pkp').val(res.data.status_pkp).change();
-            //                 $('#status_rekening').val(res.data.informasi_bank.status).change();
-            //                 if(res.data.data_identitas) {
-            //                     $('#identitas_penanggung_jawab').val(res.data.data_identitas.identitas).change();
-            //                 }
-                            
-            //                 let upperIdentitas = res.data.identitas.toUpperCase();
-            //                 $('#identitas_perusahaan').val(upperIdentitas).change();
-            //                 $('#jenis_cust').val(res.data.status_cust).change();
-            //                 $('#status_cabang').val(res.data.status_cabang).change();
-            //                 $('#sales').val(res.data.nama_sales).change();
-            //             } else {
-            //                 $('#status_kepemilikan').val('').change();
-            //                 $('#badan_usaha').val('').change();
-            //                 $('#bidang_usaha').val('').change();
-            //                 $('#identitas_perusahaan').val('ktp').change();
-            //                 $('#status_pkp').val('non_pkp').change();
-            //                 $('#status_rekening').val('').change();
-            //                 $('#identitas_penanggung_jawab').val('').change();
-            //                 $('#cust_lama').prop('checked', true);
-            //                 $('#status_cabang').val('').change();
-            //                 $('#jenis_cust').val('').change();
-            //                 $('#sales').val('').change();
-            //             }
-            //         }
-            //     });
-            // }
-            // END: Get data untuk select
 
             // START: Dynamic row
             let counter = 1;
@@ -1122,6 +1089,12 @@
                 updateDeleteButtonVisibility();
             });
             // END: Dynamic row
+
+            // START: AUTO CAPITAL TEXT
+            $(document).on('keyup', '#nama_perusahaan, #nama_group_perusahaan, #alamat_lengkap, #alamat_group_lengkap, #bidang_usaha_lain, #nama_group, #nama_npwp, #badan_usaha_lain, #alamat_npwp, #kota_npwp, #nama_rekening, #nama_bank, #rekening_lain, #nama_penanggung_jawab, #jabatan, #kota_kabupaten, #nama_cabang, #alamat_nitku', function() {
+                $(this).val($(this).val().toUpperCase());
+            });
+            // END: AUTO CAPITAL TEXT
         });
     </script>
 <?php $__env->stopSection(); ?>

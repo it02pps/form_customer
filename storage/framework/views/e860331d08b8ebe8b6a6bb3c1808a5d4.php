@@ -108,7 +108,7 @@
         padding: 0 24px;
         height: 48px;
         border-radius: 8px;
-        background-color: #0063ee;
+        background-color: #424242;
         border: none;
         color: #fff;
     }
@@ -742,6 +742,7 @@
                 $.ajax({
                     url: '/form-customer/'+ menu +'/detail/upload/' + id,
                     type: 'POST',
+                    timeout: 8000,
                     data: new FormData(this),
                     cache: false,
                     contentType: false,
@@ -770,6 +771,13 @@
                                 icon: 'error'
                             });
                         }
+                    },
+                    error: function(textStatus) {
+                        Swal.fire({
+                            title: 'Gagal',
+                            text: 'Terjadi kesalahan. Silahkan dicoba lagi',
+                            icon: 'error'
+                        });
                     }
                 });
             });

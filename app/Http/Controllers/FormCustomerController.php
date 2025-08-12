@@ -3,31 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\DataIdentitas;
 use App\Models\IdentitasPerusahaan;
-use App\Models\InformasiBank;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Helper\ApiStorage;
-use App\Helper\base30ToImage;
-use App\Models\Cabang;
 use App\Models\Sales;
 use App\Services\CabangServices;
 use App\Services\DataIdentitasServices;
 use App\Services\InformasiBankServices;
 use App\Services\PerusahaanServices;
-use Illuminate\Support\Facades\Storage;
-use League\Flysystem\Visibility;
 use Illuminate\Support\Facades\Http;
 use setasign\Fpdi\Fpdi;
-use setasign\Fpdi\PdfReader\PageBoundaries;
 use Illuminate\Support\Facades\DB;
-
-use function PHPUnit\Framework\isEmpty;
 
 class FormCustomerController extends Controller
 {
@@ -141,47 +128,6 @@ class FormCustomerController extends Controller
             }
         }
     }
-
-    // public function view_perseorangan($menu, $status = NULL, $status2 = NULL, $param = NULL)
-    // {
-    //     if ($param) {
-    //         $param = Crypt::decryptString($param);
-    //         // dd($param);
-    //         $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas', 'cabang')->where('bentuk_usaha', 'perseorangan')->where('nomor_ktp', $param)->latest()->first();
-    //         $url = route('form_customer.detail', ['menu' => $menu, 'id' => Crypt::encryptString($data)]);
-    //         $enkripsi = Crypt::encryptString($param);
-    //     } else {
-    //         $data = NULL;
-    //         $url = NULL;
-    //         $enkripsi = NULL;
-    //     }
-
-    //     $sales = Sales::select('nama_sales')->get();
-    //     $bidang_usaha = [
-    //         'toko_retail',
-    //         'bumn',
-    //         'reseller',
-    //         'pabrik',
-    //         'kontraktor',
-    //         'toko_online',
-    //         'dock_kapal',
-    //         'end_user',
-    //         'ekspedisi',
-    //         'lainnya'
-    //     ];
-
-    //     // dd($data);
-
-    //     if ($status == 'customer-baru') {
-    //         return view('customer.perseorangan.cust_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
-    //     }
-
-    //     if ($status2 == 'pengkinian-data') {
-    //         return view('customer.perseorangan.cust_lama', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
-    //     } else {
-    //         return view('customer.perseorangan.usaha_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
-    //     }
-    // }
 
     public function store(Request $request)
     {
@@ -417,10 +363,10 @@ class FormCustomerController extends Controller
                     'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                 ])->get(config('services.service_x.url') . "/api/getfile/FileIDSignature/" . $data->data_identitas->ttd, []);
 
-                $imaegBase64Signature = null;
+                $imageBase64Signature = null;
                 if ($getFileSignature->successful()) {
                     $fileMime = (new \finfo(FILEINFO_MIME_TYPE))->buffer($getFileSignature->body());
-                    $imaegBase64Signature = 'data:' . $fileMime . ';base64,' . base64_encode($getFileSignature->body());
+                    $imageBase64Signature = 'data:' . $fileMime . ';base64,' . base64_encode($getFileSignature->body());
                 }
             } catch (\Illuminate\Http\Client\ConnectionException) {
                 abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
@@ -429,7 +375,7 @@ class FormCustomerController extends Controller
             $pdf = Pdf::loadView('pdf.perseorangan_pdf', [
                 'ktpImage' => $imageBase64Ktp,
                 'penanggungImage' => $imageBase64Penanggung,
-                'signatureImage' => $imaegBase64Signature,
+                'signatureImage' => $imageBase64Signature,
                 'data' => $data
             ]);
             $pdf->setPaper('A4', 'portrait');
@@ -462,12 +408,9 @@ class FormCustomerController extends Controller
         $pdf = new Fpdi();
         $pageWidth = 210;
         $maxImageWidth = 200;
-        $pageHeight = 297;
-        $imageHeight = 90;
-        $marginBottom = 20;
         $y = 20;
 
-        foreach ($pdfFiles as $file) {
+        foreach ($pdfFiles as $index => $file) {
             if (preg_match('/^data:application\/pdf;base64,/', $file)) {
                 $tmpFile = tempnam(sys_get_temp_dir(), 'pdf_') . '.pdf';
                 file_put_contents($tmpFile, base64_decode(preg_replace('/^data:application\/pdf;base64,/', '', $file)));
@@ -485,29 +428,30 @@ class FormCustomerController extends Controller
 
             $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
             if ($ext == 'pdf') {
-                $pageCount = $pdf->setSourceFile($file);
-                for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
-                    $pdf->AddPage();
-                    $pdfIdx = $pdf->importPage($pageNo);
-                    $size = $pdf->getTemplateSize($pdfIdx);
-                    $width = min($size['width'], $maxImageWidth);
-                    // $height = $size['height'] * ($width / $size['width']);
+                try {
+                    $pageCount = $pdf->setSourceFile($file);
+                    for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                        $pdf->AddPage();
+                        $pdfIdx = $pdf->importPage($pageNo);
+                        $size = $pdf->getTemplateSize($pdfIdx);
+                        $width = min($size['width'], $maxImageWidth);
 
-                    $x = ($pageWidth - $width) / 2;
-                    $pdf->useTemplate($pdfIdx, $x, $y, $width);
+                        $x = ($pageWidth - $width) / 2;
+                        $pdf->useTemplate($pdfIdx, $x, $y, $width);
+                    }
+                } catch (\setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException $e) {
+                    // \Log::error("Skipping unsupported PDF: " . $file);
+                    continue;
                 }
             } else {
-                if ($y + $imageHeight + $marginBottom > $pageHeight) {
-                    $pdf->AddPage();
-                    $y = 20;
-                } else if ($pdf->PageNo() == 0) {
-                    $pdf->AddPage();
-                    $y = 20;
-                }
                 $pdf->SetFont('Arial', '', 22);
                 $pdf->Text(90, 12, 'Lampiran');
                 $pdf->Image($file, 15, $y, 160);
-                $y += $imageHeight + 5;
+                $y = 20;
+            }
+
+            if ($index < count($pdfFiles) - 1) {
+                $pdf->AddPage();
             }
         }
 

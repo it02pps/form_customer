@@ -972,6 +972,12 @@
                 }
             });
             // END: Tahun berdiri
+
+            // START: AUTO CAPITAL TEXT
+            $(document).on('keyup', '#nama_perusahaan, #nama_group_perusahaan, #alamat_lengkap, #alamat_group_lengkap, #bidang_usaha_lain, #nama_group, #nama_lengkap, #alamat_ktp, #nama_rekening, #nama_bank, #rekening_lain, #nama_penanggung_jawab, #jabatan, #kota_kabupaten, #nama_cabang, #alamat_nitku', function() {
+                $(this).val($(this).val().toUpperCase());
+            });
+            // END: AUTO CAPITAL TEXT
         });
     </script>
 <?php $__env->stopSection(); ?>

@@ -744,6 +744,7 @@
                 $.ajax({
                     url: '/form-customer/'+ menu +'/detail/upload/' + id,
                     type: 'POST',
+                    timeout: 8000,
                     data: new FormData(this),
                     cache: false,
                     contentType: false,
@@ -772,6 +773,13 @@
                                 icon: 'error'
                             });
                         }
+                    },
+                    error: function(textStatus) {
+                        Swal.fire({
+                            title: 'Gagal',
+                            text: 'Terjadi kesalahan. Silahkan dicoba lagi',
+                            icon: 'error'
+                        });
                     }
                 });
             });

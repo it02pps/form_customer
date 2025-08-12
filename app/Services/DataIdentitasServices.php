@@ -44,8 +44,8 @@ class DataIdentitasServices
             $data = DataIdentitas::create(
                 [
                     'identitas_perusahaan_id' => $new_perusahaan,
-                    'nama' => $request->nama_penanggung_jawab,
-                    'jabatan' => $request->jabatan,
+                    'nama' => strtoupper($request->nama_penanggung_jawab),
+                    'jabatan' => strtoupper($request->jabatan),
                     'identitas' => $request->identitas_penanggung_jawab,
                     'no_hp' => $request->nomor_hp_penanggung_jawab,
                     'created_at' => Carbon::now()

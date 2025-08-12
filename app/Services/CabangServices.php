@@ -30,8 +30,8 @@ class CabangServices
                     Cabang::insert([
                         'identitas_perusahaan_id' => $perusahaan,
                         'nitku' => $request['nitku_cabang'][$i],
-                        'nama' => $request['nama_cabang'][$i],
-                        'alamat' => $request['alamat_nitku'][$i],
+                        'nama' => strtoupper($request['nama_cabang'][$i]),
+                        'alamat' => strtoupper($request['alamat_nitku'][$i]),
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now(),
                     ]);
