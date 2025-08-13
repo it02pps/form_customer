@@ -502,7 +502,7 @@
                                         <input type="text" name="no_wa" id="no_wa" class="form-control" autocomplete="off" readonly value="{{ $data['nomor_whatsapp'] ? $data['nomor_whatsapp'] : '-' }}">
                                     </div>
     
-                                    <div class="form-group pt-3">
+                                    <div class="form-group pt-3 pb-0">
                                         <label for="">Status Pengusaha Kena Pajak (PKP)</label>
                                         <input type="text" name="status_pkp" id="status_pkp" class="form-control" autocomplete="off" readonly value="{{ strtoupper(str_replace('_', ' ', $data['status_pkp'])) }}">
                                     </div>
@@ -701,7 +701,6 @@
                     </div>
                     <div class="button3">
                         <button type="button" class="btnUploadFile" title="Upload File" data-bs-toggle="modal" data-bs-target="#modalUpload">Upload File</button>
-                        <a type="button" href="{{ route('form_customer.pdf', ['menu' => str_replace('_', '-', $data['bentuk_usaha']), 'id' => $enkripsi]) }}" target="_blank" class="btnDownloadPdf" title="Download PDF">Download PDF</a>
                     </div>
                     @if($data['file_customer_external'] != '' && $data['status_upload'] == '1')
                         <div class="button4">

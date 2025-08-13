@@ -317,9 +317,6 @@ class FormCustomerController extends Controller
             }
 
             $pdf = Pdf::loadView('pdf.badan_usaha_pdf', [
-                'npwpImage' => $imageBase64Npwp,
-                'penanggungImage' => $imageBase64Penanggung,
-                'sppkpImage' => $imageBase64Sppkp,
                 'data' => $data
             ]);
             $pdf->setPaper('A4', 'portrait');
@@ -366,15 +363,21 @@ class FormCustomerController extends Controller
                 $imageBase64Signature = null;
                 if ($getFileSignature->successful()) {
                     $fileMime = (new \finfo(FILEINFO_MIME_TYPE))->buffer($getFileSignature->body());
-                    $imageBase64Signature = 'data:' . $fileMime . ';base64,' . base64_encode($getFileSignature->body());
+                    $ext = match ($fileMime) {
+                        'image/png' => 'png',
+                        'image/jpeg' => 'jpg',
+                        default => 'png'
+                    };
+
+                    // Save to temp file
+                    $imageBase64Signature = storage_path('app/tmp_signature.' . $ext);
+                    file_put_contents($imageBase64Signature, $getFileSignature->body());
                 }
             } catch (\Illuminate\Http\Client\ConnectionException) {
                 abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
             }
 
             $pdf = Pdf::loadView('pdf.perseorangan_pdf', [
-                'ktpImage' => $imageBase64Ktp,
-                'penanggungImage' => $imageBase64Penanggung,
                 'signatureImage' => $imageBase64Signature,
                 'data' => $data
             ]);
@@ -394,6 +397,11 @@ class FormCustomerController extends Controller
             $mergePdfPath = $this->mergingPdf($all_files, $name);
 
             File::delete($temp_pdf);
+            if ($imageBase64Signature && file_exists($imageBase64Signature)) {
+                register_shutdown_function(function () use ($imageBase64Signature) {
+                    @unlink($imageBase64Signature);
+                });
+            }
             return response()->download($mergePdfPath);
         }
     }
