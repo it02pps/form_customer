@@ -27,18 +27,16 @@ class DataIdentitasServices
                 return ['status' => false, 'error' => $validator->errors()->all()];
             }
 
-            if ($request->bentuk_usaha == 'perseorangan') {
-                if ($old_perusahaan) {
-                    $oldData = DataIdentitas::where('identitas_perusahaan_id', $old_perusahaan)->latest()->first();
-                } else {
-                    $oldData = '';
-                }
+            if ($old_perusahaan) {
+                $oldDataPenanggung = DataIdentitas::where('identitas_perusahaan_id', $old_perusahaan)->latest()->first();
             } else {
-                if ($old_perusahaan) {
-                    $oldData = DataIdentitas::where('identitas_perusahaan_id', $old_perusahaan)->latest()->first();
-                } else {
-                    $oldData = '';
-                }
+                $oldDataPenanggung = '';
+            }
+
+            if ($request->bentuk_usaha == 'perseorangan') {
+                $oldData = $oldDataPenanggung;
+            } else {
+                $oldData = $oldDataPenanggung;
             }
 
             $data = DataIdentitas::create(
@@ -55,7 +53,6 @@ class DataIdentitasServices
             if ($request->hasFile('foto_penanggung')) {
                 $foto = $request->file('foto_penanggung');
                 $filename = uniqid() . '-PIC-' . strtoupper($request->identitas_penanggung_jawab) . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $foto->getClientOriginalExtension();
-                // $foto->storeAs('uploads/penanggung_jawab', $filename, 'custom_path');
 
                 $response = Http::withHeaders([
                     'x-api-key' => config('services.service_x.api_key'),
@@ -130,19 +127,9 @@ class DataIdentitasServices
                             }
                         }
                     }
-                    // if (!is_dir('uploads/ttd')) {
-                    //     mkdir('uploads/ttd/', 0777, true);
-                    // }
 
                     // Nama file untuk menyimpan gambar
                     $imageName = uniqid() . '-TTD-' . str_replace(' ', '-', $request->nama_penanggung_jawab) . '.png';
-                    $filePath = 'uploads/ttd/' . $imageName;
-
-                    // Menyimpan gambar ke storage
-                    // $fullPath = public_path($filePath);
-                    // imagepng($img, $fullPath);
-                    // imagedestroy($img);
-                    // $data->ttd = $imageName;
 
                     ob_start();
                     imagepng($img);
@@ -179,7 +166,6 @@ class DataIdentitasServices
                         'filename' => substr($imageName, 0, strrpos($imageName, '.'))
                     ]);
                 } else {
-                    // $data->ttd = null;
                     return ['status' => false, 'error' => 'Tanda Tangan tidak boleh kosong'];
                 }
             }

@@ -20,8 +20,6 @@ class perusahaanServices
 
     public function handleFormPerusahaan(Request $request)
     {
-        // sleep(15);
-        // dd($request->all(), Crypt::decryptString($request->update_id));
         try {
             $validator = $this->validasiServices->validationPerusahaan($request->all());
             if ($validator->fails()) {
@@ -53,24 +51,24 @@ class perusahaanServices
             // Non-aktif old customer
             if ($request->bentuk_usaha == 'perseorangan') {
                 if ($request->update_id) {
+                    $data = IdentitasPerusahaan::where('nomor_ktp', Crypt::decryptString($request->update_id));
                     if ($request->opsi == 'pengkinian_data') {
-                        $update = IdentitasPerusahaan::where('nomor_ktp', Crypt::decryptString($request->update_id));
-                        $update->update(['status_aktif' => '0']);
-                        $oldData = $update->latest()->first();
+                        $data->update(['status_aktif' => '0']);
+                        $oldData = $data->latest()->first();
                     } else {
-                        $oldData = IdentitasPerusahaan::where('nomor_ktp', Crypt::decryptString($request->update_id))->latest()->first();
+                        $oldData = $data->latest()->first();
                     }
                 } else {
                     $oldData = '';
                 }
             } else {
                 if ($request->update_id) {
+                    $data = IdentitasPerusahaan::where('nomor_npwp', Crypt::decryptString($request->update_id));
                     if ($request->opsi == 'pengkinian_data') {
-                        $update = IdentitasPerusahaan::where('nomor_npwp', Crypt::decryptString($request->update_id));
-                        $update->update(['status_aktif' => '0']);
-                        $oldData = $update->latest()->first();
+                        $data->update(['status_aktif' => '0']);
+                        $oldData = $data->latest()->first();
                     } else {
-                        $oldData = IdentitasPerusahaan::where('nomor_npwp', Crypt::decryptString($request->update_id))->latest()->first();
+                        $oldData = $data->latest()->first();
                     }
                 } else {
                     $oldData = '';
@@ -123,7 +121,6 @@ class perusahaanServices
                 if ($request->hasFile('foto_ktp')) {
                     $foto = $request->file('foto_ktp');
                     $filename = uniqid() . '-KTP-' . Str::slug($request->nama_lengkap, '-') . '.' . $foto->getClientOriginalExtension();
-                    // $foto->storeAs('uploads/identitas_perusahaan', $filename, 'custom_path');
 
                     $response = Http::withHeaders([
                         'x-api-key' => config('services.service_x.api_key'),
@@ -162,7 +159,6 @@ class perusahaanServices
                 if ($request->hasFile('foto_npwp')) {
                     $foto = $request->file('foto_npwp');
                     $filename = uniqid() . '-NPWP-' . Str::slug($request->nama_npwp, '-') . '.' . $foto->getClientOriginalExtension();
-                    // $foto->storeAs('uploads/identitas_perusahaan', $filename, 'custom_path');
 
                     $response = Http::withHeaders([
                         'x-api-key' => config('services.service_x.api_key'),
@@ -202,7 +198,6 @@ class perusahaanServices
                     if ($request->hasFile('foto_sppkp')) {
                         $foto = $request->file('foto_sppkp');
                         $filename = uniqid() . '-SPPKP-' . Str::slug($request->nama_npwp, '-') . '.' . $foto->getClientOriginalExtension();
-                        // $foto->storeAs('uploads/identitas_perusahaan', $filename, 'custom_path');
 
                         $response = Http::withHeaders([
                             'x-api-key' => config('services.service_x.api_key'),
@@ -244,7 +239,6 @@ class perusahaanServices
             $link = route('form_customer.detail', ['menu' => str_replace('_', '-', $request->bentuk_usaha), 'id' => Crypt::encryptString($data->id)]);
             return ['status' => true, 'link' => $link, 'new_data' => $data->id, 'old_data' => ($data->bentuk_usaha == 'perseorangan' ? ($request->update_id ? $oldData->id : '') : '')];
         } catch (\Exception $e) {
-            // dd($e);
             return ['status' => false, 'error' => 'Terjadi Kesalahaan'];
         }
     }

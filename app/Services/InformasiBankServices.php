@@ -26,10 +26,10 @@ class InformasiBankServices
                 ['identitas_perusahaan_id' => $perusahaan],
                 [
                     'nomor_rekening' => $request->nomor_rekening,
-                    'nama_rekening' => $request->nama_rekening,
+                    'nama_rekening' => strtoupper($request->nama_rekening),
                     'status' => $request->status_rekening,
-                    'nama_bank' => $request->nama_bank,
-                    'rekening_lain' => $request->status_rekening == 'lainnya' ? $request->rekening_lain : null,
+                    'nama_bank' => strtoupper($request->nama_bank),
+                    'rekening_lain' => $request->status_rekening == 'lainnya' ? strtoupper($request->rekening_lain) : null,
                     'created_at' => Carbon::now()
                 ]
             );
