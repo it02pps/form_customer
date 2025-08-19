@@ -22,6 +22,7 @@ class DataIdentitasServices
     public function handleFormIdentitas($request, $new_perusahaan, $old_perusahaan)
     {
         try {
+            set_time_limit(15);
             $validator = $this->validasiServices->validationIdentitas($request->all());
             if ($validator->fails()) {
                 return ['status' => false, 'error' => $validator->errors()->all()];
@@ -54,7 +55,7 @@ class DataIdentitasServices
                 $foto = $request->file('foto_penanggung');
                 $filename = uniqid() . '-PIC-' . strtoupper($request->identitas_penanggung_jawab) . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $foto->getClientOriginalExtension();
 
-                $response = Http::withHeaders([
+                $response = Http::timeout(15)->withHeaders([
                     'x-api-key' => config('services.service_x.api_key'),
                     'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                 ])->get(config('services.service_x.url') . '/api/checkfile', [
@@ -65,7 +66,7 @@ class DataIdentitasServices
                 $result = $response->json();
                 if ($result['status'] == true) {
                     $category = 'FileIDPersonCharge';
-                    $response = Http::withHeaders([
+                    $response = Http::timeout(15)->withHeaders([
                         'x-api-key' => config('services.service_x.api_key'),
                         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                     ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->foto", []);
@@ -73,7 +74,7 @@ class DataIdentitasServices
                 }
 
                 $data->foto = $filename;
-                $response = Http::withHeaders([
+                $response = Http::timeout(15)->withHeaders([
                     'x-api-key' => config('services.service_x.api_key'),
                     'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                 ])->attach(
@@ -135,7 +136,7 @@ class DataIdentitasServices
                     imagepng($img);
                     $imageBinary = ob_get_clean();
                     imagedestroy($img);
-                    $response = Http::withHeaders([
+                    $response = Http::timeout(15)->withHeaders([
                         'x-api-key' => config('services.service_x.api_key'),
                         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                     ])->get(config('services.service_x.url') . '/api/checkfile', [
@@ -146,7 +147,7 @@ class DataIdentitasServices
                     $result = $response->json();
                     if ($result['status'] == true) {
                         $category = 'FileIDSignature';
-                        $response = Http::withHeaders([
+                        $response = Http::timeout(15)->withHeaders([
                             'x-api-key' => config('services.service_x.api_key'),
                             'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                         ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->ttd", []);
@@ -154,7 +155,7 @@ class DataIdentitasServices
                     }
 
                     $data->ttd = $imageName;
-                    $response = Http::withHeaders([
+                    $response = Http::timeout(15)->withHeaders([
                         'x-api-key' => config('services.service_x.api_key'),
                         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                     ])->attach(

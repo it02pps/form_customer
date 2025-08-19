@@ -133,6 +133,7 @@ class FormCustomerController extends Controller
     {
         DB::beginTransaction();
         try {
+            set_time_limit(15);
             $perusahaan = $this->perusahaanServices->handleFormPerusahaan($request);
             // dd($perusahaan);
             if ($perusahaan['status'] == false) {
@@ -214,6 +215,7 @@ class FormCustomerController extends Controller
     public function upload_pdf(Request $request, $menu, $id)
     {
         try {
+            set_time_limit(15);
             $data = IdentitasPerusahaan::find(Crypt::decryptString($id));
 
             if ($request->hasFile('file_pdf')) {
@@ -222,7 +224,7 @@ class FormCustomerController extends Controller
                 $filename = uniqid() . '-PDFCust-' . $data->nama_perusahaan . '.' . $ext;
 
                 try {
-                    $response = Http::withHeaders([
+                    $response = Http::timeout(15)->withHeaders([
                         'x-api-key' => config('services.service_x.api_key'),
                         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                     ])->get(config('services.service_x.url') . '/api/checkfile', [
@@ -233,7 +235,7 @@ class FormCustomerController extends Controller
                     $result = $response->json();
                     if ($result['status'] == true) {
                         $category = 'FilePDFCustomer';
-                        $response = Http::withHeaders([
+                        $response = Http::timeout(15)->withHeaders([
                             'x-api-key' => config('services.service_x.api_key'),
                             'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                         ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->file_customer_external", []);
@@ -241,7 +243,7 @@ class FormCustomerController extends Controller
                     }
 
                     $data->file_customer_external = $filename;
-                    $response = Http::withHeaders([
+                    $response = Http::timeout(15)->withHeaders([
                         'x-api-key' => config('services.service_x.api_key'),
                         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                     ])->attach(
@@ -267,11 +269,12 @@ class FormCustomerController extends Controller
 
     public function download_pdf($menu, Request $request)
     {
+        set_time_limit(30);
         $decrypt = Crypt::decryptString($request->id);
         $data = IdentitasPerusahaan::with('data_identitas', 'informasi_bank')->where('id', $decrypt)->first();
 
         try {
-            $getFilePenanggung = Http::withHeaders([
+            $getFilePenanggung = Http::timeout(30)->withHeaders([
                 'x-api-key' => config('services.service_x.api_key'),
                 'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
             ])->get(config('services.service_x.url') . "/api/getfile/FileIDPersonCharge/" . $data->data_identitas->foto, []);
@@ -287,7 +290,7 @@ class FormCustomerController extends Controller
 
         if ($menu == 'badan_usaha' || $menu == 'badan-usaha') {
             try {
-                $getFileNpwp = Http::withHeaders([
+                $getFileNpwp = Http::timeout(30)->withHeaders([
                     'x-api-key' => config('services.service_x.api_key'),
                     'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                 ])->get(config('services.service_x.url') . "/api/getfile/FileIDCompanyOrPersonal/" . $data->foto_npwp, []);
@@ -302,7 +305,7 @@ class FormCustomerController extends Controller
             }
 
             try {
-                $getFileSppkp = Http::withHeaders([
+                $getFileSppkp = Http::timeout(30)->withHeaders([
                     'x-api-key' => config('services.service_x.api_key'),
                     'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                 ])->get(config('services.service_x.url') . "/api/getfile/FileSPPKPCompany/" . $data->sppkp, []);
@@ -340,7 +343,7 @@ class FormCustomerController extends Controller
             return response()->download($mergePdfPath);
         } else {
             try {
-                $getFileKtp = Http::withHeaders([
+                $getFileKtp = Http::timeout(30)->withHeaders([
                     'x-api-key' => config('services.service_x.api_key'),
                     'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                 ])->get(config('services.service_x.url') . "/api/getfile/FileIDCompanyOrPersonal/" . $data->foto_ktp, []);
@@ -355,7 +358,7 @@ class FormCustomerController extends Controller
             }
 
             try {
-                $getFileSignature = Http::withHeaders([
+                $getFileSignature = Http::timeout(30)->withHeaders([
                     'x-api-key' => config('services.service_x.api_key'),
                     'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                 ])->get(config('services.service_x.url') . "/api/getfile/FileIDSignature/" . $data->data_identitas->ttd, []);
@@ -409,6 +412,7 @@ class FormCustomerController extends Controller
     // Function for merging PDF
     private function mergingPdf(array $pdfFiles, string $outputFilename): string
     {
+        set_time_limit(30);
         // Manually include FPDF
         require_once base_path('vendor/setasign/fpdf/fpdf.php');
         require_once base_path('vendor/setasign/fpdi/src/autoload.php');
@@ -467,7 +471,7 @@ class FormCustomerController extends Controller
         $outputPath = public_path('uploads/pdf/' . $outputFilename);
         $pdf->Output($outputPath, 'F');
         try {
-            $response = Http::withHeaders([
+            $response = Http::timeout(30)->withHeaders([
                 'x-api-key' => config('services.service_x.api_key'),
                 'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
             ])->get(config('services.service_x.url') . '/api/checkfile', [
@@ -478,14 +482,14 @@ class FormCustomerController extends Controller
             $result = $response->json();
             if ($result['status'] == true) {
                 $category = 'FileIDMergingPdf';
-                $response = Http::withHeaders([
+                $response = Http::timeout(30)->withHeaders([
                     'x-api-key' => config('services.service_x.api_key'),
                     'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                 ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$outputFilename", []);
                 $result = $response->json();
             }
 
-            $response = Http::withHeaders([
+            $response = Http::timeout(30)->withHeaders([
                 'x-api-key' => config('services.service_x.api_key'),
                 'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
             ])->attach(

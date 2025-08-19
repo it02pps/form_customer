@@ -21,6 +21,7 @@ class perusahaanServices
     public function handleFormPerusahaan(Request $request)
     {
         try {
+            set_time_limit(15);
             $validator = $this->validasiServices->validationPerusahaan($request->all());
             if ($validator->fails()) {
                 return ['status' => false, 'error' => $validator->errors()->all()];
@@ -122,7 +123,7 @@ class perusahaanServices
                     $foto = $request->file('foto_ktp');
                     $filename = uniqid() . '-KTP-' . Str::slug($request->nama_lengkap, '-') . '.' . $foto->getClientOriginalExtension();
 
-                    $response = Http::withHeaders([
+                    $response = Http::timeout(15)->withHeaders([
                         'x-api-key' => config('services.service_x.api_key'),
                         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                     ])->get(config('services.service_x.url') . '/api/checkfile', [
@@ -133,7 +134,7 @@ class perusahaanServices
                     $result = $response->json();
                     if ($result['status'] == true) {
                         $category = 'FileIDCompanyOrPersonal';
-                        $response = Http::withHeaders([
+                        $response = Http::timeout(15)->withHeaders([
                             'x-api-key' => config('services.service_x.api_key'),
                             'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                         ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->foto_ktp", []);
@@ -141,7 +142,7 @@ class perusahaanServices
                     }
 
                     $data->foto_ktp = $filename;
-                    $response = Http::withHeaders([
+                    $response = Http::timeout(15)->withHeaders([
                         'x-api-key' => config('services.service_x.api_key'),
                         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                     ])->attach(
@@ -160,7 +161,7 @@ class perusahaanServices
                     $foto = $request->file('foto_npwp');
                     $filename = uniqid() . '-NPWP-' . Str::slug($request->nama_npwp, '-') . '.' . $foto->getClientOriginalExtension();
 
-                    $response = Http::withHeaders([
+                    $response = Http::timeout(15)->withHeaders([
                         'x-api-key' => config('services.service_x.api_key'),
                         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                     ])->get(config('services.service_x.url') . '/api/checkfile', [
@@ -171,7 +172,7 @@ class perusahaanServices
                     $result = $response->json();
                     if ($result['status'] == true) {
                         $category = 'FileIDCompanyOrPersonal';
-                        $response = Http::withHeaders([
+                        $response = Http::timeout(15)->withHeaders([
                             'x-api-key' => config('services.service_x.api_key'),
                             'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                         ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->foto_npwp", []);
@@ -179,7 +180,7 @@ class perusahaanServices
                     }
 
                     $data->foto_npwp = $filename;
-                    $response = Http::withHeaders([
+                    $response = Http::timeout(15)->withHeaders([
                         'x-api-key' => config('services.service_x.api_key'),
                         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                     ])->attach(
@@ -199,7 +200,7 @@ class perusahaanServices
                         $foto = $request->file('foto_sppkp');
                         $filename = uniqid() . '-SPPKP-' . Str::slug($request->nama_npwp, '-') . '.' . $foto->getClientOriginalExtension();
 
-                        $response = Http::withHeaders([
+                        $response = Http::timeout(15)->withHeaders([
                             'x-api-key' => config('services.service_x.api_key'),
                             'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                         ])->get(config('services.service_x.url') . '/api/checkfile', [
@@ -210,7 +211,7 @@ class perusahaanServices
                         $result = $response->json();
                         if ($result['status'] == true) {
                             $category = 'FileSPPKPCompany';
-                            $response = Http::withHeaders([
+                            $response = Http::timeout(15)->withHeaders([
                                 'x-api-key' => config('services.service_x.api_key'),
                                 'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                             ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->sppkp", []);
@@ -218,7 +219,7 @@ class perusahaanServices
                         }
 
                         $data->sppkp = $filename;
-                        $response = Http::withHeaders([
+                        $response = Http::timeout(15)->withHeaders([
                             'x-api-key' => config('services.service_x.api_key'),
                             'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                         ])->attach(
