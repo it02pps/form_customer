@@ -875,7 +875,10 @@
                         });
                     }
                 } else {
-                    $("#preview_npwp").css('height', '271px');
+                    $("#preview_npwp").css({
+                        'height': '271px',
+                        'padding-top': '0'
+                    });
                     $('#preview_npwp').html('<img id="preview_foto_npwp" src="" alt="Preview" data-action="zoom">');
                     reader.onload = function() {
                         $("#preview_foto_npwp").attr("src", reader.result);
@@ -904,7 +907,10 @@
                         });
                     }
                 } else {
-                    $("#preview_sppkp").css('height', '271px');
+                    $("#preview_sppkp").css({
+                        'height': '271px',
+                        'padding-top': '0'
+                    });
                     $('#preview_sppkp').html('<img id="preview_foto_sppkp" src="" alt="Preview" data-action="zoom">');
                     reader.onload = function() {
                         $("#preview_foto_sppkp").attr("src", reader.result);
@@ -933,7 +939,10 @@
                         });
                     }
                 } else {
-                    $("#preview_penanggung").css('height', '271px');
+                    $("#preview_penanggung").css({
+                        'height': '271px',
+                        'padding-top': '0'
+                    });
                     $('#preview_penanggung').html('<img id="preview_foto_penanggung" src="" alt="Preview" data-action="zoom">');
                     reader.onload = function() {
                         $("#preview_foto_penanggung").attr("src", reader.result);
@@ -1034,6 +1043,7 @@
                 $.ajax({
                     url: '/form-customer/'+badan_usaha+'/store',
                     type: 'POST',
+                    timeout: 120000,
                     data: new FormData(this),
                     cache: false,
                     contentType: false,
@@ -1061,6 +1071,21 @@
                             Swal.fire({
                                 title: 'Gagal',
                                 text: res.error,
+                                icon: 'error'
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        if(error === 'timeout') {
+                            Swal.fire({
+                                title: 'Gagal',
+                                text: 'Permintaan terlalu lama (Lebih dari 2 menit). Silahkan coba lagi.',
+                                icon: 'error'
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Gagal',
+                                text: 'Terjadi kesalahan ' + error,
                                 icon: 'error'
                             });
                         }
@@ -1173,6 +1198,12 @@
                 updateDeleteButtonVisibility();
             });
             // END: Dynamic row
+
+            // START: AUTO CAPITAL TEXT
+            $(document).on('keyup', '#nama_perusahaan, #nama_group_perusahaan, #alamat_lengkap, #alamat_group_lengkap, #bidang_usaha_lain, #nama_group, #nama_npwp, #badan_usaha_lain, #alamat_npwp, #kota_npwp, #nama_rekening, #nama_bank, #rekening_lain, #nama_penanggung_jawab, #jabatan, #kota_kabupaten, #nama_cabang, #alamat_nitku', function() {
+                $(this).val($(this).val().toUpperCase());
+            });
+            // END: AUTO CAPITAL TEXT
         });
     </script>
 <?php $__env->stopSection(); ?>

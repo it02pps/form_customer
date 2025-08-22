@@ -6,9 +6,10 @@ use App\Models\IdentitasPerusahaan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+use Illuminate\Http\File;
 
 class perusahaanServices
 {
@@ -20,7 +21,25 @@ class perusahaanServices
 
     public function handleFormPerusahaan(Request $request)
     {
+        DB::beginTransaction();
         try {
+            set_time_limit(120);
+
+            // Non-aktif old customer
+            if ($request->update_id) {
+                $decrypt_id = Crypt::decryptString($request->update_id);
+                $data = IdentitasPerusahaan::where('nomor_ktp', $decrypt_id)->orWhere('nomor_npwp', $decrypt_id);
+                if ($request->opsi == 'pengkinian_data') {
+                    $data->update(['status_aktif' => '0']);
+                    $oldData = $data->latest()->first();
+                } else {
+                    $oldData = $data->latest()->first();
+                }
+            } else {
+                $oldData = '';
+            }
+
+            // START: Proses storing
             $validator = $this->validasiServices->validationPerusahaan($request->all());
             if ($validator->fails()) {
                 return ['status' => false, 'error' => $validator->errors()->all()];
@@ -45,33 +64,6 @@ class perusahaanServices
 
                 if ($request->email_faktur == '-') {
                     return ['status' => false, 'error' => 'Email faktur pajak wajib diisi dengan format yang benar'];
-                }
-            }
-
-            // Non-aktif old customer
-            if ($request->bentuk_usaha == 'perseorangan') {
-                if ($request->update_id) {
-                    $data = IdentitasPerusahaan::where('nomor_ktp', Crypt::decryptString($request->update_id));
-                    if ($request->opsi == 'pengkinian_data') {
-                        $data->update(['status_aktif' => '0']);
-                        $oldData = $data->latest()->first();
-                    } else {
-                        $oldData = $data->latest()->first();
-                    }
-                } else {
-                    $oldData = '';
-                }
-            } else {
-                if ($request->update_id) {
-                    $data = IdentitasPerusahaan::where('nomor_npwp', Crypt::decryptString($request->update_id));
-                    if ($request->opsi == 'pengkinian_data') {
-                        $data->update(['status_aktif' => '0']);
-                        $oldData = $data->latest()->first();
-                    } else {
-                        $oldData = $data->latest()->first();
-                    }
-                } else {
-                    $oldData = '';
                 }
             }
 
@@ -116,7 +108,6 @@ class perusahaanServices
                 ]
             );
 
-            // Store image
             if ($request->bentuk_usaha == 'perseorangan') {
                 if ($request->hasFile('foto_ktp')) {
                     $foto = $request->file('foto_ktp');
@@ -127,7 +118,7 @@ class perusahaanServices
                         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                     ])->get(config('services.service_x.url') . '/api/checkfile', [
                         'category' => 'FileIDCompanyOrPersonal',
-                        'filename' => $data->foto_ktp
+                        'filename' => $request->foto_ktp
                     ]);
 
                     $result = $response->json();
@@ -165,7 +156,7 @@ class perusahaanServices
                         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                     ])->get(config('services.service_x.url') . '/api/checkfile', [
                         'category' => 'FileIDCompanyOrPersonal',
-                        'filename' => $data->foto_npwp
+                        'filename' => $request->foto_npwp
                     ]);
 
                     $result = $response->json();
@@ -204,7 +195,7 @@ class perusahaanServices
                             'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                         ])->get(config('services.service_x.url') . '/api/checkfile', [
                             'category' => 'FileSPPKPCompany',
-                            'filename' => $data->sppkp
+                            'filename' => $request->sppkp
                         ]);
 
                         $result = $response->json();
@@ -233,16 +224,15 @@ class perusahaanServices
                         $data->sppkp = $oldData->sppkp;
                     }
                 }
-            }
-            set_time_limit(120);
-            try {
                 $data->save();
-            } catch (\Exception $e) {
-                dd($e);
             }
+
+            DB::commit();
             $link = route('form_customer.detail', ['menu' => str_replace('_', '-', $request->bentuk_usaha), 'id' => Crypt::encryptString($data->id)]);
             return ['status' => true, 'link' => $link, 'new_data' => $data->id, 'old_data' => ($data->bentuk_usaha == 'perseorangan' ? ($request->update_id ? $oldData->id : '') : '')];
         } catch (\Exception $e) {
+            dd($e);
+            DB::rollback();
             return ['status' => false, 'error' => 'Terjadi Kesalahaan'];
         }
     }

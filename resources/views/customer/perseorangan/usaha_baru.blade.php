@@ -841,7 +841,7 @@
                 $.ajax({    
                     url: '/form-customer/'+badan_usaha+'/store',
                     type: 'POST',
-                    timout: 8000,
+                    timout: 120000,
                     data: new FormData(this),
                     cache: false,
                     contentType: false,
@@ -872,12 +872,20 @@
                             });
                         }
                     },
-                    error: function(textStatus) {
-                        Swal.fire({
-                            title: 'Gagal',
-                            text: 'Terjadi kesalahan. Silahkan dicoba lagi',
-                            icon: 'error'
-                        });
+                    error: function(xhr, status, error) {
+                        if(error === 'timeout') {
+                            Swal.fire({
+                                title: 'Gagal',
+                                text: 'Permintaan terlalu lama (Lebih dari 2 menit). Silahkan coba lagi.',
+                                icon: 'error'
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Gagal',
+                                text: 'Terjadi kesalahan ' + error,
+                                icon: 'error'
+                            });
+                        }
                     }
                 })
             });

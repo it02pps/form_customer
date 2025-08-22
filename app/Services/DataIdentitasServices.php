@@ -3,9 +3,7 @@
 namespace App\Services;
 
 use App\Models\DataIdentitas;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\File;
 use App\Helper\base30ToImage;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
@@ -22,6 +20,8 @@ class DataIdentitasServices
     public function handleFormIdentitas($request, $new_perusahaan, $old_perusahaan)
     {
         try {
+            set_time_limit(120);
+
             $validator = $this->validasiServices->validationIdentitas($request->all());
             if ($validator->fails()) {
                 return ['status' => false, 'error' => $validator->errors()->all()];
@@ -170,12 +170,7 @@ class DataIdentitasServices
                 }
             }
 
-            set_time_limit(120);
-            try {
-                $data->save();
-            } catch (\Exception $e) {
-                dd($e);
-            }
+            $data->save();
 
             return ['status' => true];
         } catch (\Exception $e) {

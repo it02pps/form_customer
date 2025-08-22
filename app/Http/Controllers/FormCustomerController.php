@@ -131,7 +131,6 @@ class FormCustomerController extends Controller
 
     public function store(Request $request)
     {
-        DB::beginTransaction();
         try {
             $perusahaan = $this->perusahaanServices->handleFormPerusahaan($request);
             // dd($perusahaan);
@@ -153,11 +152,9 @@ class FormCustomerController extends Controller
             if ($cabang['status'] == false) {
                 return ['status' => false, 'error' => $cabang['error']];
             }
-            DB::commit();
 
             return ['status' => true, 'link' => $perusahaan['link']];
         } catch (\Exception $e) {
-            DB::rollback();
             return ['status' => false, 'error' => 'Terjadi Kesalahan'];
         }
     }
