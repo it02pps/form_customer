@@ -33,12 +33,6 @@ class DataIdentitasServices
                 $oldDataPenanggung = '';
             }
 
-            if ($request->bentuk_usaha == 'perseorangan') {
-                $oldData = $oldDataPenanggung;
-            } else {
-                $oldData = $oldDataPenanggung;
-            }
-
             $data = DataIdentitas::create(
                 [
                     'identitas_perusahaan_id' => $new_perusahaan,
@@ -59,7 +53,7 @@ class DataIdentitasServices
                     'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                 ])->get(config('services.service_x.url') . '/api/checkfile', [
                     'category' => 'FileIDPersonCharge',
-                    'filename' => $data->foto
+                    'filename' => $oldDataPenanggung->foto
                 ]);
 
                 $result = $response->json();
@@ -68,7 +62,7 @@ class DataIdentitasServices
                     $response = Http::withHeaders([
                         'x-api-key' => config('services.service_x.api_key'),
                         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                    ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->foto", []);
+                    ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$oldDataPenanggung->foto", []);
                     $result = $response->json();
                 }
 
@@ -85,7 +79,7 @@ class DataIdentitasServices
                     'filename' => substr($filename, 0, strrpos($filename, '.'))
                 ]);
             } else {
-                $data->foto = $oldData->foto;
+                $data->foto = $oldDataPenanggung->foto;
             }
 
             if ($request->bentuk_usaha == 'perseorangan') {
@@ -140,7 +134,7 @@ class DataIdentitasServices
                         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                     ])->get(config('services.service_x.url') . '/api/checkfile', [
                         'category' => 'FileIDSignature',
-                        'filename' => $data->ttd
+                        'filename' => $oldDataPenanggung->ttd
                     ]);
 
                     $result = $response->json();
@@ -149,7 +143,7 @@ class DataIdentitasServices
                         $response = Http::withHeaders([
                             'x-api-key' => config('services.service_x.api_key'),
                             'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                        ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->ttd", []);
+                        ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$oldDataPenanggung->ttd", []);
                         $result = $response->json();
                     }
 

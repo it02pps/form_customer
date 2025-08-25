@@ -509,7 +509,7 @@
                                                                 {{-- <a href="{{ asset('/uploads/identitas_perusahaan/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a> --}}
                                                             </div>
                                                         @elseif(File::extension($data['foto_ktp']) != 'pdf')
-                                                            <div class="form-group" id="preview_ktp">
+                                                            <div class="form-group p-0" id="preview_ktp">
                                                                 <img id="preview_foto_ktp" src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
                                                                 {{-- <img id="preview_foto_ktp" src="{{ asset('/uploads/identitas_perusahaan/' . $data['foto_ktp']) }}" alt="Belum ada file" data-action="zoom"> --}}
                                                             </div>
@@ -643,7 +643,7 @@
                                                         {{-- <a href="{{ asset('/uploads/penanggung_jawab/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a> --}}
                                                     </div>
                                                 @elseif(File::extension($data['data_identitas']['foto']) != 'pdf')
-                                                    <div id="preview_penanggung" class="form-group">
+                                                    <div id="preview_penanggung" class="form-group p-0">
                                                         <img id="preview_foto_penanggung" src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
                                                         {{-- <img id="preview_foto_penanggung" src="{{ asset('/uploads/penanggung_jawab/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom"> --}}
                                                     </div>

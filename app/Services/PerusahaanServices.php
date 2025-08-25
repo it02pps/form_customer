@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Illuminate\Http\File;
 
 class perusahaanServices
 {
@@ -118,7 +117,7 @@ class perusahaanServices
                         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                     ])->get(config('services.service_x.url') . '/api/checkfile', [
                         'category' => 'FileIDCompanyOrPersonal',
-                        'filename' => $request->foto_ktp
+                        'filename' => $oldData->foto_ktp
                     ]);
 
                     $result = $response->json();
@@ -127,7 +126,7 @@ class perusahaanServices
                         $response = Http::withHeaders([
                             'x-api-key' => config('services.service_x.api_key'),
                             'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                        ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->foto_ktp", []);
+                        ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$oldData->foto_ktp", []);
                         $result = $response->json();
                     }
 
@@ -156,7 +155,7 @@ class perusahaanServices
                         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                     ])->get(config('services.service_x.url') . '/api/checkfile', [
                         'category' => 'FileIDCompanyOrPersonal',
-                        'filename' => $request->foto_npwp
+                        'filename' => $oldData->foto_npwp
                     ]);
 
                     $result = $response->json();
@@ -165,7 +164,7 @@ class perusahaanServices
                         $response = Http::withHeaders([
                             'x-api-key' => config('services.service_x.api_key'),
                             'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                        ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->foto_npwp", []);
+                        ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$oldData->foto_npwp", []);
                         $result = $response->json();
                     }
 
@@ -195,7 +194,7 @@ class perusahaanServices
                             'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                         ])->get(config('services.service_x.url') . '/api/checkfile', [
                             'category' => 'FileSPPKPCompany',
-                            'filename' => $request->sppkp
+                            'filename' => $oldData->sppkp
                         ]);
 
                         $result = $response->json();
@@ -204,7 +203,7 @@ class perusahaanServices
                             $response = Http::withHeaders([
                                 'x-api-key' => config('services.service_x.api_key'),
                                 'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                            ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->sppkp", []);
+                            ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$oldData->sppkp", []);
                             $result = $response->json();
                         }
 
@@ -224,14 +223,14 @@ class perusahaanServices
                         $data->sppkp = $oldData->sppkp;
                     }
                 }
-                $data->save();
             }
+            $data->save();
 
             DB::commit();
             $link = route('form_customer.detail', ['menu' => str_replace('_', '-', $request->bentuk_usaha), 'id' => Crypt::encryptString($data->id)]);
             return ['status' => true, 'link' => $link, 'new_data' => $data->id, 'old_data' => ($data->bentuk_usaha == 'perseorangan' ? ($request->update_id ? $oldData->id : '') : '')];
         } catch (\Exception $e) {
-            dd($e);
+            // dd($e);
             DB::rollback();
             return ['status' => false, 'error' => 'Terjadi Kesalahaan'];
         }
