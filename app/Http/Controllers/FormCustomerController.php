@@ -138,20 +138,20 @@ class FormCustomerController extends Controller
                 return ['status' => false, 'error' => $perusahaan['error']];
             }
 
-            $bank = $this->informasiBankServices->handleFormInformasiBank($request, $perusahaan['new_data']);
-            if ($bank['status'] == false) {
-                return ['status' => false, 'error' => $bank['error']];
-            }
+            // $bank = $this->informasiBankServices->handleFormInformasiBank($request, $perusahaan['new_data']);
+            // if ($bank['status'] == false) {
+            //     return ['status' => false, 'error' => $bank['error']];
+            // }
 
-            $identitas = $this->dataIdentitasServices->handleFormIdentitas($request, $perusahaan['new_data'], $perusahaan['old_data']);
-            if ($identitas['status'] == false) {
-                return ['status' => false, 'error' => $identitas['error']];
-            }
+            // $identitas = $this->dataIdentitasServices->handleFormIdentitas($request, $perusahaan['new_data'], $perusahaan['old_data']);
+            // if ($identitas['status'] == false) {
+            //     return ['status' => false, 'error' => $identitas['error']];
+            // }
 
-            $cabang = $this->cabangServices->handleCabang($request, $perusahaan['new_data']);
-            if ($cabang['status'] == false) {
-                return ['status' => false, 'error' => $cabang['error']];
-            }
+            // $cabang = $this->cabangServices->handleCabang($request, $perusahaan['new_data']);
+            // if ($cabang['status'] == false) {
+            //     return ['status' => false, 'error' => $cabang['error']];
+            // }
 
             return ['status' => true, 'link' => $perusahaan['link']];
         } catch (\Exception $e) {

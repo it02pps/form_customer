@@ -19,23 +19,9 @@ class CabangServices
     public function handleCabang(Request $request, $perusahaan)
     {
         try {
-            $validator = $this->validasiServices->validationCabang($request->all());
-            if ($validator->fails()) {
-                return ['status' => false, 'error' => $validator->errors()->all()];
-            }
+            
 
-            if ($request['nitku_cabang'][0] != null) {
-                foreach ($request['nitku_cabang'] as $i => $loop_cabang) {
-                    Cabang::insert([
-                        'identitas_perusahaan_id' => $perusahaan,
-                        'nitku' => $request['nitku_cabang'][$i],
-                        'nama' => strtoupper($request['nama_cabang'][$i]),
-                        'alamat' => strtoupper($request['alamat_nitku'][$i]),
-                        'created_at' => Carbon::now(),
-                        'updated_at' => Carbon::now(),
-                    ]);
-                }
-            }
+            
 
             return ['status' => true];
         } catch (\Exception $e) {

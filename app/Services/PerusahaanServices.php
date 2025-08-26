@@ -2,12 +2,16 @@
 
 namespace App\Services;
 
+use App\Models\Cabang;
+use App\Models\DataIdentitas;
 use App\Models\IdentitasPerusahaan;
+use App\Models\InformasiBank;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use App\Helper\base30ToImage;
 use Illuminate\Support\Str;
 
 class perusahaanServices
@@ -27,7 +31,7 @@ class perusahaanServices
             // Non-aktif old customer
             if ($request->update_id) {
                 $decrypt_id = Crypt::decryptString($request->update_id);
-                $data = IdentitasPerusahaan::where('nomor_ktp', $decrypt_id)->orWhere('nomor_npwp', $decrypt_id);
+                $data = IdentitasPerusahaan::with('data_identitas')->where('nomor_ktp', $decrypt_id)->orWhere('nomor_npwp', $decrypt_id);
                 if ($request->opsi == 'pengkinian_data') {
                     $data->update(['status_aktif' => '0']);
                     $oldData = $data->latest()->first();
@@ -38,11 +42,27 @@ class perusahaanServices
                 $oldData = '';
             }
 
-            // START: Proses storing
+            // START: Validation
             $validator = $this->validasiServices->validationPerusahaan($request->all());
             if ($validator->fails()) {
                 return ['status' => false, 'error' => $validator->errors()->all()];
             }
+
+            $validator = $this->validasiServices->validationInformasiBank($request->all());
+            if ($validator->fails()) {
+                return ['status' => false, 'error' => $validator->errors()->all()];
+            }
+
+            $validator = $this->validasiServices->validationIdentitas($request->all());
+            if ($validator->fails()) {
+                return ['status' => false, 'error' => $validator->errors()->all()];
+            }
+
+            $validator = $this->validasiServices->validationCabang($request->all());
+            if ($validator->fails()) {
+                return ['status' => false, 'error' => $validator->errors()->all()];
+            }
+            // END: Validation
 
             // Automatic create customer code
             $lastest_cust = IdentitasPerusahaan::latest('id')->first();
@@ -66,7 +86,7 @@ class perusahaanServices
                 }
             }
 
-            // Store data
+            // START: Store Data
             $data = IdentitasPerusahaan::create(
                 [
                     'kode_customer' => $kode_cust,
@@ -103,10 +123,54 @@ class perusahaanServices
                     'alamat_npwp' => $request->bentuk_usaha == 'badan_usaha' ? strtoupper($request->alamat_npwp) : null,
                     'kota_npwp' => $request->bentuk_usaha == 'badan_usaha' ? strtoupper($request->kota_npwp) : null,
                     'badan_usaha_lain' => $request->bentuk_usaha == 'badan_usaha' ? ($request->badan_usaha == 'lainnya' ? strtoupper($request->badan_usaha_lain) : null) : '',
-                    'created_at' => Carbon::now()
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
                 ]
             );
 
+            InformasiBank::updateOrCreate(
+                ['identitas_perusahaan_id' => $data->id],
+                [
+                    'nomor_rekening' => $request->nomor_rekening,
+                    'nama_rekening' => strtoupper($request->nama_rekening),
+                    'status' => $request->status_rekening,
+                    'nama_bank' => strtoupper($request->nama_bank),
+                    'rekening_lain' => $request->status_rekening == 'lainnya' ? strtoupper($request->rekening_lain) : null,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]
+            );
+
+            $identitas_penanggung = DataIdentitas::updateOrCreate(
+                ['identitas_perusahaan_id' => $data->id],
+                [
+                    'nama' => strtoupper($request->nama_penanggung_jawab),
+                    'jabatan' => strtoupper($request->jabatan),
+                    'identitas' => $request->identitas_penanggung_jawab,
+                    'no_hp' => $request->nomor_hp_penanggung_jawab,
+                    'created_at' => Carbon::now(),
+
+                ]
+            );
+
+            if ($request['nitku_cabang'][0] != null) {
+                foreach ($request['nitku_cabang'] as $i => $loop_cabang) {
+                    Cabang::insert([
+                        'identitas_perusahaan_id' => $data->id,
+                        'nitku' => $request['nitku_cabang'][$i],
+                        'nama' => strtoupper($request['nama_cabang'][$i]),
+                        'alamat' => strtoupper($request['alamat_nitku'][$i]),
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ]);
+                }
+            }
+            // END: Store Data
+
+            // dd($oldData);
+
+            // START: File storing
+            // Perusahaan
             if ($request->bentuk_usaha == 'perseorangan') {
                 if ($request->hasFile('foto_ktp')) {
                     $foto = $request->file('foto_ktp');
@@ -117,7 +181,7 @@ class perusahaanServices
                         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                     ])->get(config('services.service_x.url') . '/api/checkfile', [
                         'category' => 'FileIDCompanyOrPersonal',
-                        'filename' => $oldData->foto_ktp
+                        'filename' => $oldData ? $oldData->foto_ktp : ''
                     ]);
 
                     $result = $response->json();
@@ -145,6 +209,87 @@ class perusahaanServices
                 } else {
                     $data->foto_ktp = $oldData->foto_ktp;
                 }
+
+                if ($request->hasil_ttd) {
+                    // Konversi base30 menjadi koordinat asli
+                    $JSignatureTools = new base30ToImage;
+                    $rawData = $JSignatureTools->base64ToNative($request->hasil_ttd);
+
+                    // Membuat canvas gambar
+                    $img = imagecreatetruecolor(592, 271);
+                    $white = imagecolorallocate($img, 255, 255, 255);
+                    $black = imagecolorallocate($img, 0, 0, 0);
+                    imagefill($img, 0, 0, $white);
+
+                    // Membuat fungsi untuk menggambar garis yang lebih tebal (bold)
+                    function drawBoldLine($image, $x1, $y1, $x2, $y2, $penColor, $thickness = 3)
+                    {
+                        // Loop untuk menggambar garis dengan ketebalan
+                        for ($i = -$thickness; $i <= $thickness; $i++) {
+                            for ($j = -$thickness; $j <= $thickness; $j++) {
+                                imageline($image, $x1 + $i, $y1 + $j, $x2 + $i, $y2 + $j, $penColor);
+                            }
+                        }
+                    }
+
+                    // Menggambar tanda tangan ke canvas
+                    foreach ($rawData as $stroke) {
+                        for ($i = 0; $i < count($stroke['x']); $i++) {
+                            if ($i > 0) {
+                                drawBoldLine(
+                                    $img,
+                                    $stroke['x'][$i - 1],
+                                    $stroke['y'][$i - 1],
+                                    $stroke['x'][$i],
+                                    $stroke['y'][$i],
+                                    $black,
+                                    0.5 // ketebalan garis
+                                );
+                            }
+                        }
+                    }
+
+                    // Nama file untuk menyimpan gambar
+                    $imageName = uniqid() . '-TTD-' . str_replace(' ', '-', $request->nama_penanggung_jawab) . '.png';
+
+                    ob_start();
+                    imagepng($img);
+                    $imageBinary = ob_get_clean();
+                    imagedestroy($img);
+                    $response = Http::withHeaders([
+                        'x-api-key' => config('services.service_x.api_key'),
+                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                    ])->get(config('services.service_x.url') . '/api/checkfile', [
+                        'category' => 'FileIDSignature',
+                        'filename' => $oldData ? $oldData->data_identitas['ttd'] : ''
+                    ]);
+
+                    $result = $response->json();
+                    if ($result['status'] == true) {
+                        $category = 'FileIDSignature';
+                        $signature = $oldData->data_identitas->ttd;
+                        $response = Http::withHeaders([
+                            'x-api-key' => config('services.service_x.api_key'),
+                            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                        ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$signature", []);
+                        $result = $response->json();
+                    }
+
+                    $identitas_penanggung->ttd = $imageName;
+                    $response = Http::withHeaders([
+                        'x-api-key' => config('services.service_x.api_key'),
+                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                    ])->attach(
+                        'file',
+                        $imageBinary,
+                        $imageName
+                    )->post(config('services.service_x.url') . '/api/uploadfile', [
+                        'category' => 'FileIDSignature',
+                        'filename' => substr($imageName, 0, strrpos($imageName, '.'))
+                    ]);
+                } else {
+                    return ['status' => false, 'error' => 'Tanda Tangan tidak boleh kosong'];
+                }
             } else {
                 if ($request->hasFile('foto_npwp')) {
                     $foto = $request->file('foto_npwp');
@@ -155,7 +300,7 @@ class perusahaanServices
                         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                     ])->get(config('services.service_x.url') . '/api/checkfile', [
                         'category' => 'FileIDCompanyOrPersonal',
-                        'filename' => $oldData->foto_npwp
+                        'filename' => $oldData ? $oldData->foto_npwp : ''
                     ]);
 
                     $result = $response->json();
@@ -194,7 +339,7 @@ class perusahaanServices
                             'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                         ])->get(config('services.service_x.url') . '/api/checkfile', [
                             'category' => 'FileSPPKPCompany',
-                            'filename' => $oldData->sppkp
+                            'filename' => $oldData ? $oldData->sppkp : ''
                         ]);
 
                         $result = $response->json();
@@ -224,13 +369,55 @@ class perusahaanServices
                     }
                 }
             }
+
+            if ($request->hasFile('foto_penanggung')) {
+                $foto = $request->file('foto_penanggung');
+                $filename = uniqid() . '-PIC-' . strtoupper($request->identitas_penanggung_jawab) . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $foto->getClientOriginalExtension();
+
+                $response = Http::withHeaders([
+                    'x-api-key' => config('services.service_x.api_key'),
+                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                ])->get(config('services.service_x.url') . '/api/checkfile', [
+                    'category' => 'FileIDPersonCharge',
+                    'filename' => $oldData ? $oldData->data_identitas->foto : ''
+                ]);
+
+                $result = $response->json();
+                if ($result['status'] == true) {
+                    $category = 'FileIDPersonCharge';
+                    $foto = $oldData->data_identitas->foto;
+                    $response = Http::withHeaders([
+                        'x-api-key' => config('services.service_x.api_key'),
+                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                    ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$foto", []);
+                    $result = $response->json();
+                }
+
+                $identitas_penanggung->foto = $filename;
+                $response = Http::withHeaders([
+                    'x-api-key' => config('services.service_x.api_key'),
+                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                ])->attach(
+                    'file',
+                    file_get_contents($foto->getRealPath()),
+                    $filename
+                )->post(config('services.service_x.url') . '/api/uploadfile', [
+                    'category' => 'FileIDPersonCharge',
+                    'filename' => substr($filename, 0, strrpos($filename, '.'))
+                ]);
+            } else {
+                $identitas_penanggung->foto = $oldData->data_identitas->foto;
+            }
+
+            // END: File storing
             $data->save();
+            $identitas_penanggung->save();
 
             DB::commit();
             $link = route('form_customer.detail', ['menu' => str_replace('_', '-', $request->bentuk_usaha), 'id' => Crypt::encryptString($data->id)]);
-            return ['status' => true, 'link' => $link, 'new_data' => $data->id, 'old_data' => ($data->bentuk_usaha == 'perseorangan' ? ($request->update_id ? $oldData->id : '') : '')];
+            return ['status' => true, 'link' => $link];
         } catch (\Exception $e) {
-            // dd($e);
+            dd($e);
             DB::rollback();
             return ['status' => false, 'error' => 'Terjadi Kesalahaan'];
         }
