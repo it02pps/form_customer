@@ -8,13 +8,9 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Sales;
-use App\Services\CabangServices;
-use App\Services\DataIdentitasServices;
-use App\Services\InformasiBankServices;
 use App\Services\PerusahaanServices;
 use Illuminate\Support\Facades\Http;
 use setasign\Fpdi\Fpdi;
-use Illuminate\Support\Facades\DB;
 
 class FormCustomerController extends Controller
 {
@@ -22,16 +18,10 @@ class FormCustomerController extends Controller
     public $apiUrl;
     public $path;
     protected $perusahaanServices;
-    protected $dataIdentitasServices;
-    protected $informasiBankServices;
-    protected $cabangServices;
 
-    public function __construct(perusahaanServices $perusahaanServices, DataIdentitasServices $dataIdentitasServices, InformasiBankServices $informasiBankServices, CabangServices $cabangServices)
+    public function __construct(perusahaanServices $perusahaanServices)
     {
         $this->perusahaanServices = $perusahaanServices;
-        $this->dataIdentitasServices = $dataIdentitasServices;
-        $this->informasiBankServices = $informasiBankServices;
-        $this->cabangServices = $cabangServices;
     }
 
     public function menu()
@@ -137,21 +127,6 @@ class FormCustomerController extends Controller
             if ($perusahaan['status'] == false) {
                 return ['status' => false, 'error' => $perusahaan['error']];
             }
-
-            // $bank = $this->informasiBankServices->handleFormInformasiBank($request, $perusahaan['new_data']);
-            // if ($bank['status'] == false) {
-            //     return ['status' => false, 'error' => $bank['error']];
-            // }
-
-            // $identitas = $this->dataIdentitasServices->handleFormIdentitas($request, $perusahaan['new_data'], $perusahaan['old_data']);
-            // if ($identitas['status'] == false) {
-            //     return ['status' => false, 'error' => $identitas['error']];
-            // }
-
-            // $cabang = $this->cabangServices->handleCabang($request, $perusahaan['new_data']);
-            // if ($cabang['status'] == false) {
-            //     return ['status' => false, 'error' => $cabang['error']];
-            // }
 
             return ['status' => true, 'link' => $perusahaan['link']];
         } catch (\Exception $e) {
