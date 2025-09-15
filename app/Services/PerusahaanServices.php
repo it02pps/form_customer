@@ -166,7 +166,6 @@ class perusahaanServices
                 }
             }
             // END: Store Data
-            DB::commit();
 
             // dd($oldData);
 
@@ -447,7 +446,7 @@ class perusahaanServices
             });
 
             // END: File storing
-            // $identitas_penanggung->save();
+            DB::commit();
             $link = route('form_customer.detail', ['menu' => str_replace('_', '-', $request->bentuk_usaha), 'id' => Crypt::encryptString($data->id)]);
             return ['status' => true, 'link' => $link];
         } catch (\Exception $e) {
