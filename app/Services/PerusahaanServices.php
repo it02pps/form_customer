@@ -10,9 +10,13 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use App\Helper\base30ToImage;
 use Illuminate\Support\Str;
+use App\Jobs\UploadIdentitas;
+use App\Jobs\UploadKTP;
+use App\Jobs\UploadNPWP;
+use App\Jobs\UploadSPPKP;
+use App\Jobs\UploadTTD;
 
 class perusahaanServices
 {
@@ -141,7 +145,7 @@ class perusahaanServices
                 ]
             );
 
-            $identitas_penanggung = DataIdentitas::updateOrCreate(
+            DataIdentitas::updateOrCreate(
                 ['identitas_perusahaan_id' => $data->id],
                 [
                     'nama' => strtoupper($request->nama_penanggung_jawab),
@@ -173,46 +177,14 @@ class perusahaanServices
                 if ($request->hasFile('foto_ktp')) {
                     $foto = $request->file('foto_ktp');
                     $filename = uniqid() . '-KTP-' . Str::slug($request->nama_lengkap, '-') . '.' . $foto->getClientOriginalExtension();
+
+                    // Temporary store files
+                    $tempPath = $foto->storeAs('temp_files', $filename);
+
                     DB::table('identitas_perusahaan')->where('id', $data->id)->update([
                         'foto_ktp' => $filename
                     ]);
-
-                    register_shutdown_function(function () use ($oldData, $filename, $foto) {
-                        try {
-                            $response = Http::withHeaders([
-                                'x-api-key' => config('services.service_x.api_key'),
-                                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                            ])->get(config('services.service_x.url') . '/api/checkfile', [
-                                'category' => 'FileIDCompanyOrPersonal',
-                                'filename' => $oldData ? $oldData->foto_ktp : ''
-                            ]);
-
-                            $result = $response->json();
-                            if ($result['status'] == true) {
-                                $category = 'FileIDCompanyOrPersonal';
-                                $response = Http::withHeaders([
-                                    'x-api-key' => config('services.service_x.api_key'),
-                                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                                ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$oldData->foto_ktp", []);
-                                $result = $response->json();
-                            }
-
-                            // $data->foto_ktp = $filename;
-                            $response = Http::withHeaders([
-                                'x-api-key' => config('services.service_x.api_key'),
-                                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                            ])->attach(
-                                'file',
-                                file_get_contents($foto->getRealPath()),
-                                $filename
-                            )->post(config('services.service_x.url') . '/api/uploadfile', [
-                                'category' => 'FileIDCompanyOrPersonal',
-                                'filename' => substr($filename, 0, strrpos($filename, '.'))
-                            ]);
-                        } catch (\Exception $e) {
-                            return ['status' => false, 'error' => 'Terjadi Kesalahan : ' . $e];
-                        }
-                    });
+                    UploadKTP::dispatch($filename, ($oldData ? $oldData->foto_ktp : ''), $tempPath);
                 } else {
                     $filename = $oldData->foto_ktp;
                 }
@@ -267,141 +239,40 @@ class perusahaanServices
                     DB::table('data_identitas')->where('identitas_perusahaan_id', $data->id)->update([
                         'ttd' => $imageName
                     ]);
-
-                    register_shutdown_function(function () use ($oldData, $imageBinary, $imageName) {
-                        try {
-                            $response = Http::withHeaders([
-                                'x-api-key' => config('services.service_x.api_key'),
-                                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                            ])->get(config('services.service_x.url') . '/api/checkfile', [
-                                'category' => 'FileIDSignature',
-                                'filename' => $oldData ? $oldData->data_identitas['ttd'] : ''
-                            ]);
-
-                            $result = $response->json();
-                            if ($result['status'] == true) {
-                                $category = 'FileIDSignature';
-                                $signature = $oldData->data_identitas->ttd;
-                                $response = Http::withHeaders([
-                                    'x-api-key' => config('services.service_x.api_key'),
-                                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                                ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$signature", []);
-                                $result = $response->json();
-                            }
-
-                            // $identitas_penanggung->ttd = $imageName;
-                            $response = Http::withHeaders([
-                                'x-api-key' => config('services.service_x.api_key'),
-                                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                            ])->attach(
-                                'file',
-                                $imageBinary,
-                                $imageName
-                            )->post(config('services.service_x.url') . '/api/uploadfile', [
-                                'category' => 'FileIDSignature',
-                                'filename' => substr($imageName, 0, strrpos($imageName, '.'))
-                            ]);
-                        } catch (\Exception $e) {
-                            return ['status' => false, 'error' => 'Terjadi Kesalahan : ' . $e];
-                        }
-                    });
+                    UploadTTD::dispatch(($oldData ? $oldData->data_identitas['ttd'] : ''), $imageBinary, $imageName);
                 } else {
                     return ['status' => false, 'error' => 'Tanda Tangan tidak boleh kosong'];
                 }
             } else {
                 if ($request->hasFile('foto_npwp')) {
                     $foto = $request->file('foto_npwp');
-                    $filenameNPWP = uniqid() . '-NPWP-' . Str::slug($request->nama_npwp, '-') . '.' . $foto->getClientOriginalExtension();
+                    $filename = uniqid() . '-NPWP-' . Str::slug($request->nama_npwp, '-') . '.' . $foto->getClientOriginalExtension();
+
+                    // Temporary store files
+                    $tempPath = $foto->storeAs('temp_files', $filename);
+
                     DB::table('identitas_perusahaan')->where('id', $data->id)->update([
-                        'foto_npwp' => $filenameNPWP
+                        'foto_npwp' => $filename
                     ]);
-
-                    register_shutdown_function(function () use ($oldData, $filenameNPWP, $foto) {
-                        try {
-                            $response = Http::withHeaders([
-                                'x-api-key' => config('services.service_x.api_key'),
-                                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                            ])->get(config('services.service_x.url') . '/api/checkfile', [
-                                'category' => 'FileIDCompanyOrPersonal',
-                                'filename' => $oldData ? $oldData->foto_npwp : ''
-                            ]);
-
-                            $result = $response->json();
-                            if ($result['status'] == true) {
-                                $category = 'FileIDCompanyOrPersonal';
-                                $response = Http::withHeaders([
-                                    'x-api-key' => config('services.service_x.api_key'),
-                                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                                ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$oldData->foto_npwp", []);
-                                $result = $response->json();
-                            }
-
-                            // $data->foto_npwp = $filename;
-                            $response = Http::withHeaders([
-                                'x-api-key' => config('services.service_x.api_key'),
-                                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                            ])->attach(
-                                'file',
-                                file_get_contents($foto->getRealPath()),
-                                $filenameNPWP
-                            )->post(config('services.service_x.url') . '/api/uploadfile', [
-                                'category' => 'FileIDCompanyOrPersonal',
-                                'filename' => substr($filenameNPWP, 0, strrpos($filenameNPWP, '.'))
-                            ]);
-                        } catch (\Exception $e) {
-                            return ['status' => false, 'error' => 'Terjadi Kesalahan : ' . $e];
-                        }
-                    });
+                    UploadNPWP::dispatch($filename, ($oldData ? $oldData->foto_npwp : ''), $tempPath);
                 } else {
-                    $filenameNPWP = $oldData->foto_npwp;
+                    $filename = $oldData->foto_npwp;
                 }
 
                 if ($request->status_pkp == 'pkp') {
                     if ($request->hasFile('foto_sppkp')) {
                         $foto = $request->file('foto_sppkp');
-                        $filenameSPPKP = uniqid() . '-SPPKP-' . Str::slug($request->nama_npwp, '-') . '.' . $foto->getClientOriginalExtension();
+                        $filename = uniqid() . '-SPPKP-' . Str::slug($request->nama_npwp, '-') . '.' . $foto->getClientOriginalExtension();
+
+                        // Temporary store files
+                        $tempPath = $foto->storeAs('temp_files', $filename);
+
                         DB::table('identitas_perusahaan')->where('id', $data->id)->update([
-                            'sppkp' => $filenameSPPKP
+                            'sppkp' => $filename
                         ]);
-
-                        register_shutdown_function(function () use ($oldData, $foto, $filenameSPPKP) {
-                            try {
-                                $response = Http::withHeaders([
-                                    'x-api-key' => config('services.service_x.api_key'),
-                                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                                ])->get(config('services.service_x.url') . '/api/checkfile', [
-                                    'category' => 'FileSPPKPCompany',
-                                    'filename' => $oldData ? $oldData->sppkp : ''
-                                ]);
-
-                                $result = $response->json();
-                                if ($result['status'] == true) {
-                                    $category = 'FileSPPKPCompany';
-                                    $response = Http::withHeaders([
-                                        'x-api-key' => config('services.service_x.api_key'),
-                                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                                    ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$oldData->sppkp", []);
-                                    $result = $response->json();
-                                }
-
-                                // $data->sppkp = $filename;
-                                $response = Http::withHeaders([
-                                    'x-api-key' => config('services.service_x.api_key'),
-                                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                                ])->attach(
-                                    'file',
-                                    file_get_contents($foto->getRealPath()),
-                                    $filenameSPPKP
-                                )->post(config('services.service_x.url') . '/api/uploadfile', [
-                                    'category' => 'FileSPPKPCompany',
-                                    'filename' => substr($filenameSPPKP, 0, strrpos($filenameSPPKP, '.'))
-                                ]);
-                            } catch (\Exception $e) {
-                                return ['status' => false, 'error' => 'Terjadi Kesalahan : ' . $e];
-                            }
-                        });
+                        UploadSPPKP::dispatch($filename, ($oldData ? $oldData->sppkp : ''), $tempPath);
                     } else {
-                        $filenameSPPKP = $oldData->sppkp;
+                        $filename = $oldData->sppkp;
                     }
                 }
             }
@@ -409,47 +280,14 @@ class perusahaanServices
             if ($request->hasFile('foto_penanggung')) {
                 $foto = $request->file('foto_penanggung');
                 $filename = uniqid() . '-PIC-' . strtoupper($request->identitas_penanggung_jawab) . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $foto->getClientOriginalExtension();
+
+                // Temporary store files
+                $tempPath = $foto->storeAs('temp_files', $filename);
+
                 DB::table('data_identitas')->where('identitas_perusahaan_id', $data->id)->update([
                     'foto' => $filename,
                 ]);
-
-                register_shutdown_function(function () use ($oldData, $filename, $foto) {
-                    try {
-                        $response = Http::withHeaders([
-                            'x-api-key' => config('services.service_x.api_key'),
-                            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                        ])->get(config('services.service_x.url') . '/api/checkfile', [
-                            'category' => 'FileIDPersonCharge',
-                            'filename' => $oldData ? $oldData->data_identitas->foto : ''
-                        ]);
-
-                        $result = $response->json();
-                        if ($result['status'] == true) {
-                            $category = 'FileIDPersonCharge';
-                            $foto = $oldData->data_identitas->foto;
-                            $response = Http::withHeaders([
-                                'x-api-key' => config('services.service_x.api_key'),
-                                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                            ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$foto", []);
-                            $result = $response->json();
-                        }
-
-                        // $identitas_penanggung->foto = $filename;
-                        $response = Http::withHeaders([
-                            'x-api-key' => config('services.service_x.api_key'),
-                            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                        ])->attach(
-                            'file',
-                            file_get_contents($foto->getRealPath()),
-                            $filename
-                        )->post(config('services.service_x.url') . '/api/uploadfile', [
-                            'category' => 'FileIDPersonCharge',
-                            'filename' => substr($filename, 0, strrpos($filename, '.'))
-                        ]);
-                    } catch (\Exception $e) {
-                        return ['status' => false, 'error' => 'Terjadi Kesalahan : ' . $e];
-                    }
-                });
+                UploadIdentitas::dispatch($filename, ($oldData ? $oldData->data_identitas->foto : ''), $tempPath);
             } else {
                 $filename = $oldData->data_identitas->foto;
             }
@@ -459,7 +297,7 @@ class perusahaanServices
             $link = route('form_customer.detail', ['menu' => str_replace('_', '-', $request->bentuk_usaha), 'id' => Crypt::encryptString($data->id)]);
             return ['status' => true, 'link' => $link];
         } catch (\Exception $e) {
-            // dd($e);
+            dd($e);
             DB::rollback();
             return ['status' => false, 'error' => 'Terjadi Kesalahaan'];
         }
