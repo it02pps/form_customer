@@ -8,6 +8,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class UploadTTD implements ShouldQueue
 {
@@ -17,13 +18,13 @@ class UploadTTD implements ShouldQueue
      * Create a new job instance.
      */
     public $oldData;
-    public $imageBinary;
+    public $path;
     public $imageName;
 
-    public function __construct($oldData, $imageBinary, $imageName)
+    public function __construct($oldData, $path, $imageName)
     {
         $this->oldData = $oldData;
-        $this->imageBinary = $imageBinary;
+        $this->path = $path;
         $this->imageName = $imageName;
     }
 
@@ -33,7 +34,7 @@ class UploadTTD implements ShouldQueue
     public function handle(): void
     {
         $oldData = $this->oldData;
-        $imageBinary = $this->imageBinary;
+        $content = Storage::get($this->path);
         $imageName = $this->imageName;
 
         $response = Http::withHeaders([
@@ -61,11 +62,13 @@ class UploadTTD implements ShouldQueue
             'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
         ])->attach(
             'file',
-            $imageBinary,
+            $content,
             $imageName
         )->post(config('services.service_x.url') . '/api/uploadfile', [
             'category' => 'FileIDSignature',
             'filename' => substr($imageName, 0, strrpos($imageName, '.'))
         ]);
+
+        Storage::delete($this->path);
     }
 }

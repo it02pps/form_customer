@@ -17,6 +17,7 @@ use App\Jobs\UploadKTP;
 use App\Jobs\UploadNPWP;
 use App\Jobs\UploadSPPKP;
 use App\Jobs\UploadTTD;
+use Illuminate\Support\Facades\Storage;
 
 class perusahaanServices
 {
@@ -236,10 +237,13 @@ class perusahaanServices
                     $imageBinary = ob_get_clean();
                     imagedestroy($img);
 
+
+                    $path = "temp_files/" . $imageName;
+                    Storage::put($path, $imageBinary);
                     DB::table('data_identitas')->where('identitas_perusahaan_id', $data->id)->update([
                         'ttd' => $imageName
                     ]);
-                    UploadTTD::dispatch(($oldData ? $oldData->data_identitas['ttd'] : ''), $imageBinary, $imageName);
+                    UploadTTD::dispatch(($oldData ? (string) $oldData->data_identitas['ttd'] : ''), $path, $imageName);
                 } else {
                     return ['status' => false, 'error' => 'Tanda Tangan tidak boleh kosong'];
                 }
