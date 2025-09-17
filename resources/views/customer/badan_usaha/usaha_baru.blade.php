@@ -988,7 +988,7 @@
                                 allowOutsideClick: false,
                                 allowEscapeClick: false,
                                 showConfirmButton: false,
-                                timer: 62000,
+                                timer: 65000,
                                 didOpen: () => {
                                     Swal.showLoading();
                                 }

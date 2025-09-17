@@ -838,7 +838,7 @@
                 var data = $sigDiv.jSignature('getData', 'base30');
                 $('#hasil_ttd').val(data[1]);
                 const badan_usaha = $('#bentuk_usaha').val();
-                $.ajax({    
+                $.ajax({
                     url: '/form-customer/'+badan_usaha+'/store',
                     type: 'POST',
                     timout: 120000,
@@ -864,7 +864,7 @@
                                 allowOutsideClick: false,
                                 allowEscapeClick: false,
                                 showConfirmButton: false,
-                                timer: 62000,
+                                timer: 65000,
                                 didOpen: () => {
                                     Swal.showLoading();
                                 }
