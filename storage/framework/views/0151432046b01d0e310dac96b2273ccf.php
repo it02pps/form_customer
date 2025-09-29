@@ -1000,34 +1000,13 @@
                     success: res => {
                         if(res.status == true) {
                             Swal.fire({
-                                title: 'Sedang diproses...',
-                                text: 'Mohon tunggu sebentar',
-                                ico: 'info',
-                                allowOutsideClick: false,
-                                allowEscapeClick: false,
-                                showConfirmButton: false,
-                                timer: 60000,
-                                didOpen: () => {
-                                    Swal.showLoading();
-                                }
-                            }).then((result) => {
-                                if(result.dismiss === Swal.DismissReason.timer) {
-                                    Swal.fire({
-                                        title: 'Berhasil',
-                                        text: 'Data berhasil ditambahkan!',
-                                        icon: 'success'
-                                    });
-                                    $('#formCustomer')[0].reset();
-                                    // console.log(res.link);
-                                    window.location.href = res.link;
-                                }
-                            })
-                        } else {
-                            Swal.fire({
-                                title: 'Gagal',
-                                text: res.error,
-                                icon: 'error'
+                                title: 'Berhasil',
+                                text: 'Data berhasil ditambahkan!',
+                                icon: 'success'
                             });
+                            $('#formCustomer')[0].reset();
+                            // console.log(res.link);
+                            window.location.href = res.link;
                         }
                     },
                     error: function(xhr, status, error) {

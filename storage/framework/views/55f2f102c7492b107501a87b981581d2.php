@@ -475,13 +475,19 @@
                                                 <?php if(File::extension($perusahaan['foto_ktp']) == 'pdf'): ?>
                                                     <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
                                                         <p style="font-size: 18px;">Preview file KTP</p>
-                                                        <a href="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $perusahaan['foto_ktp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
-                                                        
+                                                        <?php if($perusahaan['status_upload_nik'] === 'success'): ?>
+                                                            <a href="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $perusahaan['foto_ktp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                        <?php elseif($perusahaan['status_upload_nik'] === 'pending'): ?>
+                                                            <a href="<?php echo e(asset('storage/temp_files/' . $perusahaan['foto_ktp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                        <?php endif; ?>
                                                     </div>
                                                 <?php else: ?>
                                                     <div id="preview_ktp" class="form-group">
-                                                        <img id="preview_foto_ktp" src="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $perusahaan['foto_ktp'])); ?>" alt="Belum ada file" data-action="zoom">
-                                                        
+                                                        <?php if($perusahaan['status_upload_nik'] === 'success'): ?>
+                                                            <img id="preview_foto_ktp" src="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $perusahaan['foto_ktp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                        <?php elseif($perusahaan['status_upload_nik'] === 'pending'): ?>
+                                                            <img id="preview_foto_ktp" src="<?php echo e(asset('storage/temp_files/' . $perusahaan['foto_ktp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                        <?php endif; ?>
                                                     </div>
                                                 <?php endif; ?>
                                             </div>
@@ -578,13 +584,19 @@
                                     <?php if(File::extension($perusahaan['data_identitas']['foto']) == 'pdf'): ?>
                                         <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                             <p style="font-size: 18px;">Preview file identitas</p>
-                                            <a href="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $perusahaan['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
-                                            
+                                            <?php if($perusahaan['data_identitas']['status_upload_foto'] === 'success'): ?>
+                                                <a href="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $perusahaan['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                            <?php elseif($perusahaan['data_identitas']['status_upload_foto'] === 'pending'): ?>
+                                                <a href="<?php echo e(asset('storage/temp_files/' . $perusahaan['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                            <?php endif; ?>
                                         </div>
                                     <?php else: ?>
                                         <div id="preview_penanggung" class="form-group">
-                                            <img id="preview_foto_penanggung" src="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $perusahaan['data_identitas']['foto'])); ?>" alt="Preview" data-action="zoom">
-                                            
+                                            <?php if($perusahaan['data_identitas']['status_upload_foto'] === 'success'): ?>
+                                                <img id="preview_foto_penanggung" src="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $perusahaan['data_identitas']['foto'])); ?>" alt="Preview" data-action="zoom">
+                                            <?php elseif($perusahaan['data_identitas']['status_upload_foto'] === 'pending'): ?>
+                                                <img id="preview_foto_penanggung" src="<?php echo e(asset('storage/temp_files/' . $perusahaan['data_identitas']['foto'])); ?>" alt="Preview" data-action="zoom">
+                                            <?php endif; ?>
                                         </div>
                                     <?php endif; ?>
                                 </div>
@@ -594,8 +606,11 @@
                                 <div class="form-group" id="ttd_credit">
                                     <label for="">Tanda Tangan</label>
                                     <div id="signature">
-                                        <img src="<?php echo e(url('/form-customer/getFiles/FileIDSignature/' . $perusahaan['data_identitas']['ttd'])); ?>" alt="Preview" data-action="zoom">
-                                        
+                                        <?php if($perusahaan['data_identitas']['status_upload_ttd'] === 'success'): ?>
+                                            <img src="<?php echo e(url('/form-customer/getFiles/FileIDSignature/' . $perusahaan['data_identitas']['ttd'])); ?>" alt="Preview" data-action="zoom">
+                                        <?php elseif($perusahaan['data_identitas']['status_upload_ttd'] === 'pending'): ?>
+                                            <img src="<?php echo e(url('storage/temp_files/' . $perusahaan['data_identitas']['ttd'])); ?>" alt="Preview" data-action="zoom">
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>

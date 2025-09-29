@@ -982,28 +982,13 @@
                     success: res => {
                         if(res.status == true) {
                             Swal.fire({
-                                title: 'Sedang diproses...',
-                                text: 'Mohon tunggu sekitar 1 menit.',
-                                icon: 'info',
-                                allowOutsideClick: false,
-                                allowEscapeClick: false,
-                                showConfirmButton: false,
-                                timer: 65000,
-                                didOpen: () => {
-                                    Swal.showLoading();
-                                }
-                            }).then((result) => {
-                                if(result.dismiss === Swal.DismissReason.timer) {
-                                    Swal.fire({
-                                        title: 'Berhasil',
-                                        text: 'Data berhasil ditambahkan!',
-                                        icon: 'success'
-                                    });
-                                    $('#formCustomer')[0].reset();
-                                    // console.log(res.link);
-                                    window.location.href = res.link;
-                                }
-                            })
+                                title: 'Berhasil',
+                                text: 'Data berhasil ditambahkan!',
+                                icon: 'success'
+                            });
+                            $('#formCustomer')[0].reset();
+                            // console.log(res.link);
+                            window.location.href = res.link;
                         } else {
                             Swal.fire({
                                 title: 'Gagal',

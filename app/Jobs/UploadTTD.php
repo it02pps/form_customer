@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,12 +21,14 @@ class UploadTTD implements ShouldQueue
     public $oldData;
     public $path;
     public $imageName;
+    public $id;
 
-    public function __construct($oldData, $path, $imageName)
+    public function __construct($oldData, $path, $imageName, $id)
     {
         $this->oldData = $oldData;
         $this->path = $path;
         $this->imageName = $imageName;
+        $this->id = $id;
     }
 
     /**
@@ -34,7 +37,7 @@ class UploadTTD implements ShouldQueue
     public function handle(): void
     {
         $oldData = $this->oldData;
-        $content = Storage::get($this->path);
+        $content = Storage::disk('public')->get($this->path);
         $imageName = $this->imageName;
 
         $response = Http::withHeaders([
@@ -69,6 +72,12 @@ class UploadTTD implements ShouldQueue
             'filename' => substr($imageName, 0, strrpos($imageName, '.'))
         ]);
 
-        Storage::delete($this->path);
+        $result = $response->json();
+        if ($result['status'] == true) {
+            DB::table('data_identitas')->where('identitas_perusahaan_id', $this->id)->update(['status_upload_ttd' => 'success']);
+            Storage::delete($this->path);
+        } else {
+            DB::table('data_identitas')->where('identitas_perusahaan_id', $this->id)->update(['status_upload_ttd' => 'failed']);
+        }
     }
 }

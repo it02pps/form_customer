@@ -503,13 +503,19 @@
                                                         <?php if(File::extension($data['foto_ktp']) == 'pdf'): ?>
                                                             <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
                                                                 <p style="font-size: 18px;">Preview file KTP</p>
-                                                                <a href="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
-                                                                
+                                                                <?php if($data['status_upload_nik'] === 'success'): ?>
+                                                                    <a href="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                                <?php elseif($data['status_upload_nik'] === 'pending'): ?>
+                                                                    <a href="<?php echo e(asset('storage/temp_files/' . $data['foto_ktp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                                <?php endif; ?>
                                                             </div>
                                                         <?php elseif(File::extension($data['foto_ktp']) != 'pdf'): ?>
                                                             <div class="form-group p-0" id="preview_ktp">
-                                                                <img id="preview_foto_ktp" src="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp'])); ?>" alt="Belum ada file" data-action="zoom">
-                                                                
+                                                                <?php if($data['status_upload_nik'] === 'success'): ?>
+                                                                    <img id="preview_foto_ktp" src="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                                <?php elseif($data['status_upload_nik'] === 'pending'): ?>
+                                                                    <img id="preview_foto_ktp" src="<?php echo e(asset('storage/temp_files/' . $data['foto_ktp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                                <?php endif; ?>
                                                             </div>
                                                         <?php else: ?>
                                                             <div class="form-group" id="preview_ktp">
@@ -637,13 +643,19 @@
                                                 <?php if(File::extension($data['data_identitas']['foto']) == 'pdf'): ?>
                                                     <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                                         <p style="font-size: 18px">Preview file identitas</p>
-                                                        <a href="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
-                                                        
+                                                        <?php if($data['data_identitas']['status_upload_foto'] === 'success'): ?>
+                                                            <a href="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                        <?php elseif($data['data_identitas']['status_upload_foto'] === 'pending'): ?>
+                                                            <a href="<?php echo e(asset('storage/temp_files/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                        <?php endif; ?>
                                                     </div>
                                                 <?php elseif(File::extension($data['data_identitas']['foto']) != 'pdf'): ?>
                                                     <div id="preview_penanggung" class="form-group p-0">
-                                                        <img id="preview_foto_penanggung" src="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
-                                                        
+                                                        <?php if($data['data_identitas']['status_upload_foto'] === 'success'): ?>
+                                                            <img id="preview_foto_penanggung" src="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                        <?php elseif($data['data_identitas']['status_upload_foto'] === 'pending'): ?>
+                                                            <img id="preview_foto_penanggung" src="<?php echo e(asset('storage/temp_files/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                        <?php endif; ?>
                                                     </div>
                                                 <?php else: ?>
                                                     <div id="preview_penanggung" class="form-group">
@@ -969,6 +981,7 @@
                                 icon: 'success'
                             });
                             $('#formCustomer')[0].reset();
+                            // console.log(res.link);
                             window.location.href = res.link;
                         } else {
                             Swal.fire({

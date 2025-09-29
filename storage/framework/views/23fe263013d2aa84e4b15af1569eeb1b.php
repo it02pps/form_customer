@@ -848,21 +848,14 @@
                         });
                     },
                     success: res => {
-                        if(res.status == true) {
-                            Swal.fire({
-                                title: 'Berhasil',
-                                text: 'Data berhasil ditambahkan!',
-                                icon: 'success'
-                            });
-                            $('#formCustomer')[0].reset();
-                            window.location.href = res.link;
-                        } else {
-                            Swal.fire({
-                                title: 'Gagal',
-                                text: res.error,
-                                icon: 'error'
-                            });
-                        }
+                        Swal.fire({
+                            title: 'Berhasil',
+                            text: 'Data berhasil ditambahkan!',
+                            icon: 'success'
+                        });
+                        $('#formCustomer')[0].reset();
+                        // console.log(res.link);
+                        window.location.href = res.link;
                     },
                     error: function(xhr, status, error) {
                         if(error === 'timeout') {

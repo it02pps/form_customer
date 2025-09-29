@@ -495,11 +495,19 @@
                                         <?php if(File::extension($perusahaan['foto_npwp']) == 'pdf'): ?>
                                             <div id="preview_npwp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                                 <p style="font-size: 18px;">Preview file NPWP</p>
-                                                <a href="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $perusahaan['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                <?php if($perusahaan['status_upload_npwp'] === 'success'): ?>
+                                                    <a href="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $perusahaan['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                <?php elseif($perusahaan['status_upload_npwp'] === 'pending'): ?>
+                                                    <a href="<?php echo e(asset('storage/temp_files/' . $perusahaan['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                <?php endif; ?>
                                             </div>
                                         <?php else: ?>
                                             <div id="preview_npwp" class="form-group">
-                                                <img id="preview_foto_npwp" src="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $perusahaan['foto_npwp'])); ?>" alt="Preview" data-action="zoom">
+                                                <?php if($perusahaan['status_upload_npwp'] === 'success'): ?>
+                                                    <img id="preview_foto_npwp" src="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $perusahaan['foto_npwp'])); ?>" alt="Preview" data-action="zoom">
+                                                <?php elseif($perusahaan['status_upload_npwp'] === 'pending'): ?>
+                                                    <img id="preview_foto_npwp" src="<?php echo e(asset('storage/temp_files/' . $perusahaan['foto_npwp'])); ?>" alt="Preview" data-action="zoom">
+                                                <?php endif; ?>
                                             </div>
                                         <?php endif; ?>
                                     </div>
@@ -522,11 +530,19 @@
                                             <?php if(File::extension($perusahaan['sppkp']) == 'pdf'): ?>
                                                 <div id="preview_sppkp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                                     <p style="font-size: 18px;">Preview file SPPKP</p>
-                                                    <a href="<?php echo e(url('/form-customer/getFiles/FileSPPKPCompany/' . $perusahaan['sppkp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    <?php if($perusahaan['status_upload_sppkp'] === 'success'): ?>
+                                                        <a href="<?php echo e(url('/form-customer/getFiles/FileSPPKPCompany/' . $perusahaan['sppkp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    <?php elseif($perusahaan['status_upload_sppkp'] === 'pending'): ?>
+                                                        <a href="<?php echo e(asset('storage/temp_files/' . $perusahaan['sppkp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    <?php endif; ?>
                                                 </div>
                                             <?php else: ?>
                                                 <div id="preview_sppkp" class="form-group">
-                                                    <img id="preview_foto_sppkp" src="<?php echo e(url('/form-customer/getFiles/FileSPPKPCompany/' . $perusahaan['sppkp'])); ?>" alt="Preview" data-action="zoom">
+                                                    <?php if($perusahaan['status_upload_sppkp'] === 'success'): ?>
+                                                        <img id="preview_foto_sppkp" src="<?php echo e(url('/form-customer/getFiles/FileSPPKPCompany/' . $perusahaan['sppkp'])); ?>" alt="Preview" data-action="zoom">
+                                                    <?php elseif($perusahaan['status_upload_sppkp'] === 'pending'): ?>
+                                                        <img id="preview_foto_sppkp" src="<?php echo e(asset('storage/temp_files/' . $perusahaan['sppkp'])); ?>" alt="Preview" data-action="zoom">
+                                                    <?php endif; ?>
                                                 </div>
                                             <?php endif; ?>
                                         </div>
@@ -610,11 +626,19 @@
                                     <?php if(File::extension($perusahaan['data_identitas']['foto']) == 'pdf'): ?>
                                         <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                             <p style="font-size: 18px;">Preview file identitas</p>
-                                            <a href="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $perusahaan['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                            <?php if($perusahaan['data_identitas']['status_upload_foto'] === 'success'): ?>
+                                                <a href="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $perusahaan['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                            <?php elseif($perusahaan['data_identitas']['status_upload_foto'] === 'pending'): ?>
+                                                <a href="<?php echo e(asset('storage/temp_files/' . $perusahaan['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                            <?php endif; ?>
                                         </div>
                                     <?php else: ?>
                                         <div id="preview_penanggung" class="form-group">
-                                            <img id="preview_foto_penanggung" src="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $perusahaan['data_identitas']['foto'])); ?>" alt="Preview" data-action="zoom">
+                                            <?php if($perusahaan['data_identitas']['status_upload_foto'] === 'success'): ?>
+                                                <img id="preview_foto_penanggung" src="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $perusahaan['data_identitas']['foto'])); ?>" alt="Preview" data-action="zoom">
+                                            <?php elseif($perusahaan['data_identitas']['status_upload_foto'] === 'pending'): ?>
+                                                <img id="preview_foto_penanggung" src="<?php echo e(asset('storage/temp_files/' . $perusahaan['data_identitas']['foto'])); ?>" alt="Preview" data-action="zoom">
+                                            <?php endif; ?>
                                         </div>
                                     <?php endif; ?>
                                 </div>

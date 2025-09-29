@@ -7,7 +7,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class UploadNPWP implements ShouldQueue
 {
@@ -19,12 +21,14 @@ class UploadNPWP implements ShouldQueue
     public $filename;
     public $oldData;
     public $tempPath;
+    public $id;
 
-    public function __construct($filename, $oldData, $tempPath)
+    public function __construct($filename, $oldData, $tempPath, $id)
     {
         $this->filename = $filename;
         $this->oldData = $oldData;
         $this->tempPath = $tempPath;
+        $this->id = $id;
     }
 
     /**
@@ -34,7 +38,14 @@ class UploadNPWP implements ShouldQueue
     {
         $filename = $this->filename;
         $oldData = $this->oldData;
-        $filePath = storage_path('app/' . $this->tempPath);
+        $filePath = storage_path('app/public/' . $this->tempPath);
+
+        logger()->info('Job started', [
+            'filename' => $filename,
+            'oldData' => $oldData,
+            'filePath' => $filePath,
+            'exists' => file_exists($filePath),
+        ]);
 
         $response = Http::withHeaders([
             'x-api-key' => config('services.service_x.api_key'),
@@ -67,6 +78,12 @@ class UploadNPWP implements ShouldQueue
             'filename' => substr($filename, 0, strrpos($filename, '.'))
         ]);
 
-        @unlink($filePath);
+        $result = $response->json();
+        if ($result['status'] == true) {
+            DB::table('identitas_perusahaan')->where('id', $this->id)->update(['status_upload_npwp' => 'success']);
+            @unlink($filePath);
+        } else {
+            DB::table('identitas_perusahaan')->where('id', $this->id)->update(['status_upload_npwp' => 'failed']);
+        }
     }
 }

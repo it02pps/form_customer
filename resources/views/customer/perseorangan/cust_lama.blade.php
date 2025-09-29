@@ -505,13 +505,19 @@
                                                         @if(File::extension($data['foto_ktp']) == 'pdf')
                                                             <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
                                                                 <p style="font-size: 18px;">Preview file KTP</p>
-                                                                <a href="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                                {{-- <a href="{{ asset('/uploads/identitas_perusahaan/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a> --}}
+                                                                @if ($data['status_upload_nik'] === 'success')
+                                                                    <a href="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                                @elseif ($data['status_upload_nik'] === 'pending')
+                                                                    <a href="{{ asset('storage/temp_files/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                                @endif
                                                             </div>
                                                         @elseif(File::extension($data['foto_ktp']) != 'pdf')
                                                             <div class="form-group p-0" id="preview_ktp">
-                                                                <img id="preview_foto_ktp" src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
-                                                                {{-- <img id="preview_foto_ktp" src="{{ asset('/uploads/identitas_perusahaan/' . $data['foto_ktp']) }}" alt="Belum ada file" data-action="zoom"> --}}
+                                                                @if ($data['status_upload_nik'] === 'success')
+                                                                    <img id="preview_foto_ktp" src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
+                                                                @elseif ($data['status_upload_nik'] === 'pending')
+                                                                    <img id="preview_foto_ktp" src="{{ asset('storage/temp_files/' . $data['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
+                                                                @endif
                                                             </div>
                                                         @else
                                                             <div class="form-group" id="preview_ktp">
@@ -639,13 +645,19 @@
                                                 @if(File::extension($data['data_identitas']['foto']) == 'pdf')
                                                     <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                                         <p style="font-size: 18px">Preview file identitas</p>
-                                                        <a href="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                        {{-- <a href="{{ asset('/uploads/penanggung_jawab/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a> --}}
+                                                        @if ($data['data_identitas']['status_upload_foto'] === 'success')
+                                                            <a href="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                        @elseif ($data['data_identitas']['status_upload_foto'] === 'pending')
+                                                            <a href="{{ asset('storage/temp_files/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                        @endif
                                                     </div>
                                                 @elseif(File::extension($data['data_identitas']['foto']) != 'pdf')
                                                     <div id="preview_penanggung" class="form-group p-0">
-                                                        <img id="preview_foto_penanggung" src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
-                                                        {{-- <img id="preview_foto_penanggung" src="{{ asset('/uploads/penanggung_jawab/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom"> --}}
+                                                        @if ($data['data_identitas']['status_upload_foto'] === 'success')
+                                                            <img id="preview_foto_penanggung" src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
+                                                        @elseif ($data['data_identitas']['status_upload_foto'] === 'pending')
+                                                            <img id="preview_foto_penanggung" src="{{ asset('storage/temp_files/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
+                                                        @endif
                                                     </div>
                                                 @else
                                                     <div id="preview_penanggung" class="form-group">
@@ -966,28 +978,13 @@
                     success: res => {
                         if(res.status == true) {
                             Swal.fire({
-                                title: 'Sedang diproses...',
-                                text: 'Mohon tunggu sekitar 1 menit.',
-                                icon: 'info',
-                                allowOutsideClick: false,
-                                allowEscapeClick: false,
-                                showConfirmButton: false,
-                                timer: 65000,
-                                didOpen: () => {
-                                    Swal.showLoading();
-                                }
-                            }).then((result) => {
-                                if(result.dismiss === Swal.DismissReason.timer) {
-                                    Swal.fire({
-                                        title: 'Berhasil',
-                                        text: 'Data berhasil ditambahkan!',
-                                        icon: 'success'
-                                    });
-                                    $('#formCustomer')[0].reset();
-                                    // console.log(res.link);
-                                    window.location.href = res.link;
-                                }
-                            })
+                                title: 'Berhasil',
+                                text: 'Data berhasil ditambahkan!',
+                                icon: 'success'
+                            });
+                            $('#formCustomer')[0].reset();
+                            // console.log(res.link);
+                            window.location.href = res.link;
                         } else {
                             Swal.fire({
                                 title: 'Gagal',
