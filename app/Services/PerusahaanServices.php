@@ -180,7 +180,8 @@ class perusahaanServices
                     $filename = uniqid() . '-KTP-' . Str::slug($request->nama_lengkap, '-') . '.' . $foto->getClientOriginalExtension();
 
                     // Temporary store files
-                    $tempPath = $foto->storeAs('temp_files', $filename, 'public');
+                    $tempPath = $foto->move(public_path('temp_files'), $filename);
+                    dd($tempPath);
                     // $foto->move(public_path('temp_files'), $filename);
 
                     DB::table('identitas_perusahaan')->where('id', $data->id)->update([
