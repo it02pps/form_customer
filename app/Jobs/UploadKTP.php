@@ -20,14 +20,14 @@ class UploadKTP implements ShouldQueue
      */
     public $filename;
     public $oldData;
-    public $path;
+    public $tempPath;
     public $id;
 
-    public function __construct($filename, $oldData, $path, $id)
+    public function __construct($filename, $oldData, $tempPath, $id)
     {
         $this->filename = $filename;
         $this->oldData = $oldData;
-        $this->path = $path;
+        $this->tempPath = $tempPath;
         $this->id = $id;
     }
 
@@ -38,8 +38,7 @@ class UploadKTP implements ShouldQueue
     {
         $filename = $this->filename;
         $oldData = $this->oldData;
-        // $filePath = storage_path('app/public/' . $this->path);
-        $filePath = Storage::disk('public')->get($this->path);
+        $filePath = storage_path('app/public/' . $this->tempPath);
 
         $response = Http::withHeaders([
             'x-api-key' => config('services.service_x.api_key'),
