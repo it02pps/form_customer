@@ -180,8 +180,8 @@ class perusahaanServices
                     $filename = uniqid() . '-KTP-' . Str::slug($request->nama_lengkap, '-') . '.' . $foto->getClientOriginalExtension();
 
                     // Temporary store files
-                    $tempPath = public_path('temp_files/', $filename);
                     $foto->move(public_path('temp_files'), $filename);
+                    $tempPath = public_path('temp_files/', $filename);
                     // dd($tempPath);
                     // $foto->move(public_path('temp_files'), $filename);
 
@@ -260,8 +260,8 @@ class perusahaanServices
                     $filename = uniqid() . '-NPWP-' . Str::slug($request->nama_npwp, '-') . '.' . $foto->getClientOriginalExtension();
 
                     // Temporary store files
-                    $tempPath = public_path('temp_files/', $filename);
                     $foto->move(public_path('temp_files'), $filename);
+                    $tempPath = public_path('temp_files/', $filename);
 
                     DB::table('identitas_perusahaan')->where('id', $data->id)->update([
                         'foto_npwp' => $filename,
@@ -280,8 +280,8 @@ class perusahaanServices
                         $filename = uniqid() . '-SPPKP-' . Str::slug($request->nama_npwp, '-') . '.' . $foto->getClientOriginalExtension();
 
                         // Temporary store files
-                        $tempPath = public_path('temp_files/', $filename);
                         $foto->move(public_path('temp_files'), $filename);
+                        $tempPath = public_path('temp_files/', $filename);
 
                         DB::table('identitas_perusahaan')->where('id', $data->id)->update([
                             'sppkp' => $filename,
@@ -301,8 +301,8 @@ class perusahaanServices
                 $filename = uniqid() . '-PIC-' . strtoupper($request->identitas_penanggung_jawab) . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $foto->getClientOriginalExtension();
 
                 // Temporary store files
-                $tempPath = public_path('temp_files/', $filename);
                 $foto->move(public_path('temp_files'), $filename);
+                $tempPath = public_path('temp_files/', $filename);
 
                 DB::table('data_identitas')->where('identitas_perusahaan_id', $data->id)->update([
                     'foto' => $filename,
