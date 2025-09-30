@@ -480,7 +480,7 @@
                                                         @if ($perusahaan['status_upload_nik'] === 'success')
                                                             <a href="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $perusahaan['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                         @elseif ($perusahaan['status_upload_nik'] === 'pending')
-                                                            <a href="{{ asset('storage/temp_files/' . $perusahaan['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                            <a href="{{ asset('temp_files/' . $perusahaan['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                         @endif
                                                     </div>
                                                 @else
@@ -488,7 +488,7 @@
                                                         @if ($perusahaan['status_upload_nik'] === 'success')
                                                             <img id="preview_foto_ktp" src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $perusahaan['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
                                                         @elseif ($perusahaan['status_upload_nik'] === 'pending')
-                                                            <img id="preview_foto_ktp" src="{{ asset('storage/temp_files/' . $perusahaan['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
+                                                            <img id="preview_foto_ktp" src="{{ asset('temp_files/' . $perusahaan['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
                                                         @endif
                                                     </div>
                                                 @endif
@@ -589,7 +589,7 @@
                                             @if ($perusahaan['data_identitas']['status_upload_foto'] === 'success')
                                                 <a href="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $perusahaan['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
                                             @elseif ($perusahaan['data_identitas']['status_upload_foto'] === 'pending')
-                                                <a href="{{ asset('storage/temp_files/' . $perusahaan['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                <a href="{{ asset('temp_files/' . $perusahaan['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
                                             @endif
                                         </div>
                                     @else
@@ -597,7 +597,7 @@
                                             @if ($perusahaan['data_identitas']['status_upload_foto'] === 'success')
                                                 <img id="preview_foto_penanggung" src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $perusahaan['data_identitas']['foto']) }}" alt="Preview" data-action="zoom">
                                             @elseif ($perusahaan['data_identitas']['status_upload_foto'] === 'pending')
-                                                <img id="preview_foto_penanggung" src="{{ asset('storage/temp_files/' . $perusahaan['data_identitas']['foto']) }}" alt="Preview" data-action="zoom">
+                                                <img id="preview_foto_penanggung" src="{{ asset('temp_files/' . $perusahaan['data_identitas']['foto']) }}" alt="Preview" data-action="zoom">
                                             @endif
                                         </div>
                                     @endif
@@ -611,7 +611,7 @@
                                         @if ($perusahaan['data_identitas']['status_upload_ttd'] === 'success')
                                             <img src="{{ url('/form-customer/getFiles/FileIDSignature/' . $perusahaan['data_identitas']['ttd']) }}" alt="Preview" data-action="zoom">
                                         @elseif ($perusahaan['data_identitas']['status_upload_ttd'] === 'pending')
-                                            <img src="{{ url('storage/temp_files/' . $perusahaan['data_identitas']['ttd']) }}" alt="Preview" data-action="zoom">
+                                            <img src="{{ url('temp_files/' . $perusahaan['data_identitas']['ttd']) }}" alt="Preview" data-action="zoom">
                                         @endif
                                     </div>
                                 </div>

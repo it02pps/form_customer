@@ -549,7 +549,7 @@
                                                             @if ($data['status_upload_sppkp'] === 'success')
                                                                 <a href="{{ url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                             @elseif($data['status_upload_sppkp'] == 'pending')
-                                                                <a href="{{ asset('storage/temp_files/' . $data['sppkp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                                <a href="{{ asset('temp_files/' . $data['sppkp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                             @endif
                                                         </div>
                                                     @elseif(File::extension($data['sppkp']) != 'pdf')
@@ -557,7 +557,7 @@
                                                             @if ($data['status_upload_sppkp'] === 'success')
                                                                 <img id="preview_foto_sppkp" src="{{ url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp']) }}" alt="Belum ada file" data-action="zoom">
                                                             @elseif ($data['status_upload_sppkp'] === 'pending')
-                                                                <img id="preview_foto_sppkp" src="{{ asset('storage/temp_files/' . $data['sppkp']) }}" alt="Belum ada file" data-action="zoom">
+                                                                <img id="preview_foto_sppkp" src="{{ asset('temp_files/' . $data['sppkp']) }}" alt="Belum ada file" data-action="zoom">
                                                             @endif
                                                         </div>
                                                     @else
@@ -593,7 +593,7 @@
                                                         @if ($data['status_upload_npwp'] === 'success')
                                                             <a href="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                         @elseif ($data['status_upload_npwp'] === 'pending')
-                                                            <a href="{{ asset('storage/temp_files/' . $data['foto_npwp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                            <a href="{{ asset('temp_files/' . $data['foto_npwp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                         @endif
                                                     </div>
                                                 @elseif(File::extension($data['foto_npwp']) != 'pdf')
@@ -601,7 +601,7 @@
                                                         @if ($data['status_upload_npwp'] === 'success')
                                                             <img id="preview_foto_npwp" src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp']) }}" alt="Belum ada file" data-action="zoom">
                                                         @elseif ($data['status_upload_npwp'] === 'pending')
-                                                            <img id="preview_foto_npwp" src="{{ asset('storage/temp_files/' . $data['foto_npwp']) }}" alt="Belum ada file" data-action="zoom">
+                                                            <img id="preview_foto_npwp" src="{{ asset('temp_files/' . $data['foto_npwp']) }}" alt="Belum ada file" data-action="zoom">
                                                         @endif
                                                     </div>
                                                 @else
@@ -725,7 +725,7 @@
                                                         @if ($data['data_identitas']['status_upload_foto'] === 'success')
                                                             <a href="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                         @elseif ($data['data_identitas']['status_upload_foto'] === 'pending')
-                                                            <a href="{{ asset('storage/temp_files/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                            <a href="{{ asset('temp_files/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                         @endif
                                                     </div>
                                                 @elseif($data['data_identitas']['foto'] && File::extension($data['data_identitas']['foto']) != 'pdf')
@@ -733,7 +733,7 @@
                                                         @if ($data['data_identitas']['status_upload_foto'] === 'success')
                                                             <img id="preview_foto_penanggung" src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
                                                         @elseif ($data['data_identitas']['status_upload_foto'] === 'pending')
-                                                            <img id="preview_foto_penanggung" src="{{ asset('storage/temp_files/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
+                                                            <img id="preview_foto_penanggung" src="{{ asset('temp_files/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
                                                         @endif
                                                     </div>
                                                 @else
@@ -1083,7 +1083,7 @@
                                 icon: 'success'
                             });
                             $('#formCustomer')[0].reset();
-                            // console.log(res.link);
+                            // console.log(res.link);   
                             window.location.href = res.link;
                         } else {
                             Swal.fire({

@@ -508,7 +508,7 @@
                                                                 @if ($data['status_upload_nik'] === 'success')
                                                                     <a href="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                                 @elseif ($data['status_upload_nik'] === 'pending')
-                                                                    <a href="{{ asset('storage/temp_files/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                                    <a href="{{ asset('temp_files/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                                 @endif
                                                             </div>
                                                         @elseif(File::extension($data['foto_ktp']) != 'pdf')
@@ -516,7 +516,7 @@
                                                                 @if ($data['status_upload_nik'] === 'success')
                                                                     <img id="preview_foto_ktp" src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
                                                                 @elseif ($data['status_upload_nik'] === 'pending')
-                                                                    <img id="preview_foto_ktp" src="{{ asset('storage/temp_files/' . $data['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
+                                                                    <img id="preview_foto_ktp" src="{{ asset('temp_files/' . $data['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
                                                                 @endif
                                                             </div>
                                                         @else
@@ -648,7 +648,7 @@
                                                         @if ($data['data_identitas']['status_upload_foto'] === 'success')
                                                             <a href="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                         @elseif ($data['data_identitas']['status_upload_foto'] === 'pending')
-                                                            <a href="{{ asset('storage/temp_files/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                            <a href="{{ asset('temp_files/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                         @endif
                                                     </div>
                                                 @elseif(File::extension($data['data_identitas']['foto']) != 'pdf')
@@ -656,7 +656,7 @@
                                                         @if ($data['data_identitas']['status_upload_foto'] === 'success')
                                                             <img id="preview_foto_penanggung" src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
                                                         @elseif ($data['data_identitas']['status_upload_foto'] === 'pending')
-                                                            <img id="preview_foto_penanggung" src="{{ asset('storage/temp_files/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
+                                                            <img id="preview_foto_penanggung" src="{{ asset('temp_files/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
                                                         @endif
                                                     </div>
                                                 @else
