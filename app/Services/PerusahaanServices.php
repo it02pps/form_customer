@@ -181,7 +181,7 @@ class perusahaanServices
 
                     // Temporary store files
                     $foto->move(public_path('temp_files'), $filename);
-                    $tempPath = public_path('temp_files/', $filename);
+                    $tempPath = public_path('temp_files/' . $filename);
                     // dd($tempPath);
                     // $foto->move(public_path('temp_files'), $filename);
 
@@ -261,7 +261,7 @@ class perusahaanServices
 
                     // Temporary store files
                     $foto->move(public_path('temp_files'), $filename);
-                    $tempPath = public_path('temp_files/', $filename);
+                    $tempPath = public_path('temp_files/' . $filename);
 
                     DB::table('identitas_perusahaan')->where('id', $data->id)->update([
                         'foto_npwp' => $filename,
@@ -281,7 +281,7 @@ class perusahaanServices
 
                         // Temporary store files
                         $foto->move(public_path('temp_files'), $filename);
-                        $tempPath = public_path('temp_files/', $filename);
+                        $tempPath = public_path('temp_files/' . $filename);
 
                         DB::table('identitas_perusahaan')->where('id', $data->id)->update([
                             'sppkp' => $filename,
@@ -302,7 +302,7 @@ class perusahaanServices
 
                 // Temporary store files
                 $foto->move(public_path('temp_files'), $filename);
-                $tempPath = public_path('temp_files/', $filename);
+                $tempPath = public_path('temp_files/' . $filename);
 
                 DB::table('data_identitas')->where('identitas_perusahaan_id', $data->id)->update([
                     'foto' => $filename,
