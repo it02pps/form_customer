@@ -20,14 +20,14 @@ class UploadNPWP implements ShouldQueue
      */
     public $filename;
     public $oldData;
-    public $tempPath;
+    public $path;
     public $id;
 
-    public function __construct($filename, $oldData, $tempPath, $id)
+    public function __construct($filename, $oldData, $path, $id)
     {
         $this->filename = $filename;
         $this->oldData = $oldData;
-        $this->tempPath = $tempPath;
+        $this->path = $path;
         $this->id = $id;
     }
 
@@ -38,14 +38,15 @@ class UploadNPWP implements ShouldQueue
     {
         $filename = $this->filename;
         $oldData = $this->oldData;
-        $filePath = storage_path('app/public/' . $this->tempPath);
+        // $filePath = storage_path('app/public/' . $this->path);
+        $filePath = Storage::disk('public')->get($this->path);
 
-        logger()->info('Job started', [
-            'filename' => $filename,
-            'oldData' => $oldData,
-            'filePath' => $filePath,
-            'exists' => file_exists($filePath),
-        ]);
+        // logger()->info('Job started', [
+        //     'filename' => $filename,
+        //     'oldData' => $oldData,
+        //     'filePath' => $filePath,
+        //     'exists' => file_exists($filePath),
+        // ]);
 
         $response = Http::withHeaders([
             'x-api-key' => config('services.service_x.api_key'),

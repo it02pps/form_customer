@@ -9,6 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class UploadSPPKP implements ShouldQueue
 {
@@ -19,14 +20,14 @@ class UploadSPPKP implements ShouldQueue
      */
     public $filename;
     public $oldData;
-    public $tempPath;
+    public $path;
     public $id;
 
-    public function __construct($filename, $oldData, $tempPath, $id)
+    public function __construct($filename, $oldData, $path, $id)
     {
         $this->filename = $filename;
         $this->oldData = $oldData;
-        $this->tempPath = $tempPath;
+        $this->path = $path;
         $this->id = $id;
     }
 
@@ -37,7 +38,8 @@ class UploadSPPKP implements ShouldQueue
     {
         $filename = $this->filename;
         $oldData = $this->oldData;
-        $filePath = storage_path('app/public/' . $this->tempPath);
+        // $filePath = storage_path('app/public/' . $this->path);
+        $filePath = Storage::disk('public')->get($this->path);
 
         $response = Http::withHeaders([
             'x-api-key' => config('services.service_x.api_key'),

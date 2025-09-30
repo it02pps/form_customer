@@ -180,14 +180,17 @@ class perusahaanServices
                     $filename = uniqid() . '-KTP-' . Str::slug($request->nama_lengkap, '-') . '.' . $foto->getClientOriginalExtension();
 
                     // Temporary store files
-                    $tempPath = $foto->storeAs('temp_files', $filename, 'public');
-                    $foto->move(public_path('temp_files'), $filename);
+                    $binary = file_get_contents($foto->getRealPath());
+                    $path = 'temp_files/' . $filename;
+                    Storage::disk('public')->put($path, $binary);
+                    // $tempPath = $foto->storeAs('temp_files', $filename, 'public');
+                    // $foto->move(public_path('temp_files'), $filename);
 
                     DB::table('identitas_perusahaan')->where('id', $data->id)->update([
                         'foto_ktp' => $filename,
                         'status_upload_nik' => 'pending'
                     ]);
-                    UploadKTP::dispatch($filename, ($oldData ? $oldData->foto_ktp : ''), $tempPath, $data->id);
+                    UploadKTP::dispatch($filename, ($oldData ? $oldData->foto_ktp : ''), $path, $data->id);
                 } else {
                     DB::table('identitas_perusahaan')->where('id', $data->id)->update([
                         'foto_ktp' => $oldData->foto_ktp
@@ -258,15 +261,18 @@ class perusahaanServices
                     $filename = uniqid() . '-NPWP-' . Str::slug($request->nama_npwp, '-') . '.' . $foto->getClientOriginalExtension();
 
                     // Temporary store files
-                    $tempPath = $foto->storeAs('temp_files', $filename, 'public');
-                    $foto->move(public_path('temp_files'), $filename);
+                    $binary = file_get_contents($foto->getRealPath());
+                    $path = 'temp_files/' . $filename;
+                    Storage::disk('public')->put($path, $binary);
+                    // $tempPath = $foto->storeAs('temp_files', $filename, 'public');
+                    // $foto->move(public_path('temp_files'), $filename);
                     // dd($tempPath);
 
                     DB::table('identitas_perusahaan')->where('id', $data->id)->update([
                         'foto_npwp' => $filename,
                         'status_upload_npwp' => 'pending'
                     ]);
-                    UploadNPWP::dispatch($filename, ($oldData ? $oldData->foto_npwp : ''), $tempPath, $data->id);
+                    UploadNPWP::dispatch($filename, ($oldData ? $oldData->foto_npwp : ''), $path, $data->id);
                 } else {
                     DB::table('identitas_perusahaan')->where('id', $data->id)->update([
                         'foto_npwp' => $oldData->foto_npwp
@@ -279,14 +285,17 @@ class perusahaanServices
                         $filename = uniqid() . '-SPPKP-' . Str::slug($request->nama_npwp, '-') . '.' . $foto->getClientOriginalExtension();
 
                         // Temporary store files
-                        $tempPath = $foto->storeAs('temp_files', $filename, 'public');
-                        $foto->move(public_path('temp_files'), $filename);
+                        $binary = file_get_contents($foto->getRealPath());
+                        $path = 'temp_files/' . $filename;
+                        Storage::disk('public')->put($path, $binary);
+                        // $tempPath = $foto->storeAs('temp_files', $filename, 'public');
+                        // $foto->move(public_path('temp_files'), $filename);
 
                         DB::table('identitas_perusahaan')->where('id', $data->id)->update([
                             'sppkp' => $filename,
                             'status_upload_sppkp' => 'pending'
                         ]);
-                        UploadSPPKP::dispatch($filename, ($oldData ? $oldData->sppkp : ''), $tempPath, $data->id);
+                        UploadSPPKP::dispatch($filename, ($oldData ? $oldData->sppkp : ''), $path, $data->id);
                     } else {
                         DB::table('identitas_perusahaan')->where('id', $data->id)->update([
                             'sppkp' => $oldData->sppkp
@@ -300,14 +309,17 @@ class perusahaanServices
                 $filename = uniqid() . '-PIC-' . strtoupper($request->identitas_penanggung_jawab) . '-' . Str::slug($request->nama_penanggung_jawab, '-') . '.' . $foto->getClientOriginalExtension();
 
                 // Temporary store files
-                $tempPath = $foto->storeAs('temp_files', $filename, 'public');
-                $foto->move(public_path('temp_files'), $filename);
+                $binary = file_get_contents($foto->getRealPath());
+                $path = 'temp_files/' . $filename;
+                Storage::disk('public')->put($path, $binary);
+                // $tempPath = $foto->storeAs('temp_files', $filename, 'public');
+                // $foto->move(public_path('temp_files'), $filename);
 
                 DB::table('data_identitas')->where('identitas_perusahaan_id', $data->id)->update([
                     'foto' => $filename,
                     'status_upload_foto' => 'pending'
                 ]);
-                UploadIdentitas::dispatch($filename, ($oldData ? $oldData->data_identitas->foto : ''), $tempPath, $data->id);
+                UploadIdentitas::dispatch($filename, ($oldData ? $oldData->data_identitas->foto : ''), $path, $data->id);
             } else {
                 DB::table('data_identitas')->where('identitas_perusahaan_id', $data->id)->update([
                     'foto' => $oldData->data_identitas->foto,
