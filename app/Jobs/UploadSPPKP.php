@@ -20,14 +20,14 @@ class UploadSPPKP implements ShouldQueue
      */
     public $filename;
     public $oldData;
-    public $path;
+    public $tempPath;
     public $id;
 
-    public function __construct($filename, $oldData, $path, $id)
+    public function __construct($filename, $oldData, $tempPath, $id)
     {
         $this->filename = $filename;
         $this->oldData = $oldData;
-        $this->path = $path;
+        $this->tempPath = $tempPath;
         $this->id = $id;
     }
 
@@ -38,8 +38,7 @@ class UploadSPPKP implements ShouldQueue
     {
         $filename = $this->filename;
         $oldData = $this->oldData;
-        // $filePath = storage_path('app/public/' . $this->path);
-        $filePath = Storage::disk('public')->get($this->path);
+        $content = file_get_contents($this->tempPath);
 
         $response = Http::withHeaders([
             'x-api-key' => config('services.service_x.api_key'),
@@ -65,7 +64,7 @@ class UploadSPPKP implements ShouldQueue
             'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
         ])->attach(
             'file',
-            file_get_contents($filePath),
+            $content,
             $filename
         )->post(config('services.service_x.url') . '/api/uploadfile', [
             'category' => 'FileSPPKPCompany',
@@ -75,7 +74,7 @@ class UploadSPPKP implements ShouldQueue
         $result = $response->json();
         if ($result['status'] == true) {
             DB::table('identitas_perusahaan')->where('id', $this->id)->update(['status_upload_sppkp' => 'success']);
-            @unlink($filePath);
+            @unlink($this->tempPath);
         } else {
             DB::table('identitas_perusahaan')->where('id', $this->id)->update(['status_upload_sppkp' => 'failed']);
         }

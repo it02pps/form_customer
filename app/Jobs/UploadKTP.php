@@ -38,7 +38,7 @@ class UploadKTP implements ShouldQueue
     {
         $filename = $this->filename;
         $oldData = $this->oldData;
-        $filePath = storage_path('app/public/' . $this->tempPath);
+        $content = file_get_contents($this->tempPath);
 
         $response = Http::withHeaders([
             'x-api-key' => config('services.service_x.api_key'),
@@ -64,7 +64,7 @@ class UploadKTP implements ShouldQueue
             'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
         ])->attach(
             'file',
-            file_get_contents($filePath),
+            $content,
             $filename
         )->post(config('services.service_x.url') . '/api/uploadfile', [
             'category' => 'FileIDCompanyOrPersonal',
@@ -74,7 +74,7 @@ class UploadKTP implements ShouldQueue
         $result = $response->json();
         if ($result['status'] == true) {
             DB::table('identitas_perusahaan')->where('id', $this->id)->update(['status_upload_nik' => 'success']);
-            @unlink($filePath);
+            @unlink($this->tempPath);
         } else {
             DB::table('identitas_perusahaan')->where('id', $this->id)->update(['status_upload_nik' => 'failed']);
         }
