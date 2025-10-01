@@ -483,13 +483,19 @@
                                         @if(File::extension($data['foto_npwp']) == 'pdf')
                                             <div id="preview_npwp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                                 <p style="font-size: 18px;">Preview file NPWP</p>
-                                                <a href="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                {{-- <a href="{{ asset('/uploads/identitas_perusahaan/' . $data['foto_npwp']) }}" target="_blank" id="previewPDF">Preview PDF</a> --}}
+                                                @if ($data['status_upload_npwp'] === 'success')
+                                                    <a href="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                @elseif ($data['status_upload_npwp'] === 'pending')   
+                                                    <a href="{{ asset('temp_files/' . $data['foto_npwp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                @endif
                                             </div>
                                         @else
                                             <div id="preview_npwp" class="form-group">
-                                                <img id="preview_foto_npwp" src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp']) }}" alt="Belum ada file" data-action="zoom">
-                                                {{-- <img id="preview_foto_npwp" src="{{ asset('/uploads/identitas_perusahaan/' . $data['foto_npwp']) }}" alt="Belum ada file" data-action="zoom"> --}}
+                                                @if ($data['status_upload_npwp'] === 'success')
+                                                    <img id="preview_foto_npwp" src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp']) }}" alt="Belum ada file" data-action="zoom">
+                                                @elseif ($data['status_upload_npwp'] === 'pending')
+                                                    <img id="preview_foto_npwp" src="{{ asset('temp_files/' . $data['foto_npwp']) }}" alt="Belum ada file" data-action="zoom">
+                                                @endif
                                             </div>
                                         @endif
                                     </div>
@@ -512,13 +518,19 @@
                                             @if(File::extension($data['sppkp']) == 'pdf')
                                                 <div id="preview_sppkp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                                     <p style="font-size: 18px;">Preview file SPPKP</p>
-                                                    <a href="{{ url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                    {{-- <a href="{{ asset('/uploads/identitas_perusahaan/' . $data['sppkp']) }}" target="_blank" id="previewPDF">Preview PDF</a> --}}
+                                                    @if ($data['status_upload_sppkp'] === 'success')
+                                                        <a href="{{ url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    @elseif ($data['status_upload_sppkp'] === 'pending')
+                                                        <a href="{{ asset('temp_files/' . $data['sppkp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    @endif
                                                 </div>
                                             @else
                                                 <div id="preview_sppkp" class="form-group">
-                                                    <img id="preview_foto_sppkp" src="{{ url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp']) }}" alt="Belum ada file" data-action="zoom">
-                                                    {{-- <img id="preview_foto_sppkp" src="{{ asset('/uploads/identitas_perusahaan/' . $data['sppkp']) }}" alt="Belum ada file" data-action="zoom"> --}}
+                                                    @if ($data['status_upload_sppkp'] === 'success')
+                                                        <img id="preview_foto_sppkp" src="{{ url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp']) }}" alt="Belum ada file" data-action="zoom">
+                                                    @elseif ($data['status_upload_sppkp'] === 'pending')
+                                                        <img id="preview_foto_sppkp" src="{{ asset('temp_files/' . $data['sppkp']) }}" alt="Belum ada file" data-action="zoom">
+                                                    @endif
                                                 </div>
                                             @endif
                                         </div>
@@ -602,13 +614,19 @@
                                     @if(File::extension($data['data_identitas']['foto']) == 'pdf')
                                         <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                             <p style="font-size: 18px;">Preview file identitas</p>
-                                            <a href="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                            {{-- <a href="{{ asset('/uploads/penanggung_jawab/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a> --}}
+                                            @if ($data['data_identitas']['status_upload_foto'] === 'success')
+                                                <a href="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                            @elseif ($data['data_identitas']['status_upload_foto'] === 'pending')
+                                                <a href="{{ asset('temp_files/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                            @endif
                                         </div>
                                     @else
                                         <div id="preview_penanggung" class="form-group">
-                                            <img id="preview_foto_penanggung" src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
-                                            {{-- <img id="preview_foto_penanggung" src="{{ asset('/uploads/penanggung_jawab/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom"> --}}
+                                            @if ($data['data_identitas']['status_upload_foto'] === 'success')
+                                                <img id="preview_foto_penanggung" src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
+                                            @elseif ($data['data_identitas']['status_upload_foto'] === 'pending')
+                                                <img id="preview_foto_penanggung" src="{{ asset('temp_files/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
+                                            @endif
                                         </div>
                                     @endif
                                 </div>
