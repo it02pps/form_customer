@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\File;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Sales;
 use App\Services\PerusahaanServices;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use setasign\Fpdi\Fpdi;
 
@@ -194,6 +195,9 @@ class FormCustomerController extends Controller
                 $ext = $file->getClientOriginalExtension();
                 $filename = uniqid() . '-PDFCust-' . $data->nama_perusahaan . '.' . $ext;
 
+                $file->move(public_path('temp_files'), $filename);
+                $tempPath = public_path('temp_files/' . $filename);
+
                 try {
                     $response = Http::withHeaders([
                         'x-api-key' => config('services.service_x.api_key'),
@@ -213,24 +217,29 @@ class FormCustomerController extends Controller
                         $result = $response->json();
                     }
 
-                    $data->file_customer_external = $filename;
+                    // $data->file_customer_external = $filename;
                     $response = Http::withHeaders([
                         'x-api-key' => config('services.service_x.api_key'),
                         'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
                     ])->attach(
                         'file',
-                        file_get_contents($file->getRealPath()),
+                        file_get_contents($tempPath),
                         $filename
                     )->post(config('services.service_x.url') . '/api/uploadfile', [
                         'category' => 'FilePDFCustomer',
                         'filename' => substr($filename, 0, strrpos($filename, '.'))
                     ]);
+                    $result_store = $response->json();
+                    if ($result_store['status'] == true) {
+                        DB::table('identitas_perusahaan')->where('id', $data->id)->update([
+                            'status_upload' => '1'
+                        ]);
+                        @unlink($tempPath);
+                    }
                 } catch (\Illuminate\Http\Client\ConnectionException $e) {
                     abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
                 }
-                $data->status_upload = '1';
             }
-            $data->save();
 
             return ['status' => true, 'url' => 'https://papasari.com'];
         } catch (\Exception $e) {
@@ -297,7 +306,7 @@ class FormCustomerController extends Controller
             $pdf->render();
 
             $name = uniqid() . '-PDF-' . $data['nama_perusahaan'] . '.pdf';
-            $temp_pdf = public_path('uploads/temporary/tempFile-' . $name);
+            $temp_pdf = public_path('temp_files/' . $name);
             file_put_contents($temp_pdf, $pdf->output());
 
             $files = [
@@ -359,7 +368,7 @@ class FormCustomerController extends Controller
             $pdf->render();
 
             $name = uniqid() . '-PDF-' . $data['nama_perusahaan'] . '.pdf';
-            $temp_pdf = public_path('uploads/temporary/tempFile-' . $name);
+            $temp_pdf = public_path('temp_files/' . $name);
             file_put_contents($temp_pdf, $pdf->output());
 
             $files = [
@@ -439,7 +448,7 @@ class FormCustomerController extends Controller
         }
 
         // Define Output
-        $outputPath = public_path('uploads/pdf/' . $outputFilename);
+        $outputPath = public_path('temp_files/pdf/' . $outputFilename);
         $pdf->Output($outputPath, 'F');
         try {
             $response = Http::withHeaders([

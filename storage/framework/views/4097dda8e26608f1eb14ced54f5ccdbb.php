@@ -506,7 +506,7 @@
                                                                 <?php if($data['status_upload_nik'] === 'success'): ?>
                                                                     <a href="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                                                 <?php elseif($data['status_upload_nik'] === 'pending'): ?>
-                                                                    <a href="<?php echo e(asset('storage/temp_files/' . $data['foto_ktp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                                    <a href="<?php echo e(asset('temp_files/' . $data['foto_ktp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                                                 <?php endif; ?>
                                                             </div>
                                                         <?php elseif(File::extension($data['foto_ktp']) != 'pdf'): ?>
@@ -514,7 +514,7 @@
                                                                 <?php if($data['status_upload_nik'] === 'success'): ?>
                                                                     <img id="preview_foto_ktp" src="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp'])); ?>" alt="Belum ada file" data-action="zoom">
                                                                 <?php elseif($data['status_upload_nik'] === 'pending'): ?>
-                                                                    <img id="preview_foto_ktp" src="<?php echo e(asset('storage/temp_files/' . $data['foto_ktp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                                    <img id="preview_foto_ktp" src="<?php echo e(asset('temp_files/' . $data['foto_ktp'])); ?>" alt="Belum ada file" data-action="zoom">
                                                                 <?php endif; ?>
                                                             </div>
                                                         <?php else: ?>
@@ -646,7 +646,7 @@
                                                         <?php if($data['data_identitas']['status_upload_foto'] === 'success'): ?>
                                                             <a href="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                                         <?php elseif($data['data_identitas']['status_upload_foto'] === 'pending'): ?>
-                                                            <a href="<?php echo e(asset('storage/temp_files/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                            <a href="<?php echo e(asset('temp_files/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                                         <?php endif; ?>
                                                     </div>
                                                 <?php elseif(File::extension($data['data_identitas']['foto']) != 'pdf'): ?>
@@ -654,7 +654,7 @@
                                                         <?php if($data['data_identitas']['status_upload_foto'] === 'success'): ?>
                                                             <img id="preview_foto_penanggung" src="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
                                                         <?php elseif($data['data_identitas']['status_upload_foto'] === 'pending'): ?>
-                                                            <img id="preview_foto_penanggung" src="<?php echo e(asset('storage/temp_files/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                            <img id="preview_foto_penanggung" src="<?php echo e(asset('temp_files/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
                                                         <?php endif; ?>
                                                     </div>
                                                 <?php else: ?>

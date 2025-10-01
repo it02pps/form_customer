@@ -303,6 +303,7 @@ class perusahaanServices
                 // Temporary store files
                 $foto->move(public_path('temp_files'), $filename);
                 $tempPath = public_path('temp_files/' . $filename);
+                // dd($tempPath);
 
                 DB::table('data_identitas')->where('identitas_perusahaan_id', $data->id)->update([
                     'foto' => $filename,
