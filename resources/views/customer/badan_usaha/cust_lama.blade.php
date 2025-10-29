@@ -514,8 +514,8 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="" class="additional-label">Email Khusus Untuk Faktur Pajak <span class="text-danger">*</span></label>
-                                            <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Contoh: faktur@gmail.com" required value="{{ $data ? $data['email_khusus_faktur_pajak'] : '' }}">
+                                            <label for="" class="additional-label">Email Khusus Untuk Faktur Pajak</label>
+                                            <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Contoh: faktur@gmail.com" value="{{ $data ? $data['email_khusus_faktur_pajak'] : '' }}">
                                         </div>
                                     </div>
                                 </div>

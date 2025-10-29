@@ -474,19 +474,25 @@
                                             <input type="text" id="nama_lengkap" name="nama_lengkap" autocomplete="off" class="form-control" readonly value="<?php echo e($data['nama_lengkap'] ? $data['nama_lengkap'] : '-'); ?>">
                                         </div>
 
-                                        <div class="group-colum">
+                                        <div class="group-column">
                                             <div class="form-group p-0 mt-2">
                                                 <label for="">Foto KTP <span class="text-danger">*</span></label>
                                                 <?php if(File::extension($data['foto_ktp']) == 'pdf'): ?>
                                                     <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
                                                         <p style="font-size: 18px;">Preview file KTP</p>
-                                                        <a href="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
-                                                        
+                                                        <?php if($data['status_upload_nik'] === 'success'): ?>
+                                                            <a href="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                        <?php elseif($data['status_upload_nik'] === 'pending'): ?>
+                                                            <a href="<?php echo e(asset('temp_files/' . $data['foto_ktp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                        <?php endif; ?>
                                                     </div>
                                                 <?php else: ?>
-                                                    <div class="form-group" id="preview_ktp">
-                                                        <img id="preview_foto_ktp" src="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp'])); ?>" alt="Belum ada file" data-action="zoom">
-                                                        
+                                                    <div class="form-group p-0" id="preview_ktp">
+                                                        <?php if($data['status_upload_nik'] === 'success'): ?>
+                                                            <img id="preview_foto_ktp" src="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                        <?php elseif($data['status_upload_nik'] === 'pending'): ?>
+                                                            <img id="preview_foto_ktp" src="<?php echo e(asset('temp_files/' . $data['foto_ktp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                        <?php endif; ?>
                                                     </div>
                                                 <?php endif; ?>
                                             </div>
@@ -583,13 +589,19 @@
                                     <?php if(File::extension($data['data_identitas']['foto']) == 'pdf'): ?>
                                         <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
                                             <p style="font-size: 18px;">Preview file identitas</p>
-                                            <a href="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
-                                            
+                                            <?php if($data['data_identitas']['status_upload_foto'] === 'success'): ?>
+                                                <a href="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                            <?php elseif($data['data_identitas']['status_upload_foto'] === 'pending'): ?>
+                                                <a href="<?php echo e(asset('temp_files/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                            <?php endif; ?>
                                         </div>
                                     <?php else: ?>
-                                        <div id="preview_penanggung" class="form-group">
-                                            <img id="preview_foto_penanggung" src="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
-                                            
+                                        <div id="preview_penanggung" class="form-group p-0">
+                                            <?php if($data['data_identitas']['status_upload_foto'] === 'success'): ?>
+                                                <img id="preview_foto_penanggung" src="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
+                                            <?php elseif($data['data_identitas']['status_upload_foto'] === 'pending'): ?>
+                                                <img id="preview_foto_penanggung" src="<?php echo e(asset('temp_files/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
+                                            <?php endif; ?>
                                         </div>
                                     <?php endif; ?>
                                 </div>
@@ -599,8 +611,11 @@
                                 <div class="form-group" id="ttd_credit">
                                     <label for="">Tanda Tangan</label>
                                     <div id="signature">
-                                        <img src="<?php echo e(url('/form-customer/getFiles/FileIDSignature/' . $data['data_identitas']['ttd'])); ?>" alt="Belum ada tanda tangan" data-action="zoom">
-                                        
+                                        <?php if($data['data_identitas']['status_upload_ttd'] === 'success'): ?>
+                                            <img src="<?php echo e(url('/form-customer/getFiles/FileIDSignature/' . $data['data_identitas']['ttd'])); ?>" alt="Belum ada tanda tangan" data-action="zoom">
+                                        <?php elseif($data['data_identitas']['status_upload_ttd'] === 'pending'): ?>
+                                            <img src="<?php echo e(asset('temp_files/' . $data['data_identitas']['ttd'])); ?>" alt="Belum ada tanda tangan" data-action="zoom">
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>

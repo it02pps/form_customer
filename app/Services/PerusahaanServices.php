@@ -192,7 +192,8 @@ class perusahaanServices
                     UploadKTP::dispatch($filename, ($oldData ? $oldData->foto_ktp : ''), $tempPath, $data->id);
                 } else {
                     DB::table('identitas_perusahaan')->where('id', $data->id)->update([
-                        'foto_ktp' => $oldData->foto_ktp
+                        'foto_ktp' => $oldData->foto_ktp,
+                        'status_upload_nik' => 'pending'
                     ]);
                 }
 
@@ -270,7 +271,8 @@ class perusahaanServices
                     UploadNPWP::dispatch($filename, ($oldData ? $oldData->foto_npwp : ''), $tempPath, $data->id);
                 } else {
                     DB::table('identitas_perusahaan')->where('id', $data->id)->update([
-                        'foto_npwp' => $oldData->foto_npwp
+                        'foto_npwp' => $oldData->foto_npwp,
+                        'status_upload_npwp' => 'pending'
                     ]);
                 }
 
@@ -290,7 +292,8 @@ class perusahaanServices
                         UploadSPPKP::dispatch($filename, ($oldData ? $oldData->sppkp : ''), $tempPath, $data->id);
                     } else {
                         DB::table('identitas_perusahaan')->where('id', $data->id)->update([
-                            'sppkp' => $oldData->sppkp
+                            'sppkp' => $oldData->sppkp,
+                            'status_upload_sppkp' => 'pending'
                         ]);
                     }
                 }
@@ -313,6 +316,7 @@ class perusahaanServices
             } else {
                 DB::table('data_identitas')->where('identitas_perusahaan_id', $data->id)->update([
                     'foto' => $oldData->data_identitas->foto,
+                    'status_upload_foto' => 'pending'
                 ]);
             }
 
@@ -321,7 +325,7 @@ class perusahaanServices
             $link = route('form_customer.detail', ['menu' => str_replace('_', '-', $request->bentuk_usaha), 'id' => Crypt::encryptString($data->id)]);
             return ['status' => true, 'link' => $link];
         } catch (\Exception $e) {
-            dd($e);
+            // dd($e);
             DB::rollback();
             return ['status' => false, 'error' => 'Terjadi Kesalahaan'];
         }

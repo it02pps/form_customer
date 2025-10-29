@@ -346,12 +346,10 @@
                             </div>
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    {{-- <div class="group-column"> --}}
-                                        <div class="form-group">
-                                            <label for="">Alamat Perusahaan <span class="text-danger">*</span></label>
-                                            <textarea name="alamat_lengkap" id="alamat_lengkap" class="form-control" rows="6" placeholder="Masukkan alamat lengkap perusahaan" autocomplete="off" required>{{ $data ? $data['alamat_lengkap'] : '' }}</textarea>
-                                        </div>
-                                    {{-- </div> --}}
+                                    <div class="form-group">
+                                        <label for="">Alamat Perusahaan <span class="text-danger">*</span></label>
+                                        <textarea name="alamat_lengkap" id="alamat_lengkap" class="form-control" rows="6" placeholder="Masukkan alamat lengkap perusahaan" autocomplete="off" required>{{ $data ? $data['alamat_lengkap'] : '' }}</textarea>
+                                    </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="group-column">
@@ -516,7 +514,7 @@
                                                             @endif
                                                         </div>
                                                     @elseif(File::extension($data['sppkp']) != 'pdf')
-                                                        <div id="preview_sppkp" class="form-group">
+                                                        <div id="preview_sppkp p-0" class="form-group">
                                                             @if ($data['status_upload_sppkp'] === 'success')
                                                                 <img id="preview_foto_sppkp" src="{{ url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp']) }}" alt="Belum ada file" data-action="zoom">
                                                             @elseif ($data['status_upload_sppkp'] === 'pending')
@@ -559,7 +557,7 @@
                                                     @endif
                                                 </div>
                                             @elseif($data['foto_npwp'] && File::extension($data['foto_npwp']) != 'pdf')
-                                                <div id="preview_npwp" class="form-group">
+                                                <div id="preview_npwp p-0" class="form-group">
                                                     @if ($data['status_upload_npwp'] === 'success')
                                                         <img id="preview_foto_npwp" src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp']) }}" alt="Belum ada file" data-action="zoom">
                                                     @elseif ($data['status_upload_npwp'] === 'pending')
@@ -668,7 +666,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                    <div class="group-column p-0">
+                                    <div class="group-column">
                                         <div class="form-group">
                                             <label for="">Foto Identitas (KTP / NPWP) <span class="text-danger">*</span></label>
                                             <input type="file" name="foto_penanggung" id="foto_penanggung" class="form-control" onchange="previewFilePenanggung(this);" accept=".jpg, .png, .pdf, .jpeg">

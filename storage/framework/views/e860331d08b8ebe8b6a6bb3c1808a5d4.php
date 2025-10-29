@@ -498,7 +498,7 @@
                                                 <?php if($perusahaan['status_upload_npwp'] === 'success'): ?>
                                                     <a href="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $perusahaan['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                                 <?php elseif($perusahaan['status_upload_npwp'] === 'pending'): ?>
-                                                    <a href="<?php echo e(asset('storage/temp_files/' . $perusahaan['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    <a href="<?php echo e(asset('temp_files/' . $perusahaan['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                                 <?php endif; ?>
                                             </div>
                                         <?php else: ?>
@@ -506,7 +506,7 @@
                                                 <?php if($perusahaan['status_upload_npwp'] === 'success'): ?>
                                                     <img id="preview_foto_npwp" src="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $perusahaan['foto_npwp'])); ?>" alt="Preview" data-action="zoom">
                                                 <?php elseif($perusahaan['status_upload_npwp'] === 'pending'): ?>
-                                                    <img id="preview_foto_npwp" src="<?php echo e(asset('storage/temp_files/' . $perusahaan['foto_npwp'])); ?>" alt="Preview" data-action="zoom">
+                                                    <img id="preview_foto_npwp" src="<?php echo e(asset('temp_files/' . $perusahaan['foto_npwp'])); ?>" alt="Preview" data-action="zoom">
                                                 <?php endif; ?>
                                             </div>
                                         <?php endif; ?>
@@ -533,7 +533,7 @@
                                                     <?php if($perusahaan['status_upload_sppkp'] === 'success'): ?>
                                                         <a href="<?php echo e(url('/form-customer/getFiles/FileSPPKPCompany/' . $perusahaan['sppkp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                                     <?php elseif($perusahaan['status_upload_sppkp'] === 'pending'): ?>
-                                                        <a href="<?php echo e(asset('storage/temp_files/' . $perusahaan['sppkp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                        <a href="<?php echo e(asset('temp_files/' . $perusahaan['sppkp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                                     <?php endif; ?>
                                                 </div>
                                             <?php else: ?>
@@ -541,7 +541,7 @@
                                                     <?php if($perusahaan['status_upload_sppkp'] === 'success'): ?>
                                                         <img id="preview_foto_sppkp" src="<?php echo e(url('/form-customer/getFiles/FileSPPKPCompany/' . $perusahaan['sppkp'])); ?>" alt="Preview" data-action="zoom">
                                                     <?php elseif($perusahaan['status_upload_sppkp'] === 'pending'): ?>
-                                                        <img id="preview_foto_sppkp" src="<?php echo e(asset('storage/temp_files/' . $perusahaan['sppkp'])); ?>" alt="Preview" data-action="zoom">
+                                                        <img id="preview_foto_sppkp" src="<?php echo e(asset('temp_files/' . $perusahaan['sppkp'])); ?>" alt="Preview" data-action="zoom">
                                                     <?php endif; ?>
                                                 </div>
                                             <?php endif; ?>
@@ -629,7 +629,7 @@
                                             <?php if($perusahaan['data_identitas']['status_upload_foto'] === 'success'): ?>
                                                 <a href="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $perusahaan['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                             <?php elseif($perusahaan['data_identitas']['status_upload_foto'] === 'pending'): ?>
-                                                <a href="<?php echo e(asset('storage/temp_files/' . $perusahaan['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                <a href="<?php echo e(asset('temp_files/' . $perusahaan['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                             <?php endif; ?>
                                         </div>
                                     <?php else: ?>
@@ -637,7 +637,7 @@
                                             <?php if($perusahaan['data_identitas']['status_upload_foto'] === 'success'): ?>
                                                 <img id="preview_foto_penanggung" src="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $perusahaan['data_identitas']['foto'])); ?>" alt="Preview" data-action="zoom">
                                             <?php elseif($perusahaan['data_identitas']['status_upload_foto'] === 'pending'): ?>
-                                                <img id="preview_foto_penanggung" src="<?php echo e(asset('storage/temp_files/' . $perusahaan['data_identitas']['foto'])); ?>" alt="Preview" data-action="zoom">
+                                                <img id="preview_foto_penanggung" src="<?php echo e(asset('temp_files/' . $perusahaan['data_identitas']['foto'])); ?>" alt="Preview" data-action="zoom">
                                             <?php endif; ?>
                                         </div>
                                     <?php endif; ?>

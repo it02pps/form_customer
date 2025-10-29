@@ -514,8 +514,8 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="" class="additional-label">Email Khusus Untuk Faktur Pajak <span class="text-danger">*</span></label>
-                                            <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Contoh: faktur@gmail.com" required value="<?php echo e($data ? $data['email_khusus_faktur_pajak'] : ''); ?>">
+                                            <label for="" class="additional-label">Email Khusus Untuk Faktur Pajak</label>
+                                            <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Contoh: faktur@gmail.com" value="<?php echo e($data ? $data['email_khusus_faktur_pajak'] : ''); ?>">
                                         </div>
                                     </div>
                                 </div>
@@ -549,7 +549,7 @@
                                                             <?php if($data['status_upload_sppkp'] === 'success'): ?>
                                                                 <a href="<?php echo e(url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                                             <?php elseif($data['status_upload_sppkp'] == 'pending'): ?>
-                                                                <a href="<?php echo e(asset('storage/temp_files/' . $data['sppkp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                                <a href="<?php echo e(asset('temp_files/' . $data['sppkp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                                             <?php endif; ?>
                                                         </div>
                                                     <?php elseif(File::extension($data['sppkp']) != 'pdf'): ?>
@@ -557,7 +557,7 @@
                                                             <?php if($data['status_upload_sppkp'] === 'success'): ?>
                                                                 <img id="preview_foto_sppkp" src="<?php echo e(url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp'])); ?>" alt="Belum ada file" data-action="zoom">
                                                             <?php elseif($data['status_upload_sppkp'] === 'pending'): ?>
-                                                                <img id="preview_foto_sppkp" src="<?php echo e(asset('storage/temp_files/' . $data['sppkp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                                <img id="preview_foto_sppkp" src="<?php echo e(asset('temp_files/' . $data['sppkp'])); ?>" alt="Belum ada file" data-action="zoom">
                                                             <?php endif; ?>
                                                         </div>
                                                     <?php else: ?>
@@ -593,7 +593,7 @@
                                                         <?php if($data['status_upload_npwp'] === 'success'): ?>
                                                             <a href="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                                         <?php elseif($data['status_upload_npwp'] === 'pending'): ?>
-                                                            <a href="<?php echo e(asset('storage/temp_files/' . $data['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                            <a href="<?php echo e(asset('temp_files/' . $data['foto_npwp'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                                         <?php endif; ?>
                                                     </div>
                                                 <?php elseif(File::extension($data['foto_npwp']) != 'pdf'): ?>
@@ -601,7 +601,7 @@
                                                         <?php if($data['status_upload_npwp'] === 'success'): ?>
                                                             <img id="preview_foto_npwp" src="<?php echo e(url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp'])); ?>" alt="Belum ada file" data-action="zoom">
                                                         <?php elseif($data['status_upload_npwp'] === 'pending'): ?>
-                                                            <img id="preview_foto_npwp" src="<?php echo e(asset('storage/temp_files/' . $data['foto_npwp'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                            <img id="preview_foto_npwp" src="<?php echo e(asset('temp_files/' . $data['foto_npwp'])); ?>" alt="Belum ada file" data-action="zoom">
                                                         <?php endif; ?>
                                                     </div>
                                                 <?php else: ?>
@@ -725,7 +725,7 @@
                                                         <?php if($data['data_identitas']['status_upload_foto'] === 'success'): ?>
                                                             <a href="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                                         <?php elseif($data['data_identitas']['status_upload_foto'] === 'pending'): ?>
-                                                            <a href="<?php echo e(asset('storage/temp_files/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
+                                                            <a href="<?php echo e(asset('temp_files/' . $data['data_identitas']['foto'])); ?>" target="_blank" id="previewPDF">Preview PDF</a>
                                                         <?php endif; ?>
                                                     </div>
                                                 <?php elseif($data['data_identitas']['foto'] && File::extension($data['data_identitas']['foto']) != 'pdf'): ?>
@@ -733,7 +733,7 @@
                                                         <?php if($data['data_identitas']['status_upload_foto'] === 'success'): ?>
                                                             <img id="preview_foto_penanggung" src="<?php echo e(url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
                                                         <?php elseif($data['data_identitas']['status_upload_foto'] === 'pending'): ?>
-                                                            <img id="preview_foto_penanggung" src="<?php echo e(asset('storage/temp_files/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
+                                                            <img id="preview_foto_penanggung" src="<?php echo e(asset('temp_files/' . $data['data_identitas']['foto'])); ?>" alt="Belum ada file" data-action="zoom">
                                                         <?php endif; ?>
                                                     </div>
                                                 <?php else: ?>
@@ -1076,14 +1076,22 @@
                         });
                     },
                     success: res => {
-                        Swal.fire({
-                            title: 'Berhasil',
-                            text: 'Data berhasil ditambahkan!',
-                            icon: 'success'
-                        });
-                        $('#formCustomer')[0].reset();
-                        // console.log(res.link);
-                        window.location.href = res.link;
+                        if(res.status == true) {
+                            Swal.fire({
+                                title: 'Berhasil',
+                                text: 'Data berhasil ditambahkan!',
+                                icon: 'success'
+                            });
+                            $('#formCustomer')[0].reset();
+                            // console.log(res.link);   
+                            window.location.href = res.link;
+                        } else {
+                            Swal.fire({
+                                title: 'Gagal',
+                                text: res.error,
+                                icon: 'error'
+                            });
+                        }
                     },
                     error: function(xhr, status, error) {
                         if(error === 'timeout') {

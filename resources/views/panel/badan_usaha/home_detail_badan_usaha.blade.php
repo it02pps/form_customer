@@ -490,7 +490,7 @@
                                                 @endif
                                             </div>
                                         @else
-                                            <div id="preview_npwp" class="form-group">
+                                            <div id="preview_npwp p-0" class="form-group">
                                                 @if ($data['status_upload_npwp'] === 'success')
                                                     <img id="preview_foto_npwp" src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp']) }}" alt="Belum ada file" data-action="zoom">
                                                 @elseif ($data['status_upload_npwp'] === 'pending')
@@ -525,7 +525,7 @@
                                                     @endif
                                                 </div>
                                             @else
-                                                <div id="preview_sppkp" class="form-group">
+                                                <div id="preview_sppkp p-0" class="form-group">
                                                     @if ($data['status_upload_sppkp'] === 'success')
                                                         <img id="preview_foto_sppkp" src="{{ url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp']) }}" alt="Belum ada file" data-action="zoom">
                                                     @elseif ($data['status_upload_sppkp'] === 'pending')
@@ -621,7 +621,7 @@
                                             @endif
                                         </div>
                                     @else
-                                        <div id="preview_penanggung" class="form-group">
+                                        <div id="preview_penanggung p-0" class="form-group">
                                             @if ($data['data_identitas']['status_upload_foto'] === 'success')
                                                 <img id="preview_foto_penanggung" src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
                                             @elseif ($data['data_identitas']['status_upload_foto'] === 'pending')

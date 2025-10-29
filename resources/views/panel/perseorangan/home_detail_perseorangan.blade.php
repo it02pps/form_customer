@@ -476,7 +476,7 @@
                                             <input type="text" id="nama_lengkap" name="nama_lengkap" autocomplete="off" class="form-control" readonly value="{{ $data['nama_lengkap'] ? $data['nama_lengkap'] : '-' }}">
                                         </div>
 
-                                        <div class="group-colum">
+                                        <div class="group-column">
                                             <div class="form-group p-0 mt-2">
                                                 <label for="">Foto KTP <span class="text-danger">*</span></label>
                                                 @if(File::extension($data['foto_ktp']) == 'pdf')
@@ -485,11 +485,11 @@
                                                         @if ($data['status_upload_nik'] === 'success')
                                                             <a href="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                         @elseif ($data['status_upload_nik'] === 'pending')
-                                                            <a href="{{ asset('tmep_files/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                            <a href="{{ asset('temp_files/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                         @endif
                                                     </div>
                                                 @else
-                                                    <div class="form-group" id="preview_ktp">
+                                                    <div class="form-group p-0" id="preview_ktp">
                                                         @if ($data['status_upload_nik'] === 'success')
                                                             <img id="preview_foto_ktp" src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
                                                         @elseif ($data['status_upload_nik'] === 'pending')
@@ -598,7 +598,7 @@
                                             @endif
                                         </div>
                                     @else
-                                        <div id="preview_penanggung" class="form-group">
+                                        <div id="preview_penanggung" class="form-group p-0">
                                             @if ($data['data_identitas']['status_upload_foto'] === 'success')
                                                 <img id="preview_foto_penanggung" src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
                                             @elseif ($data['data_identitas']['status_upload_foto'] === 'pending')
