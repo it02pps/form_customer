@@ -540,33 +540,9 @@
                                             <div class="form-group">
                                                 <input type="file" name="foto_sppkp" id="foto_sppkp" onchange="previewFileSppkp(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
                                             </div>
-                
-                                            @if($data)
-                                                @if ($data['sppkp'])
-                                                    @if(File::extension($data['sppkp']) == 'pdf')
-                                                        <div id="preview_sppkp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
-                                                            <p style="font-size: 18px;">Preview file SPPKP</p>
-                                                            <a href="" target="_blank" id="previewPDF">Preview PDF</a>
-                                                        </div>
-                                                    @elseif(File::extension($data['sppkp']) != 'pdf')
-                                                        <div id="preview_sppkp" class="form-group">
-                                                            <img id="preview_foto_sppkp" src="" alt="Belum ada file" data-action="zoom">
-                                                        </div>
-                                                    @else
-                                                        <div id="preview_sppkp" class="form-group">
-                                                            <p class="text-center">Belum ada file</p>
-                                                        </div>
-                                                    @endif
-                                                @else
-                                                    <div id="preview_sppkp" class="form-group">
-                                                        <p class="text-center">Belum ada file</p>
-                                                    </div>
-                                                @endif
-                                            @else
-                                                <div id="preview_sppkp" class="form-group">
-                                                    <p class="text-center">Belum ada file</p>
-                                                </div>
-                                            @endif
+                                            <div id="preview_sppkp" class="form-group">
+                                                <p class="text-center">Belum ada file</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -576,33 +552,9 @@
                                             <label for="">Foto NPWP <span class="text-danger">*</span></label>
                                             <input type="file" name="foto_npwp" id="foto_npwp" onchange="previewFileNpwp(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
                                         </div>
-                
-                                        @if($data)
-                                            @if ($data['foto_npwp'])
-                                                @if(File::extension($data['foto_npwp']) == 'pdf')
-                                                    <div id="preview_npwp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
-                                                        <p style="font-size: 18px;">Preview file NPWP</p>
-                                                        <a href="" target="_blank" id="previewPDF">Preview PDF</a>
-                                                    </div>
-                                                @elseif(File::extension($data['foto_npwp']) != 'pdf')
-                                                    <div id="preview_npwp" class="form-group">
-                                                        <img id="preview_foto_npwp" src="" alt="Belum ada file" data-action="zoom">
-                                                    </div>
-                                                @else
-                                                    <div id="preview_npwp" class="form-group">
-                                                        <p class="text-center">Belum ada file</p>
-                                                    </div>
-                                                @endif
-                                            @else
-                                                <div id="preview_npwp" class="form-group">
-                                                    <p class="text-center">Belum ada file</p>
-                                                </div>
-                                            @endif
-                                        @else
-                                            <div id="preview_npwp" class="form-group">
-                                                <p class="text-center">Belum ada file</p>
-                                            </div>
-                                        @endif
+                                        <div id="preview_npwp" class="form-group">
+                                            <p class="text-center">Belum ada file</p>
+                                        </div>
 
                                         <div class="branch-section mt-4 p-0">
                                             <div >
@@ -700,33 +652,9 @@
                                             <label for="">Foto Identitas (KTP / NPWP) <span class="text-danger">*</span></label>
                                             <input type="file" name="foto_penanggung" id="foto_penanggung" class="form-control" onchange="previewFilePenanggung(this);" accept=".jpg, .png, .pdf, .jpeg">
                                         </div>
-            
-                                        @if($data)
-                                            @if ($data['data_identitas']['foto'])
-                                                @if(File::extension($data['data_identitas']['foto']) == 'pdf')
-                                                    <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
-                                                        <p style="font-size: 18px;">Preview file identitas</p>
-                                                        <a href="" target="_blank" id="previewPDF">Preview PDF</a>
-                                                    </div>
-                                                @elseif(File::extension($data['data_identitas']['foto']) != 'pdf')
-                                                    <div id="preview_penanggung" class="form-group">
-                                                        <img id="preview_foto_penanggung" src="" alt="Belum ada file" data-action="zoom">
-                                                    </div>
-                                                @else
-                                                    <div id="preview_penanggung" class="form-group">
-                                                        <p class="text-center">Belum ada file</p>
-                                                    </div>
-                                                @endif
-                                            @else
-                                                <div id="preview_penanggung" class="form-group">
-                                                    <p class="text-center">Belum ada file</p>
-                                                </div>
-                                            @endif
-                                        @else
-                                            <div id="preview_penanggung" class="form-group">
-                                                <p class="text-center">Belum ada file</p>
-                                            </div>
-                                        @endif
+                                        <div id="preview_penanggung" class="form-group">
+                                            <p class="text-center">Belum ada file</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

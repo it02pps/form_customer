@@ -50,6 +50,7 @@ class LoginController extends Controller
                 return redirect()->back()->withErrors(['error' => 'Username atau password salah']);
             }
         } catch(\Exception $e) {
+            dd($e);
             return redirect()->back()->withErrors(['error' => 'Terjadi Kesalahan']);
         }
     }

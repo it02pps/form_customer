@@ -63,12 +63,14 @@
         border-radius: 5px;
         height: 271px;
         width: 100%;
+        overflow: hidden;
     }
 
     #preview_npwp img, #preview_sppkp img, #preview_penanggung img {
         width: 100%;
         height: 269px;
         border-radius: 7px;
+        object-fit: cover;
     }
 
     .section1, .section5 {
@@ -157,11 +159,24 @@
         cursor: pointer;
     }
 
-    #preview_penanggung .zoom-img-wrap .zoom-img, .zoom-img, #preview_npwp .zoom-img-wrap .zoom-img, #preview_sppkp .zoom-img-wrap .zoom-img {
+    .zoom-img {
+        width: auto !important;
+        height: auto !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        object-fit: contain !important;
+    }
+
+    .zoom-overlay-open .zoom-img {
+        width: auto !important;
+        height: auto !important;
+    }
+
+    /* #preview_penanggung .zoom-img-wrap .zoom-img, .zoom-img, #preview_npwp .zoom-img-wrap .zoom-img, #preview_sppkp .zoom-img-wrap .zoom-img {
         width: 100%;
         height: 100%;
         transition: 1s;
-    }
+    } */
 
     .form-group {
         width: 100%;
@@ -286,6 +301,29 @@
 @endsection
 
 @section('content')
+    @php
+        // FOTO NPWP
+        $fotoNPWP = $data['foto_npwp'] ?? null;
+        $statusNPWP = $data['status_upload_npwp'] ?? 'pending';
+        $urlNPWP = $statusNPWP === 'success'
+            ? url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $fotoNPWP)
+            : asset('temp_files/' . $fotoNPWP);
+
+        // SPPKP
+        $fotoSPPKP = $data['sppkp'] ?? null;
+        $statusSPPKP = $data['status_upload_sppkp'] ?? 'pending';
+        $urlSPPKP = $statusSPPKP === 'success'
+            ? url('/form-customer/getFiles/FileSPPKPCompany/' . $fotoSPPKP)
+            : asset('temp_files/' . $fotoSPPKP);
+
+        // FOTO PENANGGUNG
+        $fotoPenanggung = $data['data_identitas']['foto'] ?? null;
+        $statusPenanggung = $data['data_identitas']['status_upload_foto'] ?? 'pending';
+        $urlPenanggung = $statusPenanggung === 'success'
+            ? url('/form-customer/getFiles/FileIDPersonCharge/' . $fotoPenanggung)
+            : asset('temp_files/' . $fotoPenanggung)
+    @endphp
+
     <div class="container">
         <div class="container-fluid">
             <div class="content">
@@ -370,7 +408,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Alamat Email Perusahaan</label>
-                                        <input type="text" name="alamat_email_perusahaan" id="alamat_email_perusahaan" class="form-control" autocomplete="off" placeholder="Contoh: perusahaan@gmail.com" value="{{ $data ? ($data['alamat_email'] ? $data['alamat_email'] : '') : '' }}">
+                                        <input type="text" name="alamat_email_perusahaan" id="alamat_email_perusahaan" class="form-control" autocomplete="off" placeholder="Contoh: perusahaan@gmail.com" value="{{ $data ? ($data['alamat_email'] ?: '') : '' }}">
                                     </div>
                                 </div>
                             </div>
@@ -384,7 +422,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Tahun Berdiri</label>
-                                        <input type="date" name="tahun_berdiri" id="tahun_berdiri" autocomplete="off" class="form-control" value="{{ $data ? ($data['tahun_berdiri'] ? $data['tahun_berdiri'] : '') : '' }}">
+                                        <input type="date" name="tahun_berdiri" id="tahun_berdiri" autocomplete="off" class="form-control" value="{{ $data ? ($data['tahun_berdiri'] ?: '') : '' }}">
                                     </div>
                                 </div>
                             </div>
@@ -392,7 +430,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Lama Usaha (Tahun)</label>
-                                        <input type="text" name="lama_usaha" id="lama_usaha" class="form-control" autocomplete="off" readonly value="{{ $data ? ($data['lama_usaha'] ? $data['lama_usaha'] : '') : '' }}">
+                                        <input type="text" name="lama_usaha" id="lama_usaha" class="form-control" autocomplete="off" readonly value="{{ $data ? ($data['lama_usaha'] ?: '') : '' }}">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -405,7 +443,7 @@
                                             @endforeach
                                         </select>
                                         <div class="bidang_lain d-none">
-                                            <input type="text" class="form-control" name="bidang_usaha_lain" id="bidang_usaha_lain" placeholder="Masukkan bidang usaha lain" autocomplete="off" value="{{ $data ? ($data['bidang_usaha_lain'] ? $data['bidang_usaha_lain'] : '') : '' }}">
+                                            <input type="text" class="form-control" name="bidang_usaha_lain" id="bidang_usaha_lain" placeholder="Masukkan bidang usaha lain" autocomplete="off" value="{{ $data ? ($data['bidang_usaha_lain'] ?: '') : '' }}">
                                         </div>
                                         <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                     </div>
@@ -422,7 +460,7 @@
                                             <option value="group">Group</option>
                                         </select>
                                         <div class="group d-none">
-                                            <input type="text" class="form-control" name="nama_group" id="nama_group" placeholder="Masukkan nama group" autocomplete="off" value="{{ $data ? ($data['nama_group'] ? $data['nama_group'] : '') : '' }}">
+                                            <input type="text" class="form-control" name="nama_group" id="nama_group" placeholder="Masukkan nama group" autocomplete="off" value="{{ $data ? ($data['nama_group'] ?: '') : '' }}">
                                         </div>
                                         <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                     </div>
@@ -440,7 +478,7 @@
                                             <option value="lainnya">LAINNYA</option>
                                         </select>
                                         <div class="badan_usaha_lain d-none">
-                                            <input type="text" class="form-control" name="badan_usaha_lain" id="badan_usaha_lain" placeholder="Masukkan badan usaha lain" autocomplete="off" value="{{ $data ? ($data['badan_usaha_lain'] ? $data['badan_usaha_lain'] : '') : '' }}">
+                                            <input type="text" class="form-control" name="badan_usaha_lain" id="badan_usaha_lain" placeholder="Masukkan badan usaha lain" autocomplete="off" value="{{ $data ? ($data['badan_usaha_lain'] ?: '') : '' }}">
                                         </div>
                                         <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                     </div>
@@ -501,36 +539,16 @@
                                             <div class="form-group">
                                                 <input type="file" name="foto_sppkp" id="foto_sppkp" onchange="previewFileSppkp(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
                                             </div>
-                
-                                            @if($data)
-                                                @if ($data['sppkp'])
-                                                    @if(File::extension($data['sppkp']) == 'pdf')
-                                                        <div id="preview_sppkp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
-                                                            <p style="font-size: 18px;">Preview file SPPKP</p>
-                                                            @if ($data['status_upload_sppkp'] === 'success')
-                                                                <a href="{{ url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                            @elseif ($data['status_upload_sppkp'] === 'pending')
-                                                                <a href="{{ asset('temp_files/' . $data['sppkp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                            @endif
-                                                        </div>
-                                                    @elseif(File::extension($data['sppkp']) != 'pdf')
-                                                        <div id="preview_sppkp p-0" class="form-group">
-                                                            @if ($data['status_upload_sppkp'] === 'success')
-                                                                <img id="preview_foto_sppkp" src="{{ url('/form-customer/getFiles/FileSPPKPCompany/' . $data['sppkp']) }}" alt="Belum ada file" data-action="zoom">
-                                                            @elseif ($data['status_upload_sppkp'] === 'pending')
-                                                                <img id="preview_foto_sppkp" src="{{ url('temp_files/' . $data['sppkp']) }}" alt="Belum ada file" data-action="zoom">
-                                                            @endif
-                                                        </div>
+
+                                            @if($fotoSPPKP)
+                                                <div class="form-group {{ File::extension($fotoSPPKP === 'pdf') ? 'd-flex justify-content-between align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_sppkp" style="height: 197px;">
+                                                    @if(File::extension($fotoSPPKP) === 'pdf')
+                                                        <p style="font-size: 18px;">Preview file SPPKP</p>
+                                                        <a href="{{ $urlSPPKP }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                     @else
-                                                        <div id="preview_sppkp" class="form-group">
-                                                            <p class="text-center">Belum ada file</p>
-                                                        </div>
+                                                        <img id="preview_foto_sppkp" src="{{ $urlSPPKP }}" alt="Belum ada file" data-action="zoom">
                                                     @endif
-                                                @else
-                                                    <div id="preview_sppkp" class="form-group">
-                                                        <p class="text-center">Belum ada file</p>
-                                                    </div>
-                                                @endif
+                                                </div>
                                             @else
                                                 <div id="preview_sppkp" class="form-group">
                                                     <p class="text-center">Belum ada file</p>
@@ -545,30 +563,16 @@
                                             <label for="">Foto NPWP <span class="text-danger">*</span></label>
                                             <input type="file" name="foto_npwp" id="foto_npwp" onchange="previewFileNpwp(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
                                         </div>
-                
-                                        @if($data)
-                                            @if($data['foto_npwp'] && File::extension($data['foto_npwp']) == 'pdf')
-                                                <div id="preview_npwp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
+                                        
+                                        @if($fotoNPWP)
+                                            <div class="form-group {{ File::extension($fotoNPWP === 'pdf') ? 'd-flex justify-content-between align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_npwp" style="height: 197px;">
+                                                @if(File::extension($fotoNPWP) === 'pdf')
                                                     <p style="font-size: 18px;">Preview file NPWP</p>
-                                                    @if ($data['status_upload_npwp'] === 'success')
-                                                        <a href="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                    @elseif ($data['status_upload_npwp'] === 'pending')
-                                                        <a href="{{ asset('temp_files/' . $data['foto_npwp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                    @endif
-                                                </div>
-                                            @elseif($data['foto_npwp'] && File::extension($data['foto_npwp']) != 'pdf')
-                                                <div id="preview_npwp p-0" class="form-group">
-                                                    @if ($data['status_upload_npwp'] === 'success')
-                                                        <img id="preview_foto_npwp" src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_npwp']) }}" alt="Belum ada file" data-action="zoom">
-                                                    @elseif ($data['status_upload_npwp'] === 'pending')
-                                                        <img id="preview_foto_npwp" src="{{ asset('temp_files/' . $data['foto_npwp']) }}" alt="Belum ada file" data-action="zoom">
-                                                    @endif
-                                                </div>
-                                            @else
-                                                <div id="preview_npwp" class="form-group">
-                                                    <p class="text-center">Belum ada file</p>
-                                                </div>
-                                            @endif
+                                                    <a href="{{ $urlNPWP }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                @else
+                                                    <img id="preview_foto_npwp" src="{{ $urlNPWP }}" alt="Belum ada file" data-action="zoom">
+                                                @endif
+                                            </div>
                                         @else
                                             <div id="preview_npwp" class="form-group">
                                                 <p class="text-center">Belum ada file</p>
@@ -621,7 +625,7 @@
                                                 <option value="lainnya">Lainnya</option>
                                             </select>
                                             <div class="rekening_lain d-none">
-                                                <input type="text" class="form-control" name="rekening_lain" id="rekening_lain" placeholder="Masukkan pemilik rekening lain" autocomplete="off" value="{{ $data ? ($data['informasi_bank']['rekening_lain'] ? $data['informasi_bank']['rekening_lain'] : '') : '' }}">
+                                                <input type="text" class="form-control" name="rekening_lain" id="rekening_lain" placeholder="Masukkan pemilik rekening lain" autocomplete="off" value="{{ $data ? ($data['informasi_bank']['rekening_lain'] ?: '') : '' }}">
                                             </div>
                                             <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                         </div>
@@ -671,36 +675,16 @@
                                             <label for="">Foto Identitas (KTP / NPWP) <span class="text-danger">*</span></label>
                                             <input type="file" name="foto_penanggung" id="foto_penanggung" class="form-control" onchange="previewFilePenanggung(this);" accept=".jpg, .png, .pdf, .jpeg">
                                         </div>
-            
-                                        @if($data)
-                                            @if ($data['data_identitas']['foto'])
-                                                @if(File::extension($data['data_identitas']['foto']) == 'pdf')
-                                                    <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
-                                                        <p style="font-size: 18px;">Preview file identitas</p>
-                                                        @if ($data['data_identitas']['status_upload_foto'] === 'success')
-                                                            <a href="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                        @elseif ($data['data_identitas']['status_upload_foto'] === 'pending')
-                                                            <a href="{{ asset('temp_files/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                        @endif
-                                                    </div>
-                                                @elseif(File::extension($data['data_identitas']['foto']) != 'pdf')
-                                                    <div id="preview_penanggung" class="form-group">
-                                                        @if ($data['data_identitas']['status_upload_foto'] === 'success')
-                                                            <img id="preview_foto_penanggung" src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
-                                                        @elseif ($data['data_identitas']['status_upload_foto'] === 'pending')
-                                                            <img id="preview_foto_penanggung" src="{{ asset('temp_files/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
-                                                        @endif
-                                                    </div>
+                                        
+                                        @if($fotoPenanggung)
+                                            <div class="form-group {{ File::extension($fotoPenanggung === 'pdf') ? 'd-flex justify-content-between align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_penanggung" style="height: 197px;">
+                                                @if(File::extension($fotoPenanggung) === 'pdf')
+                                                    <p style="font-size: 18px;">Preview file identitas</p>
+                                                    <a href="{{ $urlPenanggung }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                 @else
-                                                    <div id="preview_penanggung" class="form-group">
-                                                        <p class="text-center">Belum ada file</p>
-                                                    </div>
+                                                    <img id="preview_foto_penanggung" src="{{ $urlPenanggung }}" alt="Belum ada file" data-action="zoom">
                                                 @endif
-                                            @else
-                                                <div id="preview_penanggung" class="form-group">
-                                                    <p class="text-center">Belum ada file</p>
-                                                </div>
-                                            @endif
+                                            </div>
                                         @else
                                             <div id="preview_penanggung" class="form-group">
                                                 <p class="text-center">Belum ada file</p>
@@ -789,7 +773,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Kode Customer</label>
-                                        <input type="text" name="kode_customer" id="kode_customer" class="form-control" placeholder="Masukkan kode customer" autocomplete="off" value="{{ $data['tipe_customer'] ? $data['tipe_customer']['kode_customer'] ? $data['tipe_customer']['kode_customer'] : '-' : '-' }}">
+                                        <input type="text" name="kode_customer" id="kode_customer" class="form-control" placeholder="Masukkan kode customer" autocomplete="off" value="{{ $data['tipe_customer'] ? ($data['tipe_customer']['kode_customer'] ?: '') : '-' }}">
                                     </div>
                                 </div>
                             </div>
@@ -797,7 +781,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">New Bill To Code</label>
-                                        <input type="text" name="new_bill_to_code" id="new_bill_to_code" class="form-control" placeholder="Masukkan new bill to code" autocomplete="off" value="{{ $data['tipe_customer'] ? $data['tipe_customer']['new_bill_to_code'] : '-' }}">
+                                        <input type="text" name="new_bill_to_code" id="new_bill_to_code" class="form-control" placeholder="Masukkan new bill to code" autocomplete="off" value="{{ $data['tipe_customer'] ? $data['tipe_customer']['new_bill_to_code'] : '' }}">
                                     </div>
                                 </div>
                             </div>
@@ -948,7 +932,7 @@
                         });
                     }
                 } else {
-                    $("#preview_npwp").css('height', '197px');
+                    $("#preview_npwp").css('height', 'auto');
                     $('#preview_npwp').html('<img id="preview_foto_npwp" src="" alt="Preview" data-action="zoom">');
                     reader.onload = function() {
                         $("#preview_foto_npwp").attr("src", reader.result);
@@ -977,7 +961,7 @@
                         });
                     }
                 } else {
-                    $("#preview_sppkp").css('height', '197px');
+                    $("#preview_sppkp").css('height', 'auto');
                     $('#preview_sppkp').html('<img id="preview_foto_sppkp" src="" alt="Preview" data-action="zoom">');
                     reader.onload = function() {
                         $("#preview_foto_sppkp").attr("src", reader.result);
@@ -1006,7 +990,7 @@
                         });
                     }
                 } else {
-                    $("#preview_penanggung").css('height', '197px');
+                    $("#preview_penanggung").css('height', 'auto');
                     $('#preview_penanggung').html('<img id="preview_foto_penanggung" src="" alt="Preview" data-action="zoom">');
                     reader.onload = function() {
                         $("#preview_foto_penanggung").attr("src", reader.result);

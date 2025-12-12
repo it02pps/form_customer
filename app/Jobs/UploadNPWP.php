@@ -41,9 +41,9 @@ class UploadNPWP implements ShouldQueue
         $content = file_get_contents($this->tempPath);
 
         $response = Http::withHeaders([
-            'x-api-key' => config('services.service_x.api_key'),
-            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-        ])->get(config('services.service_x.url') . '/api/checkfile', [
+            'x-api-key' => config('services.service_v.api_key'),
+            'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+        ])->get(config('services.service_v.url') . '/api/checkfile', [
             'category' => 'FileIDCompanyOrPersonal',
             'filename' => $oldData ? $oldData : ''
         ]);
@@ -52,21 +52,21 @@ class UploadNPWP implements ShouldQueue
         if ($result['status'] == true) {
             $category = 'FileIDCompanyOrPersonal';
             $response = Http::withHeaders([
-                'x-api-key' => config('services.service_x.api_key'),
-                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-            ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$oldData", []);
+                'x-api-key' => config('services.service_v.api_key'),
+                'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+            ])->delete(config('services.service_v.url') . "/api/deletefile/$category/$oldData", []);
             $result = $response->json();
         }
 
         // $data->foto_npwp = $filename;
         $response = Http::withHeaders([
-            'x-api-key' => config('services.service_x.api_key'),
-            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+            'x-api-key' => config('services.service_v.api_key'),
+            'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
         ])->attach(
             'file',
             $content,
             $filename
-        )->post(config('services.service_x.url') . '/api/uploadfile', [
+        )->post(config('services.service_v.url') . '/api/uploadfile', [
             'category' => 'FileIDCompanyOrPersonal',
             'filename' => substr($filename, 0, strrpos($filename, '.'))
         ]);

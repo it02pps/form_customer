@@ -1,0 +1,46 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: formcustomer
+    volumes:
+      - ./:/var/www/html
+      - storage_data:/var/www/html/storage
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: formcustomer_db
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: formcustomer
+      MYSQL_ROOT_PASSWORD: formcust
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: formcustomer_phpmyadmin
+    restart: always
+    ports: 
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: formcust
+      UPLOAD_LIMIT: 200M
+      PMA_MAX_REQUEST_SIZE: 200M
+      PMA_MEMORY_LIMIT: 512M
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:
+  storage_data:
+  db_data:

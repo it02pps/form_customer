@@ -31,8 +31,13 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-    'service_x' => [
+    'service_v' => [
         'api_key' => env('API_KEY'),
-        'url' => env('API_URL'),
+        'url' => env('VPS_API_URL'),
     ],
+
+    'service_l' => [
+        'api_key' => env('API_KEY'),
+        'url' => env('LOCAL_API_URL')
+    ]
 ];

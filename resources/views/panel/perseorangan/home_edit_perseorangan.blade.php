@@ -294,6 +294,22 @@
 @endsection
 
 @section('content')
+    @php
+        // FOTO KTP
+        $fotoKTP = $data['foto_ktp'] ?? null;
+        $statusKTP = $data['status_upload_nik'] ?? 'pending';
+        $urlKTP = $statusKTP === 'success'
+            ? url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])
+            : asset('temp_files/' . $data['foto_ktp']);
+
+        // FOTO PENANGGUNG
+        $fotoPenanggung = $data['data_identitas']['foto'] ?? null;
+        $statusPenanggung = $data['data_identitas']['status_upload_foto'] ?? 'pending';
+        $urlPenanggung = $statusPenanggung === 'success'
+            ? url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])
+            : asset('temp_files/' . $data['data_identitas']['foto']);
+    @endphp
+
     <div class="container">
         <div class="container-fluid">
             <div class="content">
@@ -341,13 +357,13 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nama Usaha <span class="text-danger">*</span></label>
-                                        <input type="text" name="nama_perusahaan" id="nama_perusahaan" class="form-control" placeholder="Masukkan nama usaha" autocomplete="off" required value="{{ $data['nama_perusahaan'] ? $data['nama_perusahaan'] : '' }}">
+                                        <input type="text" name="nama_perusahaan" id="nama_perusahaan" class="form-control" placeholder="Masukkan nama usaha" autocomplete="off" required value="{{ $data['nama_perusahaan'] ?: '' }}">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nama Group Usaha <span class="text-danger">*</span></label>
-                                        <input type="text" name="nama_group_perusahaan" id="nama_group_perusahaan" class="form-control" placeholder="Masukkan nama group usaha" autocomplete="off" required value="{{ $data['nama_group_perusahaan'] ? $data['nama_group_perusahaan'] : '' }}">
+                                        <input type="text" name="nama_group_perusahaan" id="nama_group_perusahaan" class="form-control" placeholder="Masukkan nama group usaha" autocomplete="off" required value="{{ $data['nama_group_perusahaan'] ?: '' }}">
                                         <span class="text-danger" style="color: #FF0000;">*Jika tidak ada maka diisi dengan nama usaha</span>
                                     </div>
                                 </div>
@@ -356,13 +372,13 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Alamat Usaha <span class="text-danger">*</span></label>
-                                        <textarea name="alamat_lengkap" id="alamat_lengkap" class="form-control" rows="6" placeholder="Masukkan alamat lengkap usaha" autocomplete="off" required>{{ $data['alamat_lengkap'] ? $data['alamat_lengkap'] : '' }}</textarea>
+                                        <textarea name="alamat_lengkap" id="alamat_lengkap" class="form-control" rows="6" placeholder="Masukkan alamat lengkap usaha" autocomplete="off" required>{{ $data['alamat_lengkap'] ?: '' }}</textarea>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Alamat Group Usaha <span class="text-danger">*</span></label>
-                                        <textarea name="alamat_group_lengkap" id="alamat_group_lengkap" class="form-control" rows="6" placeholder="Masukkan alamat group usaha" autocomplete="off" required>{{ $data['alamat_group_lengkap'] ? $data['alamat_group_lengkap'] : '' }}</textarea>
+                                        <textarea name="alamat_group_lengkap" id="alamat_group_lengkap" class="form-control" rows="6" placeholder="Masukkan alamat group usaha" autocomplete="off" required>{{ $data['alamat_group_lengkap'] ?: '' }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -370,13 +386,13 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Kota/Kabupaten <span class="text-danger">*</span></label>
-                                        <input type="text" name="kota_kabupaten" id="kota_kabupaten" class="form-control" placeholder="Masukkan Kota/Kabupaten" autocomplete="off" required value="{{ $data['kota_kabupaten'] ? $data['kota_kabupaten'] : '' }}">
+                                        <input type="text" name="kota_kabupaten" id="kota_kabupaten" class="form-control" placeholder="Masukkan Kota/Kabupaten" autocomplete="off" required value="{{ $data['kota_kabupaten'] ?: '' }}">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Alamat Email Usaha</label>
-                                        <input type="text" name="alamat_email_perusahaan" id="alamat_email_perusahaan" class="form-control" autocomplete="off" placeholder="Masukkan alamat email usaha" value="{{ $data['alamat_email'] ? $data['alamat_email'] : '' }}">
+                                        <input type="text" name="alamat_email_perusahaan" id="alamat_email_perusahaan" class="form-control" autocomplete="off" placeholder="Masukkan alamat email usaha" value="{{ $data['alamat_email'] ?: '' }}">
                                     </div>    
                                 </div>
                             </div>
@@ -384,13 +400,13 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nomor Handphone Contact Person <span class="text-danger">*</span></label>
-                                        <input type="text" name="no_hp" id="no_hp" class="form-control" autocomplete="off" placeholder="Contoh: 012345678910" required value="{{ $data['nomor_handphone'] ? $data['nomor_handphone'] : '' }}">
+                                        <input type="text" name="no_hp" id="no_hp" class="form-control" autocomplete="off" placeholder="Contoh: 012345678910" required value="{{ $data['nomor_handphone'] ?: '' }}">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Tahun Berdiri</label>
-                                        <input type="date" name="tahun_berdiri" id="tahun_berdiri" autocomplete="off" class="form-control" value="{{ $data['tahun_berdiri'] ? $data['tahun_berdiri'] : '' }}">
+                                        <input type="date" name="tahun_berdiri" id="tahun_berdiri" autocomplete="off" class="form-control" value="{{ $data['tahun_berdiri'] ?: '' }}">
                                     </div>
                                 </div>
                             </div>
@@ -398,7 +414,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Lama Usaha (Tahun)</label>
-                                        <input type="text" name="lama_usaha" id="lama_usaha" class="form-control" autocomplete="off" readonly value="{{ $data['lama_usaha'] ? $data['lama_usaha'] : '' }}">
+                                        <input type="text" name="lama_usaha" id="lama_usaha" class="form-control" autocomplete="off" readonly value="{{ $data['lama_usaha'] ?: '' }}">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -411,7 +427,7 @@
                                             @endforeach
                                         </select>
                                         <div class="bidang_lain d-none">
-                                            <input type="text" class="form-control" name="bidang_usaha_lain" id="bidang_usaha_lain" placeholder="Masukkan bidang usaha lain" autocomplete="off" value="{{ $data['bidang_usaha_lain'] ? $data['bidang_usaha_lain'] : '' }}">
+                                            <input type="text" class="form-control" name="bidang_usaha_lain" id="bidang_usaha_lain" placeholder="Masukkan bidang usaha lain" autocomplete="off" value="{{ $data['bidang_usaha_lain'] ?: '' }}">
                                         </div>
                                         <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                     </div>
@@ -428,7 +444,7 @@
                                             <option value="group">Group</option>
                                         </select>
                                         <div class="group d-none">
-                                            <input type="text" class="form-control" name="nama_group" id="nama_group" placeholder="Masukkan nama group" autocomplete="off" value="{{ $data['nama_group'] ? $data['nama_group'] : '' }}">
+                                            <input type="text" class="form-control" name="nama_group" id="nama_group" placeholder="Masukkan nama group" autocomplete="off" value="{{ $data['nama_group'] ?: '' }}">
                                         </div>
                                         <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                     </div>
@@ -446,7 +462,7 @@
                                         <div class="group-column">
                                             <div class="form-group">
                                                 <label for="">Nama Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
-                                                <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan Nama Lengkap" autocomplete="off" class="form-control" value="{{ $data['nama_lengkap'] ? $data['nama_lengkap'] : '' }}">
+                                                <input type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Masukkan Nama Lengkap" autocomplete="off" class="form-control" value="{{ $data['nama_lengkap'] ?: '' }}">
                                             </div>
 
                                             <div class="group-column p-0 mt-3">
@@ -454,36 +470,16 @@
                                                     <label for="">Foto KTP / NPWP <span class="text-danger">*</span></label>
                                                     <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
                                                 </div>
-                        
-                                                @if($data)
-                                                    @if ($data['foto_ktp'])
-                                                        @if(File::extension($data['foto_ktp']) == 'pdf')
-                                                            <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
-                                                                <p style="font-size: 18px;">Preview file KTP</p>
-                                                                @if ($data['status_upload_nik'] === 'success')
-                                                                    <a href="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                                @elseif ($data['status_upload_nik'] === 'pending')
-                                                                    <a href="{{ asset('temp_files/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                                @endif
-                                                            </div>
-                                                        @elseif($data['foto_ktp'] && File::extension($data['foto_ktp']) != 'pdf')
-                                                            <div class="form-group p-0" id="preview_ktp">
-                                                                @if ($data['status_upload_nik'] === 'success')
-                                                                    <img id="preview_foto_ktp" src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
-                                                                @elseif ($data['status_upload_nik'] === 'pending')
-                                                                    <img id="preview_foto_ktp" src="{{ asset('temp_files/' . $data['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
-                                                                @endif
-                                                            </div>
+
+                                                @if($fotoKTP)
+                                                    <div class="form-group {{ File::extension($fotoKTP === 'pdf') ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_ktp" style="height: 197px;">
+                                                        @if(File::extension($fotoKTP) === 'pdf')
+                                                            <p style="font-size: 18px;">Preview file KTP</p>
+                                                            <a href="{{ $urlKTP}}" target="_blank" id="previewPDF">Preview PDF</a>
                                                         @else
-                                                            <div class="form-group" id="preview_ktp">
-                                                                <p class="text-center">Belum ada file</p>
-                                                            </div>
+                                                            <img id="preview_foto_ktp" src="{{ $urlKTP }}" alt="Belum ada file" data-action="zoom">
                                                         @endif
-                                                    @else
-                                                        <div class="form-group" id="preview_ktp">
-                                                            <p class="text-center">Belum ada file</p>
-                                                        </div>
-                                                    @endif
+                                                    </div>
                                                 @else
                                                     <div class="form-group" id="preview_ktp">
                                                         <p class="text-center">Belum ada file</p>
@@ -496,7 +492,7 @@
                                         <div class="group-column">
                                             <div class="form-group">
                                                 <label for="">Alamat Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
-                                                <textarea name="alamat_ktp" id="alamat_ktp" class="form-control" rows="6" placeholder="Masukkan alamat lengkap KTP" autocomplete="off" required>{{ $data['alamat_ktp'] ? $data['alamat_ktp'] : '' }}</textarea>
+                                                <textarea name="alamat_ktp" id="alamat_ktp" class="form-control" rows="6" placeholder="Masukkan alamat lengkap KTP" autocomplete="off" required>{{ $data['alamat_ktp'] ?: '' }}</textarea>
                                             </div>
 
                                             <div class="branch-section mt-4 p-0">
@@ -519,13 +515,13 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nomor Rekening <span class="text-danger">*</span></label>
-                                        <input type="text" name="nomor_rekening" id="nomor_rekening" class="form-control" autocomplete="off" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="15" placeholder="Masukkan nomor rekening" required value="{{ $data['informasi_bank']['nomor_rekening'] ? $data['informasi_bank']['nomor_rekening'] : '' }}">
+                                        <input type="text" name="nomor_rekening" id="nomor_rekening" class="form-control" autocomplete="off" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="15" placeholder="Masukkan nomor rekening" required value="{{ $data['informasi_bank']['nomor_rekening'] ?: '' }}">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nama Rekening <span class="text-danger">*</span></label>
-                                        <input type="text" name="nama_rekening" id="nama_rekening" class="form-control" autocomplete="off" placeholder="Masukkan nama rekening" required value="{{ $data['informasi_bank']['nama_rekening'] ? $data['informasi_bank']['nama_rekening'] : '' }}">
+                                        <input type="text" name="nama_rekening" id="nama_rekening" class="form-control" autocomplete="off" placeholder="Masukkan nama rekening" required value="{{ $data['informasi_bank']['nama_rekening'] ?: '' }}">
                                     </div>
                                 </div>
                             </div>
@@ -533,7 +529,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nama Bank <span class="text-danger">*</span></label>
-                                        <input type="text" name="nama_bank" id="nama_bank" class="form-control" autocomplete="off" placeholder="Masukkan nama bank" required value="{{ $data['informasi_bank']['nama_bank'] ? $data['informasi_bank']['nama_bank'] : '' }}">
+                                        <input type="text" name="nama_bank" id="nama_bank" class="form-control" autocomplete="off" placeholder="Masukkan nama bank" required value="{{ $data['informasi_bank']['nama_bank'] ?: '' }}">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -545,7 +541,7 @@
                                             <option value="lainnya">Lainnya</option>
                                         </select>
                                         <div class="rekening_lain d-none">
-                                            <input type="text" class="form-control" name="rekening_lain" id="rekening_lain" placeholder="Masukkan pemilik rekening lain" autocomplete="off" value="{{ $data['informasi_bank']['rekening_lain'] ? $data['informasi_bank']['rekening_lain'] : '' }}">
+                                            <input type="text" class="form-control" name="rekening_lain" id="rekening_lain" placeholder="Masukkan pemilik rekening lain" autocomplete="off" value="{{ $data['informasi_bank']['rekening_lain'] ?: '' }}">
                                         </div>
                                         <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                     </div>
@@ -559,13 +555,13 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nama Penanggung Jawab <span class="text-danger">*</span></label>
-                                        <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" autocomplete="off" class="form-control" placeholder="Masukkan nama penanggung jawab" required value="{{ $data['data_identitas']['nama'] ? $data['data_identitas']['nama'] : '' }}">
+                                        <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" autocomplete="off" class="form-control" placeholder="Masukkan nama penanggung jawab" required value="{{ $data['data_identitas']['nama'] ?: '' }}">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Jabatan <span class="text-danger">*</span></label>
-                                        <input type="text" name="jabatan" id="jabatan" class="form-control" autocomplete="off" placeholder="Masukkan jabatan" required value="{{ $data['data_identitas']['jabatan'] ? $data['data_identitas']['jabatan'] : '' }}">
+                                        <input type="text" name="jabatan" id="jabatan" class="form-control" autocomplete="off" placeholder="Masukkan jabatan" required value="{{ $data['data_identitas']['jabatan'] ?: '' }}">
                                     </div>
                                 </div>
                             </div>
@@ -583,7 +579,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nomor Handphone <span class="text-danger">*</span></label>
-                                        <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" autocomplete="off" class="form-control" required placeholder="Contoh: 012345678910" value="{{ $data['data_identitas']['no_hp'] ? $data['data_identitas']['no_hp'] : '' }}">
+                                        <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" autocomplete="off" class="form-control" required placeholder="Contoh: 012345678910" value="{{ $data['data_identitas']['no_hp'] ?: '' }}">
                                     </div>
                                 </div>
                             </div>
@@ -595,37 +591,17 @@
                                             <input type="file" name="foto_penanggung" id="foto_penanggung" class="form-control" onchange="previewFilePenanggung(this);" accept=".jpg, .png, .pdf, .jpeg">
                                         </div>
 
-                                        @if($data)
-                                            @if ($data['data_identitas']['foto'])
-                                                @if(File::extension($data['data_identitas']['foto']) == 'pdf')
-                                                    <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
-                                                        <p style="font-size: 18px">Preview file identitas</p>
-                                                        @if ($data['data_identitas']['status_upload_foto'] === 'success')
-                                                            <a href="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                        @elseif ($data['data_identitas']['status_upload_foto'] === 'pending')
-                                                            <a href="{{ asset('temp_files/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                        @endif
-                                                    </div>
-                                                @elseif(File::extension($data['data_identitas']['foto']) != 'pdf')
-                                                    <div id="preview_penanggung" class="form-group p-0">
-                                                        @if ($data['data_identitas']['status_upload_foto'] === 'success')
-                                                            <img id="preview_foto_penanggung" src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
-                                                        @elseif ($data['data_identitas']['status_upload_foto'] === 'pending')
-                                                            <img id="preview_foto_penanggung" src="{{ asset('temp_files/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
-                                                        @endif
-                                                    </div>
+                                        @if($fotoPenanggung)
+                                            <div class="form-group {{ File::extension($fotoPenanggung) === 'pdf' ? 'd-flex justify-content-between align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_penanggung" style="height: 197px;">
+                                                @if(File::extension($fotoPenanggung) === 'pdf')
+                                                    <p style="font-size: 18px">Preview file identitas</p>
+                                                    <a href="{{ $urlPenanggung }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                 @else
-                                                    <div id="preview_penanggung" class="form-group">
-                                                        <p class="text-center">Belum ada file</p>
-                                                    </div>
+                                                    <img id="preview_foto_penanggung" src="{{ $urlPenanggung }}" alt="Belum ada file" data-action="zoom">
                                                 @endif
-                                            @else
-                                                <div id="preview_penanggung" class="form-group">
-                                                    <p class="text-center">Belum ada file</p>
-                                                </div>
-                                            @endif
+                                            </div>
                                         @else
-                                            <div id="preview_penanggung" class="form-group">
+                                            <div class="form-group" id="preview_penanggung">
                                                 <p class="text-center">Belum ada file</p>
                                             </div>
                                         @endif
@@ -881,7 +857,7 @@
                         });
                     }
                 } else {
-                    $("#preview_ktp").css('height', '197px');
+                    $("#preview_ktp").css('height', 'auto');
                     $('#preview_ktp').html('<img id="preview_foto_ktp" src="" alt="Preview" data-action="zoom">');
                     reader.onload = function() {
                         $("#preview_foto_ktp").attr("src", reader.result);
@@ -910,7 +886,7 @@
                         });
                     }
                 } else {
-                    $("#preview_penanggung").css('height', '197px');
+                    $("#preview_penanggung").css('height', 'auto');
                     $('#preview_penanggung').html('<img id="preview_foto_penanggung" src="" alt="Preview" data-action="zoom">');
                     reader.onload = function() {
                         $("#preview_foto_penanggung").attr("src", reader.result);

@@ -347,6 +347,22 @@
 @endsection
 
 @section('content')
+    @php
+        // FOTO KTP
+        $fotoKTP = $data['foto_ktp'] ?? null;
+        $statusKTP = $data['status_upload_nik'] ?? 'pending';
+        $urlKTP = $statusKTP === 'success'
+            ? url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $fotoKTP)
+            : asset('temp_files/' . $fotoKTP);
+
+        // FOTO PENANGGUNG
+        $fotoPenanggung = $data['data_identitas']['foto'] ?? null;
+        $statusPenanggung = $data['data_identitas']['status_upload_foto'] ?? 'pending';
+        $urlPenanggung = $statusPenanggung === 'success'
+            ? url('/form-customer/getFiles/FileIDPersonCharge/' . $fotoPenanggung)
+            : asset('temp_files/' . $fotoPenanggung);
+    @endphp
+
     <div class="container">
         <div class="container-fluid">
             <div class="content">
@@ -373,7 +389,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group p-0">
                                     <label for="">Sales</label>
-                                    <input type="text" name="nama_sales" id="nama_sales" class="form-control" autocomplete="off" readonly value="{{ $data['nama_sales'] ? $data['nama_sales'] : '-' }}">
+                                    <input type="text" name="nama_sales" id="nama_sales" class="form-control" autocomplete="off" readonly value="{{ $data['nama_sales'] ?: '-' }}">
                                 </div>
                             </div>
                         </div>
@@ -415,7 +431,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Alamat Email Usaha</label>
-                                    <input type="text" name="alamat_email_perusahaan" id="alamat_email_perusahaan" class="form-control" autocomplete="off" readonly value="{{ $data['alamat_email'] ? $data['alamat_email'] : '-' }}">
+                                    <input type="text" name="alamat_email_perusahaan" id="alamat_email_perusahaan" class="form-control" autocomplete="off" readonly value="{{ $data['alamat_email'] ?: '-' }}">
                                 </div>
                             </div>
                         </div>
@@ -429,7 +445,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Tahun Berdiri</label>
-                                    <input type="text" name="tahun_berdiri" id="tahun_berdiri" autocomplete="off" class="form-control" readonly value="{{ $data['tahun_berdiri'] ? $data['tahun_berdiri'] : '-' }}">
+                                    <input type="text" name="tahun_berdiri" id="tahun_berdiri" autocomplete="off" class="form-control" readonly value="{{ $data['tahun_berdiri'] ?: '-' }}">
                                 </div>
                             </div>
                         </div>
@@ -437,7 +453,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Lama Usaha (Tahun)</label>
-                                    <input type="text" name="lama_usaha" id="lama_usaha" class="form-control" autocomplete="off" readonly value="{{ $data['lama_usaha'] ? $data['lama_usaha'] : '-' }}">
+                                    <input type="text" name="lama_usaha" id="lama_usaha" class="form-control" autocomplete="off" readonly value="{{ $data['lama_usaha'] ?: '-' }}">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -445,7 +461,7 @@
                                     <label for="">Bidang Usaha</label>
                                     <input type="text" name="bidang_usaha" id="bidang_usaha" autocomplete="off" class="form-control" readonly value="{{ strtoupper(str_replace('_', ' ', $data['bidang_usaha'])) }}">
                                     <div class="bidang_lain p-0 @if($data['bidang_usaha'] != 'lainnya') d-none @endif">
-                                        <input type="text" class="form-control" name="bidang_usaha_lain" id="bidang_usaha_lain" readonly autocomplete="off" value="{{ $data['bidang_usaha_lain'] ? $data['bidang_usaha_lain'] : '-'  }}">
+                                        <input type="text" class="form-control" name="bidang_usaha_lain" id="bidang_usaha_lain" readonly autocomplete="off" value="{{ $data['bidang_usaha_lain'] ?: '-'  }}">
                                     </div>
                                 </div>
                             </div>
@@ -456,14 +472,14 @@
                                     <label for="">Status Kepemilkan Tempat Usaha</label>
                                     <input type="text" name="status_kepemilikan" id="status_kepemilikan" autocomplete="off" class="form-control" readonly value="{{ ucwords(str_replace('_', ' ', $data['status_kepemilikan'])) }}">
                                     <div class="group p-0 @if($data['status_kepemilikan'] != 'group') d-none @endif">
-                                        <input type="text" class="form-control" name="nama_group" id="nama_group" autocomplete="off" readonly value="{{ $data['nama_group'] ? $data['nama_group'] : '-' }}">
+                                        <input type="text" class="form-control" name="nama_group" id="nama_group" autocomplete="off" readonly value="{{ $data['nama_group'] ?: '-' }}">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">NIK</label>
-                                    <input type="text" id="nomor_ktp" name="nomor_ktp" autocomplete="off" class="form-control" readonly value="{{ $data['nomor_ktp'] ? $data['nomor_ktp']  : $data['nomor_npwp'] }}">
+                                    <input type="text" id="nomor_ktp" name="nomor_ktp" autocomplete="off" class="form-control" readonly value="{{ $data['nomor_ktp'] ?: $data['nomor_npwp'] }}">
                                 </div>
                             </div>
                         </div>
@@ -473,28 +489,24 @@
                                     <div class="group-column">
                                         <div class="form-group">
                                             <label for="">Nama Lengkap Sesuai Identitas</label>
-                                            <input type="text" id="nama_lengkap" name="nama_lengkap" autocomplete="off" class="form-control" readonly value="{{ $data['nama_lengkap'] ? $data['nama_lengkap'] : '-' }}">
+                                            <input type="text" id="nama_lengkap" name="nama_lengkap" autocomplete="off" class="form-control" readonly value="{{ $data['nama_lengkap'] ?: '-' }}">
                                         </div>
 
                                         <div class="group-column">
                                             <div class="form-group p-0 mt-2">
                                                 <label for="">Foto KTP <span class="text-danger">*</span></label>
-                                                @if(File::extension($data['foto_ktp']) == 'pdf')
-                                                    <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
-                                                        <p style="font-size: 18px;">Preview file KTP</p>
-                                                        @if ($data['status_upload_nik'] === 'success')
-                                                            <a href="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                        @elseif ($data['status_upload_nik'] === 'pending')
-                                                            <a href="{{ asset('temp_files/' . $data['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                @if($fotoKTP)
+                                                    <div class="form-group {{ File::extension($fotoKTP) === 'pdf' ? 'd-flex justify-content-between align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_ktp" style="height: auto;">
+                                                        @if(File::extension($fotoKTP) === 'pdf')
+                                                            <p style="font-size: 18px;">Preview file KTP</p>
+                                                            <a href="{{ $urlKTP }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                        @else
+                                                            <img id="preview_foto_ktp" src="{{ $urlKTP }}" alt="Belum ada file" data-action="zoom">
                                                         @endif
                                                     </div>
                                                 @else
-                                                    <div class="form-group p-0" id="preview_ktp">
-                                                        @if ($data['status_upload_nik'] === 'success')
-                                                            <img id="preview_foto_ktp" src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $data['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
-                                                        @elseif ($data['status_upload_nik'] === 'pending')
-                                                            <img id="preview_foto_ktp" src="{{ asset('temp_files/' . $data['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
-                                                        @endif
+                                                    <div id="preview_ktp" class="form-group">
+                                                        <p class="text-center">File tidak ditemukan</p>
                                                     </div>
                                                 @endif
                                             </div>
@@ -525,13 +537,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nomor Rekening</label>
-                                    <input type="text" name="nomor_rekening" id="nomor_rekening" class="form-control" autocomplete="off" readonly value="{{ $data['informasi_bank']['nomor_rekening'] ? $data['informasi_bank']['nomor_rekening'] : '-' }}">
+                                    <input type="text" name="nomor_rekening" id="nomor_rekening" class="form-control" autocomplete="off" readonly value="{{ $data['informasi_bank']['nomor_rekening'] ?: '-' }}">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Rekening</label>
-                                    <input type="text" name="nama_rekening" id="nama_rekening" class="form-control" autocomplete="off" readonly value="{{ $data['informasi_bank']['nama_rekening'] ? $data['informasi_bank']['nama_rekening'] : '-' }}">
+                                    <input type="text" name="nama_rekening" id="nama_rekening" class="form-control" autocomplete="off" readonly value="{{ $data['informasi_bank']['nama_rekening'] ?: '-' }}">
                                 </div>
                             </div>
                         </div>
@@ -539,15 +551,15 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Bank</label>
-                                    <input type="text" name="nama_bank" id="nama_bank" class="form-control" autocomplete="off" readonly value="{{ $data['informasi_bank']['nama_bank'] ? $data['informasi_bank']['nama_bank'] : '-' }}">
+                                    <input type="text" name="nama_bank" id="nama_bank" class="form-control" autocomplete="off" readonly value="{{ $data['informasi_bank']['nama_bank'] ?: '-' }}">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Pemilik Rekening</label>
-                                    <input type="text" name="pemilik_rekening" id="pemilik_rekening" class="form-control" autocomplete="off" readonly value="{{ $data['informasi_bank']['status'] ? ucwords(str_replace('_', ' ', $data['informasi_bank']['status'])) : '-' }}">
+                                    <input type="text" name="pemilik_rekening" id="pemilik_rekening" class="form-control" autocomplete="off" readonly value="{{ ucwords(str_replace('_', ' ', $data['informasi_bank']['status'])) ?: '-' }}">
                                     <div class="rekening_lain @if($data['informasi_bank']['status'] != 'lainnya') d-none @endif">
-                                        <input type="text" class="form-control" name="rekening_lain" id="rekening_lain" autocomplete="off" readonly value="{{ $data['informasi_bank']['rekening_lain'] ? $data['informasi_bank']['rekening_lain'] : '-' }}">
+                                        <input type="text" class="form-control" name="rekening_lain" id="rekening_lain" autocomplete="off" readonly value="{{ $data['informasi_bank']['rekening_lain'] ?: '-' }}">
                                     </div>
                                 </div>
                             </div>
@@ -560,13 +572,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Penanggung Jawab</label>
-                                    <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" autocomplete="off" class="form-control" readonly value="{{ $data['data_identitas']['nama'] ? $data['data_identitas']['nama'] : '-' }}">
+                                    <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" autocomplete="off" class="form-control" readonly value="{{ $data['data_identitas']['nama'] ?: '-' }}">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Jabatan</label>
-                                    <input type="text" name="jabatan" id="jabatan" class="form-control" autocomplete="off" readonly value="{{ $data['data_identitas']['jabatan'] ? $data['data_identitas']['jabatan'] : '-' }}">
+                                    <input type="text" name="jabatan" id="jabatan" class="form-control" autocomplete="off" readonly value="{{ $data['data_identitas']['jabatan'] ?: '-' }}">
                                 </div>
                             </div>
                         </div>
@@ -574,13 +586,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group" >
                                     <label for="">Identitas Penanggung Jawab</label>
-                                    <input type="text" name="identitas_penanggung_jawab" id="identitas_penanggung_jawab" class="form-control" autocomplete="off" readonly value="{{ $data['data_identitas']['identitas'] ? strtoupper($data['data_identitas']['identitas']) : '-' }}">
+                                    <input type="text" name="identitas_penanggung_jawab" id="identitas_penanggung_jawab" class="form-control" autocomplete="off" readonly value="{{ strtoupper($data['data_identitas']['identitas']) ?: '-' }}">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nomor Handphone</label>
-                                    <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" autocomplete="off" class="form-control" readonly value="{{ $data['data_identitas']['no_hp'] ? $data['data_identitas']['no_hp'] : '-' }}">
+                                    <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" autocomplete="off" class="form-control" readonly value="{{ $data['data_identitas']['no_hp'] ?: '-' }}">
                                 </div>
                             </div>
                         </div>
@@ -588,22 +600,18 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Foto Identitas (KTP / NPWP)</label>
-                                    @if(File::extension($data['data_identitas']['foto']) == 'pdf')
-                                        <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
-                                            <p style="font-size: 18px;">Preview file identitas</p>
-                                            @if ($data['data_identitas']['status_upload_foto'] === 'success')
-                                                <a href="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                            @elseif ($data['data_identitas']['status_upload_foto'] === 'pending')
-                                                <a href="{{ asset('temp_files/' . $data['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                    @if($fotoPenanggung)
+                                        <div class="form-group {{ File::extension($fotoPenanggung) === 'pdf' ? 'd-flex justify-content-between align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_penanggung" style="height: auto;">
+                                            @if(File::extension($fotoPenanggung) === 'pdf')
+                                                <p style="font-size: 18px;">Preview file identitas</p>
+                                                <a href="{{ $urlPenanggung }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                            @else
+                                                <img id="preview_foto_penanggung" src="{{ $urlPenanggung }}" alt="Belum ada file" data-action="zoom">
                                             @endif
                                         </div>
                                     @else
-                                        <div id="preview_penanggung" class="form-group p-0">
-                                            @if ($data['data_identitas']['status_upload_foto'] === 'success')
-                                                <img id="preview_foto_penanggung" src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
-                                            @elseif ($data['data_identitas']['status_upload_foto'] === 'pending')
-                                                <img id="preview_foto_penanggung" src="{{ asset('temp_files/' . $data['data_identitas']['foto']) }}" alt="Belum ada file" data-action="zoom">
-                                            @endif
+                                        <div id="preview_penanggung" class="form-group">
+                                            <p class="text-center">File tidak ditemukan</p>
                                         </div>
                                     @endif
                                 </div>
@@ -700,7 +708,7 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">New Bill To Code</label>
-                                    <input type="text" name="new_bill_to_code" id="new_bill_to_code" readonly autocomplete="off" class="form-control" value="{{ $data['tipe_customer'] ? $data['tipe_customer']['new_bill_to_code'] ? $data['tipe_customer']['new_bill_to_code'] : '-' : '-' }}">
+                                    <input type="text" name="new_bill_to_code" id="new_bill_to_code" readonly autocomplete="off" class="form-control" value="{{ $data['tipe_customer'] ? ($data['tipe_customer']['new_bill_to_code'] ?? '') : '-' }}">
                                 </div>
                             </div>
                         </div>

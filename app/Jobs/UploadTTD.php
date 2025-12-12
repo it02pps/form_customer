@@ -41,9 +41,9 @@ class UploadTTD implements ShouldQueue
         $imageName = $this->imageName;
 
         $response = Http::withHeaders([
-            'x-api-key' => config('services.service_x.api_key'),
-            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-        ])->get(config('services.service_x.url') . '/api/checkfile', [
+            'x-api-key' => config('services.service_v.api_key'),
+            'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+        ])->get(config('services.service_v.url') . '/api/checkfile', [
             'category' => 'FileIDSignature',
             'filename' => $oldData ? $oldData : ''
         ]);
@@ -53,21 +53,21 @@ class UploadTTD implements ShouldQueue
             $category = 'FileIDSignature';
             $signature = $oldData;
             $response = Http::withHeaders([
-                'x-api-key' => config('services.service_x.api_key'),
-                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-            ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$signature", []);
+                'x-api-key' => config('services.service_v.api_key'),
+                'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+            ])->delete(config('services.service_v.url') . "/api/deletefile/$category/$signature", []);
             $result = $response->json();
         }
 
         // $identitas_penanggung->ttd = $imageName;
         $response = Http::withHeaders([
-            'x-api-key' => config('services.service_x.api_key'),
-            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+            'x-api-key' => config('services.service_v.api_key'),
+            'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
         ])->attach(
             'file',
             $content,
             $imageName
-        )->post(config('services.service_x.url') . '/api/uploadfile', [
+        )->post(config('services.service_v.url') . '/api/uploadfile', [
             'category' => 'FileIDSignature',
             'filename' => substr($imageName, 0, strrpos($imageName, '.'))
         ]);

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\UploadIdentitas;
-use App\Jobs\UploadKTP;
-use App\Jobs\UploadNPWP;
-use App\Jobs\UploadSPPKP;
+use App\Services\UploadIdentitas;
+use App\Services\UploadKTP;
+use App\Services\UploadNPWP;
+use App\Services\UploadSPPKP;
 use App\Models\IdentitasPerusahaan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -21,7 +21,6 @@ use App\Models\TipeCustomer;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Yajra\DataTables\Facades\DataTables;
@@ -107,7 +106,7 @@ class HomeController extends Controller
                 }
             })
             ->addColumn('created_date', function ($e) {
-                return Carbon::parse($e->created_at)->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y H:i');
+                return Carbon::parse($e->created_at)->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d/m/Y');
             })
             ->rawColumns(['aksi', 'status', 'checklist'])
             ->make(true);
@@ -323,7 +322,7 @@ class HomeController extends Controller
                         'foto_ktp' => $filename,
                         'status_upload_nik' => 'pending'
                     ]);
-                    UploadKTP::dispatch($filename, $identitas_perusahaan->foto_ktp, $tempPath, $identitas_perusahaan->id);
+                    UploadKTP::handleUpload($filename, $identitas_perusahaan->foto_ktp, $tempPath, $identitas_perusahaan->id);
                 }
                 // Clear NPWP column
                 $identitas_perusahaan->badan_usaha = null;
@@ -356,7 +355,7 @@ class HomeController extends Controller
                         'foto_npwp' => $filename,
                         'status_upload_npwp' => 'pending'
                     ]);
-                    UploadNPWP::dispatch($filename, $identitas_perusahaan->foto_npwp, $tempPath, $identitas_perusahaan->id);
+                    UploadNPWP::handleUpload($filename, $identitas_perusahaan->foto_npwp, $tempPath, $identitas_perusahaan->id);
                 }
 
                 // Validasi email faktur pajak
@@ -385,7 +384,7 @@ class HomeController extends Controller
                             'sppkp' => $filename,
                             'status_upload_sppkp' => 'pending'
                         ]);
-                        UploadSPPKP::dispatch($filename, $identitas_perusahaan->sppkp, $tempPath, $identitas_perusahaan->id);
+                        UploadSPPKP::handleUpload($filename, $identitas_perusahaan->sppkp, $tempPath, $identitas_perusahaan->id);
                     }
                 }
 
@@ -457,7 +456,7 @@ class HomeController extends Controller
                     'foto' => $filename,
                     'status_upload_foto' => 'pending'
                 ]);
-                UploadIdentitas::dispatch($filename, $identitas_penanggung_jawab->foto, $tempPath, $identitas_penanggung_jawab->id);
+                UploadIdentitas::handleUpload($filename, $identitas_penanggung_jawab->foto, $tempPath, $identitas_penanggung_jawab->id);
             }
             $identitas_penanggung_jawab->save();
 

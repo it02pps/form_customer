@@ -41,9 +41,9 @@ class UploadIdentitas implements ShouldQueue
         $content = file_get_contents($this->tempPath);
 
         $response = Http::withHeaders([
-            'x-api-key' => config('services.service_x.api_key'),
-            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-        ])->get(config('services.service_x.url') . '/api/checkfile', [
+            'x-api-key' => config('services.service_v.api_key'),
+            'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+        ])->get(config('services.service_v.url') . '/api/checkfile', [
             'category' => 'FileIDPersonCharge',
             'filename' => $oldData ? $oldData : ''
         ]);
@@ -52,21 +52,21 @@ class UploadIdentitas implements ShouldQueue
         if ($result['status'] == true) {
             $category = 'FileIDPersonCharge';
             $response = Http::withHeaders([
-                'x-api-key' => config('services.service_x.api_key'),
-                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-            ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$oldData", []);
+                'x-api-key' => config('services.service_v.api_key'),
+                'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+            ])->delete(config('services.service_v.url') . "/api/deletefile/$category/$oldData", []);
             $result = $response->json();
         }
 
         // $identitas_penanggung->tempPath = $filename;
         $response = Http::withHeaders([
-            'x-api-key' => config('services.service_x.api_key'),
-            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+            'x-api-key' => config('services.service_v.api_key'),
+            'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
         ])->attach(
             'file',
             $content,
             $filename
-        )->post(config('services.service_x.url') . '/api/uploadfile', [
+        )->post(config('services.service_v.url') . '/api/uploadfile', [
             'category' => 'FileIDPersonCharge',
             'filename' => substr($filename, 0, strrpos($filename, '.'))
         ]);

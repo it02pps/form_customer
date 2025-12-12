@@ -12,11 +12,11 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use App\Helper\base30ToImage;
 use Illuminate\Support\Str;
-use App\Jobs\UploadIdentitas;
-use App\Jobs\UploadKTP;
-use App\Jobs\UploadNPWP;
-use App\Jobs\UploadSPPKP;
-use App\Jobs\UploadTTD;
+use App\Services\UploadIdentitas;
+use App\Services\UploadKTP;
+use App\Services\UploadNPWP;
+use App\Services\UploadSPPKP;
+use App\Services\UploadTTD;
 use Illuminate\Support\Facades\Storage;
 
 class perusahaanServices
@@ -189,7 +189,7 @@ class perusahaanServices
                         'foto_ktp' => $filename,
                         'status_upload_nik' => 'pending'
                     ]);
-                    UploadKTP::dispatch($filename, ($oldData ? $oldData->foto_ktp : ''), $tempPath, $data->id);
+                    UploadKTP::handleUpload($filename, ($oldData ? $oldData->foto_ktp : ''), $tempPath, $data->id);
                 } else {
                     DB::table('identitas_perusahaan')->where('id', $data->id)->update([
                         'foto_ktp' => $oldData->foto_ktp,
@@ -251,7 +251,7 @@ class perusahaanServices
                         'ttd' => $request->hasil_ttd ? $imageName : ($oldData ? $oldData->data_identitas->ttd : $imageName),
                         'status_upload_ttd' => 'pending'
                     ]);
-                    UploadTTD::dispatch(($oldData ? (string) $oldData->data_identitas['ttd'] : ''), $path, $imageName, $data->id);
+                    UploadTTD::handleUpload(($oldData ? (string) $oldData->data_identitas['ttd'] : ''), $path, $imageName, $data->id);
                 } else {
                     return ['status' => false, 'error' => 'Tanda Tangan tidak boleh kosong'];
                 }
@@ -268,7 +268,7 @@ class perusahaanServices
                         'foto_npwp' => $filename,
                         'status_upload_npwp' => 'pending'
                     ]);
-                    UploadNPWP::dispatch($filename, ($oldData ? $oldData->foto_npwp : ''), $tempPath, $data->id);
+                    UploadNPWP::handleUpload($filename, ($oldData ? $oldData->foto_npwp : ''), $tempPath, $data->id);
                 } else {
                     DB::table('identitas_perusahaan')->where('id', $data->id)->update([
                         'foto_npwp' => $oldData->foto_npwp,
@@ -289,7 +289,7 @@ class perusahaanServices
                             'sppkp' => $filename,
                             'status_upload_sppkp' => 'pending'
                         ]);
-                        UploadSPPKP::dispatch($filename, ($oldData ? $oldData->sppkp : ''), $tempPath, $data->id);
+                        UploadSPPKP::handleUpload($filename, ($oldData ? $oldData->sppkp : ''), $tempPath, $data->id);
                     } else {
                         DB::table('identitas_perusahaan')->where('id', $data->id)->update([
                             'sppkp' => $oldData->sppkp,
@@ -312,7 +312,7 @@ class perusahaanServices
                     'foto' => $filename,
                     'status_upload_foto' => 'pending'
                 ]);
-                UploadIdentitas::dispatch($filename, ($oldData ? $oldData->data_identitas->foto : ''), $tempPath, $data->id);
+                UploadIdentitas::handleUpload($filename, ($oldData ? $oldData->data_identitas->foto : ''), $tempPath, $data->id);
             } else {
                 DB::table('data_identitas')->where('identitas_perusahaan_id', $data->id)->update([
                     'foto' => $oldData->data_identitas->foto,

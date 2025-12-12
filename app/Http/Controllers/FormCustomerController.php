@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Sales;
+use App\Services\getFiles;
 use App\Services\PerusahaanServices;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -29,10 +30,11 @@ class FormCustomerController extends Controller
     {
         try {
             $response = Http::withHeaders([
-                'x-api-key' => config('services.service_x.api_key'),
-                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-            ])->get(config('services.service_x.url') . '/api/checkstatus');
+                'x-api-key' => config('services.service_v.api_key'),
+                'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+            ])->get(config('services.service_v.url') . '/api/checkstatus');
 
+            // dd($response->body());
             if ($response->json()['status'] == false) {
                 abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
             }
@@ -200,9 +202,9 @@ class FormCustomerController extends Controller
 
                 try {
                     $response = Http::withHeaders([
-                        'x-api-key' => config('services.service_x.api_key'),
-                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                    ])->get(config('services.service_x.url') . '/api/checkfile', [
+                        'x-api-key' => config('services.service_v.api_key'),
+                        'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+                    ])->get(config('services.service_v.url') . '/api/checkfile', [
                         'category' => 'FilePDFCustomer',
                         'filename' => $data->file_customer_external
                     ]);
@@ -211,21 +213,21 @@ class FormCustomerController extends Controller
                     if ($result['status'] == true) {
                         $category = 'FilePDFCustomer';
                         $response = Http::withHeaders([
-                            'x-api-key' => config('services.service_x.api_key'),
-                            'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                        ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$data->file_customer_external", []);
+                            'x-api-key' => config('services.service_v.api_key'),
+                            'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+                        ])->delete(config('services.service_v.url') . "/api/deletefile/$category/$data->file_customer_external", []);
                         $result = $response->json();
                     }
 
                     // $data->file_customer_external = $filename;
                     $response = Http::withHeaders([
-                        'x-api-key' => config('services.service_x.api_key'),
-                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                        'x-api-key' => config('services.service_v.api_key'),
+                        'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
                     ])->attach(
                         'file',
                         file_get_contents($tempPath),
                         $filename
-                    )->post(config('services.service_x.url') . '/api/uploadfile', [
+                    )->post(config('services.service_v.url') . '/api/uploadfile', [
                         'category' => 'FilePDFCustomer',
                         'filename' => substr($filename, 0, strrpos($filename, '.'))
                     ]);
@@ -255,9 +257,9 @@ class FormCustomerController extends Controller
 
         try {
             $getFilePenanggung = Http::withHeaders([
-                'x-api-key' => config('services.service_x.api_key'),
-                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-            ])->get(config('services.service_x.url') . "/api/getfile/FileIDPersonCharge/" . $data->data_identitas->foto, []);
+                'x-api-key' => config('services.service_v.api_key'),
+                'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+            ])->get(config('services.service_v.url') . "/api/getfile/FileIDPersonCharge/" . $data->data_identitas->foto, []);
 
             $imageBase64Penanggung = null;
             if ($getFilePenanggung->successful()) {
@@ -271,9 +273,9 @@ class FormCustomerController extends Controller
         if ($menu == 'badan_usaha' || $menu == 'badan-usaha') {
             try {
                 $getFileNpwp = Http::withHeaders([
-                    'x-api-key' => config('services.service_x.api_key'),
-                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                ])->get(config('services.service_x.url') . "/api/getfile/FileIDCompanyOrPersonal/" . $data->foto_npwp, []);
+                    'x-api-key' => config('services.service_v.api_key'),
+                    'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+                ])->get(config('services.service_v.url') . "/api/getfile/FileIDCompanyOrPersonal/" . $data->foto_npwp, []);
 
                 $imageBase64Npwp = null;
                 if ($getFileNpwp->successful()) {
@@ -286,9 +288,9 @@ class FormCustomerController extends Controller
 
             try {
                 $getFileSppkp = Http::withHeaders([
-                    'x-api-key' => config('services.service_x.api_key'),
-                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                ])->get(config('services.service_x.url') . "/api/getfile/FileSPPKPCompany/" . $data->sppkp, []);
+                    'x-api-key' => config('services.service_v.api_key'),
+                    'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+                ])->get(config('services.service_v.url') . "/api/getfile/FileSPPKPCompany/" . $data->sppkp, []);
 
                 $imageBase64Sppkp = null;
                 if ($getFileSppkp->successful()) {
@@ -324,9 +326,9 @@ class FormCustomerController extends Controller
         } else {
             try {
                 $getFileKtp = Http::withHeaders([
-                    'x-api-key' => config('services.service_x.api_key'),
-                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                ])->get(config('services.service_x.url') . "/api/getfile/FileIDCompanyOrPersonal/" . $data->foto_ktp, []);
+                    'x-api-key' => config('services.service_v.api_key'),
+                    'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+                ])->get(config('services.service_v.url') . "/api/getfile/FileIDCompanyOrPersonal/" . $data->foto_ktp, []);
 
                 $imageBase64Ktp = null;
                 if ($getFileKtp->successful()) {
@@ -339,9 +341,9 @@ class FormCustomerController extends Controller
 
             try {
                 $getFileSignature = Http::withHeaders([
-                    'x-api-key' => config('services.service_x.api_key'),
-                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                ])->get(config('services.service_x.url') . "/api/getfile/FileIDSignature/" . $data->data_identitas->ttd, []);
+                    'x-api-key' => config('services.service_v.api_key'),
+                    'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+                ])->get(config('services.service_v.url') . "/api/getfile/FileIDSignature/" . $data->data_identitas->ttd, []);
 
                 $imageBase64Signature = null;
                 if ($getFileSignature->successful()) {
@@ -452,9 +454,9 @@ class FormCustomerController extends Controller
         $pdf->Output($outputPath, 'F');
         try {
             $response = Http::withHeaders([
-                'x-api-key' => config('services.service_x.api_key'),
-                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-            ])->get(config('services.service_x.url') . '/api/checkfile', [
+                'x-api-key' => config('services.service_v.api_key'),
+                'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+            ])->get(config('services.service_v.url') . '/api/checkfile', [
                 'category' => 'FileIDMergingPdf',
                 'filename' => $outputFilename
             ]);
@@ -463,20 +465,20 @@ class FormCustomerController extends Controller
             if ($result['status'] == true) {
                 $category = 'FileIDMergingPdf';
                 $response = Http::withHeaders([
-                    'x-api-key' => config('services.service_x.api_key'),
-                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$outputFilename", []);
+                    'x-api-key' => config('services.service_v.api_key'),
+                    'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+                ])->delete(config('services.service_v.url') . "/api/deletefile/$category/$outputFilename", []);
                 $result = $response->json();
             }
 
             $response = Http::withHeaders([
-                'x-api-key' => config('services.service_x.api_key'),
-                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
+                'x-api-key' => config('services.service_v.api_key'),
+                'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
             ])->attach(
                 'file',
                 fopen($outputPath, 'r'),
                 $outputFilename
-            )->post(config('services.service_x.url') . '/api/uploadfile', [
+            )->post(config('services.service_v.url') . '/api/uploadfile', [
                 'category' => 'FileIDMergingPdf',
                 'filename' => substr($outputFilename, 0, strrpos($outputFilename, '.'))
             ]);
@@ -530,15 +532,64 @@ class FormCustomerController extends Controller
 
     public function getFiles($category, $filename)
     {
-        try {
-            $response = Http::withHeaders([
-                'x-api-key' => config('services.service_x.api_key'),
-                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-            ])->get(config('services.service_x.url') . "/api/getfile/$category/$filename", []);
-            return response($response->body(), 200)
-                ->header('Content-Type', $response->header('Content-Type'));
-        } catch (\Illuminate\Http\Client\ConnectionException) {
-            abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
-        }
+        return getFiles::fetchFiles($category, $filename);
+        // $services = [
+        //     'service_l' => config('services.service_l'),
+        //     'service_v' => config('services.service_v')
+        // ];
+
+        // foreach($services as $service) {
+        //     try {
+        //         $response = Http::withHeaders([
+        //             'x-api-key' => $service['api-key'],
+        //             'Host' => parse_url($service['url'], PHP_URL_HOST),
+        //         ])->get($service['url'] . '/api/checkstatus', []);
+
+        //         if(!$response->ok() || $response->json('status') !== 'true') {
+        //             continue;
+        //         }
+
+        //         $file = Http::withHeaders([
+        //             'x-api-key' => $service['api-key'],
+        //             'Host' => parse_url($service['url'], PHP_URL_HOST)
+        //         ])->get($service['url'] . "/api/getfile/$category/$filename", []);
+
+        //         if($file->ok()) {
+        //             return response($file->body(), 200)
+        //                 ->header('Content-Type', $response->header('Content-Type'));
+        //         }
+        //     } catch(\Exception $e) {
+        //         continue;
+        //     }
+        // }
+
+        // abort(404, "File tidak ditemukan disemua service");
+
+        // try {
+        //     $response = Http::withHeaders([
+        //         'x-api-key' => config('services.service_v.api_key'),
+        //         'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+        //     ])->get(config('services.service_v.url') . '/api/checkstatus');
+
+        //     if ($response->json()['status'] == false) {
+        //         abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+        //     }
+        //     return view('customer.menu');
+        // } catch (\Illuminate\Http\Client\ConnectionException $e) {
+        //     // dd($e);
+        //     abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+        // }
+
+        // try {
+        //     $response = Http::withHeaders([
+        //         'x-api-key' => config('services.service_v.api_key'),
+        //         'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+        //     ])->get(config('services.service_v.url') . "/api/getfile/$category/$filename", []);
+        //     dd($response->body());
+        //     return response($response->body(), 200)
+        //         ->header('Content-Type', $response->header('Content-Type'));
+        // } catch (\Illuminate\Http\Client\ConnectionException) {
+        //     abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
+        // }
     }
 }

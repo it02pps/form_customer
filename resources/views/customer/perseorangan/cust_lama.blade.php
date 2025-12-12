@@ -335,6 +335,22 @@
 @endsection
 
 @section('content')
+    @php
+        // FOTO KTP
+        $foto_ktp = $perusahaan['foto_ktp'] ?? null;
+        $status_ktp = $perusahaan['status_upload_nik'] ?? 'pending';
+        $url_ktp = $status_ktp === 'success'
+            ? url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $foto_ktp)
+            : asset('temp_files/' . $foto_ktp);
+
+        // FOTO PENANGGUNG
+        $foto_penanggung = $perusahaan['data_identitas']['foto'] ?? null;
+        $status_penanggung = $perusahaan['status_upload_nik'] ?? 'pending';
+        $url_penanggung = $status_penanggung === 'success'
+            ? url('/form-customer/getFiles/FileIDPersonCharge/' . $foto_penanggung)
+            : asset('temp_files/' . $foto_penanggung);
+    @endphp
+
     <div class="container">
         <div class="container-fluid">
             <div class="content">
@@ -499,8 +515,15 @@
                                                     <label for="">Foto KTP / NPWP <span class="text-danger">*</span></label>
                                                     <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
                                                 </div>
+                                                <div class="form-group {{ File::extension($foto_ktp === 'pdf') ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_ktp" style="height: 271px;">
+                                                    @if(File::extension($foto_ktp) === 'pdf')
+                                                        <a href="{{ $url_ktp }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    @else
+                                                        <img id="preview_foto_ktp" src="{{ $url_ktp }}" alt="Belum ada file" data-action="zoom">
+                                                    @endif
+                                                </div>
                                                 
-                                                @if($data)
+                                                {{-- @if($data)
                                                     @if ($data['foto_ktp'])
                                                         @if(File::extension($data['foto_ktp']) == 'pdf')
                                                             <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
@@ -533,7 +556,7 @@
                                                     <div class="form-group" id="preview_ktp">
                                                         <p class="text-center">Belum ada file</p>
                                                     </div>
-                                                @endif
+                                                @endif --}}
                                             </div>
                                         </div>
                                     </div>
@@ -639,8 +662,15 @@
                                             <label for="">Foto Identitas (KTP / NPWP) <span class="text-danger">*</span></label>
                                             <input type="file" name="foto_penanggung" id="foto_penanggung" class="form-control" onchange="previewFilePenanggung(this);" accept=".jpg, .png, .pdf, .jpeg">
                                         </div>
+                                        <div class="form-group {{ File::extension($foto_penanggung === 'pdf') ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_penanggung" style="height: 271px;">
+                                            @if(File::extension($foto_penanggung === 'pdf'))
+                                                <a href="{{ $url_penanggung }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                            @else
+                                                <img id="preview_foto_penanggung" src="{{ $url_penanggung }}" alt="Belum ada file" data-action="zoom">
+                                            @endif
+                                        </div>
             
-                                        @if($data)
+                                        {{-- @if($data)
                                             @if ($data['data_identitas'])
                                                 @if(File::extension($data['data_identitas']['foto']) == 'pdf')
                                                     <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
@@ -673,7 +703,7 @@
                                             <div id="preview_penanggung" class="form-group">
                                                 <p class="text-center">Belum ada file</p>
                                             </div>
-                                        @endif
+                                        @endif --}}
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -831,7 +861,7 @@
                     }
                 } else {
                     $("#preview_ktp").css({
-                        'height': '271px',
+                        'height': 'auto',
                         'padding-top': '0'
                     });
                     $('#preview_ktp').html('<img id="preview_foto_ktp" src="" alt="Preview" data-action="zoom">');
@@ -863,7 +893,7 @@
                     }
                 } else {
                     $("#preview_penanggung").css({
-                        'height': '271px',
+                        'height': 'auto',
                         'padding-top': '0'
                     });
                     $('#preview_penanggung').html('<img id="preview_foto_penanggung" src="" alt="Preview" data-action="zoom">');

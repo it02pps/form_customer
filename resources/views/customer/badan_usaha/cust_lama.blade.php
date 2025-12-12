@@ -322,6 +322,29 @@
 @endsection
 
 @section('content')
+    @php
+        // FOTO NPWP
+        $foto_npwp = $data['foto_npwp'] ?? null;
+        $status_npwp = $data['status_upload_npwp'] ?? 'pending';
+        $url_npwp = $status_npwp === "success"
+            ? url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $foto_npwp)
+            : asset('temp_files/' . $foto_npwp);
+
+        // FOTO SPPKP
+        $foto_sppkp = $data['sppkp'] ?? null;
+        $status_sppkp = $data['status_upload_sppkp'] ?? 'pending';
+        $url_sppkp = $status_sppkp === "success"
+            ? url('/form-customer/getFiles/FileSPPKPCompany/' . $foto_sppkp)
+            : asset('temp_files/' . $foto_sppkp);
+
+        // FOTO PENANGGUNG
+        $foto_penanggung = $data['data_identitas']['foto'] ?? null;
+        $status_penanggung = $data['data_identitas']['status_upload_foto'] ?? 'pending';
+        $url_penanggung = $status_penanggun === "success"
+            ? url('/form-customer/getFiles/FileIDPersonCharge/' . $foto_penanggung)
+            : asset('temp_files/' . $foto_penanggung);
+    @endphp
+
     <div class="container">
         <div class="container-fluid">
             <div class="content">
@@ -407,7 +430,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group pb-0">
                                         <label for="" class="additional-label">Alamat Email Perusahaan</label>
-                                        <input type="text" name="alamat_email_perusahaan" id="alamat_email_perusahaan" class="form-control" autocomplete="off" placeholder="Contoh: perusahaan@gmail.com" value="{{ $data ? ($data['alamat_email'] ? $data['alamat_email'] : '') : '' }}">
+                                        <input type="text" name="alamat_email_perusahaan" id="alamat_email_perusahaan" class="form-control" autocomplete="off" placeholder="Contoh: perusahaan@gmail.com" value="{{ $data ? ($data['alamat_email'] ?: '') : '' }}">
                                     </div>
                                 </div>
                             </div>
@@ -421,7 +444,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Tahun Berdiri</label>
-                                        <input type="date" name="tahun_berdiri" id="tahun_berdiri" autocomplete="off" class="form-control" value="{{ $data ? ($data['tahun_berdiri'] ? $data['tahun_berdiri'] : '') : '' }}">
+                                        <input type="date" name="tahun_berdiri" id="tahun_berdiri" autocomplete="off" class="form-control" value="{{ $data ? ($data['tahun_berdiri'] ?: '') : '' }}">
                                     </div>
                                 </div>
                             </div>
@@ -429,7 +452,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Lama Usaha (Tahun)</label>
-                                        <input type="text" name="lama_usaha" id="lama_usaha" class="form-control" autocomplete="off" readonly value="{{ $data ? ($data['lama_usaha'] ? $data['lama_usaha'] : '') : '' }}">
+                                        <input type="text" name="lama_usaha" id="lama_usaha" class="form-control" autocomplete="off" readonly value="{{ $data ? ($data['lama_usaha'] ?: '') : '' }}">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -442,7 +465,7 @@
                                             @endforeach
                                         </select>
                                         <div class="bidang_lain d-none">
-                                            <input type="text" class="form-control" name="bidang_usaha_lain" id="bidang_usaha_lain" placeholder="Masukkan bidang usaha lain" autocomplete="off" value="{{ $data ? ($data['bidang_usaha_lain'] ? $data['bidang_usaha_lain'] : '') : '' }}">
+                                            <input type="text" class="form-control" name="bidang_usaha_lain" id="bidang_usaha_lain" placeholder="Masukkan bidang usaha lain" autocomplete="off" value="{{ $data ? ($data['bidang_usaha_lain'] ?: '') : '' }}">
                                         </div>
                                         <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                     </div>
@@ -459,7 +482,7 @@
                                             <option value="group">Group</option>
                                         </select>
                                         <div class="group d-none">
-                                            <input type="text" class="form-control" name="nama_group" id="nama_group" placeholder="Masukkan nama group" autocomplete="off" value="{{ $data ? ($data['nama_group'] ? $data['nama_group'] : '') : '' }}">
+                                            <input type="text" class="form-control" name="nama_group" id="nama_group" placeholder="Masukkan nama group" autocomplete="off" value="{{ $data ? ($data['nama_group'] ?: '') : '' }}">
                                         </div>
                                         <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                     </div>
@@ -515,7 +538,7 @@
 
                                         <div class="form-group">
                                             <label for="" class="additional-label">Email Khusus Untuk Faktur Pajak</label>
-                                            <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Contoh: faktur@gmail.com" value="{{ $data ? $data['email_khusus_faktur_pajak'] : '' }}">
+                                            <input type="email" name="email_faktur" id="email_faktur" class="form-control" autocomplete="off" placeholder="Contoh: faktur@gmail.com" value="{{ $data ? ($data['email_khusus_faktur_pajak'] ?: '') : '' }}">
                                         </div>
                                     </div>
                                 </div>
@@ -525,7 +548,7 @@
                                     <div class="group-column">
                                         <div class="form-group">
                                             <label for="">Nomor Aktif Untuk Faktur Pajak</label>
-                                            <input type="text" name="no_wa" id="no_wa" oninput="this.value = this.value.replace(/[^0-9+-]/g, '')" maxlength="14" class="form-control" autocomplete="off" placeholder="Contoh: 012345678910" value="{{ $data ? $data['nomor_whatsapp'] : '' }}">
+                                            <input type="text" name="no_wa" id="no_wa" oninput="this.value = this.value.replace(/[^0-9+-]/g, '')" maxlength="14" class="form-control" autocomplete="off" placeholder="Contoh: 012345678910" value="{{ $data ? ($data['nomor_whatsapp'] ?: '') : '' }}">
                                         </div>
 
                                         <div class="form-group mt-4 pb-0" id="select">
@@ -540,8 +563,8 @@
                                             <div class="form-group">
                                                 <input type="file" name="foto_sppkp" id="foto_sppkp" onchange="previewFileSppkp(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
                                             </div>
-                
-                                            @if($data)
+
+                                            {{-- @if($data)
                                                 @if ($data['sppkp'])
                                                     @if(File::extension($data['sppkp']) === 'pdf')
                                                         <div id="preview_sppkp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
@@ -574,6 +597,21 @@
                                                 <div id="preview_sppkp" class="form-group">
                                                     <p class="text-center">Belum ada file</p>
                                                 </div>
+                                            @endif --}}
+
+                                            @if($foto_sppkp)
+                                                <div class="form-group {{ File::extension($foto_sppkp) === 'pdf' ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_sppkp" style="Height: 271px;">
+                                                    @if(File::extension($foto_sppkp) === 'pdf')
+                                                        <p style="font-size: 18px;">Preview file SPPKP</p>
+                                                        <a href="{{ $url_sppkp }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                    @else
+                                                        <img id="preview_foto_sppkp" src="{{ $url_sppkp }}" alt="Belum ada file" data-action="zoom">
+                                                    @endif
+                                                </div>
+                                            @else
+                                                <div id="preview_sppkp" class="form-group">
+                                                    <p class="text-center">Belum ada file</p>
+                                                </div>
                                             @endif
                                         </div>
                                     </div>
@@ -585,7 +623,7 @@
                                             <input type="file" name="foto_npwp" id="foto_npwp" onchange="previewFileNpwp(this);" accept=".jpg, .png, .pdf, .jpeg" class="form-control">
                                         </div>
                 
-                                        @if($data)
+                                        {{-- @if($data)
                                             @if ($data['foto_npwp'])
                                                 @if(File::extension($data['foto_npwp']) == 'pdf')
                                                     <div id="preview_npwp" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
@@ -618,6 +656,21 @@
                                             <div id="preview_npwp" class="form-group">
                                                 <p class="text-center">Belum ada file</p>
                                             </div>
+                                        @endif --}}
+
+                                        @if($foto)
+                                            <div class="form-group {{ File::extension($foto_npwp) === 'pdf' ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_npwp" style="height: 271px;">
+                                                @if(File::extension($foto_npwp) === 'pdf')
+                                                    <p style="font-size: 18px;">Preview file NPWP</p>
+                                                    <a href="{{ $url_npwp }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                @else
+                                                    <img id="preview_foto_npwp" src="{{ $url_npwp }}" alt="Belum ada file" data-action="zoom">
+                                                @endif
+                                            </div>
+                                        @else
+                                            <div id="preview_npwp" class="form-group">
+                                                <p class="text-center">Belum ada file</p>
+                                            </div>
                                         @endif
 
                                         <div class="branch-section mt-4 p-0">
@@ -639,13 +692,13 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nomor Rekening <span class="text-danger">*</span></label>
-                                        <input type="text" name="nomor_rekening" id="nomor_rekening" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="15" class="form-control" autocomplete="off" placeholder="Masukkan nomor rekening" required value="{{ $data ? ($data['informasi_bank']['nomor_rekening']) : '' }}">
+                                        <input type="text" name="nomor_rekening" id="nomor_rekening" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="15" class="form-control" autocomplete="off" placeholder="Masukkan nomor rekening" required value="{{ $data ? ($data['informasi_bank']['nomor_rekening'] ?: '') : '' }}">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nama Rekening <span class="text-danger">*</span></label>
-                                        <input type="text" name="nama_rekening" id="nama_rekening" class="form-control" autocomplete="off" placeholder="Masukkan nama rekening" required value="{{ $data ? ($data['informasi_bank']['nama_rekening']) : '' }}">
+                                        <input type="text" name="nama_rekening" id="nama_rekening" class="form-control" autocomplete="off" placeholder="Masukkan nama rekening" required value="{{ $data ? ($data['informasi_bank']['nama_rekening'] ?: '') : '' }}">
                                     </div>
                                 </div>
                             </div>
@@ -653,7 +706,7 @@
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                     <div class="form-group">
                                         <label for="">Nama Bank <span class="text-danger">*</span></label>
-                                        <input type="text" name="nama_bank" id="nama_bank" class="form-control" autocomplete="off" placeholder="Masukkan nama bank" required value="{{ $data ? ($data['informasi_bank']['nama_bank']) : '' }}">
+                                        <input type="text" name="nama_bank" id="nama_bank" class="form-control" autocomplete="off" placeholder="Masukkan nama bank" required value="{{ $data ? ($data['informasi_bank']['nama_bank'] ?: '') : '' }}">
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -666,7 +719,7 @@
                                                 <option value="lainnya">Lainnya</option>
                                             </select>
                                             <div class="rekening_lain d-none">
-                                                <input type="text" class="form-control" name="rekening_lain" id="rekening_lain" placeholder="Masukkan pemilik rekening lain" autocomplete="off" value="{{ $data ? ($data['informasi_bank']['rekening_lain'] ? $data['informasi_bank']['rekening_lain'] : '') : '' }}">
+                                                <input type="text" class="form-control" name="rekening_lain" id="rekening_lain" placeholder="Masukkan pemilik rekening lain" autocomplete="off" value="{{ $data ? ($data['informasi_bank']['rekening_lain'] ?: '') : '' }}">
                                             </div>
                                             <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                         </div>
@@ -717,7 +770,7 @@
                                             <input type="file" name="foto_penanggung" id="foto_penanggung" class="form-control" onchange="previewFilePenanggung(this);" accept=".jpg, .png, .pdf, .jpeg">
                                         </div>
             
-                                        @if($data)
+                                        {{-- @if($data)
                                             @if ($data['data_identitas'])
                                                 @if(File::extension($data['data_identitas']['foto']) == 'pdf')
                                                     <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
@@ -746,6 +799,21 @@
                                                     <p class="text-center">Belum ada file</p>
                                                 </div>
                                             @endif
+                                        @else
+                                            <div id="preview_penanggung" class="form-group">
+                                                <p class="text-center">Belum ada file</p>
+                                            </div>
+                                        @endif --}}
+
+                                        @if($foto_penanggung)
+                                            <div class="form-group {{ File::extension($foto_penanggung) === 'pdf' ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_penanggung" style="height: 271px;">
+                                                @if(File::extension($foto_penanggung) === 'pdf')
+                                                    <p style="font-size: 18px;">Preview file identitas</p>
+                                                    <a href="{{ $url_penanggung }}" target="_blank" id="previewPDF">Preview PDF</a>
+                                                @else
+                                                    <img id="preview_foto_penanggung" src="{{ $url_penanggung }}" alt="Belum ada file" data-action="zoom">
+                                                @endif
+                                            </div>
                                         @else
                                             <div id="preview_penanggung" class="form-group">
                                                 <p class="text-center">Belum ada file</p>
@@ -894,7 +962,7 @@
                     }
                 } else {
                     $("#preview_npwp").css({
-                        'height': '271px',
+                        'height': 'auto',
                         'padding-top': '0'
                     });
                     $('#preview_npwp').html('<img id="preview_foto_npwp" src="" alt="Preview" data-action="zoom">');
@@ -926,7 +994,7 @@
                     }
                 } else {
                     $("#preview_sppkp").css({
-                        'height': '271px',
+                        'height': 'auto',
                         'padding-top': '0'
                     });
                     $('#preview_sppkp').html('<img id="preview_foto_sppkp" src="" alt="Preview" data-action="zoom">');
@@ -958,7 +1026,7 @@
                     }
                 } else {
                     $("#preview_penanggung").css({
-                        'height': '271px',
+                        'height': 'auto',
                         'padding-top': '0'
                     });
                     $('#preview_penanggung').html('<img id="preview_foto_penanggung" src="" alt="Preview" data-action="zoom">');
