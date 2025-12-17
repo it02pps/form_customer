@@ -7,206 +7,216 @@
     <link rel="icon" href="{{ asset('images/Vertical PNG 977 x 1188 px.png') }}">
 
     <title>PDF | PT Papasari</title>
-
     <style>
         * {
             font-family: 'Poppins', sans-serif;
             color: #021526;
         }
-        
-        h2, h3 {
-            text-align: center;
-        }
-
-        .content-body {
-            border-radius: 8px;
-            width: 90%;
-            /* padding: 0 -100px; */
-            margin-left: auto;
-            margin-right: auto;
-            /* height: 100vh; */
-        }
-
-        .content-body .row {
-            page-break-inside: avoid;
-        }
-
-        .column {
-            float: left;
-            width: 50%;
-        }
-
-        .row:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
 
         p {
-            margin-bottom: 0;
-            margin-top: 4px;
+            font-size: 14px;
         }
 
-        p.label {
+        #logo img {
+            width: 30%;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        #header {
+            line-height: 0px;
+        }
+        
+        .dotted-line {
+            border: none;
+            border-top: 1px dotted #000;
+            height: 1px;
+        }
+
+        #bodyTable {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #bodyTable tr td {
+            padding: 3px 0;
+            vertical-align: top;
+            font-size: 14px;
+        }
+
+        #bodyTable tr td:nth-child(1) {
+            width: 30%;
+        }
+
+        #bodyTable tr td:nth-child(2) {
+            width: 3%;
+        }
+
+        #signature-table {
+            width: 100%;
+            margin-top: 40px;
+        }
+
+        #signature-table td {
+            vertical-align: top;
+        }
+
+        .sig-left {
+            width: 60%;
+        }
+
+        .sig-right {
+            width: 40%;
+            text-align: left;
+        }
+
+        .sig-place {
+            margin-bottom: 4px;
+        }
+
+        .sig-title {
+            margin-left: 12%;
+            margin-bottom: 70px; /* jarak tanda tangan */
+        }
+
+        .sig-name {
             font-weight: bold;
-            text-decoration: underline;
-            margin-top: 15px;
+            text-transform: uppercase;
+            font-size: 12.5px;
         }
 
-        .break {
-            page-break-after: always;
-        }
-
-        .content-ttd {
-            margin-top: 6rem;
+        /* Lampiran */
+        .cover-lampiran {
             text-align: center;
-        }
-
-        .lampiran .content-body {
-            text-align: center;
+            margin-top: 200px;
         }
     </style>
 </head>
 <body>
+    <div id="logo">
+        <img src="{{ public_path('images/PNG 4125 x 913.png') }}">
+    </div>
+
     <div class="container">
-        <div class="content-header">
+        <div id="header">
             <h2>FORMULIR DATA CUSTOMER</h2>
+            <p>Dibuat pada : {{ \Carbon\Carbon::now()->locale('id')->settings(['formatFunction' => 'translatedFormat'])->isoFormat('D MMMM YYYY') }}</p>
         </div>
-        <div class="content-body">
-            <h3>IDENTITAS PERUSAHAAN</h3>
-            <div class="row" style="margin-bottom: 20px;">
-                <div class="column">
-                    <p class="label">Sales Person</p>
-                    <p>{{ $data['nama_sales'] ? $data['nama_sales'] : '-' }}</p>
-
-                    <p class="label">Nama Usaha</p>
-                    <p>{{ $data['nama_perusahaan'] }}</p>
-
-                    <p class="label">Alamat Lengkap Usaha</p>
-                    <p>{{ $data['alamat_lengkap'] }}</p>
-
-                    <p class="label">Tahun Berdiri</p>
-                    <p>{{ $data['tahun_berdiri'] ? ($data['tahun_berdiri'] ? \Carbon\Carbon::parse($data['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') : '-') : '-' }}</p>
-
-                    <p class="label">Nomor Handphone Contact Person</p>
-                    <p>{{ $data['nomor_handphone'] }}</p>
-
-                    <p class="label">Alamat Email Perusahaan</p>
-                    <p>{{ $data['alamat_email'] ? $data['alamat_email'] : '-' }}</p>
-
-                    <p class="label">Bidang Usaha</p>
-                    @if($data['bidang_usaha'] == 'lainnya')
-                        <p>{{ ucfirst($data['bidang_usaha_lain']) }}</p>
-                    @else
-                        <p>{{ strtoupper(str_replace('_', ' ', $data['bidang_usaha'])) }}</p>
-                    @endif
-                </div>
-                <div class="column">
-                    <p class="label">Nama Group Usaha</p>
-                    <p>{{ $data['nama_group_perusahaan'] }}</p>
-
-                    <p class="label">Alamat Group Usaha</p>
-                    <p>{{ $data['alamat_group_lengkap'] }}</p>
-
-                    <p class="label">Kota / Kabupaten</p>
-                    <p>{{ $data['kota_kabupaten'] }}</p>
-                    
-                    <p class="label">Lama Usaha (Tahun)</p>
-                    <p>{{ $data['lama_usaha'] ? $data['lama_usaha'].' tahun' : '-' }}</p>
-
-                    <p class="label">Status Kepemilikan Tempat Usaha</p>
-                    @if($data['status_kepemilikan'] == 'group')
-                        <p>{{ ucfirst($data['nama_group']) }}</p>
-                    @else
-                        <p>{{ str_replace("_", ' ', ucfirst($data['status_kepemilikan'])) }}</p>
-                    @endif
-
-                    <p class="label">Nomor KTP</p>
-                    <p>{{ $data['nomor_ktp'] }}</p>
-
-                    <p class="label">Nama Lengkap Sesuai Identitas</p>
-                    <p>{{ $data['nama_lengkap'] }}</p>
-                </div>
+        <hr class="dotted-line">
+        <div id="body">
+            <div class="subBody">
+                <h2 style="margin-bottom: 10px; margin-top: 0;">IDENTITAS PERUSAHAAN</h2>
+                <table id="bodyTable">
+                    <tr>
+                        <td>Nama Usaha</td>
+                        <td>:</td>
+                        <td>{{ $data['nama_perusahaan'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Alamat Lengkap Usaha</td>
+                        <td>:</td>
+                        <td>{{ $data['alamat_lengkap'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Nama Group Usaha</td>
+                        <td>:</td>
+                        <td>{{ $data['nama_group_perusahaan'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Alamat Group Usaha</td>
+                        <td>:</td>
+                        <td>{{ $data['alamat_group_lengkap'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Kota / Kabupaten</td>
+                        <td>:</td>
+                        <td>{{ $data['kota_kabupaten'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Tahun Berdiri</td>
+                        <td>:</td>
+                        <td>{{ \Carbon\Carbon::parse($data['tahun_berdiri'])->locale('id')->settings(['formatFunction' => 'translatedFormat'])->format('d F Y') ?: '-' }}</td>
+                    </tr>
+                    <tr>
+                        <td>Lama Usaha</td>
+                        <td>:</td>
+                        <td>{{ $data['lama_usaha'] ? $data['lama_usaha'] . ' tahun' : '-' }}</td>
+                    </tr>
+                    <tr>
+                        <td>Nomor Telepon</td>
+                        <td>:</td>
+                        <td>{{ $data['nomor_handphone'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Alamat Email</td>
+                        <td>:</td>
+                        <td>{{ $data['alamat_email'] ?: '-' }}</td>
+                    </tr>
+                    <tr>
+                        <td>Bidang Usaha</td>
+                        <td>:</td>
+                        <td>{{ $data['bidang_usaha'] === 'lainnya' ? ucfirst($data['bidang_usaha_lain']) : strtoupper(str_replace('_', ' ', $data['bidang_usaha'])) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Kepemilikan Tempat Usaha</td>
+                        <td>:</td>
+                        <td>{{ $data['status_kepemilikan'] === 'group' ? ucfirst($data['nama_group']) : str_replace("_", ' ', ucfirst($data['status_kepemilikan'])) }}</td>
+                    </tr>
+                </table>
             </div>
-
-            @if($data['cabang'])
-                <hr>
-                <h3>Cabang</h3>
-                <div class="row" style="margin-bottom: 20px;">
-                    @forelse($data['cabang'] as $key => $value)
-                        <div class="column">
-                            <p class="label">NITKU</p>
-                            <p>{{ $value['nitku'] ? $value['nitku'] : '-' }}</p>
-
-                            <p class="label">Nama Cabang</p>
-                            <p>{{ $value['nama'] ? $value['nama'] : '-' }}</p>
-                        </div>
-                        <div class="column">
-                            <p class="label">Alamat NITKU</p>
-                            <p>{{ $value['alamat'] ? $value['alamat'] : '-' }}</p>
-                        </div>
-                    @empty
-                        <div class="column">
-                            <p class="label">NITKU</p>
-                            <p>-</p>
-
-                            <p class="label">Nama Cabang</p>
-                            <p>-</p>
-                        </div>
-                        <div class="column">
-                            <p class="label">Alamat NITKU</p>
-                            <p>-</p>
-                        </div>
-                    @endforelse
-                </div>
-            @endif
-
-            <hr>
-
-            <h3>INFORMASI BANK</h3>
-            <div class="row" style="margin-bottom: 20px;">
-                <div class="column">
-                    <p class="label">Nomor Rekening</p>
-                    <p>{{ $data['informasi_bank']['nomor_rekening'] }}</p>
-
-                    <p class="label">Nama Bank</p>
-                    <p>{{ $data['informasi_bank']['nama_bank'] }}</p>
-                </div>
-                <div class="column">
-                    <p class="label">Nama Rekening</p>
-                    <p>{{ $data['informasi_bank']['nama_rekening'] }}</p>
-
-                    <p class="label">Pemilik Rekening</p>
-                    <p>{{ $data['informasi_bank']['rekening_lain'] ? str_replace('_', ' ', ucwords($data['informasi_bank']['rekening_lain'])) : str_replace("_", " ", ucwords($data['informasi_bank']['status'])) }}</p>
-                </div>
+            <div class="subBody">
+                <h2 style="margin-bottom: 10px;">IDENTITAS PEMILIK USAHA</h2>
+                <table id="bodyTable">
+                    <tr>
+                        <td>Nomor KTP</td>
+                        <td>:</td>
+                        <td>{{ $data['nomor_ktp'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Nama Lengkap</td>
+                        <td>:</td>
+                        <td>{{ $data['nama_lengkap'] }}</td>
+                    </tr>
+                </table>
             </div>
-
-            <hr>
-            {{-- <div class="break"></div> --}}
-            
-            <h3>DATA IDENTITAS PENANGGUNG JAWAB</h3>
-            <div class="row">
-                <div class="column">
-                    <p class="label">Nama Penanggung Jawab</p>
-                    <p>{{ $data['data_identitas'] ? ($data['data_identitas']['nama'] ? $data['data_identitas']['nama'] : '-') : '-' }}</p>
-
-                    <p class="label">Identitas Penanggung Jawab</p>
-                    <p>{{ $data['data_identitas'] ? ($data['data_identitas']['identitas'] ? strtoupper($data['data_identitas']['identitas']) : '-') : '-' }}</p>
-                </div>
-                <div class="column">
-                    <p class="label">Jabatan</p>
-                    <p>{{ $data['data_identitas'] ? ($data['data_identitas']['jabatan'] ? $data['data_identitas']['jabatan'] : '-') : '-' }}</p>
-
-                    <div class="content-ttd">
-                        <p  class="label">Penanggung Jawab</p>
-                        @if($data['data_identitas']['ttd'])
-                            <img src="{{ $signatureImage }}" alt="" style="width: 100%;">
-                        @else
-                            <br><br><br><br>
-                        @endif
-                        <p>______________________</p>
-                    </div>
-                </div>
+            <div class="subBody">
+                <h2 style="margin-bottom: 10px;">INFORMASI BANK</h2>
+                <table id="bodyTable">
+                    <tr>
+                        <td>Nomor Rekening</td>
+                        <td>:</td>
+                        <td>{{ $data['informasi_bank']['nomor_rekening'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Nama Rekening</td>
+                        <td>:</td>
+                        <td>{{ $data['informasi_bank']['nama_rekening'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Nama Bank</td>
+                        <td>:</td>
+                        <td>{{ $data['informasi_bank']['nama_bank'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Pemilik Rekening</td>
+                        <td>:</td>
+                        <td>{{ str_replace('_', ' ', ucwords($data['informasi_bank']['rekening_lain'])) ?: str_replace("_", " ", ucwords($data['informasi_bank']['status'])) }}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="subBody">
+                <table id="signature-table">
+                    <tr>
+                        <td class="sig-left"></td>
+                        <td class="sig-right">
+                            <div class="sig-title">Penanggung Jawab,</div>
+                            <div class="sig-space"></div>
+                            <div class="sig-name">{{ $data['data_identitas']['nama'] ?: '-' }}</div>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>

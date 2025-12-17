@@ -110,6 +110,7 @@
     }
 
     .btnDownloadPdf {
+        display: inline-block;
         padding: 12px 24px;
         height: 48px;
         border-radius: 8px;
@@ -349,17 +350,11 @@
     @php
         // FOTO KTP
         $foto_ktp = $perusahaan['foto_ktp'] ?? null;
-        $status_ktp = $perusahaan['status_upload_nik'] ?? 'pending';
-        $url_ktp = $status_ktp === 'success'
-            ? url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $foto_ktp)
-            : asset('temp_files/' . $foto_ktp);
+        $url_ktp = url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $foto_ktp);
 
         // FOTO PENANGGUNG
         $foto_penanggung = $perusahaan['data_identitas']['foto'] ?? null;
-        $status_penanggung = $perusahaan['data_identitas']['status_upload_foto'] ?? 'pending';
-        $url_penanggung = $status_penanggung === 'success'
-            ? url('/form-customer/getFiles/FileIDPersonCharge/' . $foto_penanggung)
-            : asset('temp_files/' . $foto_penanggung);
+        $url_penanggung = url('/form-customer/getFiles/FileIDPersonCharge/' . $foto_penanggung);
     @endphp
 
     <div class="container">
@@ -497,24 +492,6 @@
                                                         <img id="preview_foto_ktp" src="{{ $url_ktp }}" alt="Belum ada file" data-action="zoom">
                                                     @endif
                                                 </div>
-                                                {{-- @if(File::extension($perusahaan['foto_ktp']) == 'pdf')
-                                                    <div class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;" id="preview_ktp">
-                                                        <p style="font-size: 18px;">Preview file KTP</p>
-                                                        @if ($perusahaan['status_upload_nik'] === 'success')
-                                                            <a href="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $perusahaan['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                        @elseif ($perusahaan['status_upload_nik'] === 'pending')
-                                                            <a href="{{ asset('temp_files/' . $perusahaan['foto_ktp']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                                        @endif
-                                                    </div>
-                                                @else
-                                                    <div id="preview_ktp" class="form-group">
-                                                        @if ($perusahaan['status_upload_nik'] === 'success')
-                                                            <img id="preview_foto_ktp" src="{{ url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $perusahaan['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
-                                                        @elseif ($perusahaan['status_upload_nik'] === 'pending')
-                                                            <img id="preview_foto_ktp" src="{{ asset('temp_files/' . $perusahaan['foto_ktp']) }}" alt="Belum ada file" data-action="zoom">
-                                                        @endif
-                                                    </div>
-                                                @endif --}}
                                             </div>
                                         </div>
                                     </div>
@@ -613,24 +590,6 @@
                                             <img id="preview_foto_penanggung" src="{{ $url_penanggung }}" alt="Preview" data-action="zoom">
                                         @endif
                                     </div>
-                                    {{-- @if(File::extension($perusahaan['data_identitas']['foto']) == 'pdf')
-                                        <div id="preview_penanggung" class="form-group d-flex justify-content-between align-items-center py-2 px-3 m-0" style="height: auto;">
-                                            <p style="font-size: 18px;">Preview file identitas</p>
-                                            @if ($perusahaan['data_identitas']['status_upload_foto'] === 'success')
-                                                <a href="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $perusahaan['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                            @elseif ($perusahaan['data_identitas']['status_upload_foto'] === 'pending')
-                                                <a href="{{ asset('temp_files/' . $perusahaan['data_identitas']['foto']) }}" target="_blank" id="previewPDF">Preview PDF</a>
-                                            @endif
-                                        </div>
-                                    @else
-                                        <div id="preview_penanggung" class="form-group">
-                                            @if ($perusahaan['data_identitas']['status_upload_foto'] === 'success')
-                                                <img id="preview_foto_penanggung" src="{{ url('/form-customer/getFiles/FileIDPersonCharge/' . $perusahaan['data_identitas']['foto']) }}" alt="Preview" data-action="zoom">
-                                            @elseif ($perusahaan['data_identitas']['status_upload_foto'] === 'pending')
-                                                <img id="preview_foto_penanggung" src="{{ asset('temp_files/' . $perusahaan['data_identitas']['foto']) }}" alt="Preview" data-action="zoom">
-                                            @endif
-                                        </div>
-                                    @endif --}}
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">

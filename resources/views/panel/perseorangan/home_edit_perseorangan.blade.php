@@ -297,17 +297,11 @@
     @php
         // FOTO KTP
         $fotoKTP = $data['foto_ktp'] ?? null;
-        $statusKTP = $data['status_upload_nik'] ?? 'pending';
-        $urlKTP = $statusKTP === 'success'
-            ? url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])
-            : asset('temp_files/' . $data['foto_ktp']);
+        $urlKTP = url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']);
 
         // FOTO PENANGGUNG
         $fotoPenanggung = $data['data_identitas']['foto'] ?? null;
-        $statusPenanggung = $data['data_identitas']['status_upload_foto'] ?? 'pending';
-        $urlPenanggung = $statusPenanggung === 'success'
-            ? url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto'])
-            : asset('temp_files/' . $data['data_identitas']['foto']);
+        $urlPenanggung = url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']);
     @endphp
 
     <div class="container">
@@ -472,7 +466,7 @@
                                                 </div>
 
                                                 @if($fotoKTP)
-                                                    <div class="form-group {{ File::extension($fotoKTP === 'pdf') ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_ktp" style="height: 197px;">
+                                                    <div class="form-group {{ File::extension($fotoKTP === 'pdf') ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_ktp" style="height: 271px;">
                                                         @if(File::extension($fotoKTP) === 'pdf')
                                                             <p style="font-size: 18px;">Preview file KTP</p>
                                                             <a href="{{ $urlKTP}}" target="_blank" id="previewPDF">Preview PDF</a>
@@ -592,7 +586,7 @@
                                         </div>
 
                                         @if($fotoPenanggung)
-                                            <div class="form-group {{ File::extension($fotoPenanggung) === 'pdf' ? 'd-flex justify-content-between align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_penanggung" style="height: 197px;">
+                                            <div class="form-group {{ File::extension($fotoPenanggung) === 'pdf' ? 'd-flex justify-content-between align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_penanggung" style="height: 271px;">
                                                 @if(File::extension($fotoPenanggung) === 'pdf')
                                                     <p style="font-size: 18px">Preview file identitas</p>
                                                     <a href="{{ $urlPenanggung }}" target="_blank" id="previewPDF">Preview PDF</a>

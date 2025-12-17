@@ -314,24 +314,15 @@
     @php
         // FOTO NPWP
         $fotoNPWP = $data['foto_npwp'] ?? null;
-        $statusNPWP = $data['status_upload_npwp'] ?? 'pending';
-        $urlNPWP = $statusNPWP === 'success'
-            ? url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $fotoNPWP)
-            : asset('temp_files/' . $fotoNPWP);
+        $urlNPWP = url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $fotoNPWP);
 
         // FOTO SPPKP
         $fotoSPPKP = $data['sppkp'] ?? null;
-        $statusSPPKP = $data['status_upload_sppkp'] ?? 'pending';
-        $urlSPPKP = $statusSPPKP === 'success'
-            ? url('/form-customer/getFiles/FileSPPKPCompany/' . $fotoSPPKP)
-            : asset('temp_files/' . $fotoSPPKP);
+        $urlSPPKP = url('/form-customer/getFiles/FileSPPKPCompany/' . $fotoSPPKP);
 
         // FOTO PENANGGUNG
         $fotoPenanggung = $data['data_identitas']['foto'] ?? null;
-        $statusPenanggung = $data['data_identitas']['status_upload_foto'] ?? 'pending';
-        $urlPenanggung = $statusPenanggung === 'success'
-            ? url('/form-customer/getFiles/FileIDPersonCharge/' . $fotoPenanggung)
-            : asset('temp_files/' . $fotoPenanggung);
+        $urlPenanggung = url('/form-customer/getFiles/FileIDPersonCharge/' . $fotoPenanggung);
     @endphp
 
     {{-- {{ dd($fotoNPWP, $urlNPWP) }} --}}
@@ -506,7 +497,7 @@
                                     <div class="form-group">
                                         <label for="">Foto NPWP</label>
                                         @if($fotoNPWP)
-                                            <div class="form-group {{ File::extension($fotoNPWP) === 'pdf' ? 'd-flex justify-content-between align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_npwp" style="height: auto;">
+                                            <div class="form-group {{ File::extension($fotoNPWP) === 'pdf' ? 'd-flex justify-content-between align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_npwp" style="height: 271px;">
                                                 @if(File::extension($fotoNPWP) === 'pdf')
                                                     <p style="font-size: 18px;">Preview file NPWP</p>
                                                     <a href="{{ $urlNPWP }}" target="_blank" id="previewPDF">Preview PDF</a>
@@ -537,7 +528,7 @@
                                     <div class="pkp p-0 @if($data['status_pkp'] != 'pkp') d-none @endif">
                                         <div class="form-group">
                                             @if($fotoSPPKP)
-                                                <div class="form-group {{ File::extension($fotoSPPKP) === 'pdf' ? 'd-flex justify-content-between align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_sppkp" style="height: auto;">
+                                                <div class="form-group {{ File::extension($fotoSPPKP) === 'pdf' ? 'd-flex justify-content-between align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_sppkp" style="height: 271px;">
                                                     @if(File::extension($fotoSPPKP) === 'pdf')
                                                         <p style="font-size: 18px;">Preview file SPPKP</p>
                                                         <a href="{{ $urlSPPKP }}" target="_blank" id="previewPDF">Preview PDF</a>
@@ -629,7 +620,7 @@
                                 <div class="form-group p-0">
                                     <label for="">Foto Identitas (KTP / NPWP)</label>
                                     @if($fotoPenanggung)
-                                        <div class="form-group {{ File::extension($fotoPenanggung) === 'pdf' ? 'd-flex justify-content-between align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_npwp" style="height: auto;">
+                                        <div class="form-group {{ File::extension($fotoPenanggung) === 'pdf' ? 'd-flex justify-content-between align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_npwp" style="height: 271px;">
                                             @if(File::extension($fotoPenanggung) === 'pdf')
                                                 <p style="font-size: 18px;">Preview file identitas</p>
                                                 <a href="{{ $urlPenanggung }}" target="_blank" id="previewPDF">Preview PDF</a>

@@ -30,6 +30,7 @@ class getFiles
                 if($file->ok()) {
                     return response($file->body(), 200)
                         ->header('Content-Type', $file->header('Content-Type'));
+                    break;
                 }
             } catch(\Exception $e) {
                 continue;
@@ -37,32 +38,5 @@ class getFiles
         }
 
         abort(404, "File tidak ditemukan disemua service");
-
-        // try {
-        //     $response = Http::withHeaders([
-        //         'x-api-key' => config('services.service_v.api_key'),
-        //         'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
-        //     ])->get(config('services.service_v.url') . '/api/checkstatus');
-
-        //     if ($response->json()['status'] == false) {
-        //         abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
-        //     }
-        //     return view('customer.menu');
-        // } catch (\Illuminate\Http\Client\ConnectionException $e) {
-        //     // dd($e);
-        //     abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
-        // }
-
-        // try {
-        //     $response = Http::withHeaders([
-        //         'x-api-key' => config('services.service_v.api_key'),
-        //         'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
-        //     ])->get(config('services.service_v.url') . "/api/getfile/$category/$filename", []);
-        //     dd($response->body());
-        //     return response($response->body(), 200)
-        //         ->header('Content-Type', $response->header('Content-Type'));
-        // } catch (\Illuminate\Http\Client\ConnectionException) {
-        //     abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
-        // }
     }
 }

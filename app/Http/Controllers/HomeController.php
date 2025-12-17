@@ -602,88 +602,75 @@ class HomeController extends Controller
             $dekripsi = Crypt::decryptString($request->id);
             $delPerusahaan = IdentitasPerusahaan::where('id', $dekripsi)->first();
             $delPenanggung = DataIdentitas::where('identitas_perusahaan_id', $dekripsi)->first();
+
+            if(!$delPerusahaan || !$delPenanggung) {
+                return ['status' => false, 'error' => 'Data tidak ditemukan!'];
+            }
+
             InformasiBank::where('identitas_perusahaan_id', $dekripsi)->delete();
             TipeCustomer::where('identitas_perusahaan_id', $dekripsi)->delete();
 
             if ($delPerusahaan->bentuk_usaha == 'perseorangan') {
-                $companyIdentity = $delPerusahaan->foto_ktp;
-                $companySppkp = null;
+                $mappingFileCategory = [
+                    'FileIDCompanyOrPersonal' => [
+                        $delPerusahaan->foto_ktp,
+                    ],
+                    'FileIDPersonCharge' => [
+                        $delPenanggung->foto,
+                    ],
+                    'FileIDSignature' => [
+                        $delPenanggung->ttd
+                    ]
+                ];
             } else {
-                $companyIdentity = $delPerusahaan->foto_npwp;
-                $companySppkp = $delPerusahaan->sppkp;
+                $mappingFileCategory = [
+                    'FileIDCompanyOrPersonal' => [
+                        $delPerusahaan->foto_npwp,
+                    ],
+                    'FileSPPKPCompany' => [
+                        $delPerusahaan->sppkp,
+                    ],
+                    'FileIDPersonCharge' => [
+                        $delPenanggung->foto
+                    ]
+                ];
             }
 
-            // START:DELETE FILE PERUSAHAAN
-            try {
-                $response = Http::withHeaders([
-                    'x-api-key' => config('services.service_x.api_key'),
-                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                ])->get(config('services.service_x.url') . '/api/checkfile', [
-                    'category' => 'FileIDCompanyOrPersonal',
-                    'filename' => $companyIdentity
-                ]);
+            $services = [
+                'service_l' => config('services.service_l'),
+                'service_v' => config('services.service_v'),
+            ];
 
-                $result = $response->json();
-                if ($result['status'] == true) {
-                    $category = 'FileIDCompanyOrPersonal';
-                    $response = Http::withHeaders([
-                        'x-api-key' => config('services.service_x.api_key'),
-                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                    ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$companyIdentity", []);
-                    $result = $response->json();
+            foreach($mappingFileCategory as $indexCategory => $files) {
+                foreach($files as $file) {
+                    if(!$file) continue;
+
+                    foreach($services as $service) {
+                        try {
+                            $response = Http::withHeaders([
+                                'x-api-key' => $service['api_key'],
+                                'Host' => parse_url($service['url'], PHP_URL_HOST)
+                            ])->get($service['url'] . '/api/checkfile', [
+                                'category' => $indexCategory,
+                                'filename' => $file
+                            ]);
+
+                            if(!$response->ok() || $response->json('status') !== true) {
+                                continue;
+                            }
+
+                            Http::withHeaders([
+                                'x-api-key' => $service['api_key'],
+                                'Host' => parse_url($service['url'], PHP_URL_HOST)
+                            ])->delete($service['url'] . "/api/deletefile/$indexCategory/$file", []);
+
+                            break;
+                        } catch(\Exception $e) {
+                            continue;
+                        }
+                    }
                 }
-            } catch (\Illuminate\Http\Client\ConnectionException) {
-                abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
             }
-            // END:DELETE FILE PERUSAHAAN
-
-            // START:DELETE FILE SPPKP
-            try {
-                $response = Http::withHeaders([
-                    'x-api-key' => config('services.service_x.api_key'),
-                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                ])->get(config('services.service_x.url') . '/api/checkfile', [
-                    'category' => 'FileSPPKPCompany',
-                    'filename' => $companySppkp
-                ]);
-
-                $result = $response->json();
-                if ($result['status'] == true) {
-                    $category = 'FileSPPKPCompany';
-                    $response = Http::withHeaders([
-                        'x-api-key' => config('services.service_x.api_key'),
-                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                    ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$companySppkp", []);
-                    $result = $response->json();
-                }
-            } catch (\Illuminate\Http\Client\ConnectionException) {
-                abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
-            }
-            // END:DELETE FILE SPPKP
-
-            // START:DELETE FILE PENANGGUNG
-            try {
-                $response = Http::withHeaders([
-                    'x-api-key' => config('services.service_x.api_key'),
-                    'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                ])->get(config('services.service_x.url') . '/api/checkfile', [
-                    'category' => 'FileIDPersonCharge',
-                    'filename' => $delPenanggung->foto
-                ]);
-
-                $result = $response->json();
-                if ($result['status'] == true) {
-                    $category = 'FileIDPersonCharge';
-                    $response = Http::withHeaders([
-                        'x-api-key' => config('services.service_x.api_key'),
-                        'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
-                    ])->delete(config('services.service_x.url') . "/api/deletefile/$category/$delPenanggung->foto", []);
-                    $result = $response->json();
-                }
-            } catch (\Illuminate\Http\Client\ConnectionException) {
-                abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
-            }
-            // END:DELETE FILE PENANGGUNG
 
             $delPerusahaan->delete();
             $delPenanggung->delete();

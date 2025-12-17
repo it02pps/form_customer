@@ -14,7 +14,7 @@ use App\Helper\base30ToImage;
 use Illuminate\Support\Str;
 use App\Services\UploadIdentitas;
 use App\Services\UploadKTP;
-use App\Services\UploadNPWP;
+use App\Services\UPloadNPWP;
 use App\Services\UploadSPPKP;
 use App\Services\UploadTTD;
 use Illuminate\Support\Facades\Storage;
@@ -268,7 +268,7 @@ class perusahaanServices
                         'foto_npwp' => $filename,
                         'status_upload_npwp' => 'pending'
                     ]);
-                    UploadNPWP::handleUpload($filename, ($oldData ? $oldData->foto_npwp : ''), $tempPath, $data->id);
+                    UPloadNPWP::handleUpload($filename, ($oldData ? $oldData->foto_npwp : ''), $tempPath, $data->id);
                 } else {
                     DB::table('identitas_perusahaan')->where('id', $data->id)->update([
                         'foto_npwp' => $oldData->foto_npwp,
