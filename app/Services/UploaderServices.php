@@ -12,7 +12,6 @@ Class UploaderServices
             try {
                 Http::withHeaders([
                     'x-api-key' => $service['api_key'],
-                    'Host' => parse_url($service['url'], PHP_URL_HOST)
                 ])->attach(
                     'file',
                     fopen($filePath, 'r'),

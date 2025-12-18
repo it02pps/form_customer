@@ -59,7 +59,6 @@ Class FileFetcherServices
         try {
             $response = Http::withHeaders([
                 'x-api-key' => $service['api_key'],
-                'Host' => parse_url($service['url'], PHP_URL_HOST)
             ])->get($service['url'] . "/api/getfile/$category/$file");
 
             return $response->successful() ? $response->body() : null;

@@ -584,7 +584,6 @@ class HomeController extends Controller
         try {
             $response = Http::withHeaders([
                 'x-api-key' => config('services.service_x.api_key'),
-                'Host' => parse_url(config('services.service_x.url'), PHP_URL_HOST)
             ])->get(config('services.service_x.url') . "/api/getfile/FilePDFCustomer/" . $data->file_customer_external, []);
 
             $filename = basename($data->file_customer_external);
@@ -649,7 +648,6 @@ class HomeController extends Controller
                         try {
                             $response = Http::withHeaders([
                                 'x-api-key' => $service['api_key'],
-                                'Host' => parse_url($service['url'], PHP_URL_HOST)
                             ])->get($service['url'] . '/api/checkfile', [
                                 'category' => $indexCategory,
                                 'filename' => $file
@@ -661,7 +659,6 @@ class HomeController extends Controller
 
                             Http::withHeaders([
                                 'x-api-key' => $service['api_key'],
-                                'Host' => parse_url($service['url'], PHP_URL_HOST)
                             ])->delete($service['url'] . "/api/deletefile/$indexCategory/$file", []);
 
                             break;

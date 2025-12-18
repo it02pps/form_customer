@@ -15,7 +15,6 @@ class getFiles
             try {
                 $response = Http::withHeaders([
                     'x-api-key' => $service['api_key'],
-                    'Host' => parse_url($service['url'], PHP_URL_HOST),
                 ])->get($service['url'] . '/api/checkstatus');
                 
                 if(!$response->ok() || $response->json('status') !== true) {
@@ -24,7 +23,6 @@ class getFiles
                 
                 $file = Http::withHeaders([
                     'x-api-key' => $service['api_key'],
-                    'Host' => parse_url($service['url'], PHP_URL_HOST)
                 ])->get($service['url'] . "/api/getfile/$category/$filename", []);
 
                 if($file->ok()) {

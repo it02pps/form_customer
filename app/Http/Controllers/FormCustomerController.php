@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\IdentitasPerusahaan;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\File;
-use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Sales;
 use App\Services\FileFetcherServices;
 use App\Services\getFiles;
@@ -15,9 +13,7 @@ use App\Services\PerusahaanServices;
 use App\Services\UploaderServices;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
 use App\Services\pdfGeneratorServices;
-use setasign\Fpdi\Fpdi;
 
 class FormCustomerController extends Controller
 {
@@ -36,7 +32,6 @@ class FormCustomerController extends Controller
         try {
             $response = Http::withHeaders([
                 'x-api-key' => config('services.service_v.api_key'),
-                'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
             ])->get(config('services.service_v.url') . '/api/checkstatus');
 
             // dd($response->body());
@@ -214,7 +209,6 @@ class FormCustomerController extends Controller
                     try {
                         $response = Http::withHeaders([
                             'x-api-key' => $service['api_key'],
-                            'Host' => parse_url($service['url'] . '/api/checkfile', PHP_URL_HOST)
                         ])->get($service['url'] . '/api/checkfile', [
                             'category' => 'FilePDFCustomer',
                             'filename' => $oldData
@@ -223,7 +217,6 @@ class FormCustomerController extends Controller
                         if($response->ok()) {
                             Http::withHeaders([
                                 'x-api-key' => $service['api_key'],
-                                'Host' => parse_url($service['url'], PHP_URL_HOST)
                             ])->delete($service['url'] . "/api/deletefile/FilePDFCustomer/$oldData". []);
                             break;
                         }
@@ -234,7 +227,6 @@ class FormCustomerController extends Controller
 
                 $resUpload = Http::withHeaders([
                     'x-api-key' => $services['service_v']['api_key'],
-                    'Host' => parse_url($services['service_v']['url'], PHP_URL_HOST)
                 ])->attach(
                     'file',
                     file_get_contents($tempPath),

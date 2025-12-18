@@ -13,7 +13,6 @@ class UploadTTD
 
         $response = Http::withHeaders([
             'x-api-key' => config('services.service_v.api_key'),
-            'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
         ])->get(config('services.service_v.url') . '/api/checkfile', [
             'category' => 'FileIDSignature',
             'filename' => $oldData ? $oldData : ''
@@ -25,7 +24,6 @@ class UploadTTD
             $signature = $oldData;
             $response = Http::withHeaders([
                 'x-api-key' => config('services.service_v.api_key'),
-                'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
             ])->delete(config('services.service_v.url') . "/api/deletefile/$category/$signature", []);
             $result = $response->json();
         }
@@ -33,7 +31,6 @@ class UploadTTD
         // $identitas_penanggung->ttd = $imageName;
         $response = Http::withHeaders([
             'x-api-key' => config('services.service_v.api_key'),
-            'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
         ])->attach(
             'file',
             $content,
