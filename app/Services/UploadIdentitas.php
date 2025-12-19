@@ -8,7 +8,7 @@ class UploadIdentitas
 {
     public static function handleUpload($filename, $oldData, $tempPath, $id)
     {
-        $content = fopen($tempPath, 'rb');
+        $content = file_get_contents($tempPath);
 
         $response = Http::withHeaders([
             'x-api-key' => config('services.service_v.api_key'),
@@ -24,8 +24,6 @@ class UploadIdentitas
             ])->delete(config('services.service_v.url') . "/api/deletefile/$category/$oldData", []);
         }
 
-        rewind($content);
-
         // $identitas_penanggung->tempPath = $filename;
         $response = Http::withHeaders([
             'x-api-key' => config('services.service_v.api_key'),
@@ -38,7 +36,6 @@ class UploadIdentitas
             'filename' => substr($filename, 0, strrpos($filename, '.'))
         ]);
 
-        fclose($content);
         if ($response->ok()) {
             DB::table('data_identitas')->where('identitas_perusahaan_id', $id)->update(['status_upload_foto' => 'success']);
             @unlink($tempPath);
