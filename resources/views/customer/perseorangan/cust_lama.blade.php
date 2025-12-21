@@ -64,7 +64,6 @@
     #preview_ktp, #preview_penanggung {
         border: 1px solid #D2D0D8;
         border-radius: 5px;
-        height: 271px;
         width: 100%;
     }
 
@@ -339,10 +338,12 @@
         // FOTO KTP
         $foto_ktp = $perusahaan['foto_ktp'] ?? null;
         $url_ktp = url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $foto_ktp);
+        $ext_ktp = File::extension($foto_ktp);
 
         // FOTO PENANGGUNG
         $foto_penanggung = $perusahaan['data_identitas']['foto'] ?? null;
         $url_penanggung = url('/form-customer/getFiles/FileIDPersonCharge/' . $foto_penanggung);
+        $ext_penanggung = File::extension($foto_penanggung);
     @endphp
 
     <div class="container">
@@ -509,8 +510,8 @@
                                                     <label for="">Foto KTP / NPWP <span class="text-danger">*</span></label>
                                                     <input type="file" name="foto_ktp" id="foto_ktp" class="form-control" onchange="previewFileKtp(this);" accept=".jpg, .png, .pdf, .jpeg">
                                                 </div>
-                                                <div class="form-group {{ File::extension($foto_ktp === 'pdf') ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_ktp" style="height: 271px;">
-                                                    @if(File::extension($foto_ktp) === 'pdf')
+                                                <div class="form-group {{ $ext_ktp === 'pdf' ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_ktp" style="height: {{ $ext_ktp === 'pdf' ? 'auto' : '271px' }};">
+                                                    @if($ext_ktp === 'pdf')
                                                         <a href="{{ $url_ktp }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                     @else
                                                         <img id="preview_foto_ktp" src="{{ $url_ktp }}" alt="Belum ada file" data-action="zoom">
@@ -622,8 +623,8 @@
                                             <label for="">Foto Identitas (KTP / NPWP) <span class="text-danger">*</span></label>
                                             <input type="file" name="foto_penanggung" id="foto_penanggung" class="form-control" onchange="previewFilePenanggung(this);" accept=".jpg, .png, .pdf, .jpeg">
                                         </div>
-                                        <div class="form-group {{ File::extension($foto_penanggung === 'pdf') ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_penanggung" style="height: 271px;">
-                                            @if(File::extension($foto_penanggung === 'pdf'))
+                                        <div class="form-group {{ $ext_penanggung === 'pdf' ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_penanggung" style="height: {{ $ext_penanggung === 'pdf' ? 'auto' : '271px' }};">
+                                            @if($ext_penanggung === 'pdf')
                                                 <a href="{{ $url_penanggung }}" target="_blank" id="previewPDF">Preview PDF</a>
                                             @else
                                                 <img id="preview_foto_penanggung" src="{{ $url_penanggung }}" alt="Belum ada file" data-action="zoom">
@@ -637,11 +638,8 @@
                                         <label for="">Tanda Tangan <span class="text-danger">*</span></label>
                                         <div id="signature"></div>
                                         <input type="button" id="clear_signature" class="btn btn-outline-primary mt-2" value="Bersihkan">
-                                        {{-- <input type="button" id="preview" class="btn btn-primary mt-2" value="Konfirmasi"> --}}
                                         <input type="hidden" name="hasil_ttd" id="hasil_ttd" value="">
                                         
-                                        {{-- <textarea name="hasil_ttd" id="hasil_ttd"></textarea> --}}
-        
                                         <img src="" id="sign_prev" style="display: none;">
                                     </div>
                                 </div>

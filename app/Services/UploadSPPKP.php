@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use Exception;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
 
@@ -36,11 +37,12 @@ class UploadSPPKP
             'filename' => substr($filename, 0, strrpos($filename, '.'))
         ]);
 
-        if ($response->ok()) {
-            DB::table('identitas_perusahaan')->where('id', $id)->update(['status_upload_sppkp' => 'success']);
-            @unlink($tempPath);
-        } else {
+        if($response->failed()) {
             DB::table('identitas_perusahaan')->where('id', $id)->update(['status_upload_sppkp' => 'failed']);
+            throw new Exception("Upload gagal: " . $response->status());
         }
+
+        DB::table('identitas_perusahaan')->where('id', $id)->update(['status_upload_sppkp' => 'success']);
+        @unlink($tempPath);
     }
 }

@@ -57,7 +57,6 @@
     #preview_npwp, #preview_sppkp, #preview_penanggung {
         border: 1px solid #D2D0D8;
         border-radius: 5px;
-        height: 271px;
         width: 100%;
     }
 
@@ -326,14 +325,17 @@
         // FOTO NPWP
         $foto_npwp = $data['foto_npwp'] ?? null;
         $url_npwp = url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $foto_npwp);
+        $ext_npwp = File::extension($foto_npwp);
 
         // FOTO SPPKP
         $foto_sppkp = $data['sppkp'] ?? null;
         $url_sppkp = url('/form-customer/getFiles/FileSPPKPCompany/' . $foto_sppkp);
+        $ext_sppkp = File::extension($foto_sppkp);
 
         // FOTO PENANGGUNG
         $foto_penanggung = $data['data_identitas']['foto'] ?? null;
         $url_penanggung = url('/form-customer/getFiles/FileIDPersonCharge/' . $foto_penanggung);
+        $ext_penanggung = File::extension($foto_penanggung);
     @endphp
 
     <div class="container">
@@ -557,8 +559,8 @@
 
 
                                             @if($foto_sppkp)
-                                                <div class="form-group {{ File::extension($foto_sppkp) === 'pdf' ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_sppkp" style="Height: 271px;">
-                                                    @if(File::extension($foto_sppkp) === 'pdf')
+                                                <div class="form-group {{ $ext_sppkp === 'pdf' ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_sppkp" style="Height: {{ $ext_sppkp ? 'auto' : '271px' }};">
+                                                    @if($ext_sppkp === 'pdf')
                                                         <p style="font-size: 18px;">Preview file SPPKP</p>
                                                         <a href="{{ $url_sppkp }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                     @else
@@ -580,8 +582,8 @@
                                     </div>
 
                                     @if($foto_npwp)
-                                        <div class="form-group {{ File::extension($foto_npwp) === 'pdf' ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_npwp" style="height: 271px;">
-                                            @if(File::extension($foto_npwp) === 'pdf')
+                                        <div class="form-group {{ $ext_npwp === 'pdf' ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_npwp" style="height: {{ $ext_npwp ? 'auto' : '271px' }};">
+                                            @if($ext_npwp === 'pdf')
                                                 <p style="font-size: 18px;">Preview file NPWP</p>
                                                 <a href="{{ $url_npwp }}" target="_blank" id="previewPDF">Preview PDF</a>
                                             @else
@@ -691,8 +693,8 @@
                                         </div>
 
                                         @if($foto_penanggung)
-                                            <div class="form-group {{ File::extension($foto_penanggung) === 'pdf' ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_penanggung" style="height: 271px;">
-                                                @if(File::extension($foto_penanggung) === 'pdf')
+                                            <div class="form-group {{ $ext_penanggung === 'pdf' ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_penanggung" style="height: {{ $ext_penanggung ? 'auto' : '271px' }};">
+                                                @if($ext_penanggung === 'pdf')
                                                     <p style="font-size: 18px;">Preview file identitas</p>
                                                     <a href="{{ $url_penanggung }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                 @else

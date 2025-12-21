@@ -555,9 +555,9 @@
                                         <div id="preview_npwp" class="form-group">
                                             <p class="text-center">Belum ada file</p>
                                         </div>
-
+                                        
                                         <div class="branch-section mt-4 p-0">
-                                            <div >
+                                            <div>
                                                 <span class="text-danger">*Jika terdapat cabang, silahkan tekan tombol disamping. Apabila tidak ada, dapat diabaikan</span>
                                             </div>
                                             <div>

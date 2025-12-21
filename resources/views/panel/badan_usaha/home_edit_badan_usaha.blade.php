@@ -61,7 +61,6 @@
     #preview_npwp, #preview_sppkp, #preview_penanggung {
         border: 1px solid #D2D0D8;
         border-radius: 5px;
-        height: 271px;
         width: 100%;
         overflow: hidden;
     }
@@ -171,12 +170,6 @@
         width: auto !important;
         height: auto !important;
     }
-
-    /* #preview_penanggung .zoom-img-wrap .zoom-img, .zoom-img, #preview_npwp .zoom-img-wrap .zoom-img, #preview_sppkp .zoom-img-wrap .zoom-img {
-        width: 100%;
-        height: 100%;
-        transition: 1s;
-    } */
 
     .form-group {
         width: 100%;
@@ -305,14 +298,17 @@
         // FOTO NPWP
         $fotoNPWP = $data['foto_npwp'] ?? null;
         $urlNPWP = url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $fotoNPWP);
+        $extNPWP = File::extension($fotoNPWP);
 
         // SPPKP
         $fotoSPPKP = $data['sppkp'] ?? null;
         $urlSPPKP = url('/form-customer/getFiles/FileSPPKPCompany/' . $fotoSPPKP);
+        $extSPPKP = File::extension($fotoSPPKP);
 
         // FOTO PENANGGUNG
         $fotoPenanggung = $data['data_identitas']['foto'] ?? null;
         $urlPenanggung = url('/form-customer/getFiles/FileIDPersonCharge/' . $fotoPenanggung);
+        $extPenanggung = File::extension($fotoPenanggung);
     @endphp
 
     <div class="container">
@@ -532,8 +528,8 @@
                                             </div>
 
                                             @if($fotoSPPKP)
-                                                <div class="form-group {{ File::extension($fotoSPPKP === 'pdf') ? 'd-flex justify-content-between align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_sppkp" style="height: 271px;">
-                                                    @if(File::extension($fotoSPPKP) === 'pdf')
+                                                <div class="form-group {{ $extSPPKP === 'pdf' ? 'd-flex justify-content-between align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_sppkp" style="height: {{ $extSPPKP === 'pdf' ? 'auto' : '271px' }};">
+                                                    @if($extSPPKP === 'pdf')
                                                         <p style="font-size: 18px;">Preview file SPPKP</p>
                                                         <a href="{{ $urlSPPKP }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                     @else
@@ -556,8 +552,8 @@
                                         </div>
                                         
                                         @if($fotoNPWP)
-                                            <div class="form-group {{ File::extension($fotoNPWP === 'pdf') ? 'd-flex justify-content-between align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_npwp" style="height: 271px;">
-                                                @if(File::extension($fotoNPWP) === 'pdf')
+                                            <div class="form-group {{ $extNPWP === 'pdf' ? 'd-flex justify-content-between align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_npwp" style="height: {{ $extNPWP === 'pdf' ? 'auto' : '271px' }};">
+                                                @if($extNPWP === 'pdf')
                                                     <p style="font-size: 18px;">Preview file NPWP</p>
                                                     <a href="{{ $urlNPWP }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                 @else
@@ -668,8 +664,8 @@
                                         </div>
                                         
                                         @if($fotoPenanggung)
-                                            <div class="form-group {{ File::extension($fotoPenanggung === 'pdf') ? 'd-flex justify-content-between align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_penanggung" style="height: 271px;">
-                                                @if(File::extension($fotoPenanggung) === 'pdf')
+                                            <div class="form-group {{ $extPenanggung === 'pdf' ? 'd-flex justify-content-between align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_penanggung" style="height: {{ $extPenanggung === 'pdf' ? 'auto' : '271px' }};">
+                                                @if($extPenanggung === 'pdf')
                                                     <p style="font-size: 18px;">Preview file identitas</p>
                                                     <a href="{{ $urlPenanggung }}" target="_blank" id="previewPDF">Preview PDF</a>
                                                 @else

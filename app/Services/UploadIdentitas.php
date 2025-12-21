@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use Exception;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
 
@@ -36,11 +37,12 @@ class UploadIdentitas
             'filename' => substr($filename, 0, strrpos($filename, '.'))
         ]);
 
-        if ($response->ok()) {
-            DB::table('data_identitas')->where('identitas_perusahaan_id', $id)->update(['status_upload_foto' => 'success']);
-            @unlink($tempPath);
-        } else {
+        if($response->failed()) {
             DB::table('data_identitas')->where('identitas_perusahaan_id', $id)->update(['status_upload_foto' => 'failed']);
+            throw new Exception("Upload gagal: " . $response->status());
         }
+
+        DB::table('data_identitas')->where('identitas_perusahaan_id', $id)->update(['status_upload_foto' => 'success']);
+        @unlink($tempPath);
     }
 }
