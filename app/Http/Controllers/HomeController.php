@@ -640,6 +640,7 @@ class HomeController extends Controller
 
             InformasiBank::where('identitas_perusahaan_id', $dekripsi)->delete();
             TipeCustomer::where('identitas_perusahaan_id', $dekripsi)->delete();
+            DataFinance::where('identitas_perusahaan_id', $dekripsi)->delete();
 
             if ($delPerusahaan->bentuk_usaha == 'perseorangan') {
                 $mappingFileCategory = [
