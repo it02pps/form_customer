@@ -1,0 +1,30 @@
+
+RewriteOptions inherit
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # # 1️⃣ FORCE HTTPS (MUST BE FIRST)
+    # RewriteCond %{HTTPS} !=on
+    # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    
+    # # 2️⃣ Force main domain (no www)
+    # RewriteCond %{HTTP_HOST} ^www\.form-customer\.papasari\.com$ [NC]
+    # RewriteRule ^ https://form-customer.papasari.com%{REQUEST_URI} [L,R=301]
+    
+    # # 3️⃣ Redirect root to /form-customer
+    # RewriteRule ^/?$ https://form-customer.papasari.com/form-customer [L,R=301]
+    
+    # # 4️⃣ Block sensitive files/folders
+    # RewriteRule ^(.env|storage|config|database|resources|routes|tests) - [F,L]
+    
+    #Redirect semua request ke index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]
+    
+    #Blokir akses ke file sensitif
+    RewriteRule ^(.env|storage|config|database|resources|routes|tests) - [F,L]
+</IfModule>
+RewriteCond %{HTTP_HOST} ^form\-customer\.papasari\.com$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.form\-customer\.papasari\.com$
+RewriteRule ^/?$ "https\:\/\/form\-customer\.papasari\.com\/form\-customer" [R=301,L]

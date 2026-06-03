@@ -1,0 +1,82 @@
+<?php
+
+namespace App\Jobs;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
+
+class UploadSPPKP implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    /**
+     * Create a new job instance.
+     */
+    public $filename;
+    public $oldData;
+    public $tempPath;
+    public $id;
+
+    public function __construct($filename, $oldData, $tempPath, $id)
+    {
+        $this->filename = $filename;
+        $this->oldData = $oldData;
+        $this->tempPath = $tempPath;
+        $this->id = $id;
+    }
+
+    /**
+     * Execute the job.
+     */
+    public function handle(): void
+    {
+        $filename = $this->filename;
+        $oldData = $this->oldData;
+        $content = file_get_contents($this->tempPath);
+
+        $response = Http::withHeaders([
+            'x-api-key' => config('services.service_v.api_key'),
+            'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+        ])->get(config('services.service_v.url') . '/api/checkfile', [
+            'category' => 'FileSPPKPCompany',
+            'filename' => $oldData ? $oldData : ''
+        ]);
+
+        $result = $response->json();
+        if ($result['status'] == true) {
+            $category = 'FileSPPKPCompany';
+            $response = Http::withHeaders([
+                'x-api-key' => config('services.service_v.api_key'),
+                'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+            ])->delete(config('services.service_v.url') . "/api/deletefile/$category/$oldData", []);
+            $result = $response->json();
+        }
+
+        // $data->sppkp = $filename;
+        $response = Http::withHeaders([
+            'x-api-key' => config('services.service_v.api_key'),
+            'Host' => parse_url(config('services.service_v.url'), PHP_URL_HOST)
+        ])->attach(
+            'file',
+            $content,
+            $filename
+        )->post(config('services.service_v.url') . '/api/uploadfile', [
+            'category' => 'FileSPPKPCompany',
+            'filename' => substr($filename, 0, strrpos($filename, '.'))
+        ]);
+
+        $result = $response->json();
+        if ($result['status'] == true) {
+            DB::table('identitas_perusahaan')->where('id', $this->id)->update(['status_upload_sppkp' => 'success']);
+            @unlink($this->tempPath);
+        } else {
+            DB::table('identitas_perusahaan')->where('id', $this->id)->update(['status_upload_sppkp' => 'failed']);
+        }
+    }
+}

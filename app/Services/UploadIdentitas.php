@@ -1,0 +1,48 @@
+<?php
+namespace App\Services;
+
+use Exception;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
+
+class UploadIdentitas
+{
+    public static function handleUpload($filename, $oldData, $tempPath, $id)
+    {
+        $content = file_get_contents($tempPath);
+
+        $response = Http::withHeaders([
+            'x-api-key' => config('services.service_v.api_key'),
+        ])->get(config('services.service_v.url') . '/api/checkfile', [
+            'category' => 'FileIDPersonCharge',
+            'filename' => $oldData ? $oldData : ''
+        ]);
+
+        if ($response->ok()) {
+            $category = 'FileIDPersonCharge';
+            $response = Http::withHeaders([
+                'x-api-key' => config('services.service_v.api_key'),
+            ])->delete(config('services.service_v.url') . "/api/deletefile/$category/$oldData", []);
+        }
+
+        // $identitas_penanggung->tempPath = $filename;
+        $response = Http::withHeaders([
+            'x-api-key' => config('services.service_v.api_key'),
+        ])->attach(
+            'file',
+            $content,
+            $filename
+        )->post(config('services.service_v.url') . '/api/uploadfile', [
+            'category' => 'FileIDPersonCharge',
+            'filename' => substr($filename, 0, strrpos($filename, '.'))
+        ]);
+
+        if($response->failed()) {
+            DB::table('data_identitas')->where('identitas_perusahaan_id', $id)->update(['status_upload_foto' => 'failed']);
+            throw new Exception("Upload gagal: " . $response->status());
+        }
+
+        DB::table('data_identitas')->where('identitas_perusahaan_id', $id)->update(['status_upload_foto' => 'success']);
+        @unlink($tempPath);
+    }
+}
