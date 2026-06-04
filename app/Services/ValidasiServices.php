@@ -136,7 +136,7 @@ class ValidasiServices
         $rules = [
             'nama_finance' => 'required',
             'no_hp_finance' => 'required',
-            'email_finance' => $data['email_finance'] != "-" ? 'required|email' : ''
+            'email_finance' => $data['email_finance'] != '' ? ($data['email_finance'] != '-' ? 'required|email' : 'required') : 'required',
         ];
 
         $message = [
