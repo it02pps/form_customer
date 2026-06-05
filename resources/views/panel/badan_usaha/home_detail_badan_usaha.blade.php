@@ -339,7 +339,7 @@
                     <div class="profile">
                         <img id="Edit Profile" src="{{ asset('images/Profile.svg') }}" title="Edit Profile" alt="Profile">
                         <img id="logoutBtn" src="{{ asset('images/Log Out.png') }}" title="Logout" alt="Logout">
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        <form id="logout-form" action="{{ route('form_customer.logout') }}" method="POST" class="d-none">
                             @csrf
                         </form>
                     </div>

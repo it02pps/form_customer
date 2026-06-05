@@ -915,7 +915,7 @@
         $(document).ready(function() {
             // START: Tombol Kembali
             $('.btnKembali').on('click', function() {
-                window.location.href = '{{ route("form_customer.menu) }}';
+                window.location.href = '{{ route("form_customer.menu") }}';
             });
 
             $('#btnKembaliDetail').on('click', function() {
@@ -1069,10 +1069,10 @@
                 counter++;
                 $('#counter').val(counter);
                 $('.dynamic-row').append(`
-                    <hr class="line-`+counter+`">
-                    <div class="row align-items-center counter-`+counter+` numDiv">
+                    <hr class="line-${counter}">
+                    <div class="row align-items-center counter-${counter} numDiv">
                         <div class="col-xl-1 col-lg-1 col-md-1 col-sm-12 col-12 d-flex justify-content-center">
-                            <button type="button" id="delRow" data-id="`+counter+`"><i class="fa-solid fa-minus text-light"></i></button>
+                            <button type="button" id="delRow" data-id="${counter}"><i class="fa-solid fa-minus text-light"></i></button>
                         </div>
                         <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
                             <div class="group-column-modal">

@@ -35,6 +35,7 @@ Route::get('/form-customer', [FormCustomer::class, 'menu'])->name('form_customer
 Route::get('/form-customer/panel/login', [LoginController::class, 'index'])->name('form_customer.login');
 Route::post('/form-customer/panel/login-store', [LoginController::class, 'login'])->name('form_customer.login.store');
 Route::get('/form-customer/panel/lupa-password', [LoginController::class, 'lupa_password'])->name('form_customer.lupa_password');
+Route::post('/form-customer/logout', [LoginController::class, 'logout'])->name('form_customer.logout');
 
 // View Badan Usaha
 Route::get('/form-customer/{menu}/{status}/{status2?}/{param?}', [FormCustomer::class, 'view_badan_usaha'])->where('menu', 'badan-usaha|perseorangan')->where('status', 'customer-baru|customer-lama')->where('status2', 'pengkinian-data|cabang-baru')->name('form_customer.view_badan_usaha');

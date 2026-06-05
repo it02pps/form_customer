@@ -62,4 +62,13 @@ class LoginController extends Controller
     public function lupa_password() {
         return view('auth.lupa_password');
     }
+
+    public function logout(Request $request) {
+        Auth::logout();
+
+        $request->sessions()->invalidate();
+        $request->sesstion()->regenerateToken();
+
+        return redirect()->route('form_customer.login');
+    }
 }
