@@ -663,7 +663,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Email Finance <span class="text-danger">*</span></label>
-                                <input type="email" name="email_finance" id="email_finance" placeholder="Masukkan email finance" autocomplete="off" class="form-control" required value="{{ $data ? ($data['data_finance'] ? ($data['data_finance']['email'] ?: '') : '') : '' }}">
+                                <input type="text" name="email_finance" id="email_finance" placeholder="Masukkan email finance" autocomplete="off" class="form-control" required value="{{ $data ? ($data['data_finance'] ? ($data['data_finance']['email'] ?: '') : '') : '' }}">
                             </div>
                         </div>
                         <hr>

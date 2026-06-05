@@ -601,7 +601,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Email Finance</label>
-                            <input type="email" name="email_finance" id="email_finance" placeholder="Masukkan email finance" class="form-control" autocomplete="off" readonly value="{{ $data['data_finance'] ? ($data['data_finance']['email'] ?: '-') : '-' }}">
+                            <input type="text" name="email_finance" id="email_finance" placeholder="Masukkan email finance" class="form-control" autocomplete="off" readonly value="{{ $data['data_finance'] ? ($data['data_finance']['email'] ?: '-') : '-' }}">
                         </div>
                     </div>
                     <hr>

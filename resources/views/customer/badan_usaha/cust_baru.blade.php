@@ -625,7 +625,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Email Finance <span class="text-danger">*</span></label>
-                                <input type="email" name="email_finance" id="email_finance" class="form-control" autocomplete="off" placeholder="Masukkan email finance" required>
+                                <input type="text" name="email_finance" id="email_finance" class="form-control" autocomplete="off" placeholder="Masukkan email finance" required>
                             </div>
                         </div>
                         <hr>

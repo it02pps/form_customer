@@ -566,7 +566,7 @@
                         </div>
                         <div class="form-group">
                             <label for="">Email Finance</label>
-                            <input type="email" name="email_finance" id="email_finance" class="form-control" autocomplete="off" readonly value="{{ $perusahaan['data_finance']['email'] ?: '-' }}">
+                            <input type="text" name="email_finance" id="email_finance" class="form-control" autocomplete="off" readonly value="{{ $perusahaan['data_finance']['email'] ?: '-' }}">
                         </div>
                     </div>
                     <hr>

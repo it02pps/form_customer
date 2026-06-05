@@ -633,7 +633,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Email Finance <span class="text-danger">*</span></label>
-                                <input type="email" name="email_finance" id="email_finance" class="form-control" placeholder="Masukkan email finance" autocomplete="off" value="{{ $data ? ($data['data_finance'] ? ($data['data_finance']['email'] ?: '') : '') : '' }}">
+                                <input type="text" name="email_finance" id="email_finance" class="form-control" placeholder="Masukkan email finance" autocomplete="off" value="{{ $data ? ($data['data_finance'] ? ($data['data_finance']['email'] ?: '') : '') : '' }}">
                             </div>
                         </div>
                         <hr>
