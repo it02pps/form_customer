@@ -86,7 +86,7 @@ class ValidasiServices
             'rekening_lain.required' => 'Rekening lain wajib diisi',
         ];
 
-        return Validator::make($rules, $message, $data);
+        return Validator::make($data, $rules, $message);
     }
 
     public function validationIdentitas($data)
@@ -110,25 +110,32 @@ class ValidasiServices
             'nomor_hp_penanggung_jawab.digits_between' => 'Nomor HP penanggung jawab harus diantara 10 - 13 digit',
         ];
 
-        return Validator::make($rules, $message, $data);
+        return Validator::make($data, $rules, $message);
     }
 
     public function validationCabang($data)
     {
-        $rules = [
-            'nitku_cabang.*' => ($data['bentuk_usaha'] == 'badan_usaha' ? 'required|digits:22' : ''),
-            'nama_cabang.*' => ($data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ''),
-            'alamat_nitku.*' => ($data['bentuk_usaha'] == 'badan_usaha' ? 'required' : ''),
-        ];
+        $rules = [];
+
+        if(($data['bentuk_usaha'] ?? null) === 'badan_usaha') {
+            $rules = [
+                'nitku_cabang' => "required|array|min:1",
+                'nitku_cabang.*' => 'required|digits:22',
+                'nama_cabang.*' => 'required',
+                'alamat_nitku.*' => 'required',
+            ];
+        }
 
         $message = [
+            'nitku_cabang.required' => 'NITKU harus diisi',
+            'nitku_cabang.min' => 'Minimal 1 cabang harus diisi',
             'nitku_cabang.*.required' => 'NITKU harus diisi',
             'nitku_cabang.*.digits' => 'NITKU harus 22 digit',
             'nama_cabang.*.required' => 'Nama cabang harus diisi',
             'alamat_nitku.*.required' => 'Alamat cabang harus diisi',
         ];
 
-        return Validator::make($rules, $message, $data);
+        return Validator::make($data, $rules, $message);
     }
 
     public function validationDataFinance($data)
@@ -146,6 +153,6 @@ class ValidasiServices
             'email_finance.email' => "Email finance harus diisi",
         ];
 
-        return Validator::make($rules, $message, $data);
+        return Validator::make($data, $rules, $message);
     }
 }

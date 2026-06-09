@@ -880,7 +880,7 @@
                         } else {
                             Swal.fire({
                                 title: 'Gagal',
-                                text: res.error,
+                                html: res.error,
                                 icon: 'error'
                             });
                         }

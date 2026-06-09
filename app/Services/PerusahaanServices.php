@@ -51,27 +51,27 @@ class perusahaanServices
             // START: Validation
             $validator = $this->validasiServices->validationPerusahaan($request->all());
             if ($validator->fails()) {
-                return ['status' => false, 'error' => $validator->errors()->all()];
+                return ['status' => false, 'error' => implode('<br>', $validator->errors()->all())];
             }
 
             $validator = $this->validasiServices->validationInformasiBank($request->all());
             if ($validator->fails()) {
-                return ['status' => false, 'error' => $validator->errors()->all()];
+                return ['status' => false, 'error' => implode('<br>', $validator->errors()->all())];
             }
 
             $validator = $this->validasiServices->validationIdentitas($request->all());
             if ($validator->fails()) {
-                return ['status' => false, 'error' => $validator->errors()->all()];
+                return ['status' => false, 'error' => implode('<br>', $validator->errors()->all())];
             }
 
             $validator = $this->validasiServices->validationCabang($request->all());
             if ($validator->fails()) {
-                return ['status' => false, 'error' => $validator->errors()->all()];
+                return ['status' => false, 'error' => implode('<br>', $validator->errors()->all())];
             }
 
             $validator = $this->validasiServices->validationDataFinance($request->all());
             if($validator->fails()) {
-                return ['status' => false, 'error' => $validator->errors()->all()];
+                return ['status' => false, 'error' => implode('<br>', $validator->errors()->all())];
             }
             // END: Validation
 
