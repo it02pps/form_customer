@@ -532,13 +532,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nomor Rekening</label>
-                                    <input type="text" name="nomor_rekening" id="nomor_rekening" class="form-control" autocomplete="off" readonly value="{{ $data['informasi_bank']['nomor_rekening'] ?: '-' }}">
+                                    <input type="text" name="nomor_rekening" id="nomor_rekening" class="form-control" autocomplete="off" readonly value="{{ $data['informasi_bank'] ? ($data['informasi_bank']['nomor_rekening'] ?: '-') : '-' }}">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Rekening</label>
-                                    <input type="text" name="nama_rekening" id="nama_rekening" class="form-control" autocomplete="off" readonly value="{{ $data['informasi_bank']['nama_rekening'] ?: '-' }}">
+                                    <input type="text" name="nama_rekening" id="nama_rekening" class="form-control" autocomplete="off" readonly value="{{ $data['informasi_bank'] ? ($data['informasi_bank']['nama_rekening'] ?: '-') : '-' }}">
                                 </div>
                             </div>
                         </div>
@@ -546,15 +546,15 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Bank</label>
-                                    <input type="text" name="nama_bank" id="nama_bank" class="form-control" autocomplete="off" readonly value="{{ $data['informasi_bank']['nama_bank'] ?: '-' }}">
+                                    <input type="text" name="nama_bank" id="nama_bank" class="form-control" autocomplete="off" readonly value="{{ $data['informasi_bank'] ? ($data['informasi_bank']['nama_bank'] ?: '-' ) : '-' }}">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Pemilik Rekening</label>
-                                    <input type="text" name="pemilik_rekening" id="pemilik_rekening" class="form-control" autocomplete="off" readonly value="{{ ucwords(str_replace('_', ' ', $data['informasi_bank']['status'])) ?: '-' }}">
-                                    <div class="rekening_lain @if($data['informasi_bank']['status'] != 'lainnya') d-none @endif">
-                                        <input type="text" class="form-control" name="rekening_lain" id="rekening_lain" autocomplete="off" readonly value="{{ $data['informasi_bank']['rekening_lain'] ?: '-' }}">
+                                    <input type="text" name="pemilik_rekening" id="pemilik_rekening" class="form-control" autocomplete="off" readonly value="{{ $data['informasi_bank'] ? (ucwords(str_replace('_', ' ', $data['informasi_bank']['status'])) ?: '-') : '-' }}">
+                                    <div class="rekening_lain @if($data['informasi_bank'] && $data['informasi_bank']['status'] != 'lainnya') d-none @endif">
+                                        <input type="text" class="form-control" name="rekening_lain" id="rekening_lain" autocomplete="off" readonly value="{{ $data['informasi_bank'] ? ($data['informasi_bank']['rekening_lain'] ?: '-') : '-' }}">
                                     </div>
                                 </div>
                             </div>
@@ -585,13 +585,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nama Penanggung Jawab</label>
-                                    <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" autocomplete="off" class="form-control" readonly value="{{ $data['data_identitas']['nama'] ?: '-' }}">
+                                    <input type="text" name="nama_penanggung_jawab" id="nama_penanggung_jawab" autocomplete="off" class="form-control" readonly value="{{ $data['data_identitas'] ? ($data['data_identitas']['nama'] ?: '-') : '-' }}">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Jabatan</label>
-                                    <input type="text" name="jabatan" id="jabatan" class="form-control" autocomplete="off" readonly value="{{ $data['data_identitas']['jabatan'] ?: '-' }}">
+                                    <input type="text" name="jabatan" id="jabatan" class="form-control" autocomplete="off" readonly value="{{ $data['data_identitas'] ? ($data['data_identitas']['jabatan'] ?: '-') : '-' }}">
                                 </div>
                             </div>
                         </div>
@@ -599,13 +599,13 @@
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group" >
                                     <label for="">Identitas Penanggung Jawab</label>
-                                    <input type="text" name="identitas_penanggung_jawab" id="identitas_penanggung_jawab" class="form-control" autocomplete="off" readonly value="{{ strtoupper($data['data_identitas']['identitas']) ?: '-' }}">
+                                    <input type="text" name="identitas_penanggung_jawab" id="identitas_penanggung_jawab" class="form-control" autocomplete="off" readonly value="{{ $data['data_identitas'] ? (strtoupper($data['data_identitas']['identitas']) ?: '-') : '-' }}">
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label for="">Nomor Handphone</label>
-                                    <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" autocomplete="off" class="form-control" readonly value="{{ $data['data_identitas']['no_hp'] ?: '-' }}">
+                                    <input type="text" name="nomor_hp_penanggung_jawab" id="nomor_hp_penanggung_jawab" autocomplete="off" class="form-control" readonly value="{{ $data['data_identitas'] ? ($data['data_identitas']['no_hp'] ?: '-') : '-' }}">
                                 </div>
                             </div>
                         </div>
@@ -634,9 +634,9 @@
                                 <div class="form-group" id="ttd_credit">
                                     <label for="">Tanda Tangan</label>
                                     <div id="signature">
-                                        @if ($data['data_identitas']['status_upload_ttd'] === 'success')
+                                        @if ($data['data_identitas'] && $data['data_identitas']['status_upload_ttd'] === 'success')
                                             <img src="{{ url('/form-customer/getFiles/FileIDSignature/' . $data['data_identitas']['ttd']) }}" alt="Belum ada tanda tangan" data-action="zoom">
-                                        @elseif ($data['data_identitas']['status_upload_ttd'] === 'pending')
+                                        @elseif ($data['data_identitas'] && $data['data_identitas']['status_upload_ttd'] === 'pending')
                                             <img src="{{ asset('public/temp_files/' . $data['data_identitas']['ttd']) }}" alt="Belum ada tanda tangan" data-action="zoom">
                                         @endif
                                     </div>
