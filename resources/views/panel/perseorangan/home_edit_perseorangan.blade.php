@@ -296,12 +296,12 @@
     @php
         // FOTO KTP
         $fotoKTP = $data['foto_ktp'] ?? null;
-        $urlKTP = url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']);
+        $urlKTP = url('/form-customer/getFiles/FileIDPersonCharge/' . $fotoKTP);
         $extKTP = File::extension($fotoKTP);
 
         // FOTO PENANGGUNG
         $fotoPenanggung = $data['data_identitas']['foto'] ?? null;
-        $urlPenanggung = url('/form-customer/getFiles/FileIDPersonCharge/' . $data['data_identitas']['foto']);
+        $urlPenanggung = url('/form-customer/getFiles/FileIDPersonCharge/' . $fotoPenanggung);
         $extPenanggung = File::extension($fotoPenanggung);
     @endphp
 
