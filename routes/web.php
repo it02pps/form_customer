@@ -50,7 +50,7 @@ Route::get('/form-customer/{menu}/pdf/{id}', [FormCustomer::class, 'download_pdf
 Route::get('/form-customer/select/{menu}/{id}', [FormCustomer::class, 'select'])->name('form_customer.select');
 Route::get('/form-customer/getFiles/{category}/{filename}', [FormCustomer::class, 'getFiles'])->name('form_customer.getFiles');
 
-Route::middleware('web')->group(function () {
+Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/form-customer/internal/panel', [HomeController::class, 'index'])->name('home');
     Route::get('/form-customer/internal/panel/table', [HomeController::class, 'datatable'])->name('home.datatable');
     Route::get('/form-customer/internal/panel/detail/{id}', [HomeController::class, 'detail'])->name('home.detail');
