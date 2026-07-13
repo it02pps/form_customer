@@ -610,7 +610,7 @@
                                                 <option value="lainnya">Lainnya</option>
                                             </select>
                                             <div class="rekening_lain d-none">
-                                                <input type="text" class="form-control" name="rekening_lain" id="rekening_lain" placeholder="Masukkan pemilik rekening lain" autocomplete="off" value="{{ $data ? ($data['informasi_bank']['rekening_lain'] ?: '') : '' }}">
+                                                <input type="text" class="form-control" name="rekening_lain" id="rekening_lain" placeholder="Masukkan pemilik rekening lain" autocomplete="off" value="{{ $data ? $data['informasi_bank'] ? $data['informasi_bank']['rekening_lain'] : '' : '' }}">
                                             </div>
                                             <span class="caret"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                         </div>
