@@ -296,7 +296,7 @@
     @php
         // FOTO KTP
         $fotoKTP = $data['foto_ktp'] ?? null;
-        $urlKTP = url('/form-customer/getFiles/FileIDPersonCharge/' . $fotoKTP);
+        $urlKTP = url('/form-customer/getFiles/FileIDCompanyOrPersonal/' . $fotoKTP);
         $extKTP = File::extension($fotoKTP);
 
         // FOTO PENANGGUNG
