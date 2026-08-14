@@ -11,5 +11,16 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        host: true,
+        port: 5173,
+        strictPort: true,
+        cors: true,
+        origin: "http://192.168.100.84:5173",
+        hmr: {
+            host: "192.168.100.84",
+            protocol: "ws",
+            port: 5173
+        },
+    },
 });
-;;

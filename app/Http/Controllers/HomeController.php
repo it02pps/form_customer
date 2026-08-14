@@ -79,9 +79,9 @@ class HomeController extends Controller
                 });
             })
             ->addColumn('aksi', function ($e) {
-                $edit = '<button type="button" id="editCustomer" title="Edit Data Customer" data-id="' . Crypt::encryptString($e->id) . '">Edit</button>';
-                $detail = '<button type="button" id="detailCustomer" title="Detail Data Customer" data-id="' . Crypt::encryptString($e->id) . '">Detail</button>';
-                $delete = '<button type="button" id="hapusCustomer" title="Hapus Data Customer" data-id="' . Crypt::encryptString($e->id) . '">Delete</button>';
+                $edit = '<button type="button" id="editCustomer" title="Edit Data Customer" class="btn btn-warning btn-sm w-25" data-id="' . Crypt::encryptString($e->id) . '">Edit</button>';
+                $detail = '<button type="button" id="detailCustomer" title="Detail Data Customer" class="btn btn-primary btn-sm w-25" data-id="' . Crypt::encryptString($e->id) . '">Detail</button>';
+                $delete = '<button type="button" id="hapusCustomer" title="Hapus Data Customer" class="btn btn-danger btn-sm w-25" data-id="' . Crypt::encryptString($e->id) . '">Delete</button>';
                 $aksi = $edit . ' ' . $detail . ' ' . $delete;
                 return $aksi;
             })
@@ -160,9 +160,8 @@ class HomeController extends Controller
     {
         $rules = [
             // Identitas Perusahaan
-            'nama_perusahaan' => 'required',
             'nama_group_perusahaan' => 'required',
-            'alamat_lengkap' => 'required',
+            'alamat_group_lengkap' => 'required',
             'kota_kabupaten' => 'required',
             'no_hp' => 'required',
             'bidang_usaha' => 'required',
@@ -207,9 +206,8 @@ class HomeController extends Controller
 
         $message = [
             // Identitas Perusahaan
-            'nama_perusahaan.required' => 'Nama perusahaan harus diisi',
             'nama_group_perusahaan.required' => 'Nama group perusahaan harus diisi',
-            'alamat_lengkap.required' => 'Alamat lengkap harus diisi',
+            'alamat_group_perusahaan.required' => 'Alamat group perusahaan harus diisi',
             'kota_kabupaten.required' => 'Kota/Kabupaten harus diisi',
             'no_hp.required' => 'Nomor handphone harus diisi',
             'no_hp.numeric' => 'Nomor handphone harus berupa angka',
@@ -288,9 +286,9 @@ class HomeController extends Controller
 
             // Identitas perusahaan
             $identitas_perusahaan = IdentitasPerusahaan::findOrNew($dekripsi);
-            $identitas_perusahaan->nama_perusahaan = $request->nama_perusahaan;
+            $identitas_perusahaan->nama_perusahaan = null;
             $identitas_perusahaan->nama_group_perusahaan = $request->nama_group_perusahaan;
-            $identitas_perusahaan->alamat_lengkap = $request->alamat_lengkap;
+            $identitas_perusahaan->alamat_lengkap = null;
             $identitas_perusahaan->alamat_group_lengkap = $request->alamat_group_lengkap;
             $identitas_perusahaan->kota_kabupaten = $request->kota_kabupaten;
             $identitas_perusahaan->bidang_usaha = $request->bidang_usaha;

@@ -101,9 +101,9 @@ class perusahaanServices
             $data = IdentitasPerusahaan::create(
                 [
                     'kode_customer' => $kode_cust,
-                    'nama_perusahaan' => strtoupper($request->nama_perusahaan),
+                    'nama_perusahaan' => NULL,
                     'nama_group_perusahaan' => strtoupper($request->nama_group_perusahaan),
-                    'alamat_lengkap' => strtoupper($request->alamat_lengkap),
+                    'alamat_lengkap' => NULL,
                     'alamat_group_lengkap' => strtoupper($request->alamat_group_lengkap),
                     'kota_kabupaten' => strtoupper($request->kota_kabupaten),
                     'alamat_email' => $request->alamat_email_perusahaan,

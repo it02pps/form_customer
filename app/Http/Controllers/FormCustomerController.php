@@ -260,7 +260,6 @@ class FormCustomerController extends Controller
 
             return response()->json(['status' => true, 'url' => 'https://papasari.com']);
         } catch (\Exception $e) {
-		dd($e);
             return ['status' => false, 'error' => 'Terjadi Kesalahan'];
         }
     }

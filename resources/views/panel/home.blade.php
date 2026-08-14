@@ -5,263 +5,81 @@
 @endsection
 
 @section('css')
-<style>
-    .container {
-        padding: 64px 0;
-    }
-    
-    .container-fluid {
-        background-color: #fff;
-        border-radius: 16px;
-        box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.25);
-    }
-    
-    .content {
-        width: 100%;
-        padding: 64px 32px;
-    }
-
-    .content-body {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 16px;
-    }
-
-    .header .logo img {
-        height: 96px;
-        padding-bottom: 32px;
-    }
-
-    .header .profile img {
-        height: 72px;
-        padding-bottom: 32px;
-    }
-
-    .title {
-        padding-bottom: 16px;
-    }
-
-    #detailCustomer {
-        width: 100px;
-        height: 35px;
-        border-radius: 8px;
-        background-color: #0063ee;
-        border: none;
-        color: #fff;
-    }
-
-    #hapusCustomer {
-        width: 100px;
-        height: 35px;
-        border-radius: 8px;
-        background-color: #e30606;
-        border: none;
-        color: #fff;
-    }
-
-    .btnSimpan {
-        padding: 8px 80px;
-        border-radius: 5px;
-        background-color: #0063ee;
-        border: none;
-        color: #fff;
-    }
-
-    .btnBatal {
-        padding: 8px 80px;
-        border-radius: 5px;
-        background-color: #fff;
-        border: 1px solid #0063ee;
-        color: #0063ee;
-    }
-
-    #editCustomer {
-        width: 100px;
-        height: 35px;
-        border-radius: 8px;
-        background-color: #FFC107;
-        border: none;
-        color: #000;
-    }
-
-    .profile {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 16px;
-        cursor: pointer;
-    }
-
-    .logoutBtn  {
-        filter: brightness(1.5) contrast(0.9);
-    }
-
-    table {
-        border-collapse: collapse;
-    }
-    
-    .table-responsive {
-        width: 100%;
-    }
-
-    .table td {
-        border-bottom: 1px solid #cfcfd1 !important;
-    } 
-    
-    thead th {
-        font-weight: 500;
-        border: none;
-        padding: 12px 8px !important;
-        width: 50px;
-    }
-
-    tbody td {
-        font-weight: 400;
-        padding: 12px 8px !important;
-        vertical-align: middle;
-    }
-
-    #search {
-        width: 100%;
-    }
-
-    #search input {
-        padding-left: 40px;
-        height: 50px;
-    }
-    
-    .modal-content {
-        padding: 16px;
-    }
-
-    .forgot_password {
-        display: flex;
-        justify-content: end;
-    }
-
-    .searchCustomerNameIcon, .searchBillToAddressIcon, .searchSalesPersonIcon {
-        position: absolute;
-        top: 37px;
-        left: 30px;
-        opacity: 0.5;
-    }
-
-    @media (max-width: 575.98px) {
-        .container {
-            padding: 0;
-        }
-        
-        .container-fluid {
-            background-color: #fff;
-            border-radius: 0;
-            box-shadow: none;
-        }
-
-        .content {
-            width: 100%;
-            padding: 32px 16px;
-        }
-
-        .header .logo img {
-            height: 72px;
-            padding-bottom: 32px;
-        }
-
-        .profile {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .header .profile img {
-            height: 64px;
-            padding-bottom: 32px;
-        }
-
-        #datatable_wrapper .table-footer div {
-            justify-content: center !important;
-        }
-
-        .table-responsive {
-            overflow-x: auto !important;
-        }
-
-        table thead tr th:nth-child(8), table tbody tr th:nth-child(8) {
-            width: 800px !important;
-        }
-    }
-</style>
 @endsection
 
 @section('content')
-    <div class="container">
-        <div class="container-fluid">
-            <div class="content">
-                <div class="header d-flex justify-content-between align-items-center">
-                    <div class="logo">
-                        <img src="{{ asset('images/PNG 4125 x 913.png') }}" alt="Logo">
-                    </div>
-                    <div class="profile">
-                        <img id="Edit Profile" data-bs-toggle="modal" data-bs-target="#modalEditProfil" src="{{ asset('images/Profile.svg') }}" title="Edit Profile" alt="Profile">
-                        <img id="logoutBtn" src="{{ asset('images/Log Out.png') }}" title="Logout" alt="Logout">
-                        <form id="logout-form" action="{{ route('form_customer.logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
+    <div class="px-4 py-3 px-md-5">
+        <div class="header d-flex justify-content-between align-items-center mb-4">
+            <div class="logo">
+                <img src="{{ asset('images/PNG 4125 x 913.png') }}" class="img-fluid" alt="Logo">
+            </div>
+            <div class="d-flex gap-3 justify-content-end w-100">
+                <img id="Edit Profile" data-bs-toggle="modal" data-bs-target="#modalEditProfil" src="{{ asset('images/Profile.svg') }}" title="Edit Profile" class="img-fluid" style="width: 40px; cursor: pointer;" alt="Profile">
+                <img id="logoutBtn" src="{{ asset('images/Log Out.png') }}" title="Logout" class="img-fluid" style="width: 40px; cursor: pointer;" alt="Logout">
+                <form id="logout-form" action="{{ route('form_customer.logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+            </div>
+        </div>
+        <h1 class="text-center text-md-start">List Data Customer</h1>
+        <hr>
+        <div class="content-body">
+            <div id="search" class="row g-3">
+                <h5 class="mb-0">Filter</h5>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <div class="position-relative">
+                        <label for="">Customer Name</label>
+                        <input type="text" name="searchCustomerName" id="searchCustomerName" class="form-control" placeholder="Search Customer Name" autocomplete="off">
+                        <span class="position-absolute top-50" style="right: 15px;"><i class="fa-solid fa-search text-secondary"></i></span>
                     </div>
                 </div>
-                <div class="title">
-                    <h1>List Data Customer</h1>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 position-relative">
+                    <div class="position-relative">
+                        <label for="">Bill to Address</label>
+                        <input type="text" name="searchBillToAddress" id="searchBillToAddress" class="form-control" placeholder="Search Bill To Address" autocomplete="off">
+                        <span class="position-absolute top-50" style="right: 15px;"><i class="fa-solid fa-search text-secondary"></i></span>
+                    </div>
                 </div>
-                <hr>
-                <div class="content-body">
-                    <div id="search" class="row">
-                        <h5 class="mb-0">Filter</h5>
-                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 position-relative">
-                            <label for="">Customer Name</label>
-                            <input type="text" name="searchCustomerName" id="searchCustomerName" class="form-control" placeholder="Search Customer Name" autocomplete="off">
-                            <span class="searchCustomerNameIcon"><i class="fa-solid fa-search"></i></span>
-                        </div>
-                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 position-relative">
-                            <label for="">Bill to Address</label>
-                            <input type="text" name="searchBillToAddress" id="searchBillToAddress" class="form-control" placeholder="Search Bill To Address" autocomplete="off">
-                            <span class="searchBillToAddressIcon"><i class="fa-solid fa-search"></i></span>
-                        </div>
-                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 position-relative">
-                            <label for="">Sales Person</label>
-                            <input type="text" name="searchSalesPerson" id="searchSalesPerson" class="form-control" placeholder="Search Sales Person" autocomplete="off">
-                            <span class="searchSalesPersonIcon"><i class="fa-solid fa-search"></i></span>
-                        </div>
-                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                            <label for="">Upload Status</label>
-                            <select name="filter_status" id="filter_status" class="form-control" style="height: 50px;">
-                                <option value="">Filter By Status</option>
-                                <option value="0">Belum Upload</option>
-                                <option value="1">Sudah Upload</option>
-                            </select>
-                        </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12 position-relative">
+                    <div class="position-relative">
+                        <label for="">Sales Person</label>
+                        <input type="text" name="searchSalesPerson" id="searchSalesPerson" class="form-control" placeholder="Search Sales Person" autocomplete="off">
+                        <span class="position-absolute top-50" style="right: 15px;"><i class="fa-solid fa-search text-secondary"></i></span>
                     </div>
-                    <div class="table-responsive" style="width: 100%;">
-                        <div class="mt-3">
-                            <span class="text-danger">*Note: U = Badan Usaha | O = Perseorangan | CK = CheckList</span>
-                            <table id="datatable" class="table" style="border: 1px solid #cfcfd1; min-width: 100%;">
-                                <thead style="background-color: #E7E6EB;">
-                                    <tr>
-                                        <th style="min-width: 50px; font-size: 12px;">CK</th>
-                                        <th style="min-width: 80px; font-size: 12px;">No</th>
-                                        <th style="min-width: 140px; font-size: 12px;">Bussiness Entity</th>
-                                        <th style="min-width: 200px; font-size: 12px;" class="text-center align-middle">Customer Name</th>
-                                        <th style="min-width: 200px; font-size: 12px;" class="text-center align-middle">Bill to Name</th>
-                                        <th style="min-width: 250px; font-size: 12px;" class="text-center align-middle">Bill to Address</th>
-                                        <th style="min-width: 180px; font-size: 12px;" class="text-center align-middle">Sales Person</th>
-                                        <th style="min-width: 50px; font-size: 12px;">Upload Status</th>
-                                        <th style="min-width: 120px; font-size: 12px;">Created Date</th>
-                                        <th style="min-width: 350px; font-size: 12px;">Update</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                    <div class="position-relative">
+                        <label for="">Upload Status</label>
+                        <select name="filter_status" id="filter_status" class="form-control" style="height: 50px;">
+                            <option value="">Filter By Status</option>
+                            <option value="0">Belum Upload</option>
+                            <option value="1">Sudah Upload</option>
+                        </select>
+                        <span class="position-absolute top-50" style="right: 15px;"><i class="fa-solid fa-caret-down text-secondary"></i></span>
                     </div>
+                </div>
+            </div>
+            <div class="table-responsive" style="width: 100%;">
+                <div class="mt-3">
+                    <span class="text-danger">*Note: U = Badan Usaha | O = Perseorangan | CK = CheckList</span>
+                    <table id="datatable" class="table table-hover" style="">
+                        <thead>
+                            <tr>
+                                <th style="min-width: 50px; font-size: 14px;">CK</th>
+                                <th style="min-width: 80px; font-size: 14px;">No</th>
+                                <th style="min-width: 140px; font-size: 14px;">Bussiness Entity</th>
+                                <th style="min-width: 200px; font-size: 14px;" class="text-center align-middle">Customer Name</th>
+                                <th style="min-width: 200px; font-size: 14px;" class="text-center align-middle">Bill to Name</th>
+                                <th style="min-width: 250px; font-size: 14px;" class="text-center align-middle">Bill to Address</th>
+                                <th style="min-width: 180px; font-size: 14px;" class="text-center align-middle">Sales Person</th>
+                                <th style="min-width: 50px; font-size: 14px;">Upload Status</th>
+                                <th style="min-width: 120px; font-size: 14px;">Created Date</th>
+                                <th style="min-width: 350px; font-size: 14px;">Update</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -287,12 +105,12 @@
                             <input type="text" name="username" id="username" class="form-control" placeholder="Masukkan username" value="{{ Auth::user()->username }}">
                         </div>
                         <div class="forgot_password">
-                            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#modalUbahPassword" style="text-decoration: none; color: #021526;">Lupa Password?</a>
+                            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#modalUbahPassword" style="text-decoration: none;">Lupa Password?</a>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btnBatal" data-bs-dismiss="modal" title="Batal">Batal</button>
-                        <button type="submit" class="btnSimpan" title="Simpan">Simpan</button>
+                    <div class="modal-footer d-flex flex-column-reverse flex-md-row justify-content-md-end">
+                        <button type="button" class="btnBatal btn btn-outline-danger" data-bs-dismiss="modal" title="Batal">Batal</button>
+                        <button type="submit" class="btnSimpan btn btn-primary" title="Simpan">Simpan</button>
                     </div>
                 </form>
             </div>
@@ -322,9 +140,9 @@
                             <input type="password" name="password_confirmation" id="konfirmasi_password" class="form-control" placeholder="Konfirmasi password baru">
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btnBatal" data-bs-dismiss="modal" title="Batal">Batal</button>
-                        <button type="submit" class="btnSimpan" title="Simpan">Simpan</button>
+                    <div class="modal-footer d-flex flex-column-reverse flex-md-row justify-content-md-end">
+                        <button type="button" class="btnBatal btn btn-outline-danger" data-bs-dismiss="modal" title="Batal">Batal</button>
+                        <button type="submit" class="btnSimpan btn btn-primary" title="Simpan">Simpan</button>
                     </div>
                 </form>
             </div>
@@ -379,7 +197,7 @@
                         createdCell: function(td) {
                             $(td).css('text-align', 'left');
                         }
-                    },
+                    }
                 ],
                 pagingType: 'simple_numbers',
                 pageLength: 10,

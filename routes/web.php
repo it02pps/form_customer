@@ -6,6 +6,7 @@ use App\Http\Controllers\APIStorageController as APIStorage;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\OCRController;
 use App\Http\Controllers\PreviewPdfController;
 use App\Models\IdentitasPerusahaan;
 use Illuminate\Support\Facades\File;
@@ -30,6 +31,11 @@ Route::get('/', function () {
     return redirect('/form-customer/');
 });
 Route::get('/form-customer', [FormCustomer::class, 'menu'])->name('form_customer.menu');
+
+// OCR
+Route::get("/form-customer/scan", [OCRController::class, 'scan'])->name('form_customer.scan');
+Route::post("/ocr/ktp", [OCRController::class, 'ktp'])->name('ocr.ktp');
+Route::post("/ocr/npwp", [OCRController::class, 'npwp'])->name('ocr.npwp');
 
 // Login
 Route::get('/form-customer/panel/login', [LoginController::class, 'index'])->name('form_customer.login');

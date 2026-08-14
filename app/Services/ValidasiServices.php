@@ -9,9 +9,7 @@ class ValidasiServices
     public function validationPerusahaan($data)
     {
         $rules = [
-            'nama_perusahaan' => 'required',
             'nama_group_perusahaan' => 'required',
-            'alamat_lengkap' => 'required',
             'alamat_group_lengkap' => 'required',
             'kota_kabupaten' => 'required',
             'no_hp' => 'required',
@@ -34,9 +32,7 @@ class ValidasiServices
         ];
 
         $message = [
-            'nama_perusahaan.required' => 'Nama perusahaan harus diisi',
             'nama_group_perusahaan.required' => 'Nama group perusahaan harus diisi',
-            'alamat_lengkap.required' => 'Alamat lengkap harus diisi',
             'alamat_group_lengkap.required' => 'Alamat Group harus diisi',
             'kota_kabupaten.required' => 'Kota/Kabupaten harus diisi',
             'no_hp.required' => 'Nomor handphone harus diisi',

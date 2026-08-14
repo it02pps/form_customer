@@ -6,143 +6,108 @@
 
 @section('css')
 <style>
-    body {
-        overflow-y: hidden;
+    .header img {
+        width: 100%;
     }
 
-    .container .header img {
-        width: 35%;
+    .content-menu {
+        width: 100%;
     }
 
-    .page-wrapper {
-        max-height: auto;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
+    .badan_usaha,
+    .perseorangan,
+    .cust_baru,
+    .cust_lama,
+    .pengkininan_data,
+    .cabang_baru {
+        transition: background-color 0.3s;
     }
 
-    .option-menu {
-        width: 70%;
-        gap: 12px;
+    .badan_usaha:hover,
+    .perseorangan:hover,
+    .cust_baru:hover,
+    .cust_lama:hover,
+    .pengkininan_data:hover,
+    .cabang_baru:hover {
+        background-color: #0d6efd20;
     }
 
-    .option-menu .badan_usaha, .option-menu .perseorangan {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        border: 1px solid #D2D0D8;
-        border-radius: 8px;
-        padding: 32px 0;
+    .badan_usaha img, .perseorangan img {
+        width: 100px;
+    }
+
+    .active1, .active2 {
+        background-color: #0d6efd20;
+    }
+
+    .cust_baru,
+    .cust_lama,
+    .pengkininan_data,
+    .cabang_baru {
+        min-height: 56px;
         cursor: pointer;
     }
 
-    .profile-icon {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        cursor: pointer;
-    }
-
-    .card {
-        padding: 16px;
-        cursor: pointer;
-    }
-
-    .modal-body .opsi1Perseorangan .card.active1,
-    .modal-body .opsi1BadanUsaha .card.active1,
-    .modal-body .opsi2Perseorangan .card.active2,
-    .modal-body .opsi2BadanUsaha .card.active2 {
-        border: 2px solid #0063ee;
-    }
-
-    .badan_usaha, .perseorangan {
-        gap: 8px;
-    }
-
-    /* TABLET RESOLUTION */
-    @media (min-width: 576px) and (max-width: 991.98px) {
-        body {
-            overflow-y: auto;
+    @media (min-width: 768px) {
+        .content-menu {
+            width: 50% !important;
         }
 
-        .container .header img {
-            width: 80%;
+        .badan_usaha img {
+            width: 140px !important;
         }
 
-        .modal-body .opsi1Perseorangan,
-        .modal-body .opsi1BadanUsaha,
-        .modal-body .opsi2Perseorangan,
-        .modal-body .opsi2BadanUsaha {
-            gap: 8px !important;
-        }
-    }
-
-    /* MOBILE RESOLUTION */
-    @media (max-width: 575.98px) {
-        body {
-            overflow-y: auto;
-            background-image: none;
+        .perseorangan img {
+            width: 128px !important;
         }
 
-        .container-fill-mobile {
-            height: 100vh;
-            flex: 1;
-            display: flex;
-            /* flex-direction: column; */
-            /* justify-content: space-between; */
-            padding: 0 !important;
+        .header > div img {
+            width: 35% !important;
         }
 
-        .container .header img {
-            width: 80%;
-        }
-
-        .container > div {
-            border-radius: 0 !important;
-            box-shadow: none !important;
-            padding-left: 2rem !important;
-            padding-right: 2rem !important;
-        }
-
-        .option-menu {
-            width: 100%;
-        }
-
-        .modal-body .opsi1Perseorangan,
-        .modal-body .opsi1BadanUsaha,
-        .modal-body .opsi2Perseorangan,
-        .modal-body .opsi2BadanUsaha {
-            gap: 8px !important;
+        .cust_baru,
+        .cust_lama,
+        .pengkininan_data,
+        .cabang_baru {
+            min-height: 64px !important;
         }
     }
 </style>
 @endsection
 
 @section('content')
-    <div class="page-wrapper">
-        <div class="container container-fill-mobile py-5">
-            <div class="p-5 bg-white rounded-4 shadow text-center position-relative">
-                <div class="d-grid gap-5">
-                    <div class="header d-grid gap-3">
-                        <img src="{{ asset('images/Profile.svg') }}" style="width: 40px;" class="profile-icon" onclick="login()">
-                        <img src="{{ asset('images/PNG 4125 x 913.png') }}" class="mx-auto">
-                        <div class="title text-center">
-                            <h1 class="m-0">Pilih Menu</h1>
-                            <p class="m-0">Silahkan pilih menu dibawah ini untuk mengisi data customer.<br> Bentuk Usaha Customer:</p>
-                        </div>
-                    </div>
-                    <div class="content-menu d-flex justify-content-center">
-                        <div class="row text-center option-menu justify-content-around">
-                            <div class="col-lg-5 col-sm-12 badan_usaha" data-bs-toggle="modal" data-bs-target="#modalMenuBadanUsaha">
-                                <img src="{{ asset('images/enterprise 1.svg') }}" width="150">
-                                <p style="font-weight: 700;">Badan Usaha</p>
-                            </div>
-                            <div class="col-lg-5 col-sm-12 perseorangan" data-bs-toggle="modal" data-bs-target="#modalMenuPerseorangan">
-                                <img src="{{ asset('images/Single Entity 1.svg') }}" width="135">
-                                <p style="font-weight: 700;">Perseorangan</p>
-                            </div>
-                        </div>
-                    </div>
+    <div class="px-4 py-3 px-md-5 d-flex flex-column align-items-center justify-content-center position-relative gap-4 min-vh-100">
+        <div class="header">
+            <img src="{{ asset('images/Profile.svg') }}" style="width: 40px; cursor: pointer; right: 24px !important; top: 16px !important;" class="profile-icon position-absolute" onclick="login()">
+            <div class="d-flex flex-column justify-content-center align-items-center gap-4">
+                <img src="{{ asset('images/PNG 4125 x 913.png') }}">
+                <div class="title text-center lh-base">
+                    <h1 class="m-0">Pilih Menu</h1>
+                    <p class="m-0">Silahkan pilih menu dibawah ini untuk mengisi data customer.<br> Bentuk Usaha Customer:</p>
+                </div>
+            </div>
+        </div>
+        <div class="content-menu row justify-content-center g-4 text-center">
+            <div class="col-12 col-md-6">
+                <div
+                    class="badan_usaha d-flex flex-column align-items-center gap-3 w-100 border rounded px-md-5 py-3"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalMenuBadanUsaha"
+                    style="cursor: pointer;"
+                >
+                    <img src="{{ asset('images/enterprise 1.svg') }}">
+                    <p class="m-0 fw-normal">Badan Usaha</p>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div
+                    class="perseorangan d-flex flex-column align-items-center gap-3 w-100 border rounded px-md-5 py-3"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalMenuPerseorangan"
+                    style="cursor: pointer;"
+                >
+                    <img src="{{ asset('images/Single Entity 1.svg') }}">
+                    <p class="m-0 fw-normal">Perseorangan</p>
                 </div>
             </div>
         </div>
@@ -158,25 +123,25 @@
                 </div>
                 <div class="modal-body">
                     <h6>Apakah sudah pernah bertransaksi di PT Papasari?</h6>
-                    <div class="row gap-0 pb-4 opsi1Perseorangan text-center">
+                    <div class="row g-3 pb-4 opsi1Perseorangan text-center">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="card active1 cust_baru">
+                            <div class="card active1 cust_baru d-flex align-items-center justify-content-center">
                                 <span><i class="fa-solid fa-person-circle-plus"></i> Belum</span>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="card cust_lama">
+                            <div class="card cust_lama d-flex align-items-center justify-content-center">
                                 <span><i class="fa-solid fa-rotate-left"></i> Sudah</span>
                             </div>
                         </div>
                     </div>
-                    <div class="row gap-0 pb-4 opsi2Perseorangan text-center">
+                    <div class="row g-3 pb-4 opsi2Perseorangan text-center">
                         
                     </div>
-                    <div class="row gap-0 identityPerseorangan">
+                    <div class="row g-3 identityPerseorangan">
                             
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer mt-3">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-primary" id="nextPerseorangan">Selanjutnya</button>
                     </div>
@@ -196,25 +161,25 @@
                 </div>
                 <div class="modal-body">
                     <h6>Apakah sudah pernah bertransaksi di PT Papasari?</h6>
-                    <div class="row gap-0 pb-4 opsi1BadanUsaha text-center">
+                    <div class="row g-3 pb-4 opsi1BadanUsaha text-center">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="card active1 cust_baru">
+                            <div class="card active1 cust_baru d-flex align-items-center justify-content-center">
                                 <span><i class="fa-solid fa-person-circle-plus"></i> Belum</span>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="card cust_lama">
+                            <div class="card cust_lama d-flex align-items-center justify-content-center">
                                 <span><i class="fa-solid fa-rotate-left"></i> Sudah</span>
                             </div>
                         </div>
                     </div>
-                    <div class="row gap-0 pb-4 opsi2BadanUsaha text-center">
+                    <div class="row g-3 pb-4 opsi2BadanUsaha text-center">
                         
                     </div>
-                    <div class="row gap-0 identityBadanUsaha">
+                    <div class="row g-3 identityBadanUsaha">
                             
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer mt-3">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-primary" id="nextBadanUsaha">Selanjutnya</button>
                     </div>
@@ -266,12 +231,12 @@
                     $('#nik').attr('required', true);
                     $('.modal-body .opsi2Perseorangan').append(`
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="card active2 pengkininan_data">
+                            <div class="card active2 pengkininan_data d-flex align-items-center justify-content-center" style="cursor: pointer;">
                                 <span><i class="fa-solid fa-rotate-left"></i> Pengkinian Data</span>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="card cabang_baru">
+                            <div class="card cabang_baru d-flex align-items-center justify-content-center" style="cursor: pointer;">
                                 <span><i class="fa-solid fa-building"></i> Cabang Baru</span>
                             </div>
                         </div>
@@ -317,12 +282,12 @@
                     $('#npwp').attr('required', true);
                     $('.modal-body .opsi2BadanUsaha').append(`
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="card active2 pengkininan_data">
+                            <div class="card active2 pengkininan_data d-flex align-items-center justify-content-center" style="cursor: pointer;">
                                 <span><i class="fa-solid fa-rotate-left"></i> Pengkinian Data</span>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="card cabang_baru">
+                            <div class="card cabang_baru d-flex align-items-center justify-content-center" style="cursor: pointer;">
                                 <span><i class="fa-solid fa-building"></i> Cabang Baru</span>
                             </div>
                         </div>

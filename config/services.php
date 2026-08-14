@@ -39,5 +39,9 @@ return [
     'service_l' => [
         'api_key' => env('API_KEY'),
         'url' => env('LOCAL_API_URL')
+    ],
+
+    'bos_api' => [
+        'api_key' => env("BOS_API_KEY"),
     ]
 ];

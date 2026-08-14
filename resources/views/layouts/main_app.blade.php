@@ -20,6 +20,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     {{-- Zoom --}}
     <link rel="stylesheet" href="{{ asset('css/zoom.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/customCSS.css') }}">
     {{-- Datatable --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.bootstrap5.min.css">
     {{-- Font awesome --}}
@@ -32,12 +33,14 @@
         }
         
         html, body {
-            height: auto;
-            min-height: 100vh;
             margin: 0;
             padding: 0;
             background-image: linear-gradient(315deg, #E1F5FE, #CEF0FF);
             background-repeat: no-repeat;
+        }
+
+        main {
+            background: white;
         }
 
         p {
@@ -102,11 +105,10 @@
             }
         }
     </style>
-
     @yield('css')
 </head>
 <body>
-    <main>
+    <main class="min-vh-100">
         @yield('content')
     </main>
 </body>
@@ -122,5 +124,6 @@
 <script src="https://cdn.datatables.net/2.1.6/js/dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/2.1.6/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+<script src="https://docs.opencv.org/4.x/opencv.js"></script>
 
 @yield('js')

@@ -6,168 +6,6 @@
 
 @section('css')
 <style>
-    body {
-        overflow: hidden;
-    }
-
-    .container {
-        height: 100vh;
-    }
-
-    .container .header img {
-        max-width: 40px;
-    }
-
-    .header h6 {
-        font-weight: 400;
-    }
-
-    .header i {
-        color: #C4C4C4;
-        cursor: pointer;
-    }
-
-    .login-page {
-        width: 100%;
-        max-width: 55%;
-    }
-
-    .form-group {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .form-group input {
-        width: auto;
-        padding: 16px;
-    }
-
-    .content-body {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-    }
-
-    .content-footer {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        align-items: flex-end;
-        padding-top: 16px;
-    }
-
-    .content-footer button {
-        width: 100%;
-        background-color: #0063EE;
-        color: #fff;
-        border: none;
-        padding: 16px 0 16px 0;
-        border-radius: 5px;
-    }
-
-     @media (min-width: 576px) and (max-width: 991.98px) {
-        body {
-            overflow-y: auto;
-            overflow-x: hidden !important;
-        }
-
-        .container {
-            padding: 0 !important;
-        }
-
-        .login-page {
-            width: 100%;
-            min-width: 100%;
-        }
-
-        .form-group {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-group input {
-            width: auto;
-            padding: 16px;
-        }
-
-        .content-body {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .content-footer {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            align-items: flex-end;
-            padding-top: 16px;
-        }
-
-        .content-footer button {
-            width: 100%;
-            background-color: #0063EE;
-            color: #fff;
-            border: none;
-            padding: 16px 0 16px 0;
-            border-radius: 5px;
-        }
-    }
-
-    @media (max-width: 575.98px) {
-        body {
-            overflow-y: auto;
-            overflow-x: hidden !important;
-            background-image: none;
-        }
-
-        .login-page {
-            width: 100%;
-            min-width: 380px;
-            box-shadow: none !important;
-        }
-
-        .form-group {
-            width: 100%;
-            min-width: 300px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-group input {
-            width: auto;
-            padding: 16px;
-        }
-
-        .content-body {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .content-footer {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            align-items: flex-end;
-            padding-top: 16px;
-        }
-
-        .content-footer button {
-            width: 100%;
-            min-width: 200px;
-            background-color: #0063EE;
-            color: #fff;
-            border: none;
-            padding: 16px 0 16px 0;
-            border-radius: 5px;
-        }
-    }
 </style>
 @endsection
 
@@ -183,36 +21,65 @@
         </div>
     </div>
 @endif
-<div class="container d-flex justify-content-center align-items-center">
-    <div class="login-page p-5 bg-white rounded-4 shadow text-center">
-        <div class="d-grid gap-4">
-            <div class="header row">
-                <div class="col-lg-2 col-sm-2 text-start d-flex align-items-center">
-                    <i class="fa-solid fa-arrow-left icon" onclick="kembali()"></i>
-                </div>
-                <div class="col-lg-10 col-sm-10">
-                    <div class="title text-start">
-                        <h2>Selamat Datang <img src="{{ asset('images/hai.png') }}"></h2>
-                        <h6 style="font-weight: 400;">Silahkan masukkan identitas anda.</h6>
-                    </div>
+<div class="position-relative d-flex justify-content-center align-items-center min-vh-100 px-3 px-md-5">
+    <div class="logo position-absolute" style="top: 16px !important; left: 16px !important;">
+        <img
+            src="{{ asset('images/PNG 4125 x 913.png') }}"
+            class="img-fluid"
+            alt="Logo"
+        >
+    </div>
+    <div class="row w-100">
+        <div class="col-12 col-md-6 my-md-auto">
+            <div class="text-center text-justify">
+                <h3>Selamat Datang, Admin <img src="{{ asset('images/hai.png') }}" width="40"></h3>
+                <div class="my-3">
+                    <p class="text-justify m-0 fs-6 mb-2">Kelola data dan proses administrasi customer PT. Papasari.</p>
+                    <p class="text-justify m-0 fs-6">Gunakan akun administrator anda untuk mengakses sistem.</p>
                 </div>
             </div>
+        </div>
+        <div class="col-12 col-md-6">
             <div class="content">
                 <form method="POST" action="{{ route('form_customer.login.store') }}">
                     @csrf
-                    <div class="content-body text-start">
-                        <div class="form-group">
+                    <div class="d-flex flex-column gap-3">
+                        <div class="form-group text-start">
                             <label for="">Username</label>
-                            <input type="text" class="form-control" name="username" id="username" placeholder="Masukkan username" required autocomplete="off" autofocus>
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="username"
+                                id="username"
+                                placeholder="Masukkan username"
+                                required
+                                autocomplete="off"
+                                autofocus
+                            >
                         </div>
-                        <div class="form-group">
+                        <div class="form-group text-start">
                             <label for="">Password</label>
-                            <input type="password" class="form-control" name="password" id="password" placeholder="********" required autocomplete="off">
+                            <input
+                                type="password"
+                                class="form-control"
+                                name="password"
+                                id="password"
+                                placeholder="Masukkan passsword"
+                                required autocomplete="off"
+                            >
+                            <span class="text-danger">*Jika lupa password, harap segera hubungi admin untuk melanjutkan prosesnya.</span>
                         </div>
                     </div>
-                    <div class="content-footer">
-                        <button type="submit">Masuk</button>
-                        {{-- <a href="" onclick="lupa_password()" class="text-decoration-none" style="color: #021526;">Lupa Password?</a> --}}
+                    <div class="mt-3 d-flex flex-column-reverse flex-md-row justify-content-center gap-2">
+                        <button
+                            type="button"
+                            class="btn btn-outline-danger w-100"
+                            onclick="kembali()"
+                        >Kembali</button>
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-100"
+                        >Masuk</button>
                     </div>
                 </form>
             </div>
