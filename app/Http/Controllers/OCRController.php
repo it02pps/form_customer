@@ -7,8 +7,12 @@ use Illuminate\Support\Facades\Http;
 
 class OCRController extends Controller
 {
-    public function scan() {
+    public function scan_npwp() {
         return view("customer.badan_usaha.ocr");
+    }
+
+    public function scan_ktp() {
+        return view("customer.perseorangan.ocr");
     }
 
     public function ktp(Request $request) {
@@ -78,14 +82,17 @@ class OCRController extends Controller
 
         $file = $request->file("photo");
 
-        $response = Http::withHeaders([
+        $response = Http::asMultipart()
+        ->withHeaders([
             'Accept' => 'application/json',
             'API-KEY' => config('services.bos_api.api_key'),
-        ])->attach(
+        ])
+        ->attach(
             'photo',
             file_get_contents($file->getRealPath()),
             $file->getClientOriginalName()
-        )->post('https://bos-api.com/api/ocr/npwp');
+        )
+        ->post('https://bos-api.com/api/ocr/npwp');
 
         $result = $response->json();
 

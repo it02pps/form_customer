@@ -6,6 +6,10 @@
 
 @section('css')
 <style>
+    body {
+        overflow: hidden;
+    }
+    
     .header img {
         width: 100%;
     }

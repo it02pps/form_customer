@@ -6,6 +6,9 @@
 
 @section('css')
 <style>
+    body {
+        overflow: hidden;
+    }
 </style>
 @endsection
 

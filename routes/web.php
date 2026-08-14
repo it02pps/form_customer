@@ -33,7 +33,8 @@ Route::get('/', function () {
 Route::get('/form-customer', [FormCustomer::class, 'menu'])->name('form_customer.menu');
 
 // OCR
-Route::get("/form-customer/scan", [OCRController::class, 'scan'])->name('form_customer.scan');
+Route::get("/form-customer/scan-npwp", [OCRController::class, 'scan_npwp'])->name('form_customer.scan_npwp');
+Route::get("/form-customer/scan-ktp", [OCRController::class, 'scan_ktp'])->name('form_customer.scan_ktp');
 Route::post("/ocr/ktp", [OCRController::class, 'ktp'])->name('ocr.ktp');
 Route::post("/ocr/npwp", [OCRController::class, 'npwp'])->name('ocr.npwp');
 

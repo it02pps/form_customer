@@ -15,7 +15,7 @@
         <div class="header d-grid gap-3">
             <div class="title text-center">
                 <h1 class="m-0">Scan Identitas</h1>
-                <p class="mb-0 text-muted">Silahkan siapkan NPWP</p>
+                <p class="mb-0 text-muted">Silahkan siapkan KTP</p>
             </div>
         </div>
         <div class="text-center">
@@ -93,7 +93,7 @@
         formData.append(
             'photo',
             blob,
-            'npwp.jpg'
+            'ktp.jpg'
         );
 
         try {
@@ -101,7 +101,7 @@
             btnCapture.disabled = true;
 
             const response = await fetch(
-                "{{ route('ocr.npwp') }}",
+                "{{ route('ocr.ktp') }}",
                 {
                     method: 'POST',
                     headers: {
@@ -123,7 +123,7 @@
                 );
             }
 
-            console.log('Data NPWP:', result.data);
+            console.log('Data KTP:', result.data);
 
             console.log(
                 'Confidence:',
@@ -132,8 +132,10 @@
 
             // Untuk sementara tampilkan dulu
             alert(
-                `NPWP: ${result.data.no_npwp}\n` +
+                `KTP: ${result.data.no_ktp}\n` +
                 `NAMA: ${result.data.nama}\n` +
+                `ALAMAT: ${result.data.alamat}\n` +
+                `KECAMATAN: ${result.data.kecamatan}\n` +
                 `Confidence: ${result.data.confidence_score}`
             );
         } catch (error) {
