@@ -305,7 +305,7 @@ class FormCustomerController extends Controller
         $pdfMerger = new PdfMergerServices();
         $mergedPDF = $pdfMerger->merge(
             array_merge([$mainPdf], $collected['files']),
-            $data->nama_perusahaan
+            $data->nama_group_perusahaan
         );
 
         (new UploaderServices())->upload($mergedPDF);
