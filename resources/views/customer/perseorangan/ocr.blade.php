@@ -6,6 +6,21 @@
 
 @section('css')
 <style>
+    .camera-container {
+        width: 100%;
+        max-width: 600px;
+        aspect-ratio: 3 / 2;
+        overflow: hidden;
+        border-radius: 12px;
+        background: #000;
+    }
+
+    .camera-container video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
 </style>
 @endsection
 
@@ -19,23 +34,17 @@
             </div>
         </div>
         <div class="d-flex flex-column justify-content-center align-items-center">
-            <div>
+            <div class="camera-container">
                 <video
                     id="camera"
                     autoplay
                     playsinline
-                    {{-- class="col-6 col-md-6" --}}
-                    width="600"
-                    height="300"
                 ></video>
-    
-                {{-- <canvas
-                    id="canvas"
-                    class="d-none"
-                    width="200"
-                    height="100"
-                ></canvas> --}}
             </div>
+            <canvas
+                id="canvas"
+                class="d-none"
+            ></canvas>
 
             <div>
                 <button
