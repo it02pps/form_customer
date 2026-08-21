@@ -23,7 +23,7 @@
                 id="camera"
                 autoplay
                 playsinline
-                class="col-12 col-md-6"
+                class="col-6 col-md-6"
             ></video>
 
             <canvas
@@ -84,7 +84,6 @@
 
             video.srcObject = cameraStream;
         } catch (error) {
-            console.log(error);
             alert("Tidak dapat mengakses kamera.");
         }
     }
@@ -117,21 +116,11 @@
             );
 
             const result = await response.json();
-
-            console.log('OCR result:', result);
-
             if (!response.ok || !result.success) {
                 throw new Error(
                     result.message ?? 'OCR gagal.'
                 );
             }
-
-            console.log('Data KTP:', result.data);
-
-            console.log(
-                'Confidence:',
-                result.data.confidence_score
-            );
 
             alert(
                 `KTP: ${result.data.no_ktp}\n` +
@@ -140,8 +129,7 @@
                 `RT_RW: ${result.data.rt_rw}\n` +
                 `KELURAHAN: ${result.data.kelurahan}\n` +
                 `KOTA: ${result.data.kota_kabupaten}\n` +
-                `provinsi: ${result.data.provinsi}\n` +
-                `Confidence: ${result.data.confidence_score}`
+                `provinsi: ${result.data.provinsi}\n`
             );
 
         } catch (error) {

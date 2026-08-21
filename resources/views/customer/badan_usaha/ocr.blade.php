@@ -18,12 +18,12 @@
                 <p class="mb-0 text-muted">Silahkan siapkan NPWP</p>
             </div>
         </div>
-        <div class="text-center">
+        <div class="d-flex flex-column align-items-center justify-content-center">
             <video
                 id="camera"
                 autoplay
                 playsinline
-                class="w-50"
+                class="col-6 col-md-6"
             ></video>
 
             <canvas
@@ -31,13 +31,15 @@
                 class="d-none"
             ></canvas>
 
-            <button
-                type="button"
-                id="btnCapture"
-                class="btn btn-primary mt-3"
-            >
-                Ambil foto        
-            </button>
+            <div>
+                <button
+                    type="button"
+                    id="btnCapture"
+                    class="btn btn-primary mt-3"
+                >
+                    Ambil foto        
+                </button>
+            </div>
         </div>
         <div id="loadingOCR" class="text-center mt-4" style="display:none;">
             <div class="spinner-border text-primary" role="status"></div>
@@ -113,28 +115,16 @@
             );
 
             const result = await response.json();
-
-            console.log('OCR result:', result);
-
             if (!response.ok || !result.success) {
-
                 throw new Error(
                     result.message ?? 'OCR gagal.'
                 );
             }
 
-            console.log('Data NPWP:', result.data);
-
-            console.log(
-                'Confidence:',
-                result.data.confidence_score
-            );
-
             // Untuk sementara tampilkan dulu
             alert(
                 `NPWP: ${result.data.no_npwp}\n` +
-                `NAMA: ${result.data.nama}\n` +
-                `Confidence: ${result.data.confidence_score}`
+                `NAMA: ${result.data.nama}\n`
             );
         } catch (error) {
             console.error('OCR error:', error);
@@ -144,9 +134,6 @@
             loadingOCR.style.display = 'none';
             btnCapture.disabled = false;
         }
-
-        const result = await response.json();
-        console.log(result);
     }
 
     btnCapture.addEventListener('click', async () => {

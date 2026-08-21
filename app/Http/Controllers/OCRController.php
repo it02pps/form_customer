@@ -41,12 +41,6 @@ class OCRController extends Controller
 
             $result = $response->json();
 
-            Log::info('OCR KTP DEBUG', [
-                'status' => $response->status(),
-                'body' => $response->body(),
-                'json' => $result,
-            ]);
-
             if(!($result['success'] ?? false)) {
                 return response()->json([
                     'success' => false,
@@ -124,7 +118,6 @@ class OCRController extends Controller
                     'no_npwp' => $data['npwp'] ?? null,
                     'nama' => $data['name'] ?? null,
                     'alamat' => $data['address'] ?? null,
-                    'confidence_score' => $result['confidence_score'] ?? null,
                 ]
             ]);
         } catch (\Exception $e) {
