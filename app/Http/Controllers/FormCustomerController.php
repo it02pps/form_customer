@@ -29,20 +29,16 @@ class FormCustomerController extends Controller
 
     public function menu()
     {
-        // dd($response);
         try {
-            // dd(config('services.service_v.api_key'));
             $response = Http::withHeaders([
                 'x-api-key' => config('services.service_v.api_key'),
             ])->get(config('services.service_v.url') . '/api/checkstatus');
-            // dd($response);
 
             if ($response->json()['status'] == false) {
                 abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
             }
             return view('customer.menu');
         } catch (\Illuminate\Http\Client\ConnectionException $e) {
-            // dd($e);
             abort(403, 'Server tidak bisa diakses, silahkan hubungi pihak yang bersangkutan.');
         }
     }

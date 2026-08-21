@@ -18,12 +18,12 @@
                 <p class="mb-0 text-muted">Silahkan siapkan KTP</p>
             </div>
         </div>
-        <div class="text-center">
+        <div class="d-flex flex-column justify-content-center align-items-center">
             <video
                 id="camera"
                 autoplay
                 playsinline
-                class="w-50"
+                class="col-12 col-md-6"
             ></video>
 
             <canvas
@@ -31,13 +31,15 @@
                 class="d-none"
             ></canvas>
 
-            <button
-                type="button"
-                id="btnCapture"
-                class="btn btn-primary mt-3"
-            >
-                Ambil foto        
-            </button>
+            <div>
+                <button
+                    type="button"
+                    id="btnCapture"
+                    class="btn btn-primary mt-3"
+                >
+                    Ambil foto        
+                </button>
+            </div>
         </div>
         <div id="loadingOCR" class="text-center mt-4" style="display:none;">
             <div class="spinner-border text-primary" role="status"></div>
@@ -87,7 +89,7 @@
         }
     }
 
-    async function sendToOCR(blob) {
+    async function sendToOCR(blob) {        
         const formData = new FormData();
 
         formData.append(
@@ -105,7 +107,9 @@
                 {
                     method: 'POST',
                     headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'X-CSRF-TOKEN': document.querySelector(
+                            'meta[name="csrf-token"]'
+                        ).content,
                         'Accept': 'application/json'
                     },
                     body: formData
@@ -117,7 +121,6 @@
             console.log('OCR result:', result);
 
             if (!response.ok || !result.success) {
-
                 throw new Error(
                     result.message ?? 'OCR gagal.'
                 );
@@ -130,7 +133,6 @@
                 result.data.confidence_score
             );
 
-            // Untuk sementara tampilkan dulu
             alert(
                 `KTP: ${result.data.no_ktp}\n` +
                 `NAMA: ${result.data.nama}\n` +
@@ -138,17 +140,16 @@
                 `KECAMATAN: ${result.data.kecamatan}\n` +
                 `Confidence: ${result.data.confidence_score}`
             );
+
         } catch (error) {
             console.error('OCR error:', error);
 
             alert(error.message);
+
         } finally {
             loadingOCR.style.display = 'none';
             btnCapture.disabled = false;
         }
-
-        const result = await response.json();
-        console.log(result);
     }
 
     btnCapture.addEventListener('click', async () => {
