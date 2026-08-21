@@ -19,17 +19,23 @@
             </div>
         </div>
         <div class="d-flex flex-column justify-content-center align-items-center">
-            <video
-                id="camera"
-                autoplay
-                playsinline
-                class="col-6 col-md-6"
-            ></video>
-
-            <canvas
-                id="canvas"
-                class="d-none"
-            ></canvas>
+            <div>
+                <video
+                    id="camera"
+                    autoplay
+                    playsinline
+                    {{-- class="col-6 col-md-6" --}}
+                    width="300"
+                    height="250"
+                ></video>
+    
+                {{-- <canvas
+                    id="canvas"
+                    class="d-none"
+                    width="200"
+                    height="100"
+                ></canvas> --}}
+            </div>
 
             <div>
                 <button
