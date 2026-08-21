@@ -142,8 +142,7 @@
                                     rows="6"
                                     cols="70"
                                     required
-                                    value="{{ ($ocrData['alamat'] ?? '') . ' ' . ($ocrData['rt_rw'] ?? '') . ' ' . ($ocrData['kelurahan'] ?? '') . ' ' . ($ocrData['kecamatan'] ?? '') . ' ' . ($ocrData['kota_kabupaten'] ?? '') . ' ' . ($ocrData['provinsi'] ?? '') }}"
-                                ></textarea>
+                                >{{ ($ocrData['alamat'] ?? '') . ' ' . ($ocrData['rt_rw'] ?? '') . ' ' . ($ocrData['kelurahan'] ?? '') . ' ' . ($ocrData['kecamatan'] ?? '') . ' ' . ($ocrData['kota_kabupaten'] ?? '') . ' ' . ($ocrData['provinsi'] ?? '') }}</textarea>
                             </div>
                         </div>
                     </div>
