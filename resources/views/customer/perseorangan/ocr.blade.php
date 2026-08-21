@@ -33,7 +33,7 @@
                 <p class="mb-0 text-muted">Silahkan siapkan KTP</p>
             </div>
         </div>
-        <div class="d-flex flex-column justify-content-center align-items-center">
+        <div class="d-flex flex-column justify-content-center align-items-center w-100">
             <div class="camera-container">
                 <video
                     id="camera"
