@@ -6,6 +6,21 @@
 
 @section('css')
 <style>
+    .camera-container {
+        width: 100%;
+        max-width: 600px;
+        aspect-ratio: 3 / 2;
+        overflow: hidden;
+        border-radius: 12px;
+        background: #000;
+    }
+
+    .camera-container video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
 </style>
 @endsection
 
@@ -18,14 +33,14 @@
                 <p class="mb-0 text-muted">Silahkan siapkan NPWP</p>
             </div>
         </div>
-        <div class="d-flex flex-column align-items-center justify-content-center">
-            <video
-                id="camera"
-                autoplay
-                playsinline
-                class="col-6 col-md-6"
-            ></video>
-
+        <div class="d-flex flex-column align-items-center justify-content-center w-100">
+            <div class="camera-container">
+                <video
+                    id="camera"
+                    autoplay
+                    playsinline
+                ></video>
+            </div>
             <canvas
                 id="canvas"
                 class="d-none"

@@ -52,7 +52,7 @@
                     id="btnCapture"
                     class="btn btn-primary mt-3"
                 >
-                    Ambil foto        
+                    Ambil foto
                 </button>
             </div>
         </div>
@@ -112,6 +112,24 @@
             'ktp.jpg'
         );
 
+        console.log(@json($menu), @json($status));
+
+        const menuValue = @json($menu);
+        const statusValue = @json($status);
+        const status2Value = @json($status2);
+        const paramValue = @json($param);
+
+        formData.append("menu", menuValue);
+        formData.append("status", statusValue);
+
+        if(status2Value) {
+            formData.append("status2", status2Value);
+        }
+
+        if(paramValue) {
+            formData.append("param", paramValue);
+        }
+
         try {
             loadingOCR.style.display = 'block';
             btnCapture.disabled = true;
@@ -137,21 +155,10 @@
                 );
             }
 
-            alert(
-                `KTP: ${result.data.no_ktp}\n` +
-                `NAMA: ${result.data.nama}\n` +
-                `ALAMAT: ${result.data.alamat}\n` +
-                `RT_RW: ${result.data.rt_rw}\n` +
-                `KELURAHAN: ${result.data.kelurahan}\n` +
-                `KOTA: ${result.data.kota_kabupaten}\n` +
-                `provinsi: ${result.data.provinsi}\n`
-            );
-
+            window.location.href = result.redirect_url;
         } catch (error) {
             console.error('OCR error:', error);
-
             alert(error.message);
-
         } finally {
             loadingOCR.style.display = 'none';
             btnCapture.disabled = false;

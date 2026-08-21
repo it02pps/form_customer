@@ -4,16 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class OCRController extends Controller
 {
-    public function scan_npwp() {
+    public function scan_npwp($menu, $status = NULL, $status2 = NULL, $param = NULL) {
         return view("customer.badan_usaha.ocr");
     }
 
-    public function scan_ktp() {
-        return view("customer.perseorangan.ocr");
+    public function scan_ktp($menu, $status = NULL, $status2 = NULL, $param = NULL) {
+        return view("customer.perseorangan.ocr", compact('menu', 'status', 'status2', 'param'));
     }
 
     public function ktp(Request $request) {
@@ -24,9 +23,28 @@ class OCRController extends Controller
                     'file',
                     'mimes:jpg,jpeg,png',
                     'max:5120'
-                ]
+                ],
+                'menu' => [
+                    'required',
+                    'in:badan-usaha,perseorangan'
+                ],
+                'status' => [
+                    'required',
+                    'in:customer-baru,customer-lama'
+                ],
+                'status2' => [
+                    'nullable',
+                    'in:pengkinian-data,cabang-baru'
+                ],
+                'param' => [
+                    'nullable'
+                ],
             ]);
 
+            $menu = $request->menu;
+            $status = $request->status;
+            $status2 = $request->status2;
+            $param = $request->param;
             $file = $request->file("photo");
 
             $response = Http::asMultipart()
@@ -50,26 +68,35 @@ class OCRController extends Controller
 
             $data = $result['document'] ?? [];
 
+            session()->flash('data', [
+                'no_ktp' => $data['nik'] ?? null,
+                'nama' => $data['name'] ?? null,
+                'alamat' => $data['address'] ?? null,
+                'rt_rw' => $data['rt_rw'] ?? null,
+                'kelurahan' => $data['village'] ?? null,
+                'kecamatan' => $data['district'] ?? null,
+                'kota_kabupaten' => $data['city_or_regency'] ?? null,
+                'provinsi' => $data['province'] ?? null,
+                'jenis_kelamin' => $data['gender'] ?? null,
+                'agama' => $data['religion'] ?? null,
+                'status_perkawinan' => $data['marital_status'] ?? null,
+                'pekerjaan' => $data['occupation'] ?? null,
+                'kewarganegaraan' => $data['citizenship'] ?? null,
+                'tempat_lahir' => $data['birth_place'] ?? null,
+                'tanggal_lahir' => $data['birth_date'] ?? null,
+                'confidence_score' => $result['confidence_score'] ?? null,
+            ]);
+
+            $url = route('form_customer.view_badan_usaha', [
+                'menu' => $request->menu,
+                'status' => $request->status,
+                'status2' => $request->status2,
+                'param' => $request->param,
+            ]);
+
             return response()->json([
                 'success' => true,
-                'data' => [
-                    'no_ktp' => $data['nik'] ?? null,
-                    'nama' => $data['name'] ?? null,
-                    'alamat' => $data['address'] ?? null,
-                    'rt_rw' => $data['rt_rw'] ?? null,
-                    'kelurahan' => $data['village'] ?? null,
-                    'kecamatan' => $data['district'] ?? null,
-                    'kota_kabupaten' => $data['city_or_regency'] ?? null,
-                    'provinsi' => $data['province'] ?? null,
-                    'jenis_kelamin' => $data['gender'] ?? null,
-                    'agama' => $data['religion'] ?? null,
-                    'status_perkawinan' => $data['marital_status'] ?? null,
-                    'pekerjaan' => $data['occupation'] ?? null,
-                    'kewarganegaraan' => $data['citizenship'] ?? null,
-                    'tempat_lahir' => $data['birth_place'] ?? null,
-                    'tanggal_lahir' => $data['birth_date'] ?? null,
-                    'confidence_score' => $result['confidence_score'] ?? null,
-                ]
+                'redirect_url' => $url,
             ]);
         } catch (\Exception $e) {
             dd($e);

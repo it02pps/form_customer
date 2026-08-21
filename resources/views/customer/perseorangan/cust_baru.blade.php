@@ -95,6 +95,78 @@
             </div>
             <hr>
             <div class="py-2">
+                <h1 class="text-center text-md-start">Hasil Scan</h1>
+                <div class="d-flex flex-column gap-3">
+                    <div class="row g-3">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="">NIK <span class="text-danger">*</span></label>
+                                <input
+                                    type="text"
+                                    id="nomor_ktp"
+                                    name="nomor_ktp"
+                                    oninput="this.value = this.value.replace(/\D+/g, '')"
+                                    maxlength="16"
+                                    placeholder="Masukkan NIK"
+                                    autocomplete="off"
+                                    class="form-control"
+                                    value="{{ $ocrData['no_ktp'] ?? '' }}"
+                                >
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="">Nama Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
+                                <input
+                                    type="text"
+                                    id="nama_lengkap"
+                                    name="nama_lengkap"
+                                    placeholder="Masukkan Nama Lengkap"
+                                    autocomplete="off"
+                                    class="form-control"
+                                    value="{{ $ocrData['nama'] ?? '' }}"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="">Alamat Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
+                                <textarea
+                                    name="alamat_ktp"
+                                    id="alamat_ktp"
+                                    class="form-control"
+                                    placeholder="Masukkan alamat lengkap KTP"
+                                    autocomplete="off"
+                                    rows="6"
+                                    cols="70"
+                                    required
+                                    value="{{ ($ocrData['alamat'] ?? '') . ' ' . ($ocrData['rt_rw'] ?? '') . ' ' . ($ocrData['kelurahan'] . ' ' . ($ocrData['kecamatan']) . ' ' . ($ocrData['kota_kabupaten'] ?? '') . ' ' . ($ocrData['provinsi'] ?? '')) }}"
+                                ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="">Foto KTP / NPWP <span class="text-danger">*</span></label>
+                                <input
+                                    type="file"
+                                    name="foto_ktp"
+                                    id="foto_ktp"
+                                    class="form-control"
+                                    onchange="previewFileKtp(this);"
+                                    accept=".jpg, .png, .pdf, .jpeg"
+                                >
+                            </div>
+                            <div class="form-group" id="preview_ktp">
+                                <p class="text-center">Belum ada file</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
                 <h1 class="text-center text-md-start">Identitas Perseorangan</h1>
                 <div class="d-flex flex-column gap-3">
                     <div class="row g-3">
@@ -271,68 +343,7 @@
                         </div>
                     </div>
                     <div class="row g-3">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label for="">NIK <span class="text-danger">*</span></label>
-                                <input
-                                    type="text"
-                                    id="nomor_ktp"
-                                    name="nomor_ktp"
-                                    oninput="this.value = this.value.replace(/\D+/g, '')"
-                                    maxlength="16"
-                                    placeholder="Masukkan NIK"
-                                    autocomplete="off"
-                                    class="form-control"
-                                >
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label for="">Nama Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
-                                <input
-                                    type="text"
-                                    id="nama_lengkap"
-                                    name="nama_lengkap"
-                                    placeholder="Masukkan Nama Lengkap"
-                                    autocomplete="off"
-                                    class="form-control"
-                                >
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <label for="">Alamat Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
-                            <textarea
-                                name="alamat_ktp"
-                                id="alamat_ktp"
-                                class="form-control"
-                                placeholder="Masukkan alamat lengkap KTP"
-                                autocomplete="off"
-                                rows="6"
-                                cols="70"
-                                required
-                            ></textarea>
-                        </div>
-                    </div>
-                    <div class="row g-3">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label for="">Foto KTP / NPWP <span class="text-danger">*</span></label>
-                                <input
-                                    type="file"
-                                    name="foto_ktp"
-                                    id="foto_ktp"
-                                    class="form-control"
-                                    onchange="previewFileKtp(this);"
-                                    accept=".jpg, .png, .pdf, .jpeg"
-                                >
-                            </div>
-                            <div class="form-group" id="preview_ktp">
-                                <p class="text-center">Belum ada file</p>
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="col-12">
                             <div class="branch-section p-0 d-flex flex-column gap-2">
                                 <span class="text-danger">*Jika terdapat cabang, silahkan tekan tombol disamping. Apabila tidak ada, dapat diabaikan</span>
                                 <button

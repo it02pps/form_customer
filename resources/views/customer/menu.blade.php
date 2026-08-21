@@ -319,7 +319,7 @@
             $(document).on('click', '#nextPerseorangan', function() {
                 const nik = $('#nik').val();
                 if(statusPerseorangan == 'customer-baru/') {
-                    window.location.href = '/form-customer/perseorangan/' + statusPerseorangan;
+                    window.location.href = '/form-customer/scan-ktp/perseorangan/' + statusPerseorangan;
                 } else {
                     if(nik == null || nik == '') {
                         Swal.fire({
@@ -329,7 +329,7 @@
                         });
                     } else {
                         $.ajax({
-                            url: '/form-customer/perseorangan/' + statusPerseorangan + statusPerseorangan2 + nik + '/check',
+                            url: '/form-customer/scan-ktp/perseorangan/' + statusPerseorangan + statusPerseorangan2 + nik + '/check',
                             type: 'GET',
                             beforeSend: () => {
                                 Swal.fire({
@@ -344,7 +344,7 @@
                                 Swal.close();
                                 if(res.status == true) {
                                     if(res.dataa) {
-                                        window.location.href = '/form-customer/perseorangan/' + statusPerseorangan + statusPerseorangan2 + res.datID;
+                                        window.location.href = '/form-customer/scan-ktp/perseorangan/' + statusPerseorangan + statusPerseorangan2 + res.datID;
                                     } else {
                                         Swal.fire({
                                             title: 'Gagal!',
@@ -369,7 +369,7 @@
             $(document).on('click', '#nextBadanUsaha', function() {
                 const npwp = $('#npwp').val();
                 if(statusBadanUsaha == 'customer-baru/') {
-                    window.location.href = '/form-customer/badan-usaha/' + statusBadanUsaha;
+                    window.location.href = '/form-customer/scan-npwp/badan-usaha/' + statusBadanUsaha;
                 } else {
                     if(npwp == null || npwp == '') {
                         Swal.fire({
@@ -379,7 +379,7 @@
                         });
                     } else {
                         $.ajax({
-                            url: '/form-customer/badan-usaha/' + statusBadanUsaha + statusBadanUsaha2 + npwp + '/check',
+                            url: '/form-customer/scan-npwp/badan-usaha/' + statusBadanUsaha + statusBadanUsaha2 + npwp + '/check',
                             type: 'GET',
                             beforeSend: () => {
                                 Swal.fire({
@@ -394,7 +394,7 @@
                                 Swal.close();
                                 if(res.status == true) {
                                     if(res.dataa) {
-                                        window.location.href = '/form-customer/badan-usaha/' + statusBadanUsaha + statusBadanUsaha2 + res.datID;
+                                        window.location.href = '/form-customer/scan-npwp/badan-usaha/' + statusBadanUsaha + statusBadanUsaha2 + res.datID;
                                     } else {
                                         Swal.fire({
                                             title: 'Gagal!',

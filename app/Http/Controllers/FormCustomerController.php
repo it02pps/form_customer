@@ -80,6 +80,8 @@ class FormCustomerController extends Controller
                 return view('customer.badan_usaha.usaha_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
             }
         } else {
+            $ocrData = session('data', []);
+            // dd($ocrData);
             if ($param) {
                 $param = Crypt::decryptString($param);
                 // dd($param);
@@ -109,7 +111,7 @@ class FormCustomerController extends Controller
             // dd($data);
 
             if ($status == 'customer-baru') {
-                return view('customer.perseorangan.cust_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
+                return view('customer.perseorangan.cust_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha', 'ocrData'));
             }
 
             if ($status2 == 'pengkinian-data') {
