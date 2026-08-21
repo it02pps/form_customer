@@ -25,8 +25,8 @@
                     autoplay
                     playsinline
                     {{-- class="col-6 col-md-6" --}}
-                    width="300"
-                    height="250"
+                    width="600"
+                    height="300"
                 ></video>
     
                 {{-- <canvas
