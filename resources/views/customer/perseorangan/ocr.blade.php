@@ -137,7 +137,10 @@
                 `KTP: ${result.data.no_ktp}\n` +
                 `NAMA: ${result.data.nama}\n` +
                 `ALAMAT: ${result.data.alamat}\n` +
-                `KECAMATAN: ${result.data.kecamatan}\n` +
+                `RT_RW: ${result.data.rt_rw}\n` +
+                `KELURAHAN: ${result.data.kelurahan}\n` +
+                `KOTA: ${result.data.kota_kabupaten}\n` +
+                `provinsi: ${result.data.provinsi}\n` +
                 `Confidence: ${result.data.confidence_score}`
             );
 

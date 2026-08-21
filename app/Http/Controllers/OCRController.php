@@ -54,7 +54,7 @@ class OCRController extends Controller
                 ], 422);
             }
 
-            $data = $result['data'] ?? [];
+            $data = $result['document'] ?? [];
 
             return response()->json([
                 'success' => true,
@@ -116,7 +116,7 @@ class OCRController extends Controller
                 ], 422);
             }
 
-            $data = $result['data'] ?? [];
+            $data = $result['document'] ?? [];
 
             return response()->json([
                 'success' => true,
