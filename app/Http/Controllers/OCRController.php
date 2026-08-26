@@ -50,6 +50,14 @@ class OCRController extends Controller
 
             $file = $request->file("photo");
 
+            dd([
+                'has_file' => $request->hasFile('photo'),
+                'file' => $file,
+                'is_valid' => $file?->isValid(),
+                'error' => $file?->getError(),
+                'error_message' => $file?->getErrorMessage(),
+            ]);
+
             $extension = $file->getClientOriginalExtension();
             $fileName = Str::uuid() . '.' . $extension;
             $tempPath = $file->storeAs(
