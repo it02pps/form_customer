@@ -102,6 +102,106 @@
             </div>
             <hr>
             <div class="py-2">
+                <h1 class="text-center text-md-start">Hasil Scan</h1>
+                <div class="d-flex flex-column gap-3">
+                    <div class="row g-3">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="">NIK <span class="text-danger">*</span></label>
+                                <input
+                                    type="text"
+                                    id="nomor_ktp"
+                                    name="nomor_ktp"
+                                    oninput="this.value = this.value.replace(/\D+/g, '')"
+                                    maxlength="16"
+                                    placeholder="Masukkan NIK"
+                                    autocomplete="off"
+                                    class="form-control"
+                                    value="{{ old('nik', $ocrData['no_ktp'] ?? '') }}"
+                                    required
+                                >
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="">Nama Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
+                                <input
+                                    type="text"
+                                    id="nama_lengkap"
+                                    name="nama_lengkap"
+                                    placeholder="Masukkan Nama Lengkap"
+                                    autocomplete="off"
+                                    class="form-control"
+                                    value="{{ old('nama', $ocrData['nama'] ?? '') }}"
+                                    required
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="">Alamat Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
+                                <textarea
+                                    name="alamat_ktp"
+                                    id="alamat_ktp"
+                                    class="form-control"
+                                    placeholder="Masukkan alamat lengkap KTP"
+                                    autocomplete="off"
+                                    rows="6"
+                                    cols="70"
+                                    required
+                                >{{ (old('alamat', $ocrData['alamat'] ?? '')) . ' ' . (old('rt_rw', $ocrData['rt_rw'] ?? '')) . ' ' . (old('keluarahan', $ocrData['kelurahan'] ?? '')) . ' ' . (old('kecamatan', $ocrData['kecamatan'] ?? '')) . ' ' . (old('kota_Kabupaten', $ocrData['kota_kabupaten'] ?? '')) . ' ' . (old('provinsi', $ocrData['provinsi'] ?? '')) }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="">Kota/Kabupaten <span class="text-danger">*</span></label>
+                            <input
+                                type="text"
+                                name="kota_kabupaten"
+                                id="kota_kabupaten"
+                                class="form-control"
+                                placeholder="Masukkan Kota/Kabupaten"
+                                autocomplete="off" 
+                                value="{{ old('kota_kabupaten', $ocrData['kota_kabupaten'] ?? '') }}"
+                                required
+                            >
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="">Foto KTP / NPWP <span class="text-danger">*</span></label>
+                                <input
+                                    type="file"
+                                    name="foto_ktp"
+                                    id="foto_ktp"
+                                    class="form-control"
+                                    onchange="previewFileKtp(this);"
+                                    accept=".jpg, .png, .pdf, .jpeg"
+                                    @if (!$ocrPhoto) required @endif
+                                >
+                            </div>
+                            <div class="form-group" id="preview_ktp">
+                                @if($ocrPhoto)
+                                    <div class="text-center">
+                                        <img
+                                            src="{{ route('form_customer.ocr_photo', ['filename' => basename($ocrPhoto)]) }}"
+                                            class="img-fluid rounded"
+                                            style="max-height: 300px;"
+                                            alt="Preview KTP"
+                                        >
+                                    </div>
+                                @else
+                                    <p class="text-center">Belum ada file</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
                 <h1 class="text-center text-md-start">Identitas Perseorangan</h1>
                 <div class="d-flex flex-column gap-3">
                     <div class="row g-3">
@@ -156,21 +256,6 @@
                     <div class="row g-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
-                                <label for="">Kota/Kabupaten <span class="text-danger">*</span></label>
-                                <input
-                                    type="text"
-                                    name="kota_kabupaten"
-                                    id="kota_kabupaten"
-                                    class="form-control"
-                                    placeholder="Masukkan Kota/Kabupaten"
-                                    autocomplete="off"
-                                    required
-                                    value="{{ $data ? $data['kota_kabupaten'] : '' }}"
-                                >
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="form-group">
                                 <label for="">Nomor Handphone Contact Person <span class="text-danger">*</span></label>
                                 <input
                                     type="text"
@@ -184,6 +269,39 @@
                                     required
                                     value="{{ $data ? $data['nomor_handphone'] : '' }}"
                                 >
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group" id="select">
+                                <label for="">Bidang Usaha <span class="text-danger">*</span></label>
+                                <div class="position-relative">
+                                    <select
+                                        name="bidang_usaha"
+                                        id="bidang_usaha"
+                                        class="form-control"
+                                        required
+                                    >
+                                        <option value="">Pilih Bidang Usaha</option>
+                                        @foreach ($bidang_usaha as $loop_bidang_usaha)
+                                            <option value="{{ $loop_bidang_usaha }}">{{ strtoupper(str_replace('_', ' ', $loop_bidang_usaha)) }}</option>
+                                        @endforeach
+                                    </select>
+                                    <div class="bidang_lain d-none">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="bidang_usaha_lain"
+                                            id="bidang_usaha_lain"
+                                            placeholder="Masukkan bidang usaha lain"
+                                            autocomplete="off"
+                                            value="{{ $data ? $data['bidang_usaha_lain'] : '' }}"
+                                        >
+                                    </div>
+                                    <span
+                                        class="caret position-absolute"
+                                        style="right: 15px; top: 14px;"
+                                    ><i class="fa-solid fa-caret-down text-secondary"></i></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -219,39 +337,6 @@
                     <div class="row g-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group" id="select">
-                                <label for="">Bidang Usaha <span class="text-danger">*</span></label>
-                                <div class="position-relative">
-                                    <select
-                                        name="bidang_usaha"
-                                        id="bidang_usaha"
-                                        class="form-control"
-                                        required
-                                    >
-                                        <option value="">Pilih Bidang Usaha</option>
-                                        @foreach ($bidang_usaha as $loop_bidang_usaha)
-                                            <option value="{{ $loop_bidang_usaha }}">{{ strtoupper(str_replace('_', ' ', $loop_bidang_usaha)) }}</option>
-                                        @endforeach
-                                    </select>
-                                    <div class="bidang_lain d-none">
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            name="bidang_usaha_lain"
-                                            id="bidang_usaha_lain"
-                                            placeholder="Masukkan bidang usaha lain"
-                                            autocomplete="off"
-                                            value="{{ $data ? $data['bidang_usaha_lain'] : '' }}"
-                                        >
-                                    </div>
-                                    <span
-                                        class="caret position-absolute"
-                                        style="right: 15px; top: 14px;"
-                                    ><i class="fa-solid fa-caret-down text-secondary"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="form-group" id="select">
                                 <label for="">Status Kepemilkan Tempat Usaha <span class="text-danger">*</span></label>
                                 <div class="position-relative">
                                     <select
@@ -281,87 +366,6 @@
                                         style="right: 15px; top: 14px;"
                                     ><i class="fa-solid fa-caret-down text-secondary"></i></span>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row g-3">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label for="">NIK <span class="text-danger">*</span></label>
-                                <input
-                                    type="text"
-                                    id="nomor_ktp"
-                                    name="nomor_ktp"
-                                    oninput="this.value = this.value.replace(/\D+/g, '')"
-                                    maxlength="16"
-                                    placeholder="Masukkan NIK"
-                                    autocomplete="off"
-                                    class="form-control"
-                                    value="{{ $data ? ($data['nomor_ktp'] ? $data['nomor_ktp'] : $data['nomor_npwp']) : ''}}"
-                                >
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label for="">Nama Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
-                                <input
-                                    type="text"
-                                    id="nama_lengkap"
-                                    name="nama_lengkap"
-                                    placeholder="Masukkan Nama Lengkap"
-                                    autocomplete="off"
-                                    class="form-control"
-                                    value="{{ $data ? $data['nama_lengkap'] : '' }}"
-                                >
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <label for="">Alamat Lengkap Sesuai Identitas <span class="text-danger">*</span></label>
-                            <textarea
-                                name="alamat_ktp"
-                                id="alamat_ktp"
-                                class="form-control"
-                                rows="6"
-                                placeholder="Masukkan alamat lengkap KTP"
-                                autocomplete="off"
-                                required
-                            >
-                                {{ $data ? $data['alamat_ktp'] : '' }}
-                            </textarea>
-                        </div>
-                    </div>
-                    <div class="row g-3">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label for="">Foto KTP / NPWP <span class="text-danger">*</span></label>
-                                <input
-                                    type="file"
-                                    name="foto_ktp"
-                                    id="foto_ktp"
-                                    class="form-control"
-                                    onchange="previewFileKtp(this);"
-                                    accept=".jpg, .png, .pdf, .jpeg"
-                                >
-                            </div>
-                            <div class="form-group {{ $ext_ktp === 'pdf' ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_ktp" style="height: {{ $ext_ktp === 'pdf' ? 'auto' : '271px' }};">
-                                @if($ext_ktp === 'pdf')
-                                    <a
-                                        href="{{ $url_ktp }}"
-                                        target="_blank"
-                                        id="previewPDF"
-                                    >
-                                        Preview PDF
-                                    </a>
-                                @else
-                                    <img
-                                        id="preview_foto_ktp"
-                                        src="{{ $url_ktp }}"
-                                        alt="Belum ada file"
-                                        data-action="zoom"
-                                    >
-                                @endif
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">

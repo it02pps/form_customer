@@ -80,7 +80,9 @@ class FormCustomerController extends Controller
                 return view('customer.badan_usaha.usaha_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
             }
         } else {
-            $ocrData = session('data', []);
+            $getOCRData = session('ocrData');
+            $ocrData = $getOCRData['data'] ?? [];
+            $ocrPhoto = $getOCRData['photo'] ?? null;
             // dd($ocrData);
             if ($param) {
                 $param = Crypt::decryptString($param);
@@ -111,13 +113,13 @@ class FormCustomerController extends Controller
             // dd($data);
 
             if ($status == 'customer-baru') {
-                return view('customer.perseorangan.cust_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha', 'ocrData'));
+                return view('customer.perseorangan.cust_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha', 'ocrData', 'ocrPhoto'));
             }
 
             if ($status2 == 'pengkinian-data') {
-                return view('customer.perseorangan.cust_lama', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
+                return view('customer.perseorangan.cust_lama', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha', 'ocrData', 'ocrPhoto'));
             } else {
-                return view('customer.perseorangan.usaha_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
+                return view('customer.perseorangan.usaha_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha', 'ocrData', 'ocrPhoto'));
             }
         }
     }

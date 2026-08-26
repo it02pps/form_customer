@@ -61,6 +61,93 @@
                 <div class="row g-3">
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="form-group">
+                            <label for="">NIK</label>
+                            <input
+                                type="text"
+                                id="nomor_ktp"
+                                name="nomor_ktp"
+                                autocomplete="off"
+                                class="form-control"
+                                readonly
+                                value="{{ $perusahaan['npwp_perseorangan'] == '1' ? $perusahaan['nomor_npwp'] : $perusahaan['nomor_ktp'] }}"
+                            >
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="form-group">
+                            <label for="">Nama Lengkap Sesuai Identitas</label>
+                            <input
+                                type="text"
+                                id="nama_lengkap"
+                                name="nama_lengkap"
+                                autocomplete="off"
+                                class="form-control"
+                                readonly
+                                value="{{ $perusahaan['nama_lengkap'] ?: '-' }}"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="">Alamat Lengkap Sesuai Identitas</label>
+                            <textarea
+                                name="alamat_ktp"
+                                id="alamat_ktp"
+                                class="form-control"
+                                rows="6"
+                                autocomplete="off"
+                                readonly
+                            >{{ $perusahaan['alamat_ktp'] }}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="">Kota/Kabupaten</label>
+                            <input
+                                type="text"
+                                name="kota_kabupaten"
+                                id="kota_kabupaten"
+                                class="form-control"
+                                autocomplete="off"
+                                readonly
+                                value="{{ $perusahaan['kota_kabupaten'] }}"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="">Foto KTP <span class="text-danger">*</span></label>
+                            <div class="form-group {{ $ext_ktp === 'pdf' ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_ktp" style="height: {{ $ext_ktp === 'pdf' ? 'auto' : '271px' }};">
+                                @if($ext_ktp === 'pdf')
+                                    <p style="font-size: 18px;">Preview file NPWP</p>
+                                    <a
+                                        href="{{ $url_ktp }}"
+                                        target="_blank"
+                                        id="previewPDF"
+                                    >
+                                        Preview PDF
+                                    </a>
+                                @else
+                                    <img
+                                        id="preview_foto_ktp"
+                                        src="{{ $url_ktp }}"
+                                        alt="Belum ada file"
+                                        data-action="zoom"
+                                    >
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="form-group">
                             <label for="">Nama Group Usaha</label>
                             <input
                                 type="text"
@@ -106,20 +193,6 @@
                 <div class="row g-3">
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="form-group">
-                            <label for="">Kota/Kabupaten</label>
-                            <input
-                                type="text"
-                                name="kota_kabupaten"
-                                id="kota_kabupaten"
-                                class="form-control"
-                                autocomplete="off"
-                                readonly
-                                value="{{ $perusahaan['kota_kabupaten'] }}"
-                            >
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                        <div class="form-group">
                             <label for="">Nomor Handphone Contact Person</label>
                             <input
                                 type="text"
@@ -130,6 +203,30 @@
                                 readonly
                                 value="{{ $perusahaan['nomor_handphone'] }}"
                             >
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="form-group">
+                            <label for="">Bidang Usaha</label>
+                            <input
+                                type="text"
+                                name="bidang_usaha"
+                                id="bidang_usaha"
+                                autocomplete="off"
+                                class="form-control"
+                                readonly
+                                value="{{ strtoupper(str_replace('_', ' ', $perusahaan['bidang_usaha'])) }}"
+                            >
+                            <div class="bidang_lain p-0 @if($perusahaan['bidang_usaha'] != 'lainnya') d-none @endif">
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    name="bidang_usaha_lain"
+                                    id="bidang_usaha_lain"
+                                    readonly
+                                    autocomplete="off" value="{{ $perusahaan['bidang_usaha_lain'] ?: '-'  }}"
+                                >
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -166,30 +263,6 @@
                 <div class="row g-3">
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="form-group">
-                            <label for="">Bidang Usaha</label>
-                            <input
-                                type="text"
-                                name="bidang_usaha"
-                                id="bidang_usaha"
-                                autocomplete="off"
-                                class="form-control"
-                                readonly
-                                value="{{ strtoupper(str_replace('_', ' ', $perusahaan['bidang_usaha'])) }}"
-                            >
-                            <div class="bidang_lain p-0 @if($perusahaan['bidang_usaha'] != 'lainnya') d-none @endif">
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    name="bidang_usaha_lain"
-                                    id="bidang_usaha_lain"
-                                    readonly
-                                    autocomplete="off" value="{{ $perusahaan['bidang_usaha_lain'] ?: '-'  }}"
-                                >
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                        <div class="form-group">
                             <label for="">Status Kepemilkan Tempat Usaha</label>
                             <input
                                 type="text"
@@ -213,99 +286,26 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row g-3">
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="form-group">
-                            <label for="">NIK</label>
+                            <label for="">Cabang</label>
                             <input
                                 type="text"
-                                id="nomor_ktp"
-                                name="nomor_ktp"
-                                autocomplete="off"
                                 class="form-control"
-                                readonly
-                                value="{{ $perusahaan['npwp_perseorangan'] == '1' ? $perusahaan['nomor_npwp'] : $perusahaan['nomor_ktp'] }}"
-                            >
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                        <div class="form-group">
-                            <label for="">Nama Lengkap Sesuai Identitas</label>
-                            <input
-                                type="text"
-                                id="nama_lengkap"
-                                name="nama_lengkap"
-                                autocomplete="off"
-                                class="form-control"
-                                readonly
-                                value="{{ $perusahaan['nama_lengkap'] ?: '-' }}"
-                            >
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="form-group">
-                            <label for="">Alamat Lengkap Sesuai Identitas</label>
-                            <textarea
-                                name="alamat_ktp"
-                                id="alamat_ktp"
-                                class="form-control"
-                                rows="6"
                                 autocomplete="off"
                                 readonly
-                            >{{ $perusahaan['alamat_ktp'] }}</textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="row g-3">
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                        <div class="form-group">
-                            <label for="">Foto KTP <span class="text-danger">*</span></label>
-                            <div class="form-group {{ $ext_ktp === 'pdf' ? 'd-flex justify-content-center align-items-center py-2 px-3 m-0' : 'p-0' }}" id="preview_ktp" style="height: {{ $ext_ktp === 'pdf' ? 'auto' : '271px' }};">
-                                @if($ext_ktp === 'pdf')
-                                    <p style="font-size: 18px;">Preview file NPWP</p>
-                                    <a
-                                        href="{{ $url_ktp }}"
-                                        target="_blank"
-                                        id="previewPDF"
-                                    >
-                                        Preview PDF
-                                    </a>
-                                @else
-                                    <img
-                                        id="preview_foto_ktp"
-                                        src="{{ $url_ktp }}"
-                                        alt="Belum ada file"
-                                        data-action="zoom"
-                                    >
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                        <div class="form-group" id="cabang">
-                            <div class="form-group">
-                                <label for="">Cabang</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    autocomplete="off"
-                                    readonly
-                                    placeholder="{{ App\Models\Cabang::where('identitas_perusahaan_id', $perusahaan['id'])->count() }} Cabang"
-                                >
-                            </div>
-                            <button
-                                type="button"
-                                class="btnDetailCabang btn btn-primary w-100"
-                                title="Detail Cabang"
-                                data-bs-target="#modalCabang"
-                                data-bs-toggle="modal"
+                                placeholder="{{ App\Models\Cabang::where('identitas_perusahaan_id', $perusahaan['id'])->count() }} Cabang"
                             >
-                                Detail Cabang
-                            </button>
                         </div>
+                        <button
+                            type="button"
+                            class="btnDetailCabang btn btn-primary w-100"
+                            title="Detail Cabang"
+                            data-bs-target="#modalCabang"
+                            data-bs-toggle="modal"
+                        >
+                            Detail Cabang
+                        </button>
                     </div>
                 </div>
             </div>

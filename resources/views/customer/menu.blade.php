@@ -329,7 +329,7 @@
                         });
                     } else {
                         $.ajax({
-                            url: '/form-customer/scan-ktp/perseorangan/' + statusPerseorangan + statusPerseorangan2 + nik + '/check',
+                            url: '/form-customer/perseorangan/' + statusPerseorangan + statusPerseorangan2 + nik + '/check',
                             type: 'GET',
                             beforeSend: () => {
                                 Swal.fire({

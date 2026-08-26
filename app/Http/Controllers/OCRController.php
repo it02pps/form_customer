@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class OCRController extends Controller
 {
@@ -45,7 +47,15 @@ class OCRController extends Controller
             $status = $request->status;
             $status2 = $request->status2;
             $param = $request->param;
+
             $file = $request->file("photo");
+
+            $extension = $file->getClientOriginalExtension();
+            $fileName = Str::uuid() . '.' . $extension;
+            $tempPath = $file->storeAs(
+                'temp/ktp',
+                $fileName
+            );
 
             $response = Http::asMultipart()
                 ->withHeaders([
@@ -68,30 +78,34 @@ class OCRController extends Controller
 
             $data = $result['document'] ?? [];
 
-            session()->flash('data', [
-                'no_ktp' => $data['nik'] ?? null,
-                'nama' => $data['name'] ?? null,
-                'alamat' => $data['address'] ?? null,
-                'rt_rw' => $data['rt_rw'] ?? null,
-                'kelurahan' => $data['village'] ?? null,
-                'kecamatan' => $data['district'] ?? null,
-                'kota_kabupaten' => $data['city_or_regency'] ?? null,
-                'provinsi' => $data['province'] ?? null,
-                'jenis_kelamin' => $data['gender'] ?? null,
-                'agama' => $data['religion'] ?? null,
-                'status_perkawinan' => $data['marital_status'] ?? null,
-                'pekerjaan' => $data['occupation'] ?? null,
-                'kewarganegaraan' => $data['citizenship'] ?? null,
-                'tempat_lahir' => $data['birth_place'] ?? null,
-                'tanggal_lahir' => $data['birth_date'] ?? null,
-                'confidence_score' => $result['confidence_score'] ?? null,
+            session()->put('ocrData', [
+                'photo' => $tempPath,
+                'data' => [
+                    'no_ktp' => $data['nik'] ?? null,
+                    'nama' => $data['name'] ?? null,
+                    'alamat' => $data['address'] ?? null,
+                    'rt_rw' => $data['rt_rw'] ?? null,
+                    'kelurahan' => $data['village'] ?? null,
+                    'kecamatan' => $data['district'] ?? null,
+                    'kota_kabupaten' => $data['city_or_regency'] ?? null,
+                    'provinsi' => $data['province'] ?? null,
+                    'jenis_kelamin' => $data['gender'] ?? null,
+                    'agama' => $data['religion'] ?? null,
+                    'status_perkawinan' => $data['marital_status'] ?? null,
+                    'pekerjaan' => $data['occupation'] ?? null,
+                    'kewarganegaraan' => $data['citizenship'] ?? null,
+                    'tempat_lahir' => $data['birth_place'] ?? null,
+                    'tanggal_lahir' => $data['birth_date'] ?? null,
+                    'confidence_score' => $result['confidence_score'] ?? null
+                ],
+                'created_at' => now()->timestamp
             ]);
-
+            
             $url = route('form_customer.view_badan_usaha', [
-                'menu' => $request->menu,
-                'status' => $request->status,
-                'status2' => $request->status2,
-                'param' => $request->param,
+                'menu' => $menu,
+                'status' => $status,
+                'status2' => $status2,
+                'param' => $param,
             ]);
 
             return response()->json([
@@ -99,7 +113,16 @@ class OCRController extends Controller
                 'redirect_url' => $url,
             ]);
         } catch (\Exception $e) {
-            dd($e);
+            Log::error('OCR KTP Error', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 

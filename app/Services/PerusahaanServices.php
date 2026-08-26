@@ -20,6 +20,8 @@ use App\Services\UploadSPPKP;
 use App\Services\UploadTTD;
 use Illuminate\Support\Facades\Storage;
 
+use function PHPUnit\Framework\fileExists;
+
 class perusahaanServices
 {
     protected $validasiServices;
@@ -32,6 +34,9 @@ class perusahaanServices
     {
         DB::beginTransaction();
         try {
+            $getOCRData = session('ocrData');
+            $ocrPhoto = $getOCRData['photo'] ?? null;
+
             set_time_limit(120);
 
             // Non-aktif old customer
@@ -48,8 +53,14 @@ class perusahaanServices
                 $oldData = '';
             }
 
+            $ocrPath = $ocrPhoto
+                ? storage_path('app/' . $ocrPhoto)
+                : null;
+
+            $hasValidOcrPhoto = $ocrPath && file_exists($ocrPath);
+
             // START: Validation
-            $validator = $this->validasiServices->validationPerusahaan($request->all());
+            $validator = $this->validasiServices->validationPerusahaan($request->all(), $hasValidOcrPhoto);
             if ($validator->fails()) {
                 return ['status' => false, 'error' => implode('<br>', $validator->errors()->all())];
             }
@@ -192,6 +203,9 @@ class perusahaanServices
             // START: File storing
             // Perusahaan
             if ($request->bentuk_usaha == 'perseorangan') {
+                $filename = null;
+                $tempPath = null;
+
                 if ($request->hasFile('foto_ktp')) {
                     $foto = $request->file('foto_ktp');
                     $filename = uniqid() . '-KTP-' . Str::slug($request->nama_lengkap, '-') . '.' . strtolower($foto->getClientOriginalExtension());
@@ -199,20 +213,35 @@ class perusahaanServices
                     // Temporary store files
                     $foto->move(public_path('temp_files'), $filename);
                     $tempPath = public_path('temp_files/' . $filename);
-                    // dd($tempPath);
-                    // $foto->move(public_path('temp_files'), $filename);
+                } elseif ($ocrPhoto) {
+                    $filename = basename($ocrPhoto);
 
+                    $tempPath = storage_path('app/' . ltrim($ocrPhoto, '/'));
+
+                    if(!file_exists($tempPath)) {
+                        return [
+                            'status' => false,
+                            'message' => 'Foto hasil scan sudah tidak tersedia. Silahkan scan ulang.'
+                        ];
+                    }
+                }
+
+                if($filename && $tempPath) {
                     DB::table('identitas_perusahaan')->where('id', $data->id)->update([
                         'foto_ktp' => $filename,
                         'status_upload_nik' => 'pending'
                     ]);
                     UploadKTP::handleUpload($filename, ($oldData ? ($oldData->foto_ktp ?: '') : ''), $tempPath, $data->id);
+
+                    if(file_exists($tempPath)) {
+                        unlink($tempPath);
+                    }
                 } else {
                     DB::table('identitas_perusahaan')->where('id', $data->id)->update([
                         'foto_ktp' => $oldData->foto_ktp,
                         'status_upload_nik' => $oldData->status_upload_nik
                     ]);
-                }
+                }                
 
                 if ($request->hasil_ttd) {
                     // Konversi base30 menjadi koordinat asli
@@ -339,6 +368,7 @@ class perusahaanServices
 
             // END: File storing
             DB::commit();
+            session()->forget('ocrData');
             $link = route('form_customer.detail', ['menu' => str_replace('_', '-', $request->bentuk_usaha), 'id' => Crypt::encryptString($data->id)]);
             return ['status' => true, 'link' => $link];
         } catch (\Exception $e) {
