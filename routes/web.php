@@ -41,6 +41,15 @@ Route::post("/ocr/npwp", [OCRController::class, 'npwp'])->name('ocr.npwp');
 Route::get('/form-customer/ocr-photo/{filename}', function($filename) {
     $path = storage_path('app/temp/ktp/' . $filename);
 
+    dd([
+        'filename' => $filename,
+        'path' => $path,
+        'exists' => file_exists($path),
+        'readable' => is_readable($path),
+        'mime' => file_exists($path) ? mime_content_type($path) : null,
+        'size' => file_exists($path) ? filesize($path) : null,
+    ]);
+
     abort_unless(file_exists($path), 404);
 
     return response()->file($path);
