@@ -333,6 +333,11 @@ class OCRController extends Controller
                 )
                 ->post('https://bos-api.com/api/ocr/npwp');
 
+            Log::info("OCR DATA :", [
+                'body' => $response->body(),
+                'json' => $response->json(),
+            ]);
+
             $result = $response->json();
             $rawText = $result['ocr']['raw_text'] ?? '';
             $parsed = $this->parseNpwpRawText($rawText);

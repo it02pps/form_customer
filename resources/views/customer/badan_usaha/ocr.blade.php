@@ -9,7 +9,7 @@
     .camera-container {
         width: 100%;
         max-width: 600px;
-        aspect-ratio: 3 / 2;
+        aspect-ratio: 1.58 / 1;
         overflow: hidden;
         border-radius: 12px;
         background: #000;
@@ -142,8 +142,32 @@
             });
 
             video.srcObject = cameraStream;
+
+            await video.play();
+
+            const track = cameraStream.getVideoTracks()[0];
+
+            console.log('Camera settings:', track.getSettings());
+
+            const capabilities = track.getCapabilities?.();
+
+            if (
+                capabilities?.focusMode &&
+                capabilities.focusMode.includes('continuous')
+            ) {
+                await track.applyConstraints({
+                    advanced: [
+                        {
+                            focusMode: 'continuous'
+                        }
+                    ]
+                });
+            }
+
         } catch (error) {
-            alert("Tidak dapat mengakses kamera.");
+            console.error(error);
+
+            alert('Tidak dapat mengakses kamera.');
 
             cameraContainer.style.display = 'none';
             btnCapture.style.display = 'none';
@@ -162,6 +186,49 @@
 
         cameraStream = null;
         video.srcObject = null;
+    }
+
+    function captureVisibleArea() {
+        const videoWidth = video.videoWidth;
+        const videoHeight = video.videoHeight;
+
+        const containerWidth = cameraContainer.clientWidth;
+        const containerHeight = cameraContainer.clientHeight;
+
+        const videoRatio = videoWidth / videoHeight;
+        const containerRatio = containerWidth / containerHeight;
+
+        let sx = 0;
+        let sy = 0;
+        let sw = videoWidth;
+        let sh = videoHeight;
+
+        if (videoRatio > containerRatio) {
+            // crop kiri kanan
+            sw = videoHeight * containerRatio;
+            sx = (videoWidth - sw) / 2;
+        } else {
+            // crop atas bawah
+            sh = videoWidth / containerRatio;
+            sy = (videoHeight - sh) / 2;
+        }
+
+        canvas.width = Math.round(sw);
+        canvas.height = Math.round(sh);
+
+        const ctx = canvas.getContext('2d');
+
+        ctx.drawImage(
+            video,
+            sx,
+            sy,
+            sw,
+            sh,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
     }
 
     async function sendToOCR(file) {
@@ -235,32 +302,17 @@
     }
 
     btnCapture.addEventListener('click', async () => {
-        const width = video.videoWidth;
-        const height = video.videoHeight;
-
-        if (!width || !height) {
-            alert(
-                'Kamera belum siap. Silakan tunggu sebentar.'
-            );
+        if (!video.videoWidth || !video.videoHeight) {
+            alert('Kamera belum siap. Silakan tunggu sebentar.');
             return;
         }
 
-        canvas.width = width;
-        canvas.height = height;
-
-        const ctx = canvas.getContext('2d');
-
-        ctx.drawImage(
-            video,
-            0,
-            0,
-            width,
-            height
-        );
+        captureVisibleArea();
 
         canvas.toBlob(
             async (blob) => {
-                if(!blob) {
+
+                if (!blob) {
                     alert('Gagal ambil foto.');
                     return;
                 }
@@ -269,21 +321,28 @@
                     [blob],
                     'npwp.jpg',
                     {
-                        type: 'image/jpeg'
+                        type: 'image/jpeg',
+                        lastModified: Date.now()
                     }
                 );
+
+                console.log({
+                    width: canvas.width,
+                    height: canvas.height,
+                    size: file.size
+                });
 
                 await sendToOCR(file);
             },
             'image/jpeg',
-            0.9
+            0.95
         );
     });
 
     npwpFile.addEventListener('change', async () => {
         const file = npwpFile.files[0];
 
-        if(!file) {
+        if (!file) {
             return;
         }
 
