@@ -43,14 +43,14 @@ class perusahaanServices
             if ($request->update_id) {
                 $decrypt_id = Crypt::decryptString($request->update_id);
                 $data = IdentitasPerusahaan::with('data_identitas')->where('nomor_ktp', $decrypt_id)->orWhere('nomor_npwp', $decrypt_id);
+
                 if ($request->opsi == 'pengkinian_data') {
                     $data->update(['status_aktif' => '0']);
-                    $oldData = $data->latest()->first();
-                } else {
-                    $oldData = $data->latest()->first();
                 }
+
+                $oldData = $data->latest()->first();
             } else {
-                $oldData = '';
+                $oldData = null;
             }
 
             $ocrPath = $ocrPhoto
@@ -302,27 +302,25 @@ class perusahaanServices
                     return ['status' => false, 'error' => 'Tanda Tangan tidak boleh kosong'];
                 }
             } else {
+                $filename = null;
+                $tempPath = null;
+
                 if ($request->hasFile('foto_npwp')) {
-                    $filename = null;
-                    $tempPath = null;
+                    $foto = $request->file('foto_npwp');
+                    $filename = uniqid() . '-NPWP-' . Str::slug($request->nama_npwp, '-') . '.' . strtolower($foto->getClientOriginalExtension());
+                    
+                    // Temporary store files
+                    $foto->move(public_path('temp_files'), $filename);
+                    $tempPath = public_path('temp_files/' . $filename);
+                } elseif ($ocrPhoto) {
+                    $filename = basename($ocrPhoto);
+                    $tempPath = storage_path('app/' . ltrim($ocrPhoto, '/'));$filename;
 
-                    if($request->hasFile('foto_npwp')) {
-                        $foto = $request->file('foto_npwp');
-                        $filename = uniqid() . '-NPWP-' . Str::slug($request->nama_npwp, '-') . '.' . strtolower($foto->getClientOriginalExtension());
-                        
-                        // Temporary store files
-                        $foto->move(public_path('temp_files'), $filename);
-                        $tempPath = public_path('temp_files/' . $filename);
-                    } elseif ($ocrPhoto) {
-                        $filename = basename($ocrPhoto);
-                        $tempPath = storage_path('app/' . ltrim($ocrPhoto, '/'));
-
-                        if(!file_exists($tempPath)) {
-                            return [
-                                'status' => false,
-                                'message' => 'Foto hasil scan sudah tidak tersedia. Silahkan scan ulang.'
-                            ];
-                        }
+                    if(!file_exists($tempPath)) {
+                        return [
+                            'status' => false,
+                            'message' => 'Foto hasil scan sudah tidak tersedia. Silahkan scan ulang.'
+                        ];
                     }
 
                     if($filename && $tempPath) {
@@ -331,22 +329,22 @@ class perusahaanServices
                             'status_upload_npwp' => 'pending'
                         ]);
 
-                        UPloadNPWP::handleUpload($filename, ($oldData ? ($oldData->foto_npwp ?: '') : ''), $tempPath, $data->id);
+                        UPloadNPWP::handleUpload(
+                            $filename,
+                            $oldData?->foto_npwp ?? '',
+                            $tempPath,
+                            $data->id
+                        );
 
                         if(file_exists($tempPath)) {
                             unlink($tempPath);
                         }
-                    } else {
+                    } elseif ($oldData) {
                         DB::table('identitas_perusahaan')->where('id', $data->id)->update([
                             'foto_ktp' => $oldData->foto_ktp,
                             'status_upload_npwp' => $oldData->status_upload_npwp
                         ]);
                     }
-                } else {
-                    DB::table('identitas_perusahaan')->where('id', $data->id)->update([
-                        'foto_npwp' => $oldData->foto_npwp,
-                        'status_upload_npwp' => $oldData->status_upload_npwp
-                    ]);
                 }
 
                 if ($request->status_pkp == 'pkp') {
