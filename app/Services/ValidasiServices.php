@@ -29,7 +29,7 @@ class ValidasiServices
         }
 
         if ($isBadanUsaha) {
-            if ($isUpdate) {
+            if ($isUpdate || $hasOcrPhoto) {
                 $fotoNpwpRule = 'nullable|mimes:jpg,jpeg,pdf,png';
             } else {
                 $fotoNpwpRule = 'required|mimes:jpg,jpeg,pdf,png';

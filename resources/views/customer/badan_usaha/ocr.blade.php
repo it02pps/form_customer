@@ -37,7 +37,7 @@
             </div>
         </div>
         <div class="d-flex flex-column justify-content-center align-items-center w-100">
-            <div id="scanOptions" class="d-flex gap-2 flex-wrap justify-content-center">
+            <div id="scanOptions" class="d-flex ga  p-2 flex-wrap justify-content-center">
                 <button
                     type="button"
                     id="btnCamera"
