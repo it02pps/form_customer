@@ -115,7 +115,7 @@
                                     placeholder="Masukkan NIK"
                                     autocomplete="off"
                                     class="form-control"
-                                    value="{{ old('nik', $ocrData['no_ktp'] ?? '') }}"
+                                    value="{{ old('no_ktp', $ocrData['no_ktp'] ?? '') }}"
                                     required
                                 >
                             </div>
@@ -186,10 +186,11 @@
                                 @if($ocrPhoto)
                                     <div class="text-center">
                                         <img
-                                            src="{{ route('form_customer.ocr_photo', ['filename' => basename($ocrPhoto)]) }}"
+                                            src="{{ route('form_customer.ocr_photo', ['path' => 'ktp', 'filename' => basename($ocrPhoto)]) }}"
                                             class="img-fluid rounded"
-                                            style="max-height: 300px;"
+                                            {{-- style="max-height: 300px;" --}}
                                             alt="Preview KTP"
+                                            data-action="zoom"
                                         >
                                     </div>
                                 @else
@@ -259,7 +260,7 @@
                                     name="no_hp"
                                     id="no_hp"
                                     oninput="this.value = this.value.replace(/[^0-9+]/g, '')"
-                                    maxlength="14"
+                                    maxlength="20"
                                     class="form-control"
                                     autocomplete="off"
                                     placeholder="Contoh: 012345678910"
@@ -477,8 +478,9 @@
                                     type="text"
                                     name="no_hp_finance"
                                     id="no_hp_finance"
+                                    oninput="this.value = this.value.replace(/[^0-9+]/g, '')"
                                     class="form-control"
-                                    maxlength="14"
+                                    maxlength="20"
                                     placeholder="Masukkan no HP finance"
                                     autocomplete="off"
                                     required
@@ -560,7 +562,7 @@
                                     name="nomor_hp_penanggung_jawab"
                                     id="nomor_hp_penanggung_jawab"
                                     oninput="this.value = this.value.replace(/[^0-9+]/g, '')"
-                                    maxlength="14"
+                                    maxlength="20"
                                     autocomplete="off"
                                     class="form-control"
                                     required

@@ -406,7 +406,7 @@
                                 name="no_hp_finance"
                                 id="no_hp_finance"
                                 class="form-control"
-                                maxlength="14"
+                                maxlength="20"
                                 autocomplete="off"
                                 readonly
                                 value="{{ $perusahaan['data_finance']['no_hp'] ?: '-' }}"

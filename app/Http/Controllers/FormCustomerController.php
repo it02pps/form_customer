@@ -45,6 +45,9 @@ class FormCustomerController extends Controller
 
     public function view_badan_usaha($menu, $status = NULL, $status2 = NULL, $param = NULL)
     {
+        $getOCRData = session('ocrData');
+        $ocrData = $getOCRData['data'] ?? [];
+        $ocrPhoto = $getOCRData['photo'] ?? null;
         if ($menu == 'badan-usaha') {
             if ($param) {
                 $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas', 'cabang')->where('bentuk_usaha', 'badan_usaha')->where('nomor_npwp', Crypt::decryptString($param))->latest()->first();
@@ -71,18 +74,15 @@ class FormCustomerController extends Controller
             ];
 
             if ($status == 'customer-baru') {
-                return view('customer.badan_usaha.cust_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
+                return view('customer.badan_usaha.cust_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha', 'ocrData', 'ocrPhoto'));
             }
 
             if ($status2 == 'pengkinian-data') {
-                return view('customer.badan_usaha.cust_lama', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
+                return view('customer.badan_usaha.cust_lama', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha', 'ocrData', 'ocrPhoto'));
             } else {
-                return view('customer.badan_usaha.usaha_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha'));
+                return view('customer.badan_usaha.usaha_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha', 'ocrData', 'ocrPhoto'));
             }
         } else {
-            $getOCRData = session('ocrData');
-            $ocrData = $getOCRData['data'] ?? [];
-            $ocrPhoto = $getOCRData['photo'] ?? null;
             // dd($ocrData);
             if ($param) {
                 $param = Crypt::decryptString($param);

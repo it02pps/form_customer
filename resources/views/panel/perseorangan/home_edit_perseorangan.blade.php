@@ -247,7 +247,7 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">No HP Finance <span class="text-danger">*</span></label>
-                                <input type="text" name="no_hp_finance" id="no_hp_finance" placeholder="Masukkan No HP finance" autocomplete="off" maxlength="14" class="form-control" value="{{ $data ? $data['data_finance'] ? $data['data_finance']['no_hp'] : '' : '' }}">
+                                <input type="text" name="no_hp_finance" id="no_hp_finance" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" placeholder="Masukkan No HP finance" autocomplete="off" maxlength="20" class="form-control" value="{{ $data ? $data['data_finance'] ? $data['data_finance']['no_hp'] : '' : '' }}">
                             </div>
                         </div>
                     </div>

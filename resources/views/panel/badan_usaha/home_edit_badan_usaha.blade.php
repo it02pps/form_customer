@@ -96,7 +96,7 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Nomor Handphone Contact Person <span class="text-danger">*</span></label>
-                                <input type="text" name="no_hp" id="no_hp" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" maxlength="14" class="form-control" autocomplete="off" placeholder="Contoh: 012345678910" required value="{{ $data ? $data['nomor_handphone'] : '' }}">
+                                <input type="text" name="no_hp" id="no_hp" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" maxlength="20" class="form-control" autocomplete="off" placeholder="Contoh: 012345678910" required value="{{ $data ? $data['nomor_handphone'] : '' }}">
                             </div>
                         </div>
                     </div>
@@ -210,7 +210,7 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Nomor Aktif Untuk Faktur Pajak</label>
-                                <input type="text" name="no_wa" id="no_wa" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" maxlength="14" class="form-control" autocomplete="off" placeholder="Contoh: 012345678910" value="{{ $data ? $data['nomor_whatsapp'] : '' }}">
+                                <input type="text" name="no_wa" id="no_wa" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" maxlength="20" class="form-control" autocomplete="off" placeholder="Contoh: 012345678910" value="{{ $data ? $data['nomor_whatsapp'] : '' }}">
                             </div>
                         </div>
                     </div>
@@ -326,7 +326,7 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">No HP Finance <span class="text-danger">*</span></label>
-                                <input type="text" name="no_hp_finance" id="no_hp_finance" class="form-control" placeholder="Masukkkan no HP finance" maxlength="14" autocomplete="off" value="{{ $data ? ($data['data_finance'] ? ($data['data_finance']['no_hp'] ?: '') : '') : '' }}">
+                                <input type="text" name="no_hp_finance" id="no_hp_finance" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" class="form-control" placeholder="Masukkkan no HP finance" maxlength="20" autocomplete="off" value="{{ $data ? ($data['data_finance'] ? ($data['data_finance']['no_hp'] ?: '') : '') : '' }}">
                             </div>
                         </div>
                     </div>
@@ -366,7 +366,7 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Nomor Handphone <span class="text-danger">*</span></label>
-                                <input type="text" name="nomor_hp_penanggung_jawab" id="no_hp_penanggung_jawab" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" maxlength="14" autocomplete="off" class="form-control" required placeholder="Contoh: 012345678910" value="{{ $data ? $data['data_identitas'] ? $data['data_identitas']['no_hp'] : '' : '' }}">
+                                <input type="text" name="nomor_hp_penanggung_jawab" id="no_hp_penanggung_jawab" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" maxlength="20" autocomplete="off" class="form-control" required placeholder="Contoh: 012345678910" value="{{ $data ? $data['data_identitas'] ? $data['data_identitas']['no_hp'] : '' : '' }}">
                             </div>
                         </div>
                     </div>
