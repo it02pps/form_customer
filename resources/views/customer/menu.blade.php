@@ -379,7 +379,7 @@
                         });
                     } else {
                         $.ajax({
-                            url: '/form-customer/scan-npwp/badan-usaha/' + statusBadanUsaha + statusBadanUsaha2 + npwp + '/check',
+                            url: '/form-customer/badan-usaha/' + statusBadanUsaha + statusBadanUsaha2 + npwp + '/check',
                             type: 'GET',
                             beforeSend: () => {
                                 Swal.fire({

@@ -28,19 +28,51 @@
 <div class="px-4 py-3 px-md-5">
     <div class="d-grid gap-4">
         <div class="header d-grid gap-3">
-            <div class="title text-center">
+            <div class="title text-center position-relative">
+                <a href="{{ route('form_customer.menu') }}" class="text-decoration-none position-absolute start-0" style="top: 20px;">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
                 <h1 class="m-0">Scan Identitas</h1>
                 <p class="mb-0 text-muted">Silahkan siapkan NPWP</p>
             </div>
         </div>
-        <div class="d-flex flex-column align-items-center justify-content-center w-100">
-            <div class="camera-container">
+        <div class="d-flex flex-column justify-content-center align-items-center w-100">
+            <div id="scanOptions" class="d-flex gap-2 flex-wrap justify-content-center">
+                <button
+                    type="button"
+                    id="btnCamera"
+                    class="btn btn-primary"
+                >
+                    <i class="fa-solid fa-camera me-2 text-white"></i>
+                    Scan Kamera
+                </button>
+                <button
+                    type="button"
+                    id="btnUpload"
+                    class="btn btn-outline-primary"
+                >
+                    <i class="fa-solid fa-image me-2 text-primary"></i>
+                    Upload Foto
+                </button>
+            </div>
+
+            <div class="mt-3" id="uploadContainer" style="display: none;">
+                <input
+                    type="file"
+                    id="npwpFile"
+                    accept="image/jpeg,image/png,image/jpg"
+                    class="form-control"
+                >
+            </div>
+
+            <div id="cameraContainer" class="camera-container mt-2" style="display: none;">
                 <video
                     id="camera"
                     autoplay
                     playsinline
                 ></video>
             </div>
+
             <canvas
                 id="canvas"
                 class="d-none"
@@ -51,8 +83,10 @@
                     type="button"
                     id="btnCapture"
                     class="btn btn-primary mt-3"
+                    style="display: none;"
                 >
-                    Ambil foto        
+                    <i class="fa-solid fa-camera me-2 text-white"></i>
+                    Ambil foto
                 </button>
             </div>
         </div>
@@ -75,7 +109,17 @@
 <script>
     const video = document.getElementById('camera');
     const canvas = document.getElementById('canvas');
+
+    const btnCamera = document.getElementById('btnCamera');
+    const btnUpload = document.getElementById('btnUpload');
     const btnCapture = document.getElementById('btnCapture');
+
+    const npwpFile = document.getElementById('npwpFile');
+
+    const scanOptions = document.getElementById('scanOptions');
+    const cameraContainer = document.getElementById('cameraContainer');
+    const uploadContainer = document.getElementById('uploadContainer');
+
     const loadingOCR = document.getElementById('loadingOCR');
 
     let cameraStream = null;
@@ -99,30 +143,71 @@
 
             video.srcObject = cameraStream;
         } catch (error) {
-            console.log(error);
             alert("Tidak dapat mengakses kamera.");
+
+            cameraContainer.style.display = 'none';
+            btnCapture.style.display = 'none';
+            scanOptions.style.display = 'flex';
         }
     }
 
-    async function sendToOCR(blob) {
+    function stopCamera() {
+        if(!cameraStream) {
+            return;
+        }
+
+        cameraStream.getTracks().forEach(track => {
+            track.stop();
+        });
+
+        cameraStream = null;
+        video.srcObject = null;
+    }
+
+    async function sendToOCR(file) {
+        if(!file) {
+            alert("File NPWP belum dipilih.");
+            return;
+        }
+
         const formData = new FormData();
 
         formData.append(
             'photo',
-            blob,
-            'npwp.jpg'
+            file,
+            file.name ?? 'npwp.jpg'
         );
+
+        const menuValue = @json($menu);
+        const statusValue = @json($status);
+        const status2Value = @json($status2);
+        const paramValue = @json($param);
+
+        formData.append("menu", menuValue);
+        formData.append("status", statusValue);
+
+        if(status2Value) {
+            formData.append("status2", status2Value);
+        }
+
+        if(paramValue) {
+            formData.append("param", paramValue);
+        }
 
         try {
             loadingOCR.style.display = 'block';
+
             btnCapture.disabled = true;
+            btnUpload.disabled = true;
 
             const response = await fetch(
                 "{{ route('ocr.npwp') }}",
                 {
                     method: 'POST',
                     headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'X-CSRF-TOKEN': document.querySelector(
+                            'meta[name="csrf-token"]'
+                        ).content,
                         'Accept': 'application/json'
                     },
                     body: formData
@@ -130,24 +215,22 @@
             );
 
             const result = await response.json();
+
             if (!response.ok || !result.success) {
                 throw new Error(
                     result.message ?? 'OCR gagal.'
                 );
             }
 
-            // Untuk sementara tampilkan dulu
-            alert(
-                `NPWP: ${result.data.no_npwp}\n` +
-                `NAMA: ${result.data.nama}\n`
-            );
+            window.location.href = result.redirect_url;
         } catch (error) {
             console.error('OCR error:', error);
-
             alert(error.message);
         } finally {
             loadingOCR.style.display = 'none';
+
             btnCapture.disabled = false;
+            btnUpload.disabled = false;
         }
     }
 
@@ -182,13 +265,52 @@
                     return;
                 }
 
-                await sendToOCR(blob);
+                const file = new File(
+                    [blob],
+                    'npwp.jpg',
+                    {
+                        type: 'image/jpeg'
+                    }
+                );
+
+                await sendToOCR(file);
             },
             'image/jpeg',
             0.9
         );
     });
 
-    startCamera();
+    npwpFile.addEventListener('change', async () => {
+        const file = npwpFile.files[0];
+
+        if(!file) {
+            return;
+        }
+
+        await sendToOCR(file);
+    });
+
+    btnUpload.addEventListener('click', async () => {
+        stopCamera();
+
+        scanOptions.style.display = 'none';
+        cameraContainer.style.display = 'none';
+        btnCapture.style.display = 'none';
+
+        uploadContainer.style.display = 'block';
+
+        npwpFile.click();
+    });
+
+    btnCamera.addEventListener('click', async () => {
+        scanOptions.style.display = 'none';
+        uploadContainer.style.display = 'none';
+
+        cameraContainer.style.display = 'block';
+        btnCapture.style.display = 'block';
+
+        
+        await startCamera();
+    });
 </script>
 @endsection

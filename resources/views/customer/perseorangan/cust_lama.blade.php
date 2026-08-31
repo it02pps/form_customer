@@ -247,9 +247,7 @@
                                 placeholder="Masukkan alamat group usaha"
                                 autocomplete="off"
                                 required
-                            >
-                                {{ $data ? $data['alamat_group_lengkap'] : '' }}
-                            </textarea>
+                            >{{ $data ? $data['alamat_group_lengkap'] : '' }}</textarea>
                             <span class="text-danger">*Jika tidak ada, maka diisi dengan alamat KTP / NPWP</span>
                         </div>
                     </div>
@@ -262,7 +260,7 @@
                                     name="no_hp"
                                     id="no_hp"
                                     oninput="this.value = this.value.replace(/[^0-9+]/g, '')"
-                                    maxlength="14"
+                                    maxlength="20"
                                     class="form-control"
                                     autocomplete="off"
                                     placeholder="Contoh: 012345678910"
@@ -492,9 +490,10 @@
                                     type="text"
                                     name="no_hp_finance"
                                     id="no_hp_finance"
+                                    oninput="this.value = this.value.replace(/[^0-9+]/g, '')"
                                     class="form-control"
                                     placeholder="Masukkan no HP finance"
-                                    maxlength="14"
+                                    maxlength="20"
                                     autocomplete="off"
                                     required
                                     value="{{ $data ? ($data['data_finance'] ? ($data['data_finance']['no_hp'] ?: '') : '') : '' }}"
@@ -579,7 +578,7 @@
                                     name="nomor_hp_penanggung_jawab"
                                     id="nomor_hp_penanggung_jawab"
                                     oninput="this.value = this.value.replace(/[^0-9+]/g, '')"
-                                    maxlength="14"
+                                    maxlength="20"
                                     autocomplete="off"
                                     class="form-control"
                                     required
@@ -744,9 +743,7 @@
                                                                     class="form-control"
                                                                     autocomplete="off"
                                                                     placeholder="Masukkan alamat NITKU"
-                                                                >
-                                                                    {{ $value['alamat'] }}
-                                                                </textarea>
+                                                                >{{ $value['alamat'] }}</textarea>
                                                             </div>
                                                         </div>
                                                         <div class="mt-3">

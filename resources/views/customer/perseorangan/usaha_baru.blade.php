@@ -234,9 +234,7 @@
                                 autocomplete="off"
                                 required
                                 readonly
-                            >
-                                {{ $data ? $data['alamat_group_lengkap'] : '' }}
-                            </textarea>
+                            >{{ $data ? $data['alamat_group_lengkap'] : '' }}</textarea>
                             <span class="text-danger">*Jika tidak ada, maka diisi dengan alamat KTP / NPWP</span>
                         </div>
                     </div>
@@ -249,7 +247,7 @@
                                     name="no_hp"
                                     id="no_hp"
                                     oninput="this.value = this.value.replace(/[^0-9+]/g, '')"
-                                    maxlength="14"
+                                    maxlength="20"
                                     class="form-control"
                                     autocomplete="off"
                                     placeholder="Contoh: 012345678910"
@@ -475,8 +473,9 @@
                                     type="text"
                                     name="no_hp_finance"
                                     id="no_hp_finance"
+                                    oninput="this.value = this.value.replace(/[^0-9+]/g, '')"
                                     class="form-control"
-                                    maxlength="14"
+                                    maxlength="20"
                                     placeholder="Masukkan no HP finance"
                                     autocomplete="off"
                                     required
@@ -562,7 +561,7 @@
                                     name="nomor_hp_penanggung_jawab"
                                     id="nomor_hp_penanggung_jawab"
                                     oninput="this.value = this.value.replace(/[^0-9+]/g, '')"
-                                    maxlength="14"
+                                    maxlength="20"
                                     autocomplete="off"
                                     class="form-control"
                                     required

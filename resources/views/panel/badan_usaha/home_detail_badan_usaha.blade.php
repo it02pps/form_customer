@@ -274,7 +274,7 @@
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="form-group">
                             <label for="">No HP Finance</label>
-                            <input type="text" name="no_hp_finance" id="no_hp_finance" class="form-control" placeholder="Masukkan no HP finance" maxlength="14" autocomplete="off" readonly value="{{ $data['data_finance'] ? ($data['data_finance']['no_hp'] ?: '-') : '-' }}">
+                            <input type="text" name="no_hp_finance" id="no_hp_finance" class="form-control" placeholder="Masukkan no HP finance" maxlength="20" autocomplete="off" readonly value="{{ $data['data_finance'] ? ($data['data_finance']['no_hp'] ?: '-') : '-' }}">
                         </div>
                     </div>
                 </div>

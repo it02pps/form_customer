@@ -38,8 +38,8 @@ Route::post("/ocr/ktp", [OCRController::class, 'ktp'])->name('ocr.ktp');
 Route::get("/form-customer/scan-npwp/{menu}/{status}/{status2?}/{param?}", [OCRController::class, 'scan_npwp'])->name('form_customer.scan_npwp');
 Route::post("/ocr/npwp", [OCRController::class, 'npwp'])->name('ocr.npwp');
 
-Route::get('/form-customer/ocr-photo/{filename}', function($filename) {
-    $path = storage_path('app/temp/ktp/' . $filename);
+Route::get('/form-customer/ocr-photo/{path}/{filename}', function($path, $filename) {
+    $path = storage_path('app/temp/' . $path . '/' . $filename);
 
     abort_unless(file_exists($path), 404);
 

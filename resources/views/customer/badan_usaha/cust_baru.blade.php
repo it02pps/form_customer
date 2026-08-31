@@ -95,6 +95,111 @@
         </div>
         <hr>
         <div class="py-2">
+            <h1 class="text-center text-md-start">Hasil Scan</h1>
+            <div class="d-flex flex-column gap-3">
+                <div class="row g-3">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="form-group">
+                            <label for="">Nomor NPWP (16 digit) <span class="text-danger">*</span></label>
+                            <input
+                                type="text"
+                                name="nomor_npwp"
+                                id="nomor_npwp"
+                                oninput="this.value = this.value.replace(/\D+/g, '')"
+                                maxlength="16"
+                                class="form-control"
+                                autocomplete="off"
+                                placeholder="Masukkan Nomor NPWP"
+                                value="{{ old('no_npwp', $ocrData['no_npwp'] ?? '') }}"
+                                required
+                            >
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="form-group">
+                            <label for="">Nama NPWP <span class="text-danger">*</span></label>
+                            <input
+                                type="text"
+                                name="nama_npwp"
+                                id="nama_npwp"
+                                class="form-control" 
+                                autocomplete="off"
+                                placeholder="Masukkan Nama NPWP"
+                                value="{{ old('nama', $ocrData['nama'] ?? '') }}"
+                                required
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="">Alamat NPWP <span class="text-danger">*</span></label>
+                            <textarea
+                                name="alamat_npwp"
+                                id="alamat_npwp"
+                                cols="70"
+                                rows="6"
+                                autocomplete="off"
+                                class="form-control"
+                                required
+                                placeholder="Masukkan Alamat NPWP"
+                            >{{ old('alamat', $ocrData['alamat'] ?? '') }}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="">Kota Sesuai NPWP <span class="text-danger">*</span></label>
+                            <input
+                                type="text"
+                                name="kota_npwp"
+                                id="kota_npwp"
+                                class="form-control"
+                                autocomplete="off"
+                                placeholder="Masukkan kota sesuai NPWP"
+                                value="{{ old('kota', $ocrData['kota'] ?? '') }}"
+                                required
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="group-column">
+                            <div class="form-group">
+                                <label for="">Foto NPWP <span class="text-danger">*</span></label>
+                                <input
+                                    type="file"
+                                    name="foto_npwp"
+                                    id="foto_npwp"
+                                    onchange="previewFileNpwp(this);"
+                                    accept=".jpg, .png, .pdf, .jpeg"
+                                    class="form-control"
+                                    @if (!$ocrPhoto) required @endif
+                                >
+                            </div>
+                            <div id="preview_npwp" class="form-group">
+                                @if ($ocrPhoto)
+                                    <div class="text-center">
+                                        <img
+                                            src="{{ route('form_customer.ocr_photo', ['path' => 'npwp', 'filename' => basename($ocrPhoto)]) }}"
+                                            class="img-fluid rounded"
+                                            {{-- style="max-height: 300px;" --}}
+                                            alt="Preview NPWP"
+                                            data-action="zoom"
+                                        >
+                                    </div>
+                                @else
+                                    <p class="text-center">Belum ada file</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
             <h1 class="text-center text-md-start">Identitas Perusahaan</h1>
             <div class="d-flex flex-column gap-3">
                 <div class="row g-3">
@@ -130,22 +235,24 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label for="">Alamat Group Perusahaan <span class="text-danger">*</span></label>
-                        <textarea
-                            name="alamat_group_lengkap"
-                            id="alamat_group_lengkap"
-                            class="form-control"
-                            rows="6"
-                            placeholder="Masukkan alamat group perusahaan"
-                            autocomplete="off"
-                            required
-                        ></textarea>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="">Alamat Group Perusahaan <span class="text-danger">*</span></label>
+                            <textarea
+                                name="alamat_group_lengkap"
+                                id="alamat_group_lengkap"
+                                class="form-control"
+                                rows="6"
+                                placeholder="Masukkan alamat group perusahaan"
+                                autocomplete="off"
+                                required
+                            ></textarea>
+                        </div>
                     </div>
                 </div>
-                <div class="row g-3">
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                <div class="row">
+                    <div class="col-12">
                         <div class="form-group">
                             <label for="">Kota/Kabupaten <span class="text-danger">*</span></label>
                             <input
@@ -154,11 +261,13 @@
                                 id="kota_kabupaten"
                                 class="form-control"
                                 placeholder="Masukkan Kota/Kabupaten"
-                                autocomplete="off"
+                                autocomplete="off" 
                                 required
                             >
                         </div>
                     </div>
+                </div>
+                <div class="row g-3">
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="form-group">
                             <label for="">Nomor Handphone Contact Person <span class="text-danger">*</span></label>
@@ -167,11 +276,42 @@
                                 name="no_hp"
                                 id="no_hp"
                                 oninput="this.value = this.value.replace(/[^0-9+]/g, '')"
-                                maxlength="14" class="form-control"
+                                maxlength="20" class="form-control"
                                 autocomplete="off"
                                 placeholder="Contoh: 012345678910"
                                 required
                             >
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="form-group" id="select">
+                            <label for="">Bidang Usaha <span class="text-danger">*</span></label>
+                            <div class="position-relative">
+                                <select
+                                    name="bidang_usaha"
+                                    id="bidang_usaha"
+                                    class="form-control"
+                                    required
+                                >
+                                    <option value="">Pilih Bidang Usaha</option>
+                                    @foreach ($bidang_usaha as $loop_bidang_usaha)
+                                        <option value="{{ $loop_bidang_usaha }}">{{ strtoupper(str_replace('_', ' ', $loop_bidang_usaha)) }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="bidang_lain d-none">
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        name="bidang_usaha_lain"
+                                        id="bidang_usaha_lain"
+                                        placeholder="Masukkan bidang usaha lain"
+                                        autocomplete="off"
+                                    >
+                                </div>
+                                <span class="caret position-absolute" style="right: 15px; top: 14px;">
+                                    <i class="fa-solid fa-caret-down text-secondary"></i>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -205,37 +345,6 @@
                 <div class="row g-3">
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="form-group" id="select">
-                            <label for="">Bidang Usaha <span class="text-danger">*</span></label>
-                            <div class="position-relative">
-                                <select
-                                    name="bidang_usaha"
-                                    id="bidang_usaha"
-                                    class="form-control"
-                                    required
-                                >
-                                    <option value="">Pilih Bidang Usaha</option>
-                                    @foreach ($bidang_usaha as $loop_bidang_usaha)
-                                        <option value="{{ $loop_bidang_usaha }}">{{ strtoupper(str_replace('_', ' ', $loop_bidang_usaha)) }}</option>
-                                    @endforeach
-                                </select>
-                                <div class="bidang_lain d-none">
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        name="bidang_usaha_lain"
-                                        id="bidang_usaha_lain"
-                                        placeholder="Masukkan bidang usaha lain"
-                                        autocomplete="off"
-                                    >
-                                </div>
-                                <span class="caret position-absolute" style="right: 15px; top: 14px;">
-                                    <i class="fa-solid fa-caret-down text-secondary"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                        <div class="form-group" id="select">
                             <label for="">Status Kepemilkan Tempat Usaha <span class="text-danger">*</span></label>
                             <div class="position-relative">
                                 <select
@@ -265,8 +374,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row g-3">
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="form-group" id="select">
                             <label for="">Jenis Badan Usaha <span class="text-danger">*</span></label>
@@ -301,38 +408,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                        <div class="form-group">
-                            <label for="">Nama NPWP <span class="text-danger">*</span></label>
-                            <input
-                                type="text"
-                                name="nama_npwp"
-                                id="nama_npwp"
-                                class="form-control" 
-                                autocomplete="off"
-                                placeholder="Masukkan Nama NPWP"
-                                required
-                            >
-                        </div>
-                    </div>
                 </div>
                 <div class="row g-3">
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                        <div class="form-group">
-                            <label for="">Nomor NPWP (16 digit) <span class="text-danger">*</span></label>
-                            <input
-                                type="text"
-                                name="nomor_npwp"
-                                id="nomor_npwp"
-                                oninput="this.value = this.value.replace(/\D+/g, '')"
-                                maxlength="16"
-                                class="form-control"
-                                autocomplete="off"
-                                placeholder="Masukkan Nomor NPWP"
-                                required
-                            >
-                        </div>
-                    </div>
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="form-group">
                             <label for="" class="additional-label">Email Khusus Untuk Faktur Pajak</label>
@@ -346,37 +423,6 @@
                             >
                         </div>
                     </div>
-                </div>
-                <div class="col-12">
-                    <div class="form-group">
-                        <label for="">Alamat NPWP <span class="text-danger">*</span></label>
-                        <textarea
-                            name="alamat_npwp"
-                            id="alamat_npwp"
-                            cols="70"
-                            rows="6"
-                            autocomplete="off"
-                            class="form-control"
-                            required
-                            placeholder="Masukkan Alamat NPWP"
-                        ></textarea>
-                    </div>
-                </div>
-                <div class="row g-3">
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                        <div class="form-group">
-                            <label for="">Kota Sesuai NPWP <span class="text-danger">*</span></label>
-                            <input
-                                type="text"
-                                name="kota_npwp"
-                                id="kota_npwp"
-                                class="form-control"
-                                autocomplete="off"
-                                placeholder="Masukkan kota sesuai NPWP"
-                                required
-                            >
-                        </div>
-                    </div>
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="form-group">
                             <label for="">Nomor Aktif Untuk Faktur Pajak</label>
@@ -385,7 +431,7 @@
                                 name="no_wa"
                                 id="no_wa"
                                 oninput="this.value = this.value.replace(/[^0-9+-]/g, '')"
-                                maxlength="14"
+                                maxlength="20"
                                 class="form-control" 
                                 autocomplete="off"
                                 placeholder="Contoh: 012345678910"
@@ -425,31 +471,14 @@
                         </div>
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                        <div class="group-column">
-                            <div class="form-group">
-                                <label for="">Foto NPWP <span class="text-danger">*</span></label>
-                                <input
-                                    type="file"
-                                    name="foto_npwp"
-                                    id="foto_npwp"
-                                    onchange="previewFileNpwp(this);"
-                                    accept=".jpg, .png, .pdf, .jpeg"
-                                    class="form-control"
-                                >
-                            </div>
-                            <div id="preview_npwp" class="form-group">
-                                <p class="text-center">Belum ada file</p>
-                            </div>
-                            
-                            <div class="branch-section mt-4 p-0 d-flex flex-column gap-2">
-                                <span class="text-danger">*Jika terdapat cabang, silahkan tekan tombol disamping. Apabila tidak ada, dapat diabaikan</span>
-                                <button
-                                    type="button"
-                                    class="btnCabang w-100 btn btn-primary"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modalCabang"
-                                >Tambah Cabang</button>
-                            </div>
+                        <div class="branch-section mt-4 p-0 d-flex flex-column gap-2">
+                            <span class="text-danger">*Jika terdapat cabang, silahkan tekan tombol disamping. Apabila tidak ada, dapat diabaikan</span>
+                            <button
+                                type="button"
+                                class="btnCabang w-100 btn btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalCabang"
+                            >Tambah Cabang</button>
                         </div>
                     </div>
                 </div>
@@ -563,7 +592,8 @@
                                 class="form-control"
                                 name="no_hp_finance"
                                 id="no_hp_finance"
-                                maxlength="14"
+                                oninput="this.value = this.value.replace(/[^0-9+]/g, '')"
+                                maxlength="20"
                                 autocomplete="off"
                                 placeholder="Masukkan no hp finance"
                                 required
@@ -646,7 +676,7 @@
                                 name="nomor_hp_penanggung_jawab"
                                 id="nomor_hp_penanggung_jawab"
                                 oninput="this.value = this.value.replace(/[^0-9+]/g, '')"
-                                maxlength="14"
+                                maxlength="20"
                                 autocomplete="off"
                                 class="form-control"
                                 required
