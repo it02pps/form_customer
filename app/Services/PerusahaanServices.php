@@ -303,18 +303,45 @@ class perusahaanServices
                 }
             } else {
                 if ($request->hasFile('foto_npwp')) {
-                    $foto = $request->file('foto_npwp');
-                    $filename = uniqid() . '-NPWP-' . Str::slug($request->nama_npwp, '-') . '.' . strtolower($foto->getClientOriginalExtension());
+                    $filename = null;
+                    $tempPath = null;
 
-                    // Temporary store files
-                    $foto->move(public_path('temp_files'), $filename);
-                    $tempPath = public_path('temp_files/' . $filename);
+                    if($request->hasFile('foto_npwp')) {
+                        $foto = $request->file('foto_npwp');
+                        $filename = uniqid() . '-NPWP-' . Str::slug($request->nama_npwp, '-') . '.' . strtolower($foto->getClientOriginalExtension());
+                        
+                        // Temporary store files
+                        $foto->move(public_path('temp_files'), $filename);
+                        $tempPath = public_path('temp_files/' . $filename);
+                    } elseif ($ocrPhoto) {
+                        $filename = basename($ocrPhoto);
+                        $tempPath = storage_path('app/' . ltrim($ocrPhoto, '/'));
 
-                    DB::table('identitas_perusahaan')->where('id', $data->id)->update([
-                        'foto_npwp' => $filename,
-                        'status_upload_npwp' => 'pending'
-                    ]);
-                    UPloadNPWP::handleUpload($filename, ($oldData ? ($oldData->foto_npwp ?: '') : ''), $tempPath, $data->id);
+                        if(!file_exists($tempPath)) {
+                            return [
+                                'status' => false,
+                                'message' => 'Foto hasil scan sudah tidak tersedia. Silahkan scan ulang.'
+                            ];
+                        }
+                    }
+
+                    if($filename && $tempPath) {
+                        DB::table('identitas_perusahaan')->where('id', $data->id)->update([
+                            'foto_npwp' => $filename,
+                            'status_upload_npwp' => 'pending'
+                        ]);
+
+                        UPloadNPWP::handleUpload($filename, ($oldData ? ($oldData->foto_npwp ?: '') : ''), $tempPath, $data->id);
+
+                        if(file_exists($tempPath)) {
+                            unlink($tempPath);
+                        }
+                    } else {
+                        DB::table('identitas_perusahaan')->where('id', $data->id)->update([
+                            'foto_ktp' => $oldData->foto_ktp,
+                            'status_upload_npwp' => $oldData->status_upload_npwp
+                        ]);
+                    }
                 } else {
                     DB::table('identitas_perusahaan')->where('id', $data->id)->update([
                         'foto_npwp' => $oldData->foto_npwp,
