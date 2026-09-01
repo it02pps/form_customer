@@ -151,19 +151,27 @@ class OCRController extends Controller
         */
 
         foreach ($lines as $line) {
-            if (preg_match('/\b(\d{16})\b/', $line, $match)) {
-                $result['npwp'] = $match[1];
+
+            // NPWP16 / NIK
+            if (
+                preg_match(
+                    '/NPWP16\s*:?\s*(\d{16})/i',
+                    $line,
+                    $match
+                )
+            ) {
                 $result['npwp16'] = $match[1];
-                break;
             }
 
-            if (preg_match(
-                '/\b(\d{2}\.\d{3}\.\d{3}\.\d-\d{3}\.\d{3})\b/',
-                $line,
-                $match
-            )) {
+            // NPWP format lama
+            if (
+                preg_match(
+                    '/\b(\d{2}\.\d{3}\.\d{3}\.\d-\d{3}\.\d{3})\b/',
+                    $line,
+                    $match
+                )
+            ) {
                 $result['npwp'] = $match[1];
-                break;
             }
         }
 
@@ -347,11 +355,6 @@ class OCRController extends Controller
             }
 
             $data = $parsed ?? [];
-
-            Log::info("Data : ", [
-                'parsedData' => $parsed,
-                'datas' => $data
-            ]);
             
             session()->put('ocrData', [
                 'photo' => $tempPath,
