@@ -367,16 +367,16 @@ class OCRController extends Controller
                 'created_at' => now()->timestamp
             ]);
             
-            // $url = route('form_customer.view_badan_usaha', [
-            //     'menu' => $menu,
-            //     'status' => $status,
-            //     'status2' => $status2,
-            //     'param' => $param,
-            // ]);
+            $url = route('form_customer.view_badan_usaha', [
+                'menu' => $menu,
+                'status' => $status,
+                'status2' => $status2,
+                'param' => $param,
+            ]);
 
             return response()->json([
                 'success' => true,
-                'redirect_url' => $url ?? ''
+                'redirect_url' => $url
             ]);
         } catch (\Exception $e) {
             Log::error('OCR NPWP Error', [
