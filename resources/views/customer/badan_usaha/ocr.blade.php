@@ -21,6 +21,13 @@
         object-fit: cover;
         display: block;
     }
+
+    .preview-canvas {
+        width: 100%;
+        max-width: 600px;
+        border-radius: 12px;
+        display: block;
+    }
 </style>
 @endsection
 
@@ -37,7 +44,7 @@
             </div>
         </div>
         <div class="d-flex flex-column justify-content-center align-items-center w-100">
-            <div id="scanOptions" class="d-flex ga  p-2 flex-wrap justify-content-center">
+            <div id="scanOptions" class="d-flex gap-2 flex-wrap justify-content-center">
                 <button
                     type="button"
                     id="btnCamera"
@@ -75,18 +82,41 @@
 
             <canvas
                 id="canvas"
-                class="d-none"
+                class="d-none preview-canvas mt-3"
             ></canvas>
 
-            <div>
+            <div id="captureActions" class="mt-3" style="display: none;">
                 <button
                     type="button"
                     id="btnCapture"
                     class="btn btn-primary mt-3"
-                    style="display: none;"
                 >
                     <i class="fa-solid fa-camera me-2 text-white"></i>
                     Ambil foto
+                </button>
+            </div>
+
+            <div
+                id="previewActions"
+                class="mt-3 d-flex gap-2"
+                style="display: none !important;"
+            >
+                <button
+                    type="button"
+                    id="btnRetake"
+                    class="btn btn-outline-secondary"
+                >
+                    <i class="fa-solid fa-rotate-left me-2 text-primary"></i>
+                    Foto Ulang
+                </button>
+
+                <button
+                    type="button"
+                    id="btnUsePhoto"
+                    class="btn btn-primary"
+                >
+                    <i class="fa-solid fa-check me-2 text-white"></i>
+                    Scan Foto
                 </button>
             </div>
         </div>
@@ -112,7 +142,10 @@
 
     const btnCamera = document.getElementById('btnCamera');
     const btnUpload = document.getElementById('btnUpload');
+
     const btnCapture = document.getElementById('btnCapture');
+    const btnRetake = document.getElementById('btnRetake');
+    const btnUsePhoto = document.getElementById('btnUsePhoto');
 
     const npwpFile = document.getElementById('npwpFile');
 
@@ -120,9 +153,13 @@
     const cameraContainer = document.getElementById('cameraContainer');
     const uploadContainer = document.getElementById('uploadContainer');
 
+    const captureActions = document.getElementById('captureActions');
+    const previewActions = document.getElementById('previewActions');
+
     const loadingOCR = document.getElementById('loadingOCR');
 
     let cameraStream = null;
+    let capturedFile = null;
 
     async function startCamera() {
         try {
@@ -147,7 +184,10 @@
 
             const track = cameraStream.getVideoTracks()[0];
 
-            console.log('Camera settings:', track.getSettings());
+            console.log(
+                'Camera settings:',
+                track.getSettings()
+            );
 
             const capabilities = track.getCapabilities?.();
 
@@ -155,13 +195,20 @@
                 capabilities?.focusMode &&
                 capabilities.focusMode.includes('continuous')
             ) {
-                await track.applyConstraints({
-                    advanced: [
-                        {
-                            focusMode: 'continuous'
-                        }
-                    ]
-                });
+                try {
+                    await track.applyConstraints({
+                        advanced: [
+                            {
+                                focusMode: 'continuous'
+                            }
+                        ]
+                    });
+                } catch (error) {
+                    console.warn(
+                        'Continuous focus tidak didukung:',
+                        error
+                    );
+                }
             }
 
         } catch (error) {
@@ -170,13 +217,13 @@
             alert('Tidak dapat mengakses kamera.');
 
             cameraContainer.style.display = 'none';
-            btnCapture.style.display = 'none';
+            captureActions.style.display = 'none';
             scanOptions.style.display = 'flex';
         }
     }
 
     function stopCamera() {
-        if(!cameraStream) {
+        if (!cameraStream) {
             return;
         }
 
@@ -196,7 +243,8 @@
         const containerHeight = cameraContainer.clientHeight;
 
         const videoRatio = videoWidth / videoHeight;
-        const containerRatio = containerWidth / containerHeight;
+        const containerRatio =
+            containerWidth / containerHeight;
 
         let sx = 0;
         let sy = 0;
@@ -204,11 +252,13 @@
         let sh = videoHeight;
 
         if (videoRatio > containerRatio) {
-            // crop kiri kanan
+            // Video lebih lebar daripada container.
+            // Crop sisi kiri dan kanan.
             sw = videoHeight * containerRatio;
             sx = (videoWidth - sw) / 2;
         } else {
-            // crop atas bawah
+            // Video lebih tinggi daripada container.
+            // Crop bagian atas dan bawah.
             sh = videoWidth / containerRatio;
             sy = (videoHeight - sh) / 2;
         }
@@ -217,6 +267,13 @@
         canvas.height = Math.round(sh);
 
         const ctx = canvas.getContext('2d');
+
+        ctx.clearRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
 
         ctx.drawImage(
             video,
@@ -231,9 +288,40 @@
         );
     }
 
+    function canvasToFile() {
+        return new Promise((resolve, reject) => {
+            canvas.toBlob(
+                blob => {
+                    if (!blob) {
+                        reject(
+                            new Error(
+                                'Gagal membuat file hasil foto.'
+                            )
+                        );
+
+                        return;
+                    }
+
+                    const file = new File(
+                        [blob],
+                        'npwp.jpg',
+                        {
+                            type: 'image/jpeg',
+                            lastModified: Date.now()
+                        }
+                    );
+
+                    resolve(file);
+                },
+                'image/jpeg',
+                0.95
+            );
+        });
+    }
+
     async function sendToOCR(file) {
-        if(!file) {
-            alert("File NPWP belum dipilih.");
+        if (!file) {
+            alert('File NPWP belum tersedia.');
             return;
         }
 
@@ -250,21 +338,36 @@
         const status2Value = @json($status2);
         const paramValue = @json($param);
 
-        formData.append("menu", menuValue);
-        formData.append("status", statusValue);
+        formData.append(
+            'menu',
+            menuValue
+        );
 
-        if(status2Value) {
-            formData.append("status2", status2Value);
+        formData.append(
+            'status',
+            statusValue
+        );
+
+        if (status2Value) {
+            formData.append(
+                'status2',
+                status2Value
+            );
         }
 
-        if(paramValue) {
-            formData.append("param", paramValue);
+        if (paramValue) {
+            formData.append(
+                'param',
+                paramValue
+            );
         }
 
         try {
             loadingOCR.style.display = 'block';
 
             btnCapture.disabled = true;
+            btnRetake.disabled = true;
+            btnUsePhoto.disabled = true;
             btnUpload.disabled = true;
 
             const response = await fetch(
@@ -272,9 +375,11 @@
                 {
                     method: 'POST',
                     headers: {
-                        'X-CSRF-TOKEN': document.querySelector(
-                            'meta[name="csrf-token"]'
-                        ).content,
+                        'X-CSRF-TOKEN':
+                            document.querySelector(
+                                'meta[name="csrf-token"]'
+                            ).content,
+
                         'Accept': 'application/json'
                     },
                     body: formData
@@ -283,93 +388,210 @@
 
             const result = await response.json();
 
-            if (!response.ok || !result.success) {
+            if (
+                !response.ok ||
+                !result.success
+            ) {
                 throw new Error(
-                    result.message ?? 'OCR gagal.'
+                    result.message ??
+                    'OCR gagal.'
                 );
             }
 
-            window.location.href = result.redirect_url;
+            window.location.href =
+                result.redirect_url;
+
         } catch (error) {
-            console.error('OCR error:', error);
+            console.error(
+                'OCR error:',
+                error
+            );
+
             alert(error.message);
+
         } finally {
             loadingOCR.style.display = 'none';
 
             btnCapture.disabled = false;
+            btnRetake.disabled = false;
+            btnUsePhoto.disabled = false;
             btnUpload.disabled = false;
         }
     }
 
-    btnCapture.addEventListener('click', async () => {
-        if (!video.videoWidth || !video.videoHeight) {
-            alert('Kamera belum siap. Silakan tunggu sebentar.');
-            return;
-        }
-
-        captureVisibleArea();
-
-        canvas.toBlob(
-            async (blob) => {
-
-                if (!blob) {
-                    alert('Gagal ambil foto.');
-                    return;
-                }
-
-                const file = new File(
-                    [blob],
-                    'npwp.jpg',
-                    {
-                        type: 'image/jpeg',
-                        lastModified: Date.now()
-                    }
+    btnCapture.addEventListener(
+        'click',
+        async () => {
+            if (
+                !video.videoWidth ||
+                !video.videoHeight
+            ) {
+                alert(
+                    'Kamera belum siap. Silakan tunggu sebentar.'
                 );
+
+                return;
+            }
+
+            captureVisibleArea();
+
+            try {
+                capturedFile =
+                    await canvasToFile();
 
                 console.log({
                     width: canvas.width,
                     height: canvas.height,
-                    size: file.size
+                    size: capturedFile.size
                 });
 
-                await sendToOCR(file);
-            },
-            'image/jpeg',
-            0.95
-        );
-    });
+                // Freeze hasil foto.
+                stopCamera();
 
-    npwpFile.addEventListener('change', async () => {
-        const file = npwpFile.files[0];
+                // Hilangkan live camera.
+                cameraContainer.style.display =
+                    'none';
 
-        if (!file) {
-            return;
+                captureActions.style.display =
+                    'none';
+
+                // Tampilkan canvas preview.
+                canvas.classList.remove(
+                    'd-none'
+                );
+
+                // Tampilkan tombol Foto Ulang & Scan Foto.
+                previewActions.style.setProperty(
+                    'display',
+                    'flex',
+                    'important'
+                );
+
+            } catch (error) {
+                console.error(error);
+
+                alert(
+                    'Gagal mengambil foto.'
+                );
+            }
         }
+    );
 
-        await sendToOCR(file);
-    });
+    btnRetake.addEventListener(
+        'click',
+        async () => {
+            capturedFile = null;
 
-    btnUpload.addEventListener('click', async () => {
-        stopCamera();
+            canvas.classList.add(
+                'd-none'
+            );
 
-        scanOptions.style.display = 'none';
-        cameraContainer.style.display = 'none';
-        btnCapture.style.display = 'none';
+            previewActions.style.setProperty(
+                'display',
+                'none',
+                'important'
+            );
 
-        uploadContainer.style.display = 'block';
+            cameraContainer.style.display =
+                'block';
 
-        npwpFile.click();
-    });
+            captureActions.style.display =
+                'block';
 
-    btnCamera.addEventListener('click', async () => {
-        scanOptions.style.display = 'none';
-        uploadContainer.style.display = 'none';
+            await startCamera();
+        }
+    );
 
-        cameraContainer.style.display = 'block';
-        btnCapture.style.display = 'block';
+    btnUsePhoto.addEventListener(
+        'click',
+        async () => {
+            if (!capturedFile) {
+                alert(
+                    'Belum ada foto yang diambil.'
+                );
 
-        
-        await startCamera();
-    });
+                return;
+            }
+
+            // Yang dikirim ke OCR adalah
+            // file hasil canvas preview,
+            // bukan live camera.
+            await sendToOCR(
+                capturedFile
+            );
+        }
+    );
+
+    npwpFile.addEventListener(
+        'change',
+        async () => {
+            const file =
+                npwpFile.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            await sendToOCR(file);
+        }
+    );
+
+    btnUpload.addEventListener(
+        'click',
+        () => {
+            stopCamera();
+
+            capturedFile = null;
+
+            canvas.classList.add(
+                'd-none'
+            );
+
+            previewActions.style.setProperty(
+                'display',
+                'none',
+                'important'
+            );
+
+            captureActions.style.display =
+                'none';
+
+            cameraContainer.style.display =
+                'none';
+
+            scanOptions.style.display =
+                'none';
+
+            uploadContainer.style.display =
+                'block';
+
+            npwpFile.value = '';
+
+            npwpFile.click();
+        }
+    );
+
+    btnCamera.addEventListener(
+        'click',
+        async () => {
+            capturedFile = null;
+
+            canvas.classList.add('d-none');
+
+            previewActions.style.setProperty(
+                'display',
+                'none',
+                'important'
+            );
+
+            scanOptions.style.display = 'none';
+            uploadContainer.style.display = 'none';
+
+            cameraContainer.style.display = 'block';
+            captureActions.style.display = 'block';
+
+            await startCamera();
+        }
+    );
 </script>
 @endsection

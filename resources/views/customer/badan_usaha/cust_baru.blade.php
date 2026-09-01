@@ -110,7 +110,7 @@
                                 class="form-control"
                                 autocomplete="off"
                                 placeholder="Masukkan Nomor NPWP"
-                                value="{{ old('no_npwp', $ocrData['no_npwp'] ?? '') }}"
+                                value="{{ old('npwp16', $ocrData['npwp16'] ?? '') }}"
                                 required
                             >
                         </div>
@@ -118,7 +118,7 @@
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="form-group">
                             <label for="">Nama NPWP <span class="text-danger">*</span></label>
-                            <input
+                            <inputnama
                                 type="text"
                                 name="nama_npwp"
                                 id="nama_npwp"

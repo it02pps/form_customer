@@ -127,7 +127,7 @@
                                     class="form-control"
                                     autocomplete="off"
                                     placeholder="Masukkan Nomor NPWP"
-                                    value="{{ old('no_npwp', $ocrData['no_npwp'] ?? '') }}"
+                                    value="{{ old('npwp16', $ocrData['npwp16'] ?? '') }}"
                                     required
                                 >
                             </div>

@@ -349,11 +349,11 @@ class OCRController extends Controller
             session()->put('ocrData', [
                 'photo' => $tempPath,
                 'data' => [
-                    'no_npwp' => $data['npwp'] ?? null,
+                    // 'no_npwp' => $data['npwp'] ?? null,
                     'nama' => $data['name'] ?? null,
                     'alamat' => $data['address'] ?? null,
                     'kota' => $data['city'] ?? null,
-                    // 'nik' => $data['nik'] ?? null,
+                    'npwp16' => $data['nik'] ?? null,
                     // 'tax_office' => $data['tax_office'] ?? null,
                     'confidence_score' => $result['confidence_score'] ?? null
                 ],
