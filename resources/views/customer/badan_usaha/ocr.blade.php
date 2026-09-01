@@ -106,7 +106,7 @@
                     id="btnRetake"
                     class="btn btn-outline-secondary"
                 >
-                    <i class="fa-solid fa-rotate-left me-2 text-primary"></i>
+                    <i class="fa-solid fa-rotate-left me-2 text-secondary"></i>
                     Foto Ulang
                 </button>
 
@@ -163,6 +163,8 @@
 
     async function startCamera() {
         try {
+            stopCamera();
+            
             cameraStream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     facingMode: {

@@ -137,6 +137,7 @@ class OCRController extends Controller
             'name' => null,
             'address' => null,
             'city' => null,
+            'npwp16' => null,
             'province' => null,
         ];
 
@@ -152,6 +153,7 @@ class OCRController extends Controller
         foreach ($lines as $line) {
             if (preg_match('/\b(\d{16})\b/', $line, $match)) {
                 $result['npwp'] = $match[1];
+                $result['npwp16'] = $match[1];
                 break;
             }
 
@@ -345,31 +347,36 @@ class OCRController extends Controller
             }
 
             $data = $parsed ?? [];
+
+            Log::info("Data : ", [
+                'parsedData' => $parsed,
+                'datas' => $data
+            ]);
             
             session()->put('ocrData', [
                 'photo' => $tempPath,
                 'data' => [
-                    // 'no_npwp' => $data['npwp'] ?? null,
+                    'no_npwp' => $data['npwp'] ?? null,
                     'nama' => $data['name'] ?? null,
                     'alamat' => $data['address'] ?? null,
                     'kota' => $data['city'] ?? null,
-                    'npwp16' => $data['nik'] ?? null,
+                    'npwp16' => $data['npwp16'] ?? null,
                     // 'tax_office' => $data['tax_office'] ?? null,
                     'confidence_score' => $result['confidence_score'] ?? null
                 ],
                 'created_at' => now()->timestamp
             ]);
             
-            $url = route('form_customer.view_badan_usaha', [
-                'menu' => $menu,
-                'status' => $status,
-                'status2' => $status2,
-                'param' => $param,
-            ]);
+            // $url = route('form_customer.view_badan_usaha', [
+            //     'menu' => $menu,
+            //     'status' => $status,
+            //     'status2' => $status2,
+            //     'param' => $param,
+            // ]);
 
             return response()->json([
                 'success' => true,
-                'redirect_url' => $url
+                'redirect_url' => $url ?? ''
             ]);
         } catch (\Exception $e) {
             Log::error('OCR NPWP Error', [

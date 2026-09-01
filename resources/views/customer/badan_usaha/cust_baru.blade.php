@@ -118,7 +118,7 @@
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="form-group">
                             <label for="">Nama NPWP <span class="text-danger">*</span></label>
-                            <inputnama
+                            <input
                                 type="text"
                                 name="nama_npwp"
                                 id="nama_npwp"
