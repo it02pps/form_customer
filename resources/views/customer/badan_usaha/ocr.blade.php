@@ -321,6 +321,10 @@
         });
     }
 
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     async function sendToOCR(file) {
         if (!file) {
             alert('File NPWP belum tersedia.');
@@ -435,17 +439,26 @@
                 return;
             }
 
-            captureVisibleArea();
+            btnCapture.disabled = true;
 
             try {
+                await sleep(400);
+
+                captureVisibleArea();
+
+                if (
+                    canvas.width < 800 ||
+                    canvas.height < 500
+                ) {
+                    alert(
+                        `Resolusi foto terlalu kecil (${canvas.width}x${canvas.height}). Silakan ambil ulang lebih dekat.`
+                    );
+
+                    return;
+                }
+
                 capturedFile =
                     await canvasToFile();
-
-                console.log({
-                    width: canvas.width,
-                    height: canvas.height,
-                    size: capturedFile.size
-                });
 
                 // Freeze hasil foto.
                 stopCamera();
@@ -475,6 +488,8 @@
                 alert(
                     'Gagal mengambil foto.'
                 );
+            } finally {
+                btnCapture.disabled = false;
             }
         }
     );
