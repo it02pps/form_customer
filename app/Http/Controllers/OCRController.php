@@ -136,7 +136,7 @@ class OCRController extends Controller
         }
     }
 
-    private function clearOCRText(?string $value): ?string {
+    private function cleanOcrText(?string $value): ?string {
         if(!$value) {
             return null;
         }
