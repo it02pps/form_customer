@@ -707,7 +707,9 @@ class OCRController extends Controller
                 ], 422);
             }
 
-            $response = Http::asMultipart()
+            $response = Http::timeout(90)
+                ->connectTimeout(10)
+                ->asMultipart()
                 ->withHeaders([
                     'Accept' => 'application/json',
                     'API-KEY' => config('services.bos_api.api_key'),
