@@ -9,7 +9,7 @@
     .camera-container {
         width: 100%;
         max-width: 600px;
-        aspect-ratio: 3 / 2;
+        aspect-ratio: 1.586 / 1;
         overflow: hidden;
         border-radius: 12px;
         background: #000;
@@ -18,7 +18,7 @@
     .camera-container video {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
         display: block;
     }
 
@@ -147,7 +147,7 @@
     const btnRetake = document.getElementById('btnRetake');
     const btnUsePhoto = document.getElementById('btnUsePhoto');
 
-    const npwpFile = document.getElementById('npwpFile');
+    const ktpFile = document.getElementById('ktpFile');
 
     const scanOptions = document.getElementById('scanOptions');
     const cameraContainer = document.getElementById('cameraContainer');
@@ -233,36 +233,12 @@
         video.srcObject = null;
     }
 
-    function captureVisibleArea() {
+    function captureFrame() {
         const videoWidth = video.videoWidth;
         const videoHeight = video.videoHeight;
 
-        const containerWidth = cameraContainer.clientWidth;
-        const containerHeight = cameraContainer.clientHeight;
-
-        const videoRatio = videoWidth / videoHeight;
-        const containerRatio =
-            containerWidth / containerHeight;
-
-        let sx = 0;
-        let sy = 0;
-        let sw = videoWidth;
-        let sh = videoHeight;
-
-        if (videoRatio > containerRatio) {
-            // Video lebih lebar daripada container.
-            // Crop sisi kiri dan kanan.
-            sw = videoHeight * containerRatio;
-            sx = (videoWidth - sw) / 2;
-        } else {
-            // Video lebih tinggi daripada container.
-            // Crop bagian atas dan bawah.
-            sh = videoWidth / containerRatio;
-            sy = (videoHeight - sh) / 2;
-        }
-
-        canvas.width = Math.round(sw);
-        canvas.height = Math.round(sh);
+        canvas.width = videoWidth;
+        canvas.height = videoHeight;
 
         const ctx = canvas.getContext('2d');
 
@@ -275,14 +251,10 @@
 
         ctx.drawImage(
             video,
-            sx,
-            sy,
-            sw,
-            sh,
             0,
             0,
-            canvas.width,
-            canvas.height
+            videoWidth,
+            videoHeight
         );
     }
 
@@ -399,7 +371,7 @@
             return;
         }
 
-        captureVisibleArea();
+        captureFrame();
 
         try {
             capturedFile =
