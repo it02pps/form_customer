@@ -369,7 +369,8 @@
             $(document).on('click', '#nextBadanUsaha', function() {
                 const npwp = $('#npwp').val();
                 if(statusBadanUsaha == 'customer-baru/') {
-                    window.location.href = '/form-customer/scan-npwp/badan-usaha/' + statusBadanUsaha;
+                    window.location.href = '/form-customer/badan-usaha/' + statusBadanUsaha;
+                    // window.location.href = '/form-customer/scan-npwp/badan-usaha/' + statusBadanUsaha;
                 } else {
                     if(npwp == null || npwp == '') {
                         Swal.fire({
@@ -394,7 +395,8 @@
                                 Swal.close();
                                 if(res.status == true) {
                                     if(res.dataa) {
-                                        window.location.href = '/form-customer/scan-npwp/badan-usaha/' + statusBadanUsaha + statusBadanUsaha2 + res.datID;
+                                        window.location.href = '/form-customer/badan-usaha/' + statusBadanUsaha + statusBadanUsaha2 + res.datID;
+                                        // window.location.href = '/form-customer/scan-npwp/badan-usaha/' + statusBadanUsaha + statusBadanUsaha2 + res.datID;
                                     } else {
                                         Swal.fire({
                                             title: 'Gagal!',

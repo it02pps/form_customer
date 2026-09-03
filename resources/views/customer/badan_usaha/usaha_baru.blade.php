@@ -90,7 +90,8 @@
             </div>
             <hr>
             <div class="py-2">
-                <h1 class="text-center text-md-start">Hasil Scan</h1>
+                <h1 class="text-center text-md-start">Identitas Perusahaan</h1>
+                {{-- <h1 class="text-center text-md-start">Hasil Scan</h1> --}}
                 <div class="d-flex flex-column gap-3">
                     <div class="row g-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -193,9 +194,9 @@
                         </div>
                     </div>
                 </div>
-                <hr>
-                <h1 class="text-center text-md-start">Identitas Perusahaan</h1>
-                <div class="d-flex flex-column gap-3">
+                {{-- <hr> --}}
+                {{-- <h1 class="text-center text-md-start">Identitas Perusahaan</h1> --}}
+                <div class="d-flex flex-column gap-3 mt-3">
                     <div class="row g-3">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">

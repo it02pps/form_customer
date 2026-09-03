@@ -180,6 +180,7 @@
                                     onchange="previewFileKtp(this);"
                                     accept=".jpg, .png, .pdf, .jpeg"
                                     @if (!$ocrPhoto) required @endif
+                                    hidden
                                 >
                             </div>
                             <div class="form-group" id="preview_ktp">
