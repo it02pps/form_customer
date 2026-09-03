@@ -50,8 +50,31 @@ class OCRController extends Controller
 
             $file = $request->file("photo");
 
+            $response = Http::asMultipart()
+                ->withHeaders([
+                    'Accept' => 'application/json',
+                    'API-KEY' => config('services.bos_api.api_key'),
+                ])->attach(
+                    'photo',
+                    fopen($file->getRealPath(), 'r'),
+                    $file->getClientOriginalName(),
+                    [
+                        'Content-Type' => $file->getMimeType()
+                    ]
+                )->post('https://bos-api.com/api/ocr/ktp');
+
+            $result = $response->json();
+
+            if(!($result['success'] ?? false)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $result['message'] ?? "OCR gagal"
+                ], 422);
+            }
+
             $extension = $file->getClientOriginalExtension();
             $fileName = Str::uuid() . '.' . $extension;
+            
             $tempPath = $file->storeAs(
                 'temp/ktp',
                 $fileName
@@ -65,25 +88,6 @@ class OCRController extends Controller
                 throw new \Exception(
                     'File KTP gagal disimpan.'
                 );
-            }
-
-            $response = Http::asMultipart()
-                ->withHeaders([
-                    'Accept' => 'application/json',
-                    'API-KEY' => config('services.bos_api.api_key'),
-                ])->attach(
-                    'photo',
-                    file_get_contents($storedPath),
-                    $file->getClientOriginalName()
-                )->post('https://bos-api.com/api/ocr/ktp');
-
-            $result = $response->json();
-
-            if(!($result['success'] ?? false)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $result['message'] ?? "OCR gagal"
-                ], 422);
             }
 
             $data = $result['document'] ?? [];

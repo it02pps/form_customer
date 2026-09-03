@@ -9,7 +9,7 @@
     .camera-container {
         width: 100%;
         max-width: 600px;
-        aspect-ratio: 3 / 2;
+        aspect-ratio: 1.586 / 1;
         overflow: hidden;
         border-radius: 12px;
         background: #000;
@@ -142,24 +142,21 @@
 
     const btnCamera = document.getElementById('btnCamera');
     const btnUpload = document.getElementById('btnUpload');
-
     const btnCapture = document.getElementById('btnCapture');
     const btnRetake = document.getElementById('btnRetake');
     const btnUsePhoto = document.getElementById('btnUsePhoto');
 
-    const npwpFile = document.getElementById('npwpFile');
+    const ktpFile = document.getElementById('ktpFile');
 
     const scanOptions = document.getElementById('scanOptions');
     const cameraContainer = document.getElementById('cameraContainer');
-    const uploadContainer = document.getElementById('uploadContainer');
-
     const captureActions = document.getElementById('captureActions');
     const previewActions = document.getElementById('previewActions');
-
     const loadingOCR = document.getElementById('loadingOCR');
 
     let cameraStream = null;
     let capturedFile = null;
+    let captureSource = null;
 
     async function startCamera() {
         try {
@@ -186,9 +183,8 @@
 
             const track = cameraStream.getVideoTracks()[0];
 
-            console.log("Camera settings : ", track.getSettings());
-
-            const capabilities = track.getCapabilities?.();
+            const capabilities =
+                track.getCapabilities?.();
 
             if (
                 capabilities?.focusMode &&
@@ -209,38 +205,46 @@
                     );
                 }
             }
+
         } catch (error) {
             console.error(error);
 
-            alert('Tidak dapat mengakses kamera.');
+            alert(
+                'Tidak dapat mengakses kamera.'
+            );
 
-            cameraContainer.style.display = 'none';
-            captureActions.style.display = 'none';
-            scanOptions.style.display = 'flex';
+            resetToOptions();
         }
     }
 
     function stopCamera() {
-        if(!cameraStream) {
+        if (!cameraStream) {
             return;
         }
 
-        cameraStream.getTracks().forEach(track => {
-            track.stop();
-        });
+        cameraStream
+            .getTracks()
+            .forEach(track => {
+                track.stop();
+            });
 
         cameraStream = null;
         video.srcObject = null;
     }
 
-    function captureVisibleArea() {
+    function captureCameraToCanvas() {
         const videoWidth = video.videoWidth;
         const videoHeight = video.videoHeight;
 
-        const containerWidth = cameraContainer.clientWidth;
-        const containerHeight = cameraContainer.clientHeight;
+        const containerWidth =
+            cameraContainer.clientWidth;
 
-        const videoRatio = videoWidth / videoHeight;
+        const containerHeight =
+            cameraContainer.clientHeight;
+
+        const videoRatio =
+            videoWidth / videoHeight;
+
         const containerRatio =
             containerWidth / containerHeight;
 
@@ -249,22 +253,37 @@
         let sw = videoWidth;
         let sh = videoHeight;
 
+        /*
+         * Karena preview memakai object-fit: cover,
+         * canvas dibuat sesuai area yang terlihat user.
+         */
         if (videoRatio > containerRatio) {
-            // Video lebih lebar daripada container.
-            // Crop sisi kiri dan kanan.
-            sw = videoHeight * containerRatio;
-            sx = (videoWidth - sw) / 2;
+
+            sw =
+                videoHeight *
+                containerRatio;
+
+            sx =
+                (videoWidth - sw) / 2;
+
         } else {
-            // Video lebih tinggi daripada container.
-            // Crop bagian atas dan bawah.
-            sh = videoWidth / containerRatio;
-            sy = (videoHeight - sh) / 2;
+
+            sh =
+                videoWidth /
+                containerRatio;
+
+            sy =
+                (videoHeight - sh) / 2;
         }
 
-        canvas.width = Math.round(sw);
-        canvas.height = Math.round(sh);
+        canvas.width =
+            Math.round(sw);
 
-        const ctx = canvas.getContext('2d');
+        canvas.height =
+            Math.round(sh);
+
+        const ctx =
+            canvas.getContext('2d');
 
         ctx.clearRect(
             0,
@@ -275,10 +294,12 @@
 
         ctx.drawImage(
             video,
+
             sx,
             sy,
             sw,
             sh,
+
             0,
             0,
             canvas.width,
@@ -286,176 +307,470 @@
         );
     }
 
-    function canvasToFile() {
-        return new Promise((resolve, reject) => {
-            canvas.toBlob(
-                blob => {
-                    if (!blob) {
-                        reject(
-                            new Error(
-                                'Gagal membuat file hasil foto.'
-                            )
+    function loadUploadToCanvas(file) {
+        return new Promise(
+            (resolve, reject) => {
+
+                const image = new Image();
+
+                const objectUrl =
+                    URL.createObjectURL(file);
+
+                image.onload = () => {
+                    try {
+                        const originalWidth =
+                            image.naturalWidth;
+
+                        const originalHeight =
+                            image.naturalHeight;
+
+                        /*
+                         * Batasi gambar terlalu besar.
+                         *
+                         * 2500 px sudah sangat cukup
+                         * untuk OCR KTP dan mengurangi
+                         * payload ke API.
+                         */
+
+                        const maxDimension = 2500;
+
+                        let targetWidth =
+                            originalWidth;
+
+                        let targetHeight =
+                            originalHeight;
+
+                        if (
+                            originalWidth >
+                            maxDimension ||
+                            originalHeight >
+                            maxDimension
+                        ) {
+                            const scale =
+                                Math.min(
+                                    maxDimension /
+                                        originalWidth,
+
+                                    maxDimension /
+                                        originalHeight
+                                );
+
+                            targetWidth =
+                                Math.round(
+                                    originalWidth *
+                                    scale
+                                );
+
+                            targetHeight =
+                                Math.round(
+                                    originalHeight *
+                                    scale
+                                );
+                        }
+
+                        canvas.width =
+                            targetWidth;
+
+                        canvas.height =
+                            targetHeight;
+
+                        const ctx =
+                            canvas.getContext('2d');
+
+                        ctx.clearRect(
+                            0,
+                            0,
+                            canvas.width,
+                            canvas.height
                         );
 
-                        return;
-                    }
+                        ctx.drawImage(
+                            image,
+                            0,
+                            0,
+                            canvas.width,
+                            canvas.height
+                        );
 
-                    const file = new File(
-                        [blob],
-                        'ktp.jpg',
-                        {
-                            type: 'image/jpeg',
-                            lastModified: Date.now()
-                        }
+                        URL.revokeObjectURL(
+                            objectUrl
+                        );
+
+                        resolve();
+
+                    } catch (error) {
+
+                        URL.revokeObjectURL(
+                            objectUrl
+                        );
+
+                        reject(error);
+                    }
+                };
+
+
+                image.onerror = () => {
+
+                    URL.revokeObjectURL(
+                        objectUrl
                     );
 
-                    resolve(file);
-                },
-                'image/jpeg',
-                0.95
-            );
-        });
+                    reject(
+                        new Error(
+                            'Gambar tidak dapat dibaca.'
+                        )
+                    );
+                };
+
+
+                image.src = objectUrl;
+            }
+        );
+    }
+
+    function canvasToFile() {
+        return new Promise(
+            (resolve, reject) => {
+
+                canvas.toBlob(
+                    blob => {
+
+                        if (!blob) {
+                            reject(
+                                new Error(
+                                    'Gagal membuat file KTP.'
+                                )
+                            );
+
+                            return;
+                        }
+
+                        const file =
+                            new File(
+                                [blob],
+                                'ktp.jpg',
+                                {
+                                    type:
+                                        'image/jpeg',
+
+                                    lastModified:
+                                        Date.now()
+                                }
+                            );
+
+                        resolve(file);
+                    },
+
+                    'image/jpeg',
+
+                    0.95
+                );
+            }
+        );
+    }
+
+    function showPreview() {
+        stopCamera();
+
+        cameraContainer.style.display =
+            'none';
+
+        captureActions.style.display =
+            'none';
+
+        scanOptions.style.display =
+            'none';
+
+        canvas.classList.remove(
+            'd-none'
+        );
+
+        previewActions.style.setProperty(
+            'display',
+            'flex',
+            'important'
+        );
+    }
+
+
+    function hidePreview() {
+        canvas.classList.add(
+            'd-none'
+        );
+
+        previewActions.style.setProperty(
+            'display',
+            'none',
+            'important'
+        );
+    }
+
+    function resetToOptions() {
+        stopCamera();
+
+        capturedFile = null;
+        captureSource = null;
+
+        hidePreview();
+
+        cameraContainer.style.display =
+            'none';
+
+        captureActions.style.display =
+            'none';
+
+        scanOptions.style.display =
+            'flex';
     }
 
     async function sendToOCR(file) {
-        if(!file) {
-            alert("File KTP belum dipilih.");
+        if (!file) {
+            alert(
+                'File KTP belum tersedia.'
+            );
+
             return;
         }
 
-        const formData = new FormData();
+        const formData =
+            new FormData();
 
         formData.append(
             'photo',
             file,
-            file.name ?? 'ktp.jpg'
+            'ktp.jpg'
         );
 
-        const menuValue = @json($menu);
-        const statusValue = @json($status);
-        const status2Value = @json($status2);
-        const paramValue = @json($param);
+        const menuValue =
+            @json($menu);
 
-        formData.append("menu", menuValue);
-        formData.append("status", statusValue);
+        const statusValue =
+            @json($status);
 
-        if(status2Value) {
-            formData.append("status2", status2Value);
+        const status2Value =
+            @json($status2);
+
+        const paramValue =
+            @json($param);
+
+
+        formData.append(
+            'menu',
+            menuValue
+        );
+
+        formData.append(
+            'status',
+            statusValue
+        );
+
+
+        if (status2Value) {
+            formData.append(
+                'status2',
+                status2Value
+            );
         }
 
-        if(paramValue) {
-            formData.append("param", paramValue);
+
+        if (paramValue) {
+            formData.append(
+                'param',
+                paramValue
+            );
         }
+
 
         try {
-            loadingOCR.style.display = 'block';
+            loadingOCR.style.display =
+                'block';
 
-            btnCapture.disabled = true;
-            btnRetake.disabled = true;
-            btnUsePhoto.disabled = true;
-            btnUpload.disabled = true;
+            setButtonsDisabled(true);
 
-            const response = await fetch(
-                "{{ route('ocr.ktp') }}",
+
+            console.log(
+                'Mengirim file OCR:',
                 {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector(
-                            'meta[name="csrf-token"]'
-                        ).content,
-                        'Accept': 'application/json'
-                    },
-                    body: formData
+                    source:
+                        captureSource,
+
+                    name:
+                        file.name,
+
+                    type:
+                        file.type,
+
+                    size:
+                        file.size,
+
+                    width:
+                        canvas.width,
+
+                    height:
+                        canvas.height
                 }
             );
 
-            const result = await response.json();
 
-            if (!response.ok || !result.success) {
+            const response =
+                await fetch(
+                    "{{ route('ocr.ktp') }}",
+                    {
+                        method: 'POST',
+
+                        headers: {
+                            'X-CSRF-TOKEN':
+                                document
+                                    .querySelector(
+                                        'meta[name="csrf-token"]'
+                                    )
+                                    .content,
+
+                            'Accept':
+                                'application/json'
+                        },
+
+                        body:
+                            formData
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (
+                !response.ok ||
+                !result.success
+            ) {
                 throw new Error(
-                    result.message ?? 'OCR gagal.'
+                    result.message ??
+                    'OCR gagal.'
                 );
             }
 
-            window.location.href = result.redirect_url;
-        } catch (error) {
-            console.error('OCR error:', error);
-            alert(error.message);
-        } finally {
-            loadingOCR.style.display = 'none';
 
-            btnCapture.disabled = false;
-            btnRetake.disabled = false;
-            btnUsePhoto.disabled = false;
-            btnUpload.disabled = false;
+            window.location.href =
+                result.redirect_url;
+
+
+        } catch (error) {
+
+            console.error(
+                'OCR error:',
+                error
+            );
+
+            alert(
+                error.message
+            );
+
+        } finally {
+
+            loadingOCR.style.display =
+                'none';
+
+            setButtonsDisabled(false);
         }
     }
 
-    btnCapture.addEventListener('click', async () => {
-        if (!video.videoWidth || !video.videoHeight) {
-            alert(
-                'Kamera belum siap. Silakan tunggu sebentar.'
-            );
-            return;
-        }
 
-        captureVisibleArea();
+    function setButtonsDisabled(disabled) {
+        btnCamera.disabled =
+            disabled;
 
-        try {
-            capturedFile =
-                await canvasToFile();
+        btnUpload.disabled =
+            disabled;
 
-            console.log({
-                width: canvas.width,
-                height: canvas.height,
-                size: capturedFile.size
-            });
+        btnCapture.disabled =
+            disabled;
 
-            // Freeze hasil foto.
-            stopCamera();
+        btnRetake.disabled =
+            disabled;
 
-            // Hilangkan live camera.
-            cameraContainer.style.display =
-                'none';
+        btnUsePhoto.disabled =
+            disabled;
+    }
 
-            captureActions.style.display =
-                'none';
-
-            // Tampilkan canvas preview.
-            canvas.classList.remove(
-                'd-none'
-            );
-
-            // Tampilkan tombol Foto Ulang & Scan Foto.
-            previewActions.style.setProperty(
-                'display',
-                'flex',
-                'important'
-            );
-
-        } catch (error) {
-            console.error(error);
-
-            alert(
-                'Gagal mengambil foto.'
-            );
-        }
-    });
-
-    btnRetake.addEventListener(
+    btnCapture.addEventListener(
         'click',
         async () => {
+
+            if (
+                !video.videoWidth ||
+                !video.videoHeight
+            ) {
+                alert(
+                    'Kamera belum siap. Tunggu sebentar.'
+                );
+
+                return;
+            }
+
+
+            try {
+                /*
+                 * Freeze frame kamera
+                 * ke canvas.
+                 */
+                captureCameraToCanvas();
+
+
+                /*
+                 * Buat JPEG dari canvas.
+                 */
+                capturedFile =
+                    await canvasToFile();
+
+
+                console.log(
+                    'Camera captured:',
+                    {
+                        width:
+                            canvas.width,
+
+                        height:
+                            canvas.height,
+
+                        size:
+                            capturedFile.size
+                    }
+                );
+
+
+                /*
+                 * Sekarang baru camera
+                 * dimatikan dan preview
+                 * ditampilkan.
+                 */
+                showPreview();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    'Gagal mengambil foto.'
+                );
+            }
+        }
+    );
+
+    btnCamera.addEventListener(
+        'click',
+        async () => {
+
             capturedFile = null;
 
-            canvas.classList.add(
-                'd-none'
-            );
+            captureSource =
+                'camera';
 
-            previewActions.style.setProperty(
-                'display',
-                'none',
-                'important'
-            );
+            hidePreview();
+
+            scanOptions.style.display =
+                'none';
 
             cameraContainer.style.display =
                 'block';
@@ -470,83 +785,203 @@
     btnUsePhoto.addEventListener(
         'click',
         async () => {
+
             if (!capturedFile) {
                 alert(
-                    'Belum ada foto yang diambil.'
+                    'Belum ada foto yang tersedia.'
                 );
 
                 return;
             }
 
-            // Yang dikirim ke OCR adalah
-            // file hasil canvas preview,
-            // bukan live camera.
+
+            /*
+             * SELALU file JPEG hasil
+             * canvas yang dikirim.
+             *
+             * Baik camera maupun upload.
+             */
             await sendToOCR(
                 capturedFile
             );
         }
     );
 
-    ktpFile.addEventListener('change', async () => {
-        const file = ktpFile.files[0];
+    btnUpload.addEventListener(
+        'click',
+        () => {
 
-        if(!file) {
-            return;
+            stopCamera();
+
+            capturedFile = null;
+
+            captureSource =
+                'upload';
+
+            hidePreview();
+
+            cameraContainer.style.display =
+                'none';
+
+            captureActions.style.display =
+                'none';
+
+            scanOptions.style.display =
+                'none';
+
+            ktpFile.value =
+                '';
+
+            ktpFile.click();
         }
+    );
 
-        await sendToOCR(file);
-    });
 
-    btnUpload.addEventListener('click', async () => {
-        stopCamera();
+    ktpFile.addEventListener(
+        'change',
+        async () => {
 
-        capturedFile = null;
+            const file =
+                ktpFile.files[0];
 
-        canvas.classList.add(
-            'd-none'
-        );
+            if (!file) {
+                resetToOptions();
+                return;
+            }
 
-        previewActions.style.setProperty(
-            'display',
-            'none',
-            'important'
-        );
 
-        captureActions.style.display =
-            'none';
+            try {
 
-        cameraContainer.style.display =
-            'none';
+                console.log(
+                    'Original upload:',
+                    {
+                        name:
+                            file.name,
 
-        scanOptions.style.display =
-            'none';
+                        type:
+                            file.type,
 
-        uploadContainer.style.display =
-            'block';
+                        size:
+                            file.size
+                    }
+                );
 
-        ktpFile.value = '';
 
-        ktpFile.click();
-    });
+                /*
+                 * File upload dibaca
+                 * lalu digambar ulang
+                 * ke canvas.
+                 */
+                await loadUploadToCanvas(
+                    file
+                );
 
-    btnCamera.addEventListener('click', async () => {
-        capturedFile = null;
 
-        canvas.classList.add('d-none');
+                /*
+                 * Canvas menjadi JPEG.
+                 */
+                capturedFile =
+                    await canvasToFile();
 
-        previewActions.style.setProperty(
-            'display',
-            'none',
-            'important'
-        );
 
-        scanOptions.style.display = 'none';
-        uploadContainer.style.display = 'none';
+                console.log(
+                    'Normalized upload:',
+                    {
+                        width:
+                            canvas.width,
 
-        cameraContainer.style.display = 'block';
-        captureActions.style.display = 'block';
+                        height:
+                            canvas.height,
 
-        await startCamera();
-    });
+                        size:
+                            capturedFile.size,
+
+                        type:
+                            capturedFile.type
+                    }
+                );
+
+
+                /*
+                 * Jangan langsung OCR.
+                 *
+                 * Tampilkan preview dulu,
+                 * sama seperti camera.
+                 */
+                showPreview();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    error.message
+                );
+
+                resetToOptions();
+            }
+        }
+    );
+
+    btnRetake.addEventListener(
+        'click',
+        async () => {
+
+            capturedFile =
+                null;
+
+
+            hidePreview();
+
+
+            /*
+             * Kalau asalnya kamera,
+             * buka kamera lagi.
+             */
+            if (
+                captureSource ===
+                'camera'
+            ) {
+                cameraContainer.style.display =
+                    'block';
+
+                captureActions.style.display =
+                    'block';
+
+                await startCamera();
+
+                return;
+            }
+
+
+            /*
+             * Kalau asalnya upload,
+             * buka file picker lagi.
+             */
+            if (
+                captureSource ===
+                'upload'
+            ) {
+                ktpFile.value =
+                    '';
+
+                ktpFile.click();
+
+                return;
+            }
+
+
+            resetToOptions();
+        }
+    );
+    
+    window.addEventListener(
+        'beforeunload',
+        () => {
+            stopCamera();
+        }
+    );
+
 </script>
 @endsection
