@@ -46,8 +46,10 @@ class FormCustomerController extends Controller
     public function view_badan_usaha($menu, $status = NULL, $status2 = NULL, $param = NULL)
     {
         $getOCRData = session('ocrData');
+        $scan = session("identity_scan");
         $ocrData = $getOCRData['data'] ?? [];
         $ocrPhoto = $getOCRData['photo'] ?? null;
+
         if ($menu == 'badan-usaha') {
             if ($param) {
                 $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas', 'cabang')->where('bentuk_usaha', 'badan_usaha')->where('nomor_npwp', Crypt::decryptString($param))->latest()->first();
@@ -83,6 +85,22 @@ class FormCustomerController extends Controller
                 return view('customer.badan_usaha.usaha_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha', 'ocrData', 'ocrPhoto'));
             }
         } else {
+            if (
+                !$scan ||
+                !$scan['verified'] ||
+                $scan['menu'] !== $menu ||
+                $scan['status'] !== $status ||
+                ($scan['status2'] ?? null) !== $status2 ||
+                ($scan['param'] ?? null) !== $param
+            ) {
+                return redirect()->route('form_customer.scan_ktp', [
+                    'menu' => $menu,
+                    'status' => $status,
+                    'status2' => $status2,
+                    'param' => $param,
+                ]);
+            }
+
             // dd($ocrData);
             if ($param) {
                 $param = Crypt::decryptString($param);

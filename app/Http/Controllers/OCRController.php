@@ -92,6 +92,14 @@ class OCRController extends Controller
 
             $data = $result['document'] ?? [];
 
+            session()->put('identity_scan', [
+                'verified' => true,
+                'menu' => $request->menu,
+                'status' => $request->status,
+                'status2' => $request->status2,
+                'param' => $request->param
+            ]);
+
             session()->put('ocrData', [
                 'photo' => $tempPath,
                 'data' => [
@@ -902,6 +910,14 @@ class OCRController extends Controller
                     ],
                 ]
             );
+
+            session()->put('identity_scan', [
+                'verified' => true,
+                'menu' => $request->menu,
+                'status' => $request->status,
+                'status2' => $request->status2,
+                'param' => $request->param
+            ]);
             
             session()->put('ocrData', [
                 'photo' => $tempPath,
