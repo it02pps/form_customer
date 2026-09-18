@@ -190,8 +190,9 @@
                                         <img
                                             src="{{ route('form_customer.ocr_photo', ['path' => 'ktp', 'filename' => basename($ocrPhoto)]) }}"
                                             class="img-fluid rounded"
-                                            style="max-height: 300px;"
+                                            {{-- style="max-height: 300px;" --}}
                                             alt="Preview KTP"
+                                            data-action="zoom"
                                         >
                                     </div>
                                 @else
