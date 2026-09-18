@@ -188,7 +188,7 @@
                                 @if($ocrPhoto)
                                     <div class="text-center">
                                         <img
-                                            src="{{ route('form_customer.ocr_photo', ['filename' => basename($ocrPhoto)]) }}"
+                                            src="{{ route('form_customer.ocr_photo', ['path' => 'ktp', 'filename' => basename($ocrPhoto)]) }}"
                                             class="img-fluid rounded"
                                             style="max-height: 300px;"
                                             alt="Preview KTP"

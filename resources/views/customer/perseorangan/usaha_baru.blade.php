@@ -25,7 +25,7 @@
                 >
             </div>
         </div>
-        <div class="d-flex flex-column gap-3">
+        <div class="d-flex flex-column  ap-3">
             <h1 class="text-center text-md-start m-0 p-0">Formulir Data Customer</h1>
             <h5 class="text-center text-md-start p-0">Silahkan isi data terkini anda, kemudian tanda tangan.</h5>
             <div
@@ -175,7 +175,7 @@
                                 @if($ocrPhoto)
                                     <div class="text-center">
                                         <img
-                                            src="{{ route('form_customer.ocr_photo', ['filename' => basename($ocrPhoto)]) }}"
+                                            src="{{ route('form_customer.ocr_photo', ['path' => 'ktp', 'filename' => basename($ocrPhoto)]) }}"
                                             class="img-fluid rounded"
                                             style="max-height: 300px;"
                                             alt="Preview KTP"
