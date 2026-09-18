@@ -229,19 +229,37 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12">
-                        <div class="form-group">
-                            <label for="">Alamat Group Perusahaan <span class="text-danger">*</span></label>
-                            <textarea
-                                name="alamat_group_lengkap"
-                                id="alamat_group_lengkap"
-                                class="form-control"
-                                rows="6"
-                                placeholder="Masukkan alamat group perusahaan"
-                                autocomplete="off"
-                                required
-                                readonly
-                            >{{ $data ? $data['alamat_group_lengkap'] : '' }}</textarea>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="">Alamat Group Perusahaan <span class="text-danger">*</span></label>
+                                <textarea
+                                    name="alamat_group_lengkap"
+                                    id="alamat_group_lengkap"
+                                    class="form-control"
+                                    rows="6"
+                                    placeholder="Masukkan alamat group perusahaan"
+                                    autocomplete="off"
+                                    required
+                                    readonly
+                                >{{ $data ? $data['alamat_group_lengkap'] : '' }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="">Kota/Kabupaten <span class="text-danger">*</span></label>
+                                <Input
+                                    type="text"
+                                    name="kota_kabupaten"
+                                    id="kota_kabupaten"
+                                    class="form-control"
+                                    placeholder="Masukan Kota/Kabupaten"
+                                    autocomplete="off"
+                                    required
+                                >
+                            </div>
                         </div>
                     </div>
                     <div class="row g-3">
