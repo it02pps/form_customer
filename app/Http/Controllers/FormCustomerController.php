@@ -48,6 +48,9 @@ class FormCustomerController extends Controller
         $getOCRData = session('ocrData');
         $scan = session("identity_scan");
 
+        $ocrData = [];
+        $ocrPhoto = null;
+
         if ($menu == 'badan-usaha') {
             if ($param) {
                 $data = IdentitasPerusahaan::with('informasi_bank', 'data_identitas', 'cabang')->where('bentuk_usaha', 'badan_usaha')->where('nomor_npwp', Crypt::decryptString($param))->latest()->first();
@@ -101,9 +104,6 @@ class FormCustomerController extends Controller
                     'param' => $param,
                 ]);
             }
-
-            $ocrData = [];
-            $ocrPhoto = null;
 
             if($flag === 'scan') {
                 $ocrData = $getOCRData['data'] ?? [];
