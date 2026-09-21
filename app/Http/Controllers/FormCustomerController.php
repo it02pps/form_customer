@@ -47,8 +47,6 @@ class FormCustomerController extends Controller
     {
         $getOCRData = session('ocrData');
         $scan = session("identity_scan");
-        $ocrData = $getOCRData['data'] ?? [];
-        $ocrPhoto = $getOCRData['photo'] ?? null;
 
         if ($menu == 'badan-usaha') {
             if ($param) {
@@ -85,11 +83,14 @@ class FormCustomerController extends Controller
                 return view('customer.badan_usaha.usaha_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha', 'ocrData', 'ocrPhoto'));
             }
         } else {
-            if (
+            $flag = $scan['flag'] ?? null;
+
+            if(
                 !$scan ||
-                !$scan['verified'] ||
-                $scan['menu'] !== $menu ||
-                $scan['status'] !== $status ||
+                !in_array($flag, ['scan', 'skip'], true) ||
+                ($flag === 'scan' && !($scan['verified'] ?? false)) ||
+                ($scan['menu'] ?? null) !== $menu ||
+                ($scan['status'] ?? null) !== $status ||
                 ($scan['status2'] ?? null) !== $status2 ||
                 ($scan['param'] ?? null) !== $param
             ) {
@@ -99,6 +100,14 @@ class FormCustomerController extends Controller
                     'status2' => $status2,
                     'param' => $param,
                 ]);
+            }
+
+            $ocrData = [];
+            $ocrPhoto = null;
+
+            if($flag === 'scan') {
+                $ocrData = $getOCRData['data'] ?? [];
+                $ocrPhoto = $getOCRData['photo'] ?? null;
             }
 
             // dd($ocrData);
@@ -131,13 +140,13 @@ class FormCustomerController extends Controller
             // dd($data);
 
             if ($status == 'customer-baru') {
-                return view('customer.perseorangan.cust_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha', 'ocrData', 'ocrPhoto'));
+                return view('customer.perseorangan.cust_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha', 'ocrData', 'ocrPhoto', 'flag'));
             }
 
             if ($status2 == 'pengkinian-data') {
-                return view('customer.perseorangan.cust_lama', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha', 'ocrData', 'ocrPhoto'));
+                return view('customer.perseorangan.cust_lama', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha', 'ocrData', 'ocrPhoto', 'flag'));
             } else {
-                return view('customer.perseorangan.usaha_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha', 'ocrData', 'ocrPhoto'));
+                return view('customer.perseorangan.usaha_baru', compact('data', 'url', 'enkripsi', 'menu', 'sales', 'bidang_usaha', 'ocrData', 'ocrPhoto', 'flag'));
             }
         }
     }

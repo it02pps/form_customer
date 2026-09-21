@@ -41,6 +41,16 @@
                 </a>
                 <h1 class="m-0">Scan Identitas</h1>
                 <p class="mb-0 text-muted">Silahkan siapkan KTP</p>
+                <div class="position-absolute end-0" style="top: 20px;">
+                    <button
+                        type="button"
+                        id="btnSkipScanning"
+                        class="btn btn-link"
+                    >
+                        {{-- <i class="fa-solid fa-forward"></i> --}}
+                        Lewati jika menggunakan NPWP Perseorangan
+                    </button>
+                </div>
             </div>
         </div>
         <div class="d-flex flex-column justify-content-center align-items-center w-100">
@@ -145,6 +155,7 @@
     const btnCapture = document.getElementById('btnCapture');
     const btnRetake = document.getElementById('btnRetake');
     const btnUsePhoto = document.getElementById('btnUsePhoto');
+    const btnSkipScanning = document.getElementById("btnSkipScanning");
 
     const ktpFile = document.getElementById('ktpFile');
 
@@ -523,8 +534,8 @@
             'flex';
     }
 
-    async function sendToOCR(file) {
-        if (!file) {
+    async function sendToOCR(file, flag = "scan") {
+        if (!file && flag === "scan") {
             alert(
                 'File KTP belum tersedia.'
             );
@@ -532,54 +543,29 @@
             return;
         }
 
-        const formData =
-            new FormData();
+        const formData = new FormData();
 
-        formData.append(
-            'photo',
-            file,
-            'ktp.jpg'
-        );
+        if (file) {
+            formData.append('photo', file, 'ktp.jpg');
+        }
 
-        const menuValue =
-            @json($menu);
+        formData.append('flag', flag);
 
-        const statusValue =
-            @json($status);
+        const menuValue = @json($menu);
+        const statusValue = @json($status);
+        const status2Value = @json($status2);
+        const paramValue = @json($param);
 
-        const status2Value =
-            @json($status2);
-
-        const paramValue =
-            @json($param);
-
-
-        formData.append(
-            'menu',
-            menuValue
-        );
-
-        formData.append(
-            'status',
-            statusValue
-        );
-
+        formData.append('menu', menuValue);
+        formData.append('status', statusValue);
 
         if (status2Value) {
-            formData.append(
-                'status2',
-                status2Value
-            );
+            formData.append('status2', status2Value);
         }
-
 
         if (paramValue) {
-            formData.append(
-                'param',
-                paramValue
-            );
+            formData.append('param', paramValue);
         }
-
 
         try {
             loadingOCR.style.display =
@@ -587,30 +573,28 @@
 
             setButtonsDisabled(true);
 
+            // console.log(
+            //     'Mengirim file OCR:',
+            //     {
+            //         source:
+            //             captureSource,
 
-            console.log(
-                'Mengirim file OCR:',
-                {
-                    source:
-                        captureSource,
+            //         name:
+            //             file.name,
 
-                    name:
-                        file.name,
+            //         type:
+            //             file.type,
 
-                    type:
-                        file.type,
+            //         size:
+            //             file.size,
 
-                    size:
-                        file.size,
+            //         width:
+            //             canvas.width,
 
-                    width:
-                        canvas.width,
-
-                    height:
-                        canvas.height
-                }
-            );
-
+            //         height:
+            //             canvas.height
+            //     }
+            // );
 
             const response =
                 await fetch(
@@ -635,10 +619,7 @@
                     }
                 );
 
-
-            const result =
-                await response.json();
-
+            const result = await response.json();
 
             if (
                 !response.ok ||
@@ -651,12 +632,10 @@
             }
 
 
-            window.location.href =
-                result.redirect_url;
+            window.location.href = result.redirect_url;
 
 
         } catch (error) {
-
             console.error(
                 'OCR error:',
                 error
@@ -665,9 +644,7 @@
             alert(
                 error.message
             );
-
         } finally {
-
             loadingOCR.style.display =
                 'none';
 
@@ -785,7 +762,6 @@
     btnUsePhoto.addEventListener(
         'click',
         async () => {
-
             if (!capturedFile) {
                 alert(
                     'Belum ada foto yang tersedia.'
@@ -806,6 +782,13 @@
             );
         }
     );
+
+    btnSkipScanning.addEventListener(
+        'click',
+        async () => {
+            await sendToOCR(null, 'skip')
+        }
+    )
 
     btnUpload.addEventListener(
         'click',

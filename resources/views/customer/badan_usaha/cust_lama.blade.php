@@ -167,8 +167,8 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12">
                             <div class="form-group">
+                        <div class="col-12">
                                 <label for="">Kota Sesuai NPWP <span class="text-danger">*</span></label>
                                 <input
                                     type="text"

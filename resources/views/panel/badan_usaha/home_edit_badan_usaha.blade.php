@@ -320,19 +320,19 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">Nama Finance <span class="text-danger">*</span></label>
-                                <input type="text" name="nama_finance" id="nama_finance" class="form-control" placeholder="Masukkan nama finance" autocomplete="off" value="{{ $data ? ($data['data_finance'] ? ($data['data_finance']['nama'] ?: '') : '') : '' }}">
+                                <input type="text" name="nama_finance" id="nama_finance" class="form-control" placeholder="Masukkan nama finance" autocomplete="off" value="{{ $data ? ($data['data_finance'] ? ($data['data_finance']['nama'] ?: '-') : '-') : '-' }}">
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="form-group">
                                 <label for="">No HP Finance <span class="text-danger">*</span></label>
-                                <input type="text" name="no_hp_finance" id="no_hp_finance" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" class="form-control" placeholder="Masukkkan no HP finance" maxlength="20" autocomplete="off" value="{{ $data ? ($data['data_finance'] ? ($data['data_finance']['no_hp'] ?: '') : '') : '' }}">
+                                <input type="text" name="no_hp_finance" id="no_hp_finance" oninput="this.value = this.value.replace(/[^0-9+]/g, '')" class="form-control" placeholder="Masukkkan no HP finance" maxlength="20" autocomplete="off" value="{{ $data ? ($data['data_finance'] ? ($data['data_finance']['no_hp'] ?: '-') : '-') : '-' }}">
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="">Email Finance <span class="text-danger">*</span></label>
-                        <input type="text" name="email_finance" id="email_finance" class="form-control" placeholder="Masukkan email finance" autocomplete="off" value="{{ $data ? ($data['data_finance'] ? ($data['data_finance']['email'] ?: '') : '') : '' }}">
+                        <input type="text" name="email_finance" id="email_finance" class="form-control" placeholder="Masukkan email finance" autocomplete="off" value="{{ $data ? ($data['data_finance'] ? ($data['data_finance']['email'] ?: '-') : '-') : '-' }}">
                     </div>
                 </div>
                 <hr>

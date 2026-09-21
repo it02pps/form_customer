@@ -149,7 +149,7 @@
                                     rows="6"
                                     cols="70"
                                     required
-                                >{{ (old('alamat', $ocrData['alamat'] ?? '')) . ' ' . (old('rt_rw', $ocrData['rt_rw'] ?? '')) . ' ' . (old('keluarahan', $ocrData['kelurahan'] ?? '')) . ' ' . (old('kecamatan', $ocrData['kecamatan'] ?? '')) . ' ' . (old('kota_Kabupaten', $ocrData['kota_kabupaten'] ?? '')) . ' ' . (old('provinsi', $ocrData['provinsi'] ?? '')) }}</textarea>
+                                >@if($flag === 'scan') {{ (old('alamat', $ocrData['alamat'] ?? '')) . ' ' . (old('rt_rw', $ocrData['rt_rw'] ?? '')) . ' ' . (old('keluarahan', $ocrData['kelurahan'] ?? '')) . ' ' . (old('kecamatan', $ocrData['kecamatan'] ?? '')) . ' ' . (old('kota_Kabupaten', $ocrData['kota_kabupaten'] ?? '')) . ' ' . (old('provinsi', $ocrData['provinsi'] ?? '')) }} @endif</textarea>
                             </div>
                         </div>
                     </div>
@@ -180,7 +180,7 @@
                                     onchange="previewFileKtp(this);"
                                     accept=".jpg, .png, .pdf, .jpeg"
                                     @if (!$ocrPhoto) required @endif
-                                    hidden
+                                    @if($flag === 'scan') hidden @endif
                                 >
                             </div>
                             <div class="form-group" id="preview_ktp">

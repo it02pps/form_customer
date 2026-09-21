@@ -20,8 +20,13 @@ class OCRController extends Controller
     public function ktp(Request $request) {
         try {
             $request->validate([
-                'photo' => [
+                'flag' => [
                     'required',
+                    'in:scan,skip'
+                ],
+                'photo' => [
+                    'nullable',
+                    'required_if:flag,scan',
                     'file',
                     'mimes:jpg,jpeg,png',
                     'max:5120'
@@ -47,7 +52,30 @@ class OCRController extends Controller
             $status = $request->status;
             $status2 = $request->status2;
             $param = $request->param;
+            $flag = $request->flag;
 
+            $url = route('form_customer.view_badan_usaha', [
+                'menu' => $menu,
+                'status' => $status,
+                'status2' => $status2,
+                'param' => $param,
+            ]);
+
+            if($request->flag === "skip") {
+                session()->put('identity_scan', [
+                    'verified' => true,
+                    'flag' => $flag,
+                    'menu' => $menu,
+                    'status' => $status,
+                    'status2' => $status2,
+                    'param' => $param
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'redirect_url' => $url,
+                ]);
+            }
             $file = $request->file("photo");
 
             $response = Http::asMultipart()
@@ -94,10 +122,11 @@ class OCRController extends Controller
 
             session()->put('identity_scan', [
                 'verified' => true,
-                'menu' => $request->menu,
-                'status' => $request->status,
-                'status2' => $request->status2,
-                'param' => $request->param
+                'flag' => $flag,
+                'menu' => $menu,
+                'status' => $status,
+                'status2' => $status2,
+                'param' => $param
             ]);
 
             session()->put('ocrData', [
@@ -121,13 +150,6 @@ class OCRController extends Controller
                     'confidence_score' => $result['confidence_score'] ?? null
                 ],
                 'created_at' => now()->timestamp
-            ]);
-            
-            $url = route('form_customer.view_badan_usaha', [
-                'menu' => $menu,
-                'status' => $status,
-                'status2' => $status2,
-                'param' => $param,
             ]);
 
             return response()->json([
