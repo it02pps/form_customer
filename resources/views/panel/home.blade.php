@@ -28,8 +28,8 @@
                 <h5 class="mb-0">Filter</h5>
                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
                     <div class="position-relative">
-                        <label for="">Customer Name</label>
-                        <input type="text" name="searchCustomerName" id="searchCustomerName" class="form-control" placeholder="Search Customer Name" autocomplete="off">
+                        <label for="">Group Name</label>
+                        <input type="text" name="searchGroupName" id="searchGroupName" class="form-control" placeholder="Search Group Name" autocomplete="off">
                         <span class="position-absolute top-50" style="right: 15px;"><i class="fa-solid fa-search text-secondary"></i></span>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                                 <th style="min-width: 50px; font-size: 14px;">CK</th>
                                 <th style="min-width: 80px; font-size: 14px;">No</th>
                                 <th style="min-width: 140px; font-size: 14px;">Bussiness Entity</th>
-                                <th style="min-width: 200px; font-size: 14px;" class="text-center align-middle">Customer Name</th>
+                                <th style="min-width: 200px; font-size: 14px;" class="text-center align-middle">Group Name</th>
                                 <th style="min-width: 200px; font-size: 14px;" class="text-center align-middle">Bill to Name</th>
                                 <th style="min-width: 250px; font-size: 14px;" class="text-center align-middle">Bill to Address</th>
                                 <th style="min-width: 180px; font-size: 14px;" class="text-center align-middle">Sales Person</th>
@@ -173,7 +173,7 @@
                     { data: 'checklist', name: 'checklist' },
                     { data: 'kode_customer', name: 'kode_customer' },
                     { data: 'bentuk_usaha', name: 'bentuk_usaha' },
-                    { data: 'nama_perusahaan', name: 'nama_perusahaan' },
+                    { data: 'nama_group_perusahaan', name: 'nama_group_perusahaan' },
                     { data: 'bill_to_name', name: 'bill_to_name' },
                     { data: 'bill_to_address', name: 'bill_to_address'},
                     { data: 'sales', name: 'nama_sales' },
@@ -215,7 +215,7 @@
             // END: Datatable
 
             // START: Search
-            $('#searchCustomerName').on('keyup', function() {
+            $('#searchGroupName').on('keyup', function() {
                 table.column(3).search(this.value).draw();
             });
 
