@@ -60,7 +60,7 @@
             }
 
             if ($kecamatan) {
-                $partsAlamat[] = 'KEC. ' . $kecamatan;
+                $partsAlamat[] = 'KECAMATAN ' . $kecamatan;
             }
 
             if ($kota) {
