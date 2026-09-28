@@ -29,7 +29,7 @@
         border-radius: 12px;
         display: block;
     }
-    
+
     .ktp-guide {
         position: absolute;
         inset: 4%;
@@ -37,6 +37,7 @@
         border-radius: 12px;
         pointer-events: none;
     }
+
     .ktp-guide-text {
         position: absolute;
         left: 50%;
@@ -55,6 +56,64 @@
         font-size: 13px;
         text-align: center;
     }
+
+    .scan-header {
+        position: relative;
+        min-height: 70px;
+    }
+
+    .scan-back {
+        position: absolute;
+        left: 0;
+        top: 20px;
+    }
+
+    .scan-skip {
+        position: absolute;
+        right: 0;
+        top: 12px;
+    }
+
+    .scan-title {
+        padding-left: 220px;
+        padding-right: 220px;
+    }
+
+    @media (max-width: 767.98px) {
+        .scan-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .scan-back {
+            position: absolute;
+            left: 0;
+            top: 12px;
+        }
+
+        .scan-title {
+            width: 100%;
+            padding-left: 40px;
+            padding-right: 40px;
+        }
+
+        .scan-title h1 {
+            font-size: 1.5rem;
+        }
+
+        .scan-skip {
+            position: static;
+            width: 100%;
+            text-align: center;
+        }
+
+        .scan-skip .btn {
+            padding: 4px 8px;
+            white-space: normal;
+        }
+    }
 </style>
 @endsection
 
@@ -62,19 +121,19 @@
 <div class="px-4 py-3 px-md-5">
     <div class="d-grid gap-4">
         <div class="header d-grid gap-3">
-            <div class="title text-center position-relative">
-                <a href="{{ route('form_customer.menu') }}" class="text-decoration-none position-absolute start-0" style="top: 20px;">
+            <div class="scan-header position-relative">
+                <a href="{{ route('form_customer.menu') }}" class="scan-back text-decoration-none">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
-                <h1 class="m-0">Scan Identitas</h1>
-                <p class="mb-0 text-muted">Silahkan siapkan KTP</p>
-                <div class="position-absolute end-0" style="top: 20px;">
-                    <button
-                        type="button"
-                        id="btnSkipScanning"
-                        class="btn btn-link"
-                    >
-                        {{-- <i class="fa-solid fa-forward"></i> --}}
+
+                <div class="scan-title text-center">
+                    <h1 class="m-0">Scan Identitas</h1>
+
+                    <p class="mb-0 text-muted">Silakan siapkan KTP</p>
+                </div>
+
+                <div class="scan-skip">
+                    <button type="button" id="btnSkipScanning" class="btn btn-link">
                         Lewati jika tidak menggunakan scan
                     </button>
                 </div>

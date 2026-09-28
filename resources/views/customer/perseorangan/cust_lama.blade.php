@@ -18,6 +18,23 @@
         $foto_penanggung = $data['data_identitas']['foto'] ?? null;
         $url_penanggung = url('/form-customer/getFiles/FileIDPersonCharge/' . $foto_penanggung);
         $ext_penanggung = File::extension($foto_penanggung);
+
+        $rtRw = '';
+
+        if ($flag === 'scan' && !empty($ocrData['rt_rw'])) {
+            $parts = preg_split('/[\/\-]/', $ocrData['rt_rw']);
+
+            $rt = trim($parts[0] ?? '');
+            $rw = trim($parts[1] ?? '');
+
+            if ($rt) {
+                $rtRw .= 'RT. ' . $rt;
+            }
+
+            if ($rw) {
+                $rtRw .= ' RW. ' . $rw;
+            }
+        }
     @endphp
 
     <div class="px-4 py-3 px-md-5">
@@ -151,7 +168,14 @@
                                     rows="6"
                                     cols="70"
                                     required
-                                >{{ (old('alamat', $ocrData['alamat'] ?? '')) . ' ' . (old('rt_rw', $ocrData['rt_rw'] ?? '')) . ' ' . (old('keluarahan', $ocrData['kelurahan'] ?? '')) . ' ' . (old('kecamatan', $ocrData['kecamatan'] ?? '')) . ' ' . (old('kota_Kabupaten', $ocrData['kota_kabupaten'] ?? '')) . ' ' . (old('provinsi', $ocrData['provinsi'] ?? '')) }}</textarea>
+                                >@if($flag === 'scan'){{ trim(
+                                    old('alamat', $ocrData['alamat'] ?? '') . ' ' .
+                                    $rtRw . ' ' .
+                                    old('kelurahan', $ocrData['kelurahan'] ?? '') . ' ' .
+                                    old('kecamatan', $ocrData['kecamatan'] ?? '') . ' ' .
+                                    old('kota_kabupaten', $ocrData['kota_kabupaten'] ?? '') . ' ' .
+                                    old('provinsi', $ocrData['provinsi'] ?? '')
+                                ) }}@endif</textarea>
                             </div>
                         </div>
                     </div>
