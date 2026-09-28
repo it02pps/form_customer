@@ -29,15 +29,14 @@
         border-radius: 12px;
         display: block;
     }
-
+    
     .ktp-guide {
         position: absolute;
-        inset: 10%;
+        inset: 4%;
         border: 3px solid rgba(255, 255, 255, .9);
         border-radius: 12px;
         pointer-events: none;
     }
-
     .ktp-guide-text {
         position: absolute;
         left: 50%;
@@ -282,183 +281,110 @@
         const videoWidth = video.videoWidth;
         const videoHeight = video.videoHeight;
 
-        // const containerWidth =
-        //     cameraContainer.clientWidth;
+        const containerWidth =
+            cameraContainer.clientWidth;
 
-        // const containerHeight =
-        //     cameraContainer.clientHeight;
+        const containerHeight =
+            cameraContainer.clientHeight;
 
-        // const videoRatio =
-        //     videoWidth / videoHeight;
+        if (
+            !videoWidth ||
+            !videoHeight ||
+            !containerWidth ||
+            !containerHeight
+        ) {
+            throw new Error('Kamera belum siap.');
+        }
 
-        // const containerRatio =
-        //     containerWidth / containerHeight;
+        const videoRatio =
+            videoWidth / videoHeight;
 
-        // let sx = 0;
-        // let sy = 0;
-        // let sw = videoWidth;
-        // let sh = videoHeight;
+        const containerRatio =
+            containerWidth / containerHeight;
+
+        let sx = 0;
+        let sy = 0;
+        let sw = videoWidth;
+        let sh = videoHeight;
 
         /*
-         * Karena preview memakai object-fit: cover,
-         * canvas dibuat sesuai area yang terlihat user.
-         */
-        // if (videoRatio > containerRatio) {
+        * Hitung area source yang sedang terlihat
+        * pada preview object-fit: cover.
+        */
+        if (videoRatio > containerRatio) {
+            sw =
+                videoHeight *
+                containerRatio;
 
-        //     sw =
-        //         videoHeight *
-        //         containerRatio;
+            sx =
+                (videoWidth - sw) / 2;
+        } else {
+            sh =
+                videoWidth /
+                containerRatio;
 
-        //     sx =
-        //         (videoWidth - sw) / 2;
-
-        // } else {
-
-        //     sh =
-        //         videoWidth /
-        //         containerRatio;
-
-        //     sy =
-        //         (videoHeight - sh) / 2;
-        // }
-
-        // canvas.width =
-        //     Math.round(sw);
-
-        // canvas.height =
-        //     Math.round(sh);
-
-        if(!videoWidth || !videoHeight) {
-            throw new Error("Kamera belum siap.");
-        }
-        
-        canvas.width = videoWidth;
-        canvas.height = videoHeight;
-
-        const ctx = canvas.getContext('2d');
-
-        if(!ctx) {
-            throw new Error("Canvas tidak tersedia.");
+            sy =
+                (videoHeight - sh) / 2;
         }
 
-        ctx.clearRect(
+        /*
+        * Tambahkan sedikit margin di luar
+        * area preview agar sisi KTP tidak
+        * terlalu mudah terpotong.
+        */
+        const marginX = sw * 0.05;
+        const marginY = sh * 0.05;
+
+        sx = Math.max(
+            0,
+            sx - marginX
+        );
+
+        sy = Math.max(
+            0,
+            sy - marginY
+        );
+
+        sw = Math.min(
+            videoWidth - sx,
+            sw + (marginX * 2)
+        );
+
+        sh = Math.min(
+            videoHeight - sy,
+            sh + (marginY * 2)
+        );
+
+        canvas.width =
+            Math.round(sw);
+
+        canvas.height =
+            Math.round(sh);
+
+        const ctx =
+            canvas.getContext('2d');
+
+        if (!ctx) {
+            throw new Error(
+                'Canvas tidak tersedia.'
+            );
+        }
+
+        ctx.drawImage(
+            video,
+
+            // Source
+            sx,
+            sy,
+            sw,
+            sh,
+
+            // Destination
             0,
             0,
             canvas.width,
             canvas.height
         );
-
-        ctx.drawImage(
-            video,
-            0,
-            0,
-            videoWidth,
-            videoHeight
-        );
-
-        // ctx.drawImage(
-        //     video,
-
-        //     sx,
-        //     sy,
-        //     sw,
-        //     sh,
-
-        //     0,
-        //     0,
-        //     canvas.width,
-        //     canvas.height
-        // );
-
-        // ctx.drawImage(
-        //     video,
-        //     0,
-        //     0,
-        //     videoWidth,
-        //     videoHeight
-        // );
-
-        // const videoRect = video.getBoundingClientRect();
-        // const guideRect = ktpGuide.getBoundingClientRect();
-
-        // const videoAspect = videoWidth / videoHeight;
-        // const elementAspect =
-        //     videoRect.width / videoRect.height;
-
-        // let renderedWidth;
-        // let renderedHeight;
-        // let offsetX = 0;
-        // let offsetY = 0;
-
-        // Hitung ukuran video sebenarnya di dalam
-        // element ketika object-fit: contain
-        // if (videoAspect > elementAspect) {
-        //     renderedWidth = videoRect.width;
-        //     renderedHeight =
-        //         renderedWidth / videoAspect;
-
-        //     offsetY =
-        //         (videoRect.height - renderedHeight) / 2;
-        // } else {
-        //     renderedHeight = videoRect.height;
-        //     renderedWidth =
-        //         renderedHeight * videoAspect;
-
-        //     offsetX =
-        //         (videoRect.width - renderedWidth) / 2;
-        // }
-
-        // const scaleX =
-        //     videoWidth / renderedWidth;
-
-        // const scaleY =
-        //     videoHeight / renderedHeight;
-
-        // const guideX =
-        //     guideRect.left -
-        //     videoRect.left -
-        //     offsetX;
-
-        // const guideY =
-        //     guideRect.top -
-        //     videoRect.top -
-        //     offsetY;
-
-        // let sx = guideX * scaleX;
-        // let sy = guideY * scaleY;
-        // let sw = guideRect.width * scaleX;
-        // let sh = guideRect.height * scaleY;
-
-        // Pastikan crop tidak keluar dari frame video
-        // sx = Math.max(0, sx);
-        // sy = Math.max(0, sy);
-
-        // sw = Math.min(sw, videoWidth - sx);
-        // sh = Math.min(sh, videoHeight - sy);
-
-        // canvas.width = Math.round(sw);
-        // canvas.height = Math.round(sh);
-
-        // const ctx = canvas.getContext('2d');
-
-        // ctx.clearRect(
-        //     0,
-        //     0,
-        //     canvas.width,
-        //     canvas.height
-        // );
-
-        // ctx.drawImage(
-        //     video,
-        //     sx,
-        //     sy,
-        //     sw,
-        //     sh,
-        //     0,
-        //     0,
-        //     canvas.width,
-        //     canvas.height
-        // );
     }
 
     function loadUploadToCanvas(file) {
@@ -624,7 +550,7 @@
                         );
                     },
                     'image/jpeg',
-                    0.95
+                    1
                 );
             }
         );
