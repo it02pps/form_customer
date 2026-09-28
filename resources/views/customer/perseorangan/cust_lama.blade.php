@@ -35,6 +35,49 @@
                 $rtRw .= ' RW. ' . $rw;
             }
         }
+
+        $alamatKtp = '';
+
+        if ($flag === 'scan') {
+            $alamat     = trim(old('alamat', $ocrData['alamat'] ?? ''));
+            $kelurahan  = trim(old('kelurahan', $ocrData['kelurahan'] ?? ''));
+            $kecamatan  = trim(old('kecamatan', $ocrData['kecamatan'] ?? ''));
+            $kota       = trim(old('kota_kabupaten', $ocrData['kota_kabupaten'] ?? ''));
+            $provinsi   = trim(old('provinsi', $ocrData['provinsi'] ?? ''));
+
+            $partsAlamat = [];
+
+            if ($alamat) {
+                $partsAlamat[] = $alamat;
+            }
+
+            if ($rtRw) {
+                $partsAlamat[] = $rtRw;
+            }
+
+            if ($kelurahan) {
+                $partsAlamat[] = 'KEL/DESA ' . $kelurahan;
+            }
+
+            if ($kecamatan) {
+                $partsAlamat[] = 'KEC. ' . $kecamatan;
+            }
+
+            if ($kota) {
+                $partsAlamat[] = $kota;
+            }
+
+            if ($provinsi) {
+                $partsAlamat[] = $provinsi;
+            }
+
+            $alamatKtp = implode(' ', $partsAlamat);
+        }
+
+        $nama = old('nama', $ocrData['nama'] ?? '');
+
+        // Rapikan whitespace jika OCR menghasilkan spasi berlebihan.
+        $nama = preg_replace('/\s+/', ' ', trim($nama));
     @endphp
 
     <div class="px-4 py-3 px-md-5">
@@ -149,7 +192,7 @@
                                     placeholder="Masukkan Nama Lengkap"
                                     autocomplete="off"
                                     class="form-control"
-                                    value="{{ old('nama', $ocrData['nama'] ?? '') }}"
+                                    value="{{ $nama }}"
                                     required
                                 >
                             </div>
@@ -168,14 +211,7 @@
                                     rows="6"
                                     cols="70"
                                     required
-                                >@if($flag === 'scan'){{ trim(
-                                    old('alamat', $ocrData['alamat'] ?? '') . ' ' .
-                                    $rtRw . ' ' .
-                                    old('kelurahan', $ocrData['kelurahan'] ?? '') . ' ' .
-                                    old('kecamatan', $ocrData['kecamatan'] ?? '') . ' ' .
-                                    old('kota_kabupaten', $ocrData['kota_kabupaten'] ?? '') . ' ' .
-                                    old('provinsi', $ocrData['provinsi'] ?? '')
-                                ) }}@endif</textarea>
+                                >{{ $alamatKtp }}</textarea>
                             </div>
                         </div>
                     </div>
