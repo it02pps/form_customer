@@ -18,7 +18,7 @@
     .camera-container video {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
         display: block;
     }
 
@@ -27,6 +27,30 @@
         max-width: 600px;
         border-radius: 12px;
         display: block;
+    }
+
+    .ktp-guide {
+        position: absolute;
+        inset: 10%;
+        border: 3px solid rgba(255, 255, 255, .9);
+        border-radius: 12px;
+        pointer-events: none;
+    }
+
+    .ktp-guide-text {
+        position: absolute;
+        left: 50%;
+        bottom: 12px;
+        transform: translateX(-50%);
+
+        padding: 5px 10px;
+        border-radius: 6px;
+
+        background: rgba(0, 0, 0, .65);
+        color: white;
+
+        font-size: 13px;
+        white-space: nowrap;
     }
 </style>
 @endsection
@@ -48,7 +72,7 @@
                         class="btn btn-link"
                     >
                         {{-- <i class="fa-solid fa-forward"></i> --}}
-                        Lewati jika menggunakan NPWP Perseorangan
+                        Lewati jika tidak menggunakan scan
                     </button>
                 </div>
             </div>
@@ -82,12 +106,18 @@
                 >
             </div>
 
-            <div id="cameraContainer" class="camera-container mt-2" style="display: none;">
+            <div id="cameraContainer" class="camera-container mt-2 position-relative" style="display: none;">
                 <video
                     id="camera"
                     autoplay
                     playsinline
                 ></video>
+
+                <div class="ktp-guide">
+                    <span class="ktp-guide-text">
+                        Posisikan KTP di dalam bingkai
+                    </span>
+                </div>
             </div>
 
             <canvas
@@ -158,6 +188,7 @@
     const btnSkipScanning = document.getElementById("btnSkipScanning");
 
     const ktpFile = document.getElementById('ktpFile');
+    const ktpGuide = document.querySelector('.ktp-guide');
 
     const scanOptions = document.getElementById('scanOptions');
     const cameraContainer = document.getElementById('cameraContainer');
@@ -244,57 +275,154 @@
     }
 
     function captureCameraToCanvas() {
-        const videoWidth = video.videoWidth;
-        const videoHeight = video.videoHeight;
+        // const videoWidth = video.videoWidth;
+        // const videoHeight = video.videoHeight;
 
-        const containerWidth =
-            cameraContainer.clientWidth;
+        // const containerWidth =
+        //     cameraContainer.clientWidth;
 
-        const containerHeight =
-            cameraContainer.clientHeight;
+        // const containerHeight =
+        //     cameraContainer.clientHeight;
 
-        const videoRatio =
-            videoWidth / videoHeight;
+        // const videoRatio =
+        //     videoWidth / videoHeight;
 
-        const containerRatio =
-            containerWidth / containerHeight;
+        // const containerRatio =
+        //     containerWidth / containerHeight;
 
-        let sx = 0;
-        let sy = 0;
-        let sw = videoWidth;
-        let sh = videoHeight;
+        // let sx = 0;
+        // let sy = 0;
+        // let sw = videoWidth;
+        // let sh = videoHeight;
 
         /*
          * Karena preview memakai object-fit: cover,
          * canvas dibuat sesuai area yang terlihat user.
          */
-        if (videoRatio > containerRatio) {
+        // if (videoRatio > containerRatio) {
 
-            sw =
-                videoHeight *
-                containerRatio;
+        //     sw =
+        //         videoHeight *
+        //         containerRatio;
 
-            sx =
-                (videoWidth - sw) / 2;
+        //     sx =
+        //         (videoWidth - sw) / 2;
 
+        // } else {
+
+        //     sh =
+        //         videoWidth /
+        //         containerRatio;
+
+        //     sy =
+        //         (videoHeight - sh) / 2;
+        // }
+
+        // canvas.width =
+        //     Math.round(sw);
+
+        // canvas.height =
+        //     Math.round(sh);
+        
+        // canvas.width = videoWidth;
+        // canvas.height = videoHeight;
+
+        // const ctx = canvas.getContext('2d');
+
+        // ctx.clearRect(
+        //     0,
+        //     0,
+        //     canvas.width,
+        //     canvas.height
+        // );
+
+        // ctx.drawImage(
+        //     video,
+
+        //     sx,
+        //     sy,
+        //     sw,
+        //     sh,
+
+        //     0,
+        //     0,
+        //     canvas.width,
+        //     canvas.height
+        // );
+
+        // ctx.drawImage(
+        //     video,
+        //     0,
+        //     0,
+        //     videoWidth,
+        //     videoHeight
+        // );
+
+        const videoWidth = video.videoWidth;
+        const videoHeight = video.videoHeight;
+
+        const videoRect = video.getBoundingClientRect();
+        const guideRect = ktpGuide.getBoundingClientRect();
+
+        const videoAspect = videoWidth / videoHeight;
+        const elementAspect =
+            videoRect.width / videoRect.height;
+
+        let renderedWidth;
+        let renderedHeight;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        // Hitung ukuran video sebenarnya di dalam
+        // element ketika object-fit: contain
+        if (videoAspect > elementAspect) {
+            renderedWidth = videoRect.width;
+            renderedHeight =
+                renderedWidth / videoAspect;
+
+            offsetY =
+                (videoRect.height - renderedHeight) / 2;
         } else {
+            renderedHeight = videoRect.height;
+            renderedWidth =
+                renderedHeight * videoAspect;
 
-            sh =
-                videoWidth /
-                containerRatio;
-
-            sy =
-                (videoHeight - sh) / 2;
+            offsetX =
+                (videoRect.width - renderedWidth) / 2;
         }
 
-        canvas.width =
-            Math.round(sw);
+        const scaleX =
+            videoWidth / renderedWidth;
 
-        canvas.height =
-            Math.round(sh);
+        const scaleY =
+            videoHeight / renderedHeight;
 
-        const ctx =
-            canvas.getContext('2d');
+        const guideX =
+            guideRect.left -
+            videoRect.left -
+            offsetX;
+
+        const guideY =
+            guideRect.top -
+            videoRect.top -
+            offsetY;
+
+        let sx = guideX * scaleX;
+        let sy = guideY * scaleY;
+        let sw = guideRect.width * scaleX;
+        let sh = guideRect.height * scaleY;
+
+        // Pastikan crop tidak keluar dari frame video
+        sx = Math.max(0, sx);
+        sy = Math.max(0, sy);
+
+        sw = Math.min(sw, videoWidth - sx);
+        sh = Math.min(sh, videoHeight - sy);
+
+        canvas.width = Math.round(sw);
+        canvas.height = Math.round(sh);
+
+        const ctx = canvas.getContext('2d');
 
         ctx.clearRect(
             0,
@@ -305,12 +433,10 @@
 
         ctx.drawImage(
             video,
-
             sx,
             sy,
             sw,
             sh,
-
             0,
             0,
             canvas.width,
@@ -343,7 +469,7 @@
                          * payload ke API.
                          */
 
-                        const maxDimension = 2500;
+                        const maxDimension = 3000;
 
                         let targetWidth =
                             originalWidth;
@@ -442,10 +568,8 @@
     function canvasToFile() {
         return new Promise(
             (resolve, reject) => {
-
                 canvas.toBlob(
                     blob => {
-
                         if (!blob) {
                             reject(
                                 new Error(
@@ -456,25 +580,34 @@
                             return;
                         }
 
-                        const file =
+                        // const file =
+                        //     new File(
+                        //         [blob],
+                        //         'ktp.jpg',
+                        //         {
+                        //             type:
+                        //                 'image/jpeg',
+
+                        //             lastModified:
+                        //                 Date.now()
+                        //         }
+                        //     );
+
+                        // resolve(file);
+
+                        resolve(
                             new File(
                                 [blob],
                                 'ktp.jpg',
                                 {
-                                    type:
-                                        'image/jpeg',
-
-                                    lastModified:
-                                        Date.now()
+                                    type: "image/jpeg",
+                                    lastModified: Date.now()
                                 }
-                            );
-
-                        resolve(file);
+                            )
+                        );
                     },
-
                     'image/jpeg',
-
-                    0.95
+                    1.0
                 );
             }
         );
@@ -667,6 +800,9 @@
             disabled;
 
         btnUsePhoto.disabled =
+            disabled;
+
+        btnSkipScanning.disabled =
             disabled;
     }
 
