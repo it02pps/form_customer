@@ -18,13 +18,14 @@
     .camera-container video {
         width: 100%;
         height: 100%;
-        object-fit: contain;
+        object-fit: cover;
         display: block;
     }
 
     .preview-canvas {
         width: 100%;
         max-width: 600px;
+        height: auto;
         border-radius: 12px;
         display: block;
     }
@@ -43,6 +44,9 @@
         bottom: 12px;
         transform: translateX(-50%);
 
+        width: max-content;
+        max-width: 90%;
+
         padding: 5px 10px;
         border-radius: 6px;
 
@@ -50,7 +54,7 @@
         color: white;
 
         font-size: 13px;
-        white-space: nowrap;
+        text-align: center;
     }
 </style>
 @endsection
@@ -115,7 +119,7 @@
 
                 <div class="ktp-guide">
                     <span class="ktp-guide-text">
-                        Posisikan KTP di dalam bingkai
+                        Posisikan seluruh KTP berada di dalam bingkai
                     </span>
                 </div>
             </div>
@@ -275,8 +279,8 @@
     }
 
     function captureCameraToCanvas() {
-        // const videoWidth = video.videoWidth;
-        // const videoHeight = video.videoHeight;
+        const videoWidth = video.videoWidth;
+        const videoHeight = video.videoHeight;
 
         // const containerWidth =
         //     cameraContainer.clientWidth;
@@ -323,18 +327,34 @@
 
         // canvas.height =
         //     Math.round(sh);
+
+        if(!videoWidth || !videoHeight) {
+            throw new Error("Kamera belum siap.");
+        }
         
-        // canvas.width = videoWidth;
-        // canvas.height = videoHeight;
+        canvas.width = videoWidth;
+        canvas.height = videoHeight;
 
-        // const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d');
 
-        // ctx.clearRect(
-        //     0,
-        //     0,
-        //     canvas.width,
-        //     canvas.height
-        // );
+        if(!ctx) {
+            throw new Error("Canvas tidak tersedia.");
+        }
+
+        ctx.clearRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+        ctx.drawImage(
+            video,
+            0,
+            0,
+            videoWidth,
+            videoHeight
+        );
 
         // ctx.drawImage(
         //     video,
@@ -358,90 +378,87 @@
         //     videoHeight
         // );
 
-        const videoWidth = video.videoWidth;
-        const videoHeight = video.videoHeight;
+        // const videoRect = video.getBoundingClientRect();
+        // const guideRect = ktpGuide.getBoundingClientRect();
 
-        const videoRect = video.getBoundingClientRect();
-        const guideRect = ktpGuide.getBoundingClientRect();
+        // const videoAspect = videoWidth / videoHeight;
+        // const elementAspect =
+        //     videoRect.width / videoRect.height;
 
-        const videoAspect = videoWidth / videoHeight;
-        const elementAspect =
-            videoRect.width / videoRect.height;
-
-        let renderedWidth;
-        let renderedHeight;
-        let offsetX = 0;
-        let offsetY = 0;
+        // let renderedWidth;
+        // let renderedHeight;
+        // let offsetX = 0;
+        // let offsetY = 0;
 
         // Hitung ukuran video sebenarnya di dalam
         // element ketika object-fit: contain
-        if (videoAspect > elementAspect) {
-            renderedWidth = videoRect.width;
-            renderedHeight =
-                renderedWidth / videoAspect;
+        // if (videoAspect > elementAspect) {
+        //     renderedWidth = videoRect.width;
+        //     renderedHeight =
+        //         renderedWidth / videoAspect;
 
-            offsetY =
-                (videoRect.height - renderedHeight) / 2;
-        } else {
-            renderedHeight = videoRect.height;
-            renderedWidth =
-                renderedHeight * videoAspect;
+        //     offsetY =
+        //         (videoRect.height - renderedHeight) / 2;
+        // } else {
+        //     renderedHeight = videoRect.height;
+        //     renderedWidth =
+        //         renderedHeight * videoAspect;
 
-            offsetX =
-                (videoRect.width - renderedWidth) / 2;
-        }
+        //     offsetX =
+        //         (videoRect.width - renderedWidth) / 2;
+        // }
 
-        const scaleX =
-            videoWidth / renderedWidth;
+        // const scaleX =
+        //     videoWidth / renderedWidth;
 
-        const scaleY =
-            videoHeight / renderedHeight;
+        // const scaleY =
+        //     videoHeight / renderedHeight;
 
-        const guideX =
-            guideRect.left -
-            videoRect.left -
-            offsetX;
+        // const guideX =
+        //     guideRect.left -
+        //     videoRect.left -
+        //     offsetX;
 
-        const guideY =
-            guideRect.top -
-            videoRect.top -
-            offsetY;
+        // const guideY =
+        //     guideRect.top -
+        //     videoRect.top -
+        //     offsetY;
 
-        let sx = guideX * scaleX;
-        let sy = guideY * scaleY;
-        let sw = guideRect.width * scaleX;
-        let sh = guideRect.height * scaleY;
+        // let sx = guideX * scaleX;
+        // let sy = guideY * scaleY;
+        // let sw = guideRect.width * scaleX;
+        // let sh = guideRect.height * scaleY;
 
         // Pastikan crop tidak keluar dari frame video
-        sx = Math.max(0, sx);
-        sy = Math.max(0, sy);
+        // sx = Math.max(0, sx);
+        // sy = Math.max(0, sy);
 
-        sw = Math.min(sw, videoWidth - sx);
-        sh = Math.min(sh, videoHeight - sy);
+        // sw = Math.min(sw, videoWidth - sx);
+        // sh = Math.min(sh, videoHeight - sy);
 
-        canvas.width = Math.round(sw);
-        canvas.height = Math.round(sh);
+        // canvas.width = Math.round(sw);
+        // canvas.height = Math.round(sh);
 
-        const ctx = canvas.getContext('2d');
+        // const ctx = canvas.getContext('2d');
 
-        ctx.clearRect(
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
+        // ctx.clearRect(
+        //     0,
+        //     0,
+        //     canvas.width,
+        //     canvas.height
+        // );
 
-        ctx.drawImage(
-            video,
-            sx,
-            sy,
-            sw,
-            sh,
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
+        // ctx.drawImage(
+        //     video,
+        //     sx,
+        //     sy,
+        //     sw,
+        //     sh,
+        //     0,
+        //     0,
+        //     canvas.width,
+        //     canvas.height
+        // );
     }
 
     function loadUploadToCanvas(file) {
@@ -607,7 +624,7 @@
                         );
                     },
                     'image/jpeg',
-                    1.0
+                    0.95
                 );
             }
         );
@@ -751,6 +768,12 @@
                             formData
                     }
                 );
+
+            const contentType = response.headers.get('content-type');
+
+            if (!contentType || !contentType.includes('application/json')) {
+                throw new Error('Terjadi kesalahan pada server.');
+            }
 
             const result = await response.json();
 
@@ -929,28 +952,17 @@
     btnUpload.addEventListener(
         'click',
         () => {
-
             stopCamera();
 
             capturedFile = null;
-
-            captureSource =
-                'upload';
+            captureSource = 'upload';
 
             hidePreview();
 
-            cameraContainer.style.display =
-                'none';
-
-            captureActions.style.display =
-                'none';
-
-            scanOptions.style.display =
-                'none';
-
-            ktpFile.value =
-                '';
-
+            cameraContainer.style.display = 'none';
+            captureActions.style.display = 'none';
+            
+            ktpFile.value = '';
             ktpFile.click();
         }
     );
@@ -960,14 +972,14 @@
         'change',
         async () => {
 
-            const file =
-                ktpFile.files[0];
+            const file = ktpFile.files[0];
 
             if (!file) {
                 resetToOptions();
                 return;
             }
 
+            scanOptions.style.display = 'none';
 
             try {
 
